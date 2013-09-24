@@ -1,0 +1,8 @@
+Temp/
+Library/
+Obj/
+
+*.csproj
+*.unityproj
+*.sln
+*.DS_store
