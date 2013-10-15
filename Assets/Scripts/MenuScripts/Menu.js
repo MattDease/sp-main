@@ -1,6 +1,9 @@
 ﻿#pragma strict
 
-public enum menu {
+static public var script : Menu;
+
+public var gameManager : GameObject;
+public enum menus {
     start,
     main,
     lobby,
@@ -8,35 +11,40 @@ public enum menu {
     host
 };
 
+
 private var startMenuScript : StartMenu;
 private var mainMenuScript : MainMenu;
 private var lobbyMenuScript : LobbyMenu;
 private var gameMenuScript : GameMenu;
 
 function Awake(){
+    script = this;
+
+    gameManager = GameObject.Find("/GameManager");
+
     startMenuScript = GetComponent(StartMenu);
     mainMenuScript = GetComponent(MainMenu);
     lobbyMenuScript = GetComponent(LobbyMenu);
     gameMenuScript = GetComponent(GameMenu);
 
-    OpenMenu(menu.start);
+    open(menus.start);
 }
 
-function OpenMenu(menuName : menu){
+function open(menuName : menus){
     switch (menuName){
-        case menu.start:
-            //init start menu
+        case menus.start:
+            startMenuScript.enter();
             break;
-        case menu.main:
-            //init main menu
+        case menus.main:
+            mainMenuScript.enter();
             break;
-        case menu.lobby:
+        case menus.lobby:
             //init lobby menu
             break;
-        case menu.quickplay:
+        case menus.quickplay:
             //init quickplay
             break;
-        case menu.host:
+        case menus.host:
             //init game menu
             break;
         default:
