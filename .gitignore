@@ -6,3 +6,5 @@ Obj/
 *.unityproj
 *.sln
 *.DS_store
+*.sublime-project
+*.sublime-workspace
