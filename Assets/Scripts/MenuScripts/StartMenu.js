@@ -6,6 +6,7 @@ private var playerScript : PlayerScript;
 private var showMenu : boolean = false;
 
 private var playerName : String;
+private var newName : String = "";
 
 function Start(){
     menuScript = Menu.script;
@@ -19,8 +20,9 @@ function OnGUI (){
     }
 
     //TODO - replace with good UI
-    if(false && playerName){
+    if(playerName){
         //display message
+        GUILayout.Label("Start Menu");
         GUILayout.Label("Welcome back, " + playerName);
         if(GUILayout.Button("Start")){
             leaveFor(menus.main);
@@ -29,9 +31,10 @@ function OnGUI (){
     else{
         //prompt for name
         GUILayout.Label("Enter your name:");
-        playerName = GUILayout.TextField(playerName, 20);
-        if(playerName && GUILayout.Button("Start")){
-            playerScript.setName(playerName);
+        newName = GUILayout.TextField(newName, 20);
+        if(newName && GUILayout.Button("Start")){
+            playerName = newName;
+            playerScript.setName(newName);
             leaveFor(menus.main);
         }
     }

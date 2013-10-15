@@ -39,13 +39,13 @@ function open(menuName : menus){
             mainMenuScript.enter();
             break;
         case menus.lobby:
-            //init lobby menu
+            lobbyMenuScript.enter(false);
             break;
         case menus.quickplay:
-            //init quickplay
+            lobbyMenuScript.enter(true);
             break;
         case menus.host:
-            //init game menu
+            gameMenuScript.enter(true);
             break;
         default:
             Debug.LogError("Unknown menu: " + menuName);

@@ -16,7 +16,18 @@ function OnGUI (){
     }
 
     //TODO - replace with good UI
-    GUILayout.Label("Main Menu: " + playerScript.getName());
+    GUILayout.Label("Main Menu");
+    GUILayout.Label("Player: " + playerScript.getName());
+    if(GUILayout.Button("New Game")){
+        leaveFor(menus.host);
+    }
+    if(GUILayout.Button("Quickplay")){
+        leaveFor(menus.quickplay);
+    }
+    if(GUILayout.Button("Join Game")){
+        leaveFor(menus.lobby);
+    }
+
 }
 
 function enter(){
