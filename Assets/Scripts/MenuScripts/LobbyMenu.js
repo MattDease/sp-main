@@ -8,7 +8,7 @@ private var isQuickplay : boolean = false;
 
 function Start(){
     menuScript = Menu.script;
-    playerScript = menuScript.gameManager.GetComponent(PlayerScript);
+    playerScript = menuScript.playerScript;
 }
 
 function OnGUI (){
@@ -16,8 +16,15 @@ function OnGUI (){
         return;
     }
 
+    // TODO Implement networking to poll masterserver so a list of active
+    // games can be displayed
+
     //TODO - replace with good UI
     GUILayout.Label("Lobby Menu" + (isQuickplay ? " - Quickplay" : ""));
+    GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
+    if(GUILayout.Button("Game Menu")){
+        leaveFor(menus.game);
+    }
 }
 
 function enter(quickplay : boolean){
@@ -27,5 +34,6 @@ function enter(quickplay : boolean){
 
 function leaveFor(newMenu : menus){
     showMenu = false;
-    menuScript.open(newMenu);
+    menuScript.stateScript.setCurrentMenu(newMenu);
+    menuScript.open();
 }

@@ -1,5 +1,6 @@
 ﻿#pragma strict
 
+private var gameManager : GameObject;
 private var menuScript : Menu;
 private var playerScript : PlayerScript;
 
@@ -8,7 +9,12 @@ private var isHosting : boolean = false;
 
 function Start(){
     menuScript = Menu.script;
-    playerScript = menuScript.gameManager.GetComponent(PlayerScript);
+    gameManager = GameObject.Find("/GameManager");
+
+    playerScript = gameManager.GetComponent(PlayerScript);
+
+    //persist game manager object between scenes
+    DontDestroyOnLoad( gameManager );
 }
 
 function OnGUI (){
@@ -18,6 +24,10 @@ function OnGUI (){
 
     //TODO - replace with good UI
     GUILayout.Label("Game Menu" + (isHosting ? " - Host" : ""));
+    GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
+    if(GUILayout.Button("Start Game")){
+        Application.LoadLevel("scene-game");
+    }
 }
 
 function enter(isNew : boolean){
@@ -27,5 +37,6 @@ function enter(isNew : boolean){
 
 function leaveFor(newMenu : menus){
     showMenu = false;
-    menuScript.open(newMenu);
+    menuScript.stateScript.setCurrentMenu(newMenu);
+    menuScript.open();
 }

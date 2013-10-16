@@ -3,15 +3,8 @@
 static public var script : Menu;
 
 public var gameManager : GameObject;
-public enum menus {
-    start,
-    main,
-    lobby,
-    quickplay,
-    host,
-    highscore
-};
-
+public var playerScript : PlayerScript;
+public var stateScript : StateScript;
 
 private var startMenuScript : StartMenu;
 private var mainMenuScript : MainMenu;
@@ -29,11 +22,17 @@ function Awake(){
     lobbyMenuScript = GetComponent(LobbyMenu);
     gameMenuScript = GetComponent(GameMenu);
     highscoreMenuScript = GetComponent(HighscoreMenu);
-
-    open(menus.start);
 }
 
-function open(menuName : menus){
+function Start(){
+    playerScript = gameManager.GetComponent(PlayerScript);
+    stateScript = gameManager.GetComponent(StateScript);
+
+    open();
+}
+
+function open(){
+    var menuName : menus = stateScript.getCurrentMenu();
     switch (menuName){
         case menus.start:
             startMenuScript.enter();
@@ -46,6 +45,9 @@ function open(menuName : menus){
             break;
         case menus.quickplay:
             lobbyMenuScript.enter(true);
+            break;
+        case menus.game:
+            gameMenuScript.enter(false);
             break;
         case menus.host:
             gameMenuScript.enter(true);
