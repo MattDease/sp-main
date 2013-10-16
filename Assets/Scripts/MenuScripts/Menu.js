@@ -8,7 +8,8 @@ public enum menus {
     main,
     lobby,
     quickplay,
-    host
+    host,
+    highscore
 };
 
 
@@ -16,6 +17,7 @@ private var startMenuScript : StartMenu;
 private var mainMenuScript : MainMenu;
 private var lobbyMenuScript : LobbyMenu;
 private var gameMenuScript : GameMenu;
+private var highscoreMenuScript : HighscoreMenu;
 
 function Awake(){
     script = this;
@@ -26,6 +28,7 @@ function Awake(){
     mainMenuScript = GetComponent(MainMenu);
     lobbyMenuScript = GetComponent(LobbyMenu);
     gameMenuScript = GetComponent(GameMenu);
+    highscoreMenuScript = GetComponent(HighscoreMenu);
 
     open(menus.start);
 }
@@ -46,6 +49,9 @@ function open(menuName : menus){
             break;
         case menus.host:
             gameMenuScript.enter(true);
+            break;
+        case menus.highscore:
+            highscoreMenuScript.enter();
             break;
         default:
             Debug.LogError("Unknown menu: " + menuName);
