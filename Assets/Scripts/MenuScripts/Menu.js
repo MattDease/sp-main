@@ -3,19 +3,14 @@
 static public var script : Menu;
 
 public var gameManager : GameObject;
-public enum menus {
-    start,
-    main,
-    lobby,
-    quickplay,
-    host
-};
-
+public var playerScript : PlayerScript;
+public var stateScript : StateScript;
 
 private var startMenuScript : StartMenu;
 private var mainMenuScript : MainMenu;
 private var lobbyMenuScript : LobbyMenu;
 private var gameMenuScript : GameMenu;
+private var highscoreMenuScript : HighscoreMenu;
 
 function Awake(){
     script = this;
@@ -26,11 +21,18 @@ function Awake(){
     mainMenuScript = GetComponent(MainMenu);
     lobbyMenuScript = GetComponent(LobbyMenu);
     gameMenuScript = GetComponent(GameMenu);
-
-    open(menus.start);
+    highscoreMenuScript = GetComponent(HighscoreMenu);
 }
 
-function open(menuName : menus){
+function Start(){
+    playerScript = gameManager.GetComponent(PlayerScript);
+    stateScript = gameManager.GetComponent(StateScript);
+
+    open();
+}
+
+function open(){
+    var menuName : menus = stateScript.getCurrentMenu();
     switch (menuName){
         case menus.start:
             startMenuScript.enter();
@@ -44,8 +46,14 @@ function open(menuName : menus){
         case menus.quickplay:
             lobbyMenuScript.enter(true);
             break;
+        case menus.game:
+            gameMenuScript.enter(false);
+            break;
         case menus.host:
             gameMenuScript.enter(true);
+            break;
+        case menus.highscore:
+            highscoreMenuScript.enter();
             break;
         default:
             Debug.LogError("Unknown menu: " + menuName);

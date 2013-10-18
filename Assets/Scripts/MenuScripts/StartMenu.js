@@ -10,7 +10,7 @@ private var newName : String = "";
 
 function Start(){
     menuScript = Menu.script;
-    playerScript = menuScript.gameManager.GetComponent(PlayerScript);
+    playerScript = menuScript.playerScript;
     playerName = playerScript.getName();
 }
 
@@ -47,5 +47,6 @@ function enter(){
 
 function leaveFor(newMenu : menus){
     showMenu = false;
-    menuScript.open(newMenu);
+    menuScript.stateScript.setCurrentMenu(newMenu);
+    menuScript.open();
 }

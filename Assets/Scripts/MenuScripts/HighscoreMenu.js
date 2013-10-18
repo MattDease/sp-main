@@ -4,7 +4,6 @@ private var menuScript : Menu;
 private var playerScript : PlayerScript;
 
 private var showMenu : boolean = false;
-private var isQuickplay : boolean = false;
 
 function Start(){
     menuScript = Menu.script;
@@ -16,20 +15,23 @@ function OnGUI (){
         return;
     }
 
-    // TODO Implement networking to poll masterserver so a list of active
-    // games can be displayed
-
     //TODO - replace with good UI
-    GUILayout.Label("Lobby Menu" + (isQuickplay ? " - Quickplay" : ""));
+    GUILayout.Label("Highscore Menu");
     GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
-    if(GUILayout.Button("Game Menu")){
-        leaveFor(menus.game);
+    GUILayout.Label("Go To: ");
+    if(GUILayout.Button("Start Menu")){
+        leaveFor(menus.start);
+    }
+    if(GUILayout.Button("Main Menu")){
+        leaveFor(menus.main);
+    }
+    if(GUILayout.Button("Lobby Menu")){
+        leaveFor(menus.lobby);
     }
 }
 
-function enter(quickplay : boolean){
+function enter(){
     showMenu = true;
-    isQuickplay = quickplay;
 }
 
 function leaveFor(newMenu : menus){

@@ -7,7 +7,7 @@ private var showMenu : boolean = false;
 
 function Start(){
     menuScript = Menu.script;
-    playerScript = menuScript.gameManager.GetComponent(PlayerScript);
+    playerScript = menuScript.playerScript;
 }
 
 function OnGUI (){
@@ -17,7 +17,7 @@ function OnGUI (){
 
     //TODO - replace with good UI
     GUILayout.Label("Main Menu");
-    GUILayout.Label("Player: " + playerScript.getName());
+    GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
     if(GUILayout.Button("New Game")){
         leaveFor(menus.host);
     }
@@ -36,5 +36,6 @@ function enter(){
 
 function leaveFor(newMenu : menus){
     showMenu = false;
-    menuScript.open(newMenu);
+    menuScript.stateScript.setCurrentMenu(newMenu);
+    menuScript.open();
 }
