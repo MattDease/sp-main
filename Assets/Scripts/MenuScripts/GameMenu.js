@@ -3,9 +3,14 @@
 private var gameManager : GameObject;
 private var menuScript : Menu;
 private var playerScript : PlayerScript;
+private var netScript : Net;
 
 private var showMenu : boolean = false;
 private var isHosting : boolean = false;
+
+function Awake(){
+    netScript = GetComponent(Net);
+}
 
 function Start(){
     menuScript = Menu.script;
