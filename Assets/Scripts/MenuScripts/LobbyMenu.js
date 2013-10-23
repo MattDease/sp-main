@@ -27,8 +27,42 @@ function OnGUI (){
     // TODO - replace with good UI
     GUILayout.Label("Lobby Menu" + (isQuickplay ? " - Quickplay" : ""));
     GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
+
     if(GUILayout.Button("Game Menu")){
         leaveFor(menus.game);
+    }
+
+    if(GUILayout.Button("Refresh List")){
+        netScript.FetchHostList(true);
+    }
+    netScript.FetchHostList(false);
+
+    if(netScript.hostData.length){
+        GUILayout.Label("All Hosted Games:");
+        // Go through all the hosts in the host list
+        for (var element : HostData in netScript.hostData){
+            GUILayout.BeginHorizontal();
+            var name : String = element.gameName + " " + element.connectedPlayers + " / " + element.playerLimit;
+            GUILayout.Label(name);
+            GUILayout.Space(5);
+            var hostInfo : String;
+            hostInfo = "[";
+            for (var host : String in element.ip){
+                hostInfo = hostInfo + host + ":" + element.port + " ";
+            }
+            hostInfo = hostInfo + "]";
+            GUILayout.Label(hostInfo);
+            GUILayout.Space(5);
+            GUILayout.FlexibleSpace();
+            if (Network.peerType == NetworkPeerType.Disconnected && GUILayout.Button("Connect")){
+                // Connect to HostData struct, internally the correct method is used (GUID when using NAT).
+                netScript.Connect(element.ip[0], element.port, onConnect);
+            }
+            GUILayout.EndHorizontal();
+        }
+    }
+    else{
+        GUILayout.Label("No Games Being Hosted");
     }
 }
 
@@ -42,3 +76,7 @@ function leaveFor(newMenu : menus){
     menuScript.stateScript.setCurrentMenu(newMenu);
     menuScript.open();
 }
+
+public var onConnect : Function = function(){
+    leaveFor(menus.game);
+};
