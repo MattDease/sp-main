@@ -20,8 +20,8 @@ private var hasEgg : boolean = false;
 //Variables that determine speed and height.
 private var WALK_SPEED : Vector3 = Vector3 (1, 0, 0);
 private var RUN_SPEED : Vector3 = Vector3 (4, 0, 0);
-private var MAX_HEIGHT : int = 0.5f;
-private var JUMP_SPEED : int = 20;
+private var MAX_HEIGHT : float = 0.5;
+private var JUMP_SPEED : float = 20;
 
 function Start(){
 

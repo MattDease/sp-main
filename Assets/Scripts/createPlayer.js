@@ -10,17 +10,16 @@ function Update () {
 
 }
 
-
 function OnGUI () {
     // Make a background box (Simple Example GUI), I know its ugly!
     if(isGui){
         GUI.Box (Rect (10,10,100,90), "Let's load things");
 
-        // Make the first button. If it is pressed, Application.Loadlevel (1) will be executed
+        // Make the first button. If it is pressed, create the character
         if (GUI.Button (Rect (20,40,80,20), "Character")) {
             loadCharacter("Name", "SampleCharacter",Vector3(-50, 0, 0), Quaternion.identity );
         }
-
+        // Make the second button. If it is pressed, create the egg
         if (GUI.Button (Rect (20,70,80,20), "Egg")) {
             createEgg();
         }
