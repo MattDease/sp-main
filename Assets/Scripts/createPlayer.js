@@ -52,7 +52,6 @@ function loadCharacter(modelName, url, position, rotation) {
     instanceControls.model = instanceTransform;
 
     isGui = false;
-
 }
 
 function createEgg() {

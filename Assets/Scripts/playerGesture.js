@@ -7,6 +7,7 @@ private var eggBody:Rigidbody;
 private var egg: GameObject;
 private var player: GameObject;
 
+//Booleans to determine what action is currently happened. Used to trigger in the update function
 private var isJumping : boolean = false;
 private var isCrouching : boolean = false;
 private var isRunning : boolean = false;
@@ -23,10 +24,12 @@ private var MAX_HEIGHT : int = 0.5f;
 private var JUMP_SPEED : int = 20;
 
 function Start(){
-    player = model.gameObject;
+
     egg = GameObject.Find("egg");
     eggBody = egg.GetComponent(Rigidbody);
     eggBody.freezeRotation = true;
+
+    player = model.gameObject;
 	body=model.gameObject.GetComponent(Rigidbody);
     body.freezeRotation = true;
 }
@@ -63,14 +66,16 @@ function Update() {
 		}
 	}
 
-	if(isCrouching){
-		//Add actions here
-	}
+	if(isCrouching && !hasEgg){
+		/*TODO: Add actions for crouching.
+         Will play correct animation and change the size of the box collider to be shorter
+	  */
+    }
 
 	if(isWalking) {
 	  	Walk();
 	} else {
-	 Run();
+	  Run();
 	}
 
     if(hasEgg){
@@ -102,19 +107,18 @@ function OnSwipe(sw:SwipeInfo){
 
 	if(sw.direction.y > 0  && ((sw.angle > 0 && sw.angle < 45) || (sw.angle > 315 && sw.angle < 360)) )  {
 		isTossingLeft = true;
-        Toss(sw.direction, sw.angle);
+        Toss(sw.direction, sw.speed);
 	}
 
 	if(sw.direction.y < 0  && sw.angle > 135 && sw.angle < 235 ) {
 		isTossingRight = true;
-        Toss(sw.direction, sw.angle);
+        Toss(sw.direction, sw.speed);
 	}
 }
 
 //called when a long tap event is ended
 function OnLongTap(tap:Tap){
-	Debug.Log("On Long Tap");
-    //Just for temp
+    //Just for temp  - this will be set somewhere else!
     hasEgg = true;
 }
 
@@ -134,17 +138,19 @@ function Run() {
 
 }
 
-function Toss(direction:Vector3, angle){
+function Toss(direction:Vector3, speed){
     if(hasEgg){
         hasEgg = false;
         Unparent(player, egg);
+
+        /*TODO: AI to choice who the closest team mate is a throw the egg to them.
+        We should use the swipe speed to actually influence the speed of the toss.
+        */
         eggBody.AddForce(direction);
     }
 }
 
 function Parent (parentObj:GameObject, childObj:GameObject){
-      Debug.Log("Parent");
-
       childObj.transform.position = parentObj.transform.position;
       childObj.transform.position += Vector3(2, 3, 0);
       childObj.transform.parent = parentObj.transform;
@@ -152,12 +158,11 @@ function Parent (parentObj:GameObject, childObj:GameObject){
 
 function Unparent(parentObj:GameObject, childObj:GameObject){
 
-    Debug.Log("Unparent");
+    //Save the position of the child so we can make the child stop following the parents position.
     var tempPos = childObj.transform.position;
+
     if(parentObj.transform.childCount > 0) {
-        var toRemove = parentObj.transform.Find("egg");
-        toRemove.transform.parent = null;
-        toRemove.transform.position = tempPos;
+        childObj.transform.parent = null;
+        childObj.transform.position = tempPos;
     }
-      //parentObj.transform.DetachChildren();
 }
