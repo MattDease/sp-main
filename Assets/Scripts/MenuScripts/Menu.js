@@ -11,6 +11,7 @@ private var mainMenuScript : MainMenu;
 private var lobbyMenuScript : LobbyMenu;
 private var gameMenuScript : GameMenu;
 private var highscoreMenuScript : HighscoreMenu;
+//private var guiClassScript : GuiClasses;
 
 function Awake(){
     script = this;
@@ -22,6 +23,7 @@ function Awake(){
     lobbyMenuScript = GetComponent(LobbyMenu);
     gameMenuScript = GetComponent(GameMenu);
     highscoreMenuScript = GetComponent(HighscoreMenu);
+//    guiClassScript = GetComponent(GuiClasses);
 }
 
 function Start(){
