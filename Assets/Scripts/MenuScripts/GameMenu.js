@@ -74,7 +74,7 @@ function OnGUI (){
     //GUILayout.Label("Game Menu" + (isHosting ? " - Host" : ""));
     //GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
 
-     //Back Button
+    //Back Button
     if(GUI.Button(Rect(GuiHost[4].offset.x + GuiHost[4].offsetY03 ,GuiHost[4].offset.y + GuiHost[4].offsetY03 ,backTexture.width,backTexture.height), backTexture)){
        leaveFor(menus.main);
     }

@@ -1,5 +1,5 @@
 ﻿class GuiClasses {
-
+	
 		var offsetY30 = Screen.height * 0.30; //Move by 30% of the screen
 	    var offsetY03 = Screen.height * 0.03; //Move by 3% of the screen
 	    var offsetY40 = Screen.height * 0.43; //Move by 43% of the screen

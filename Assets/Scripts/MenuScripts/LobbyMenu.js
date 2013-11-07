@@ -9,7 +9,7 @@ private var isQuickplay : boolean = false;
 var GuiLobby : GuiClasses[];
 
 enum Point2 {TopLeft, TopRight, BottomLeft, BottomRight, Center}
-enum Point3 {TopLeft, TopRight, BottomLeft, BottomRight, Center}
+
 var menuSkin : GUISkin;
 var observeTexture : Texture2D;
 var backTexture : Texture2D;
@@ -40,7 +40,7 @@ function OnGUI (){
     GuiLobby[1].textureHeight = backTexture.height;
 
     GuiLobby[0].pointLocation = Point2.TopRight;
-    GuiLobby[1].pointLocation = Point3.TopLeft;
+    GuiLobby[1].pointLocation = Point2.TopLeft;
 
     for(var x =0; x<2; x++){
         GuiLobby[x].updateLocation();
