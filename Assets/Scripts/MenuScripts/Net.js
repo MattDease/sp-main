@@ -21,20 +21,20 @@ private var timer : float = 0.0;
 private var connTestMessage : String = "Undetermined NAT capabilities";
 
 function Awake () {
-    // TODO - enable once hostname has propagated to DNS servers
-    // var hostInfo:IPHostEntry  = Dns.GetHostEntry(masterServerHostname);
-    // for(var ip:IPAddress in hostInfo.AddressList){
-    //     if (ip.AddressFamily.ToString() == AddressFamily.InterNetwork.ToString()){
-    //         var masterServerIp : String = ip.ToString();
-    //         Debug.Log("Master server hostname resolved to " + masterServerIp);
-    //     }
-    // }
+    // Get Master Server IP from hostname
+    var hostInfo:IPHostEntry = Dns.GetHostEntry(masterServerHostname);
+    for(var ip:IPAddress in hostInfo.AddressList){
+        if (ip.AddressFamily.ToString() == AddressFamily.InterNetwork.ToString()){
+            var masterServerIp : String = ip.ToString();
+            Debug.Log("Master server hostname resolved to " + masterServerIp);
+        }
+    }
 
-    MasterServer.ipAddress = "172.19.12.112";
+    MasterServer.ipAddress = masterServerIp;
     MasterServer.port = 23466;
-    Network.natFacilitatorIP = "172.19.12.112";
+    Network.natFacilitatorIP = masterServerIp;
     Network.natFacilitatorPort = 50005;
-    Network.connectionTesterIP = "172.19.12.112";
+    Network.connectionTesterIP = masterServerIp;
     Network.connectionTesterPort = 10737;
 
     // Start connection test
@@ -182,6 +182,7 @@ function TestConnection() {
         Debug.Log("ConnTester:"+connTestMessage);
         Debug.Log("ConnTester: NAT Capable? - " + natCapable);
         Debug.Log("ConnTester: Circmventing Firewall? - " + probingPublicIP);
+        Debug.Log("ConnTester: Use NAT? - " + useNat);
         Debug.Log("ConnTester: Connection Test Complete");
     }
 }
