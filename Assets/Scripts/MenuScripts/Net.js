@@ -1,7 +1,11 @@
 #pragma strict
 
+import System.Net;
+import System.Net.Sockets;
+
+private var masterServerHostname : String = "scrambled.no-ip.biz";
 public var gameId : String = "scrambled-by-poached";
-public var serverPort : int = 25002;
+public var gamePort : int = 25002;
 
 public var hostData : HostData[];
 
@@ -9,14 +13,24 @@ private var lastHostListRequest : float = 0;
 private var onConnection : Function;
 
 function Awake () {
+    // TODO - enable once hostname has propagated to DNS servers
+    // var hostInfo:IPHostEntry  = Dns.GetHostEntry(masterServerHostname);
+    // for(var ip:IPAddress in hostInfo.AddressList){
+    //     if (ip.AddressFamily.ToString() == AddressFamily.InterNetwork.ToString()){
+    //         var masterServerIp : String = ip.ToString();
+    //         Debug.Log("Master server hostname resolved to " + masterServerIp);
+    //     }
+    // }
 
+    MasterServer.ipAddress = "172.19.12.112";
+    MasterServer.port = 23466;
+    Network.natFacilitatorIP = "172.19.12.112";
+    Network.natFacilitatorPort = 50005;
+    Network.connectionTesterIP = "172.19.12.112";
+    Network.connectionTesterPort = 10737;
 }
 
 function Start () {
-    // TODO - Replace with dedicated server info
-    MasterServer.ipAddress = "67.255.180.24";
-    MasterServer.port = 23466;
-
     MasterServer.ClearHostList();
     MasterServer.RequestHostList (gameId);
 
@@ -39,11 +53,11 @@ function Connect(ip : String, port : int, callback : Function){
 }
 
 function StartHost(numPlayers : int, name : String){
-    if(numPlayers <= 2){
+    if(numPlayers <= 1){
         Debug.Log("Player limit of " + numPlayers + " is too low. Player limit is now set to 3");
-        numPlayers = 3;
+        numPlayers = 2;
     }
-    Network.InitializeServer(numPlayers, serverPort, !Network.HavePublicAddress());
+    Network.InitializeServer(numPlayers, gamePort, !Network.HavePublicAddress());
     MasterServer.RegisterHost(gameId, name, "");
 }
 
