@@ -1,31 +1,13 @@
 fileFormatVersion: 2
-guid: 55f766f0c3e004502ac0ca8339bce852
+guid: abbce63606847485c844efd6c419c764
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
-    100000: defaultUnit1
-    100002: group
-    100004: group1
-    100006: imagePlane1
-    100008: //RootNode
-    100010: levelSegment1
-    100012: mainCharacter1
-    400000: defaultUnit1
-    400002: group
-    400004: group1
-    400006: imagePlane1
-    400008: //RootNode
-    400010: levelSegment1
-    400012: mainCharacter1
-    2300000: defaultUnit1
-    2300002: levelSegment1
-    2300004: mainCharacter1
-    3300000: defaultUnit1
-    3300002: levelSegment1
-    3300004: mainCharacter1
-    4300000: levelSegment1
-    4300002: mainCharacter1
-    4300004: defaultUnit1
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: level10
     9500000: //RootNode
   materials:
     importMaterials: 1
