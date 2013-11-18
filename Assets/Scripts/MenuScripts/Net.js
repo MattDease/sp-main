@@ -22,12 +22,20 @@ private var connTestMessage : String = "Undetermined NAT capabilities";
 
 function Awake () {
     // Get Master Server IP from hostname
-    var hostInfo:IPHostEntry = Dns.GetHostEntry(masterServerHostname);
-    for(var ip:IPAddress in hostInfo.AddressList){
-        if (ip.AddressFamily.ToString() == AddressFamily.InterNetwork.ToString()){
-            var masterServerIp : String = ip.ToString();
-            Debug.Log("Master server hostname resolved to " + masterServerIp);
+    try{
+        var hostInfo:IPHostEntry = Dns.GetHostEntry(masterServerHostname);
+        for(var ip:IPAddress in hostInfo.AddressList){
+            if (ip.AddressFamily.ToString() == AddressFamily.InterNetwork.ToString()){
+                var masterServerIp : String = ip.ToString();
+                Debug.Log("Master server hostname resolved to " + masterServerIp);
+            }
         }
+    }
+    catch(err){
+        Debug.Log("Master server hostname resolution error: " + err.Message);
+        //fallback to static IP - may be incorrect!
+        masterServerIp = "172.19.12.112";
+        Debug.Log("Master server IP fallback to: " + masterServerIp);
     }
 
     MasterServer.ipAddress = masterServerIp;
@@ -96,7 +104,7 @@ function FetchHostList(manual : boolean){
         yield WaitForSeconds(1);
         //TODO - sort list by # of players
 
-        Debug.Log("Requested new host list. "+hostData.length+" games listed");
+        Debug.Log(">>> Requested new host list. "+hostData.length+" servers registered");
     }
 }
 
