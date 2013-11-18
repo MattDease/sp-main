@@ -83,8 +83,9 @@ function StartHost(numPlayers : int, name : String){
         Debug.Log("Player limit of " + numPlayers + " is too low. Player limit is now set to 3");
         numPlayers = 2;
     }
+    Debug.Log("Starting server. Players: " + numPlayers + " Port: " + gamePort + " NAT?: " + useNat);
     var serverError = Network.InitializeServer(numPlayers, gamePort, useNat);
-    if(serverError = NetworkConnectionError.NoError){
+    if(serverError == NetworkConnectionError.NoError){
         MasterServer.RegisterHost(gameId, name, "");
         return true;
     }
@@ -198,6 +199,21 @@ function TestConnection() {
         Debug.Log("ConnTester: Circmventing Firewall? - " + probingPublicIP);
         Debug.Log("ConnTester: Use NAT? - " + useNat);
         Debug.Log("ConnTester: Connection Test Complete");
+    }
+}
+
+function OnMasterServerEvent(event: MasterServerEvent){
+    switch(event){
+        case MasterServerEvent.HostListReceived:
+            break;
+        case MasterServerEvent.RegistrationSucceeded:
+            Debug.Log("Host successfully registered with master server.");
+            break;
+        case MasterServerEvent.RegistrationFailedNoServer:
+        case MasterServerEvent.RegistrationFailedGameType:
+        case MasterServerEvent.RegistrationFailedGameName:
+            Debug.Log("Error registering host: " + event);
+            break;
     }
 }
 
