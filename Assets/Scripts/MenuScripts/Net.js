@@ -3,17 +3,16 @@
 import System.Net;
 import System.Net.Sockets;
 
-private var masterServerHostname : String = "scrambled.no-ip.biz";
-public var gameId : String = "scrambled-by-poached_v1.0.0";
-public var gamePort : int = 25002;
-
 public var hostData : HostData[];
+
+private var masterServerHostname : String = "scrambled.no-ip.biz";
+private var gameId : String = "scrambled-by-poached_v1.0.0";
+private var gamePort : int = 25002;
 
 private var lastHostListRequest : float = 0;
 private var onConnection : Function;
 
 private var natCapable : ConnectionTesterStatus = ConnectionTesterStatus.Undetermined;
-private var filterNATHosts : boolean = false;
 private var probingPublicIP : boolean = false;
 private var doneTestingNAT : boolean = false;
 private var useNat : boolean = false;
@@ -78,7 +77,7 @@ function StartHost(numPlayers : int, name : String){
     Debug.Log("Starting server. Players: " + numPlayers + " Port: " + gamePort + " NAT?: " + useNat);
     var serverError = Network.InitializeServer(numPlayers, gamePort, useNat);
     if(serverError == NetworkConnectionError.NoError){
-        MasterServer.RegisterHost(gameId, name, "");
+        MasterServer.RegisterHost(gameId, name, natCapable.ToString());
         return true;
     }
     else{
@@ -112,17 +111,18 @@ function TestConnection() {
     switch (natCapable) {
         case ConnectionTesterStatus.Error:
             connTestMessage = "Problem determining NAT capabilities";
+            // Be optimistic and don't toggle `canHost` flag. May need to if issues are encountered
             doneTestingNAT = true;
             break;
 
         case ConnectionTesterStatus.Undetermined:
             connTestMessage = "Undetermined NAT capabilities";
+            // Be optimistic and don't toggle `canHost` flag. May need to if issues are encountered
             doneTestingNAT = false;
             break;
 
         case ConnectionTesterStatus.PublicIPIsConnectable:
             connTestMessage = "Directly connectable public IP address.";
-
             doneTestingNAT = true;
             useNat = false;
             break;
@@ -134,16 +134,14 @@ function TestConnection() {
             useNat = true;
 
             // If no NAT punchthrough test has been performed on this public IP, force a test
-            if (!probingPublicIP)
-            {
-                Debug.Log("Testing if firewall can be circumnvented");
+            if (!probingPublicIP){
+                Debug.Log("Testing if firewall can be circumvented");
                 natCapable = Network.TestConnectionNAT();
                 probingPublicIP = true;
                 timer = Time.time + 10;
             }
             // NAT punchthrough test was performed but we still get blocked
-            else if (Time.time > timer)
-            {
+            else if (Time.time > timer){
                 probingPublicIP = false;
                 doneTestingNAT = true;
                 useNat = true;
@@ -175,15 +173,15 @@ function TestConnection() {
             break;
 
         default:
-            connTestMessage = "Error in test routine, got " + natCapable;
+            connTestMessage = "Error in connection test routine, got " + natCapable;
     }
 
     if(doneTestingNAT){
-        Debug.Log("ConnTester:"+connTestMessage);
-        Debug.Log("ConnTester: NAT Capable? - " + natCapable);
-        Debug.Log("ConnTester: Circmventing Firewall? - " + probingPublicIP);
-        Debug.Log("ConnTester: Use NAT? - " + useNat);
-        Debug.Log("ConnTester: Connection Test Complete");
+        Debug.Log("ConnTester> "+connTestMessage);
+        var infoMessage = "ConnTester> Test Status: " + natCapable + ". ";
+        infoMessage += (probingPublicIP ? "C" : "Not c") + "ircumventing firewall. ";
+        infoMessage += (useNat ? "U" : "Not u") + "sing NAT punchthrough. ";
+        Debug.Log(infoMessage);
     }
 }
 
