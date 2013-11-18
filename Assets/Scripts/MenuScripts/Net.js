@@ -4,7 +4,7 @@ import System.Net;
 import System.Net.Sockets;
 
 private var masterServerHostname : String = "scrambled.no-ip.biz";
-public var gameId : String = "scrambled-by-poached";
+public var gameId : String = "scrambled-by-poached_v1.0.0";
 public var gamePort : int = 25002;
 
 public var hostData : HostData[];
@@ -38,6 +38,10 @@ function Awake () {
         Debug.Log("Master server IP fallback to: " + masterServerIp);
     }
 
+    // Our Master Server _is_ dedicated but _game_ servers are not dedicated
+    // Set this to false to count the host as a player.
+    MasterServer.dedicatedServer = false;
+    MasterServer.updateRate = 15;
     MasterServer.ipAddress = masterServerIp;
     MasterServer.port = 23466;
     Network.natFacilitatorIP = masterServerIp;
@@ -52,18 +56,6 @@ function Awake () {
 function Start () {
     MasterServer.ClearHostList();
     MasterServer.RequestHostList(gameId);
-
-    yield WaitForSeconds(0.5);
-    var tries : int=0;
-    while(tries<=10){
-        if(hostData && hostData.length>0){
-            //Waiting for hostData
-        }else{
-            FetchHostList(true);
-        }
-        yield WaitForSeconds(0.5);
-        tries++;
-    }
 }
 
 function Update() {
@@ -95,24 +87,17 @@ function StartHost(numPlayers : int, name : String){
     }
 }
 
-//limit host list requests to once a minute or 5 seconds if forcing it.
+//limit host list requests to once every 30 seconds or 3 seconds if forcing it.
 function FetchHostList(manual : boolean){
-    if(Network.peerType != NetworkPeerType.Disconnected) return;
-
-    var timeout : int = 60;
-    if(manual){
-        timeout=5;
+    if(Network.peerType != NetworkPeerType.Disconnected){
+        return;
     }
 
-    if(lastHostListRequest==0 || Time.realtimeSinceStartup > lastHostListRequest + timeout){
-        lastHostListRequest = Time.realtimeSinceStartup;
-        MasterServer.RequestHostList (gameId);
-        yield WaitForSeconds(1);
-        hostData = MasterServer.PollHostList();
-        yield WaitForSeconds(1);
-        //TODO - sort list by # of players
+    var timeout : int = manual ? 3 : 30;
 
-        Debug.Log(">>> Requested new host list. "+hostData.length+" servers registered");
+    if(lastHostListRequest == 0 || Time.realtimeSinceStartup > lastHostListRequest + timeout){
+        lastHostListRequest = Time.realtimeSinceStartup;
+        MasterServer.RequestHostList(gameId);
     }
 }
 
@@ -205,6 +190,9 @@ function TestConnection() {
 function OnMasterServerEvent(event: MasterServerEvent){
     switch(event){
         case MasterServerEvent.HostListReceived:
+            hostData = MasterServer.PollHostList();
+            Debug.Log(">>> Received new host list. "+hostData.length+" servers registered");
+            //TODO - sort list by # of players
             break;
         case MasterServerEvent.RegistrationSucceeded:
             Debug.Log("Host successfully registered with master server.");
