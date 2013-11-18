@@ -83,8 +83,15 @@ function StartHost(numPlayers : int, name : String){
         Debug.Log("Player limit of " + numPlayers + " is too low. Player limit is now set to 3");
         numPlayers = 2;
     }
-    Network.InitializeServer(numPlayers, gamePort, !Network.HavePublicAddress());
-    MasterServer.RegisterHost(gameId, name, "");
+    var serverError = Network.InitializeServer(numPlayers, gamePort, useNat);
+    if(serverError = NetworkConnectionError.NoError){
+        MasterServer.RegisterHost(gameId, name, "");
+        return true;
+    }
+    else{
+        Debug.Log("Error starting server: " + serverError);
+        return false;
+    }
 }
 
 //limit host list requests to once a minute or 5 seconds if forcing it.
@@ -151,8 +158,7 @@ function TestConnection() {
             // NAT punchthrough test was performed but we still get blocked
             else if (Time.time > timer)
             {
-                probingPublicIP = false;        // reset
-
+                probingPublicIP = false;
                 doneTestingNAT = true;
                 useNat = true;
             }
