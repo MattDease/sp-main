@@ -84,6 +84,8 @@ GameObject:
   - 4: {fileID: 134212329}
   - 114: {fileID: 134212330}
   - 114: {fileID: 134212331}
+  - 148: {fileID: 134212332}
+  - 114: {fileID: 134212333}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -124,6 +126,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 852e141e533f88345abc8728c2e12d80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!148 &134212332
+NetworkView:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 134212328}
+  m_Enabled: 1
+  m_StateSynchronization: 0
+  m_Observed: {fileID: 0}
+  m_ViewID:
+    m_ID: 1
+    m_Type: 1
+--- !u!114 &134212333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 134212328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7aa6d53d44b4c04e9e680d8a83e7953, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 0}
+  playerList: []
 --- !u!1 &390462233
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,8 +253,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 710026a53badbfe438ae024762c58d49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameId: scrambled-by-poached
-  serverPort: 25002
 --- !u!114 &390462241
 MonoBehaviour:
   m_ObjectHideFlags: 0

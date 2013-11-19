@@ -27,9 +27,6 @@ function OnGUI (){
         return;
     }
 
-    // TODO Implement networking to poll masterserver so a list of active
-    // games can be displayed
-
     // TODO - replace with good UI
     GUILayout.Label("Lobby Menu" + (isQuickplay ? " - Quickplay" : ""));
     GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());

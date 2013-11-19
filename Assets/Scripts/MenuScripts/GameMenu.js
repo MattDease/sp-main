@@ -3,12 +3,15 @@
 private var gameManager : GameObject;
 private var menuScript : Menu;
 private var playerScript : PlayerScript;
+private var gameSetupScript : GameSetup;
 private var netScript : Net;
 
 private var showMenu : boolean = false;
 private var isHosting : boolean = false;
 private var gameName : String;
 private var playerLimit : int = 4;
+
+private var playerList : List.<Player>;
 
 function Awake(){
     netScript = GetComponent(Net);
@@ -19,6 +22,7 @@ function Start(){
     gameManager = GameObject.Find("/GameManager");
 
     playerScript = gameManager.GetComponent(PlayerScript);
+    gameSetupScript = gameManager.GetComponent(GameSetup);
 
     gameName = playerScript.getName() + "'s Game";
 
@@ -45,21 +49,32 @@ function OnGUI (){
         GUILayout.Label("Player Limit:");
         playerLimit = parseInt(GUILayout.TextField(playerLimit.ToString(), GUILayout.MinWidth(70))) || 0;
         if (GUILayout.Button ("Start Server")){
-            netScript.StartHost(playerLimit, gameName);
+            netScript.startHost(playerLimit, gameName, onInitialize);
         }
     }
-    else if(Network.isServer){
-        GUILayout.Label("Game Hosted!");
+    else if(Network.isClient || (isHosting && Network.isServer)){
+        playerList = gameSetupScript.playerList;
+        GUILayout.Label("Players:");
+        for(var player:Player in playerList){
+            GUILayout.Label(" - " + player.name + (player.isSelf ? " (me)" : ""));
+        }
     }
+}
 
-    if(!isHosting && Network.isClient){
-        GUILayout.Label("Joined Hosted Game!");
+function onInitialize(success: boolean){
+    if(success){
+        Debug.Log("register");
+        gameSetupScript.registerPlayerRPC(playerScript.getName());
     }
 }
 
 function enter(isNew : boolean){
     showMenu = true;
     isHosting = isNew;
+
+    if(Network.isClient){
+        gameSetupScript.registerPlayerRPC(playerScript.getName());
+    }
 }
 
 function leaveFor(newMenu : menus){

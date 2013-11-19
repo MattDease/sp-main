@@ -13,7 +13,10 @@ private var gameId : String = "scrambled-by-poached_v1.0.0";
 private var gamePort : int = 25002;
 
 private var lastHostListRequest : float = 0;
+//client
 private var connectCallback : Function;
+//server
+private var initializeCallback : Function;
 
 private var natCapable : ConnectionTesterStatus = ConnectionTesterStatus.Undetermined;
 private var probingPublicIP : boolean = false;
@@ -25,6 +28,8 @@ private var connTestMessage : String = "Undetermined NAT capabilities";
 private var hostToConnect : HostData = null;
 private var reconnectionTries : int = 0;
 private var reconnectionLimit : int = 5;
+private var rehostTries : int = 0;
+private var rehostLimit : int = 5;
 
 function Awake () {
     // Get Master Server IP from hostname
@@ -85,6 +90,7 @@ function retryFailedConnect(error: NetworkConnectionError){
         return;
     }
     Debug.Log("Retry connecting to server. Retry #" + reconnectionTries);
+    yield WaitForSeconds(0.1);
     Network.Connect(hostToConnect);
 }
 
@@ -119,7 +125,7 @@ function OnFailedToConnect(error: NetworkConnectionError){
     }
 }
 
-function StartHost(numPlayers : int, name : String){
+function startHost(numPlayers : int, name : String, callback : Function){
     Debug.Log("Starting server. Players: " + numPlayers + " Port: " + gamePort + " NAT?: " + useNat);
     // Reduce number of players by one to account for server host who is a player
     numPlayers--;
@@ -127,15 +133,34 @@ function StartHost(numPlayers : int, name : String){
         Debug.Log("Player limit of " + numPlayers + " is too low. Player limit is now set to 3");
         numPlayers = 2;
     }
+    initializeCallback = callback;
     var serverError = Network.InitializeServer(numPlayers, gamePort, useNat);
-    if(serverError == NetworkConnectionError.NoError){
-        MasterServer.RegisterHost(gameId, name, natCapable.ToString());
-        return true;
-    }
-    else{
+    if(serverError != NetworkConnectionError.NoError){
         Debug.Log("Error starting server: " + serverError);
-        return false;
+        if(initializeCallback){
+            initializeCallback(false);
+            initializeCallback = null;
+        }
     }
+}
+
+function OnServerInitialized(){
+    MasterServer.RegisterHost(gameId, name, natCapable.ToString());
+}
+
+function retryFailedHost(){
+    rehostTries++;
+    if(rehostTries > rehostLimit){
+        Debug.Log("Retry registering host limit reached. Send failure to UI.");
+        if(initializeCallback){
+            initializeCallback(false);
+            initializeCallback = null;
+        }
+        return;
+    }
+    Debug.Log("Retry registering host. Retry #" + reconnectionTries);
+    yield WaitForSeconds(0.1);
+    MasterServer.RegisterHost(gameId, name, natCapable.ToString());
 }
 
 //limit host list requests to once every 30 seconds or 3 seconds if forcing it.
@@ -238,11 +263,16 @@ function OnMasterServerEvent(event: MasterServerEvent){
             break;
         case MasterServerEvent.RegistrationSucceeded:
             Debug.Log("Host successfully registered with master server.");
+            if(initializeCallback){
+                initializeCallback(true);
+                initializeCallback = null;
+            }
             break;
         case MasterServerEvent.RegistrationFailedNoServer:
         case MasterServerEvent.RegistrationFailedGameType:
         case MasterServerEvent.RegistrationFailedGameName:
-            Debug.Log("Error registering host: " + event);
+            Debug.Log("Error registering host: " + event.ToString());
+            retryFailedHost();
             break;
     }
 }
