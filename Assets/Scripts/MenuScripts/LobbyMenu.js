@@ -4,8 +4,11 @@ private var menuScript : Menu;
 private var playerScript : PlayerScript;
 private var netScript : Net;
 
+private var hostList : List.<HostData>;
+
 private var showMenu : boolean = false;
 private var isQuickplay : boolean = false;
+private var filterHosts : boolean = false;
 
 function Awake(){
     netScript = GetComponent(Net);
@@ -35,34 +38,38 @@ function OnGUI (){
     if(GUILayout.Button("Refresh List")){
         netScript.FetchHostList(true);
     }
+
+    if(GUILayout.Button("Toggle host filtering")){
+        filterHosts = !filterHosts;
+    }
+
     netScript.FetchHostList(false);
 
-    if(netScript.hostData.length){
-        GUILayout.Label("All Hosted Games:");
-        // Go through all the hosts in the host list
-        for (var element : HostData in netScript.hostData){
+    hostList = filterHosts ? netScript.filteredHostList : netScript.hostList;
+
+    GUILayout.Label((filterHosts ? "Connectable" : "All") + " Hosted Games:");
+    if(hostList.Count){
+        for (var element : HostData in hostList){
             GUILayout.BeginHorizontal();
             var name : String = element.gameName + " " + element.connectedPlayers + " / " + element.playerLimit;
             GUILayout.Label(name);
             GUILayout.Space(5);
-            var hostInfo : String;
-            hostInfo = "[";
+            var hostInfo : String = "[";
             for (var host : String in element.ip){
                 hostInfo = hostInfo + host + ":" + element.port + " ";
             }
-            hostInfo = hostInfo + "]";
+            hostInfo += "]";
             GUILayout.Label(hostInfo);
             GUILayout.Space(5);
             GUILayout.FlexibleSpace();
             if (Network.peerType == NetworkPeerType.Disconnected && GUILayout.Button("Connect")){
-                // Connect to HostData struct, internally the correct method is used (GUID when using NAT).
                 netScript.Connect(element.ip[0], element.port, onConnect);
             }
             GUILayout.EndHorizontal();
         }
     }
     else{
-        GUILayout.Label("No Games Being Hosted");
+        GUILayout.Label("No Games Being Hosted.");
     }
 }
 

@@ -2,8 +2,10 @@
 
 import System.Net;
 import System.Net.Sockets;
+import System.Collections.Generic;
 
-public var hostData : HostData[];
+public var hostList : List.<HostData> = new List.<HostData>();
+public var filteredHostList : List.<HostData> = new List.<HostData>();
 
 private var masterServerHostname : String = "scrambled.no-ip.biz";
 private var gameId : String = "scrambled-by-poached_v1.0.0";
@@ -70,11 +72,13 @@ function Connect(ip : String, port : int, callback : Function){
 }
 
 function StartHost(numPlayers : int, name : String){
+    Debug.Log("Starting server. Players: " + numPlayers + " Port: " + gamePort + " NAT?: " + useNat);
+    // Reduce number of players by one to account for server host who is a player
+    numPlayers--;
     if(numPlayers <= 1){
         Debug.Log("Player limit of " + numPlayers + " is too low. Player limit is now set to 3");
         numPlayers = 2;
     }
-    Debug.Log("Starting server. Players: " + numPlayers + " Port: " + gamePort + " NAT?: " + useNat);
     var serverError = Network.InitializeServer(numPlayers, gamePort, useNat);
     if(serverError == NetworkConnectionError.NoError){
         MasterServer.RegisterHost(gameId, name, natCapable.ToString());
@@ -179,8 +183,8 @@ function TestConnection() {
     if(doneTestingNAT){
         Debug.Log("ConnTester> "+connTestMessage);
         var infoMessage = "ConnTester> Test Status: " + natCapable + ". ";
-        infoMessage += (probingPublicIP ? "C" : "Not c") + "ircumventing firewall. ";
-        infoMessage += (useNat ? "U" : "Not u") + "sing NAT punchthrough. ";
+        infoMessage += (probingPublicIP ? "Is" : "Not") + " circumventing firewall. ";
+        infoMessage += (useNat ? "Is" : "Not") + " using NAT punchthrough. ";
         Debug.Log(infoMessage);
     }
 }
@@ -188,8 +192,8 @@ function TestConnection() {
 function OnMasterServerEvent(event: MasterServerEvent){
     switch(event){
         case MasterServerEvent.HostListReceived:
-            hostData = MasterServer.PollHostList();
-            Debug.Log(">>> Received new host list. "+hostData.length+" servers registered");
+            sortAndFilterHostList(MasterServer.PollHostList());
+            Debug.Log(">>> Received new host list. "+hostList.Count+" servers registered." + (hostList.Count - filteredHostList.Count) + " filtered out");
             //TODO - sort list by # of players
             break;
         case MasterServerEvent.RegistrationSucceeded:
@@ -203,7 +207,30 @@ function OnMasterServerEvent(event: MasterServerEvent){
     }
 }
 
-function CanConnect(type1: ConnectionTesterStatus, type2: ConnectionTesterStatus) : boolean{
+function sortAndFilterHostList(sourceData : HostData[]){
+    hostList.Clear();
+    for(var host : HostData in sourceData){
+        hostList.Add(host);
+    }
+    hostList.Sort(function(a:HostData, b:HostData){
+        if(a.connectedPlayers < b.connectedPlayers){
+            return -1;
+        }
+        if(a.connectedPlayers > b.connectedPlayers){
+            return 1;
+        }
+        return 0;
+    });
+    filteredHostList.Clear();
+    for(host in hostList){
+        var hostConnTestStatus : ConnectionTesterStatus = System.Enum.Parse(ConnectionTesterStatus, host.comment);
+        if(canConnect(natCapable, hostConnTestStatus)){
+            filteredHostList.Add(host);
+        }
+    }
+}
+
+function canConnect(type1: ConnectionTesterStatus, type2: ConnectionTesterStatus){
     if (type1 == ConnectionTesterStatus.LimitedNATPunchthroughPortRestricted &&
         type2 == ConnectionTesterStatus.LimitedNATPunchthroughSymmetric)
         return false;
@@ -214,4 +241,8 @@ function CanConnect(type1: ConnectionTesterStatus, type2: ConnectionTesterStatus
         type2 == ConnectionTesterStatus.LimitedNATPunchthroughSymmetric)
         return false;
     return true;
+}
+
+function OnPlayerConnected(player: NetworkPlayer){
+    Debug.Log(player.ipAddress);
 }
