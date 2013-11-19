@@ -39,10 +39,6 @@ function OnGUI (){
     GUILayout.Label("Game Menu" + (isHosting ? " - Host" : ""));
     GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
 
-    if(GUILayout.Button("Start Game")){
-        Application.LoadLevel("scene-game");
-    }
-
     if(isHosting && !Network.isServer){
         GUILayout.Label("Game Name:");
         gameName = GUILayout.TextField(gameName, GUILayout.MinWidth(70));
@@ -58,12 +54,14 @@ function OnGUI (){
         for(var player:Player in playerList){
             GUILayout.Label(" - " + player.name + (player.isSelf ? " (me)" : ""));
         }
+        if(GUILayout.Button("Start Game")){
+            gameSetupScript.enterGame();
+        }
     }
 }
 
 function onInitialize(success: boolean){
     if(success){
-        Debug.Log("register");
         gameSetupScript.registerPlayerRPC(playerScript.getName());
     }
 }

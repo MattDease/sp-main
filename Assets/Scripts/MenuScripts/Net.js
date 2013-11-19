@@ -312,7 +312,3 @@ function canConnect(type1: ConnectionTesterStatus, type2: ConnectionTesterStatus
         return false;
     return true;
 }
-
-function OnPlayerConnected(player: NetworkPlayer){
-    Debug.Log(player.ipAddress);
-}
