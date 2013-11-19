@@ -1,4 +1,5 @@
 #pragma strict
+#pragma downcast
 
 import System.Net;
 import System.Net.Sockets;
@@ -12,7 +13,7 @@ private var gameId : String = "scrambled-by-poached_v1.0.0";
 private var gamePort : int = 25002;
 
 private var lastHostListRequest : float = 0;
-private var onConnection : Function;
+private var connectCallback : Function;
 
 private var natCapable : ConnectionTesterStatus = ConnectionTesterStatus.Undetermined;
 private var probingPublicIP : boolean = false;
@@ -20,6 +21,10 @@ private var doneTestingNAT : boolean = false;
 private var useNat : boolean = false;
 private var timer : float = 0.0;
 private var connTestMessage : String = "Undetermined NAT capabilities";
+
+private var hostToConnect : HostData = null;
+private var reconnectionTries : int = 0;
+private var reconnectionLimit : int = 5;
 
 function Awake () {
     // Get Master Server IP from hostname
@@ -62,13 +67,56 @@ function Start () {
 function Update() {
     // If network test is undetermined, keep running
     if (!doneTestingNAT) {
-        TestConnection();
+        testConnection();
     }
 }
 
-function Connect(ip : String, port : int, callback : Function){
-    onConnection = callback;
-    Network.Connect(ip, port);
+function connect(host: HostData, callback : Function){
+    hostToConnect = host;
+    connectCallback = callback;
+    Network.Connect(host);
+}
+
+function retryFailedConnect(error: NetworkConnectionError){
+    reconnectionTries++;
+    if(reconnectionTries > reconnectionLimit){
+        Debug.Log("Retry limit reached. Send failure to UI.");
+        connectCallback(error);
+        return;
+    }
+    Debug.Log("Retry connecting to server. Retry #" + reconnectionTries);
+    Network.Connect(hostToConnect);
+}
+
+function OnConnectedToServer(){
+    Debug.Log("Successfully connected to server as a client");
+    reconnectionTries = 0;
+    if(connectCallback){
+        connectCallback(NetworkConnectionError.NoError);
+        connectCallback = null;
+    }
+}
+
+function OnFailedToConnect(error: NetworkConnectionError){
+    Debug.Log("Failed to connect. Error: " + error.ToString());
+    switch(error){
+        case NetworkConnectionError.CreateSocketOrThreadFailure:
+        case NetworkConnectionError.AlreadyConnectedToAnotherServer:
+            Network.Disconnect();
+            yield WaitForSeconds(0.5);
+        case NetworkConnectionError.ConnectionFailed:
+        case NetworkConnectionError.InternalDirectConnectFailed:
+        case NetworkConnectionError.NATTargetNotConnected:
+        case NetworkConnectionError.NATTargetConnectionLost:
+        case NetworkConnectionError.NATPunchthroughFailed:
+            retryFailedConnect(error);
+            break;
+        default:
+            // No special case that we can fix
+            // Don't retry, just forward the error onto the callback
+            connectCallback(error);
+            break;
+    }
 }
 
 function StartHost(numPlayers : int, name : String){
@@ -104,24 +152,17 @@ function FetchHostList(manual : boolean){
     }
 }
 
-function OnConnectedToServer(){
-    onConnection();
-    onConnection = null;
-}
-
-function TestConnection() {
+function testConnection() {
     natCapable = Network.TestConnection();
 
     switch (natCapable) {
         case ConnectionTesterStatus.Error:
             connTestMessage = "Problem determining NAT capabilities";
-            // Be optimistic and don't toggle `canHost` flag. May need to if issues are encountered
             doneTestingNAT = true;
             break;
 
         case ConnectionTesterStatus.Undetermined:
             connTestMessage = "Undetermined NAT capabilities";
-            // Be optimistic and don't toggle `canHost` flag. May need to if issues are encountered
             doneTestingNAT = false;
             break;
 
@@ -194,7 +235,6 @@ function OnMasterServerEvent(event: MasterServerEvent){
         case MasterServerEvent.HostListReceived:
             sortAndFilterHostList(MasterServer.PollHostList());
             Debug.Log(">>> Received new host list. "+hostList.Count+" servers registered." + (hostList.Count - filteredHostList.Count) + " filtered out");
-            //TODO - sort list by # of players
             break;
         case MasterServerEvent.RegistrationSucceeded:
             Debug.Log("Host successfully registered with master server.");
