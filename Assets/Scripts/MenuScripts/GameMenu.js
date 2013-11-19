@@ -8,6 +8,7 @@ private var netScript : Net;
 
 private var showMenu : boolean = false;
 private var isHosting : boolean = false;
+private var isStartingServer : boolean = false;
 private var gameName : String;
 private var playerLimit : int = 4;
 
@@ -46,7 +47,11 @@ function OnGUI (){
         playerLimit = parseInt(GUILayout.TextField(playerLimit.ToString(), GUILayout.MinWidth(70))) || 0;
         if (GUILayout.Button ("Start Server")){
             netScript.startHost(playerLimit, gameName, onInitialize);
+            isStartingServer = true;
         }
+    }
+    else if(isStartingServer){
+        GUILayout.Label("Starting server. Please Wait...");
     }
     else if(Network.isClient || (isHosting && Network.isServer)){
         playerList = gameSetupScript.playerList;
@@ -62,6 +67,7 @@ function OnGUI (){
 
 function onInitialize(success: boolean){
     if(success){
+        isStartingServer = false;
         gameSetupScript.registerPlayerRPC(playerScript.getName());
     }
 }
