@@ -9,7 +9,6 @@ private var menuScript : Menu;
 private var showMenu : boolean = false;
 
 var GuiInGame : GuiClasses[];
-enum PointInGame {TopLeft, TopRight, BottomLeft, BottomRight, Center}
 var menuSkin : GUISkin;
 
 function Start(){
@@ -28,8 +27,7 @@ function Start(){
 }
 
 function OnGUI () {
-    //GUILayout.Label("~~~~~~~~~THE GAME~~~~~~~~~~");
-    //GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
+    //Todo -- Player progression bar 
     var bgHeight : int;
     var buttonOffset : int;
     GUI.skin = menuSkin;
@@ -47,7 +45,7 @@ function OnGUI () {
         buttonOffset = Screen.height*0.03;
 
     for(var x =0; x<3; x++){
-        GuiInGame[x].pointLocation = PointInGame.Center;
+        GuiInGame[x].pointLocation = GuiInGame[x].Point.Center;
         GuiInGame[x].updateLocation();
 
         if(x !=0){
@@ -65,10 +63,6 @@ function OnGUI () {
 
     if(GUI.Button(Rect(GuiInGame[2].offset.x + (75 + Screen.width * 0.025) ,GuiInGame[2].offset.y - buttonOffset ,150,30), "Join New")){
     }
-    /*if(GUILayout.Button("Leave Game")){
-        playerScript.incrementTimesPlayed();
-        stateScript.setCurrentMenu(menus.highscore);
-        Application.LoadLevel("scene-menu");
-    }*/
+
 }
 

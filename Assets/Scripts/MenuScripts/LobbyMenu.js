@@ -7,9 +7,6 @@ private var showMenu : boolean = false;
 private var isQuickplay : boolean = false;
 
 var GuiLobby : GuiClasses[];
-
-enum Point2 {TopLeft, TopRight, BottomLeft, BottomRight, Center}
-
 var menuSkin : GUISkin;
 var observeTexture : Texture2D;
 var backTexture : Texture2D;
@@ -22,7 +19,7 @@ function Start(){
     observeTexture = Resources.LoadAssetAtPath("Assets/Textures/gui/observe.jpg", Texture2D);
     backTexture = Resources.LoadAssetAtPath("Assets/Textures/gui/back.jpg", Texture2D);
 
-    GuiLobby = new GuiClasses[3];
+    GuiLobby = new GuiClasses[2];
     GuiLobby[0] = new GuiClasses();
     GuiLobby[1] = new GuiClasses();
 }
@@ -39,18 +36,14 @@ function OnGUI (){
     GuiLobby[1].textureWidth = backTexture.width;
     GuiLobby[1].textureHeight = backTexture.height;
 
-    GuiLobby[0].pointLocation = Point2.TopRight;
-    GuiLobby[1].pointLocation = Point2.TopLeft;
+    GuiLobby[0].pointLocation = GuiLobby[0].Point.TopRight;
+    GuiLobby[1].pointLocation = GuiLobby[1].Point.TopLeft;
 
-    for(var x =0; x<2; x++){
+    for(var x =0; x<GuiLobby.length - 1; x++){
         GuiLobby[x].updateLocation();
     }
     // TODO Implement networking to poll masterserver so a list of active
     // games can be displayed
-
-    //TODO - replace with good UI
-    //GUILayout.Label("Lobby Menu" + (isQuickplay ? " - Quickplay" : ""));
-    //GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
 
     GUI.Box(Rect (0,GuiLobby[0].offset.y + GuiLobby[0].offsetY30 ,Screen.width,30), "Waiting For.....Slow Friends");
 

@@ -13,8 +13,6 @@ var GuiBack: GuiClasses;
 var GuiCharacterNext: GuiClasses;
 var GuiCharacterBack: GuiClasses;
 
-enum Point4 {TopLeft, TopRight, BottomLeft, BottomRight, Center}
-
 var characterSelect : boolean = false;
 var selectMenu; //Check which menu the player selected
 
@@ -37,7 +35,7 @@ function Start(){
     backTexture = Resources.LoadAssetAtPath("Assets/Textures/gui/back.jpg", Texture2D);
 
     GuiCharacter = new GuiClasses[10];
-    for (var x =0; x<10; x++){
+    for (var x =0; x<GuiCharacter.length; x++){
         GuiCharacter[x] = new GuiClasses();
     }
 }
@@ -57,12 +55,12 @@ function OnGUI (){
     GuiBack.textureHeight = backTexture.height;
 
     Gui.updateLocation();
-    Gui.pointLocation = Point4.Center;
+    Gui.pointLocation = Gui.Point.Center;
 
-    for (var i=0; i<10; i++){
+    for (var i=0; i<GuiCharacter.length; i++){
         GuiCharacter[i].textureWidth = Screen.width*0.2;
         GuiCharacter[i].textureHeight = Screen.height*0.5;
-        GuiCharacter[i].pointLocation = Point4.Center;
+        GuiCharacter[i].pointLocation = GuiCharacter[i].Point.Center;
     }
 
     if(!showMenu){
@@ -85,12 +83,12 @@ function OnGUI (){
         }
 
         //Button location
-        GuiCharacterNext.pointLocation = Point4.Center;
+        GuiCharacterNext.pointLocation = GuiCharacterNext.Point.Center;
         GuiCharacterNext.textureWidth = Screen.width*0.08;
         GuiCharacterNext.textureHeight = Screen.height*0.3;
         GuiCharacterNext.updateLocation();
 
-        GuiCharacterBack.pointLocation = Point4.Center;
+        GuiCharacterBack.pointLocation = GuiCharacterBack.Point.Center;
         GuiCharacterBack.textureWidth = Screen.width*0.08;
         GuiCharacterBack.textureHeight = Screen.height*0.3;
         GuiCharacterBack.updateLocation();
@@ -99,7 +97,7 @@ function OnGUI (){
         GUI.Box(Rect(0 + Screen.width*0.02, GuiCharacterBack.offset.y - GuiCharacterBack.offsetY03,  Screen.width*0.08, Screen.height*0.3), "<<");
 
 
-        GuiReady.pointLocation = Point4.Center;
+        GuiReady.pointLocation = GuiReady.Point.Center;
 
         var readyBtnWidth : int;
         var readyBtnHeight : int;

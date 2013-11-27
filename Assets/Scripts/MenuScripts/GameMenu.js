@@ -8,7 +8,6 @@ private var showMenu : boolean = false;
 private var isHosting : boolean = false;
 
 var GuiHost : GuiClasses[];
-enum Point5 {TopLeft, TopRight, BottomLeft, BottomRight, Center}
 var menuSkin : GUISkin;
 var backTexture : Texture2D;
 
@@ -54,12 +53,11 @@ function OnGUI (){
 
     var bgHeight : int;
 
-
     for(var x=0; x<4; x++){
-        GuiHost[x].pointLocation = Point5.Center;
+        GuiHost[x].pointLocation = GuiHost[x].Point.Center;
         GuiHost[x].updateLocation();
     }
-    GuiHost[4].pointLocation = Point5.TopLeft;
+    GuiHost[4].pointLocation = GuiHost[x].Point.TopLeft;
     GuiHost[4].updateLocation();
 
     if(Screen.height< 500){
@@ -70,10 +68,6 @@ function OnGUI (){
     if(isHosting == true){
         GUI.Box(Rect (0,GuiHost[0].offset.y - Screen.height*0.1,Screen.width, bgHeight), "");
     
-    //TODO - replace with good UI
-    //GUILayout.Label("Game Menu" + (isHosting ? " - Host" : ""));
-    //GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
-
     //Back Button
     if(GUI.Button(Rect(GuiHost[4].offset.x + GuiHost[4].offsetY03 ,GuiHost[4].offset.y + GuiHost[4].offsetY03 ,backTexture.width,backTexture.height), backTexture)){
        leaveFor(menus.main);
