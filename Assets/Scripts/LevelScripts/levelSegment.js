@@ -1,4 +1,4 @@
-﻿#pragma strict
+﻿#pragma downcast
 
 public var isStart : boolean = false;
 public var isCurrent : boolean = false;
@@ -15,59 +15,66 @@ private var currentDifficulty;
 private var segment : int;
 
 var easy = [
-        { "current": "easy", "previous": "easy", "next":"hard" },
-        { "current": "easy", "previous": "easy", "next":"easy" },
-        { "current": "easy", "previous": "easy", "next":"medium" },
-        { "current": "easy", "previous": "medium", "next":"easy" },
-        { "current": "medium", "previous": "easy", "next":"medium" },
-        { "current": "medium", "previous": "easy", "next":"easy" }
-    ];
+    { "current": "easy", "previous": "easy", "next":"hard" },
+    { "current": "easy", "previous": "easy", "next":"easy" },
+    { "current": "easy", "previous": "easy", "next":"medium" },
+    { "current": "easy", "previous": "medium", "next":"easy" },
+    { "current": "medium", "previous": "easy", "next":"medium" },
+    { "current": "medium", "previous": "easy", "next":"easy" }
+];
 
-     var medium = [
-        { "current": "easy", "previous": "medium", "next":"hard" },
-        { "current": "easy", "previous": "easy", "next":"hard" },
-        { "current": "easy", "previous": "easy", "next":"medium" },
-        { "current": "medium", "previous": "medium", "next":"easy" },
-        { "current": "medium", "previous": "hard", "next":"easy" },
-        { "current": "medium", "previous": "medium", "next":"medium" },
-        { "current": "hard", "previous": "medium", "next":"medium" },
-        { "current": "hard", "previous": "medium", "next":"easy" }
-    ];
+ var medium = [
+    { "current": "easy", "previous": "medium", "next":"hard" },
+    { "current": "easy", "previous": "easy", "next":"hard" },
+    { "current": "easy", "previous": "easy", "next":"medium" },
+    { "current": "medium", "previous": "medium", "next":"easy" },
+    { "current": "medium", "previous": "hard", "next":"easy" },
+    { "current": "medium", "previous": "medium", "next":"medium" },
+    { "current": "hard", "previous": "medium", "next":"medium" },
+    { "current": "hard", "previous": "medium", "next":"easy" }
+];
 
-     var hard = [
-        { "current": "easy", "previous": "easy", "next":"hard" },
-        { "current": "easy", "previous": "medium", "next":"hard" },
-        { "current": "medium", "previous": "easy", "next":"hard" },
-        { "current": "medium", "previous": "hard", "next":"easy" },
-        { "current": "medium", "previous": "medium", "next":"medium" },
-        { "current": "medium", "previous": "medium", "next":"easy" },
-        { "current": "hard", "previous": "medium", "next":"easy" },
-        { "current": "hard", "previous": "medium", "next":"medium" }
+ var hard = [
+    { "current": "easy", "previous": "easy", "next":"hard" },
+    { "current": "easy", "previous": "medium", "next":"hard" },
+    { "current": "medium", "previous": "easy", "next":"hard" },
+    { "current": "medium", "previous": "hard", "next":"easy" },
+    { "current": "medium", "previous": "medium", "next":"medium" },
+    { "current": "medium", "previous": "medium", "next":"easy" },
+    { "current": "hard", "previous": "medium", "next":"easy" },
+    { "current": "hard", "previous": "medium", "next":"medium" }
 
-    ];
+];
 
-    var expert = [
-        { "current": "hard", "previous": "easy", "next":"hard" },
-        { "current": "hard", "previous": "medium", "next":"hard" },
-        { "current": "hard", "previous": "hard", "next":"medium" },
-        { "current": "medium", "previous": "easy", "next":"hard" },
-        { "current": "medium", "previous": "hard", "next":"hard" },
-        { "current": "medium", "previous": "hard", "next":"easy" },
-        { "current": "easy", "previous": "hard", "next":"easy" },
-        { "current": "easy", "previous": "medium", "next":"hard" }
+var expert = [
+    { "current": "hard", "previous": "easy", "next":"hard" },
+    { "current": "hard", "previous": "medium", "next":"hard" },
+    { "current": "hard", "previous": "hard", "next":"medium" },
+    { "current": "medium", "previous": "easy", "next":"hard" },
+    { "current": "medium", "previous": "hard", "next":"hard" },
+    { "current": "medium", "previous": "hard", "next":"easy" },
+    { "current": "easy", "previous": "hard", "next":"easy" },
+    { "current": "easy", "previous": "medium", "next":"hard" }
 
-    ];
+];
 
-    var easyLevels = [1,4,8,9];
-    var mediumLevels = [2,5,6];
-    var hardLevels = [3,7,10];
+var easyLevels : int[] = [1,4,8,9];
+var mediumLevels : int[] = [2,5,6];
+var hardLevels : int[] = [3,7,10];
 
 
 function Awake() {
-        if(isStart) {
-            start = this;
-            prev = gameObject;
-        }
+    if(isStart) {
+        start = this;
+        prev = gameObject;
+    }
+
+    /*Set up trigger on level, we check to see if the player hits this trigger
+    is yes, we load the next level */
+    var box : BoxCollider = gameObject.AddComponent(BoxCollider);
+    box.isTrigger = true;
+    box.size = new Vector3(10, 300 , 105);
+    box.center = new Vector3(-400, 120, 52);
 }
 
 function Start () {
@@ -82,7 +89,6 @@ function Update () {
     currentDifficulty = difficultyScript.getCurrentDifficulty().ToString();
 
     if(!next && addNext && isCurrent){
-
         if(currentDifficulty == "tutorial") segment = segment + 1;
         else segment = levelLogic();
 
@@ -90,27 +96,27 @@ function Update () {
         addNext = false;
         isCurrent = false;
     }
-
-    if (Input.GetKeyDown ("space")) addNext = true;
 }
 
 function loadRandomSegment(segment : int ) {
 
-    if(segment == 0) segment = Random.Range(2,10);
-    //Load a Character from the resource folder, set up its player controls
+    //Check to see if segment was selected properly, if not just randomly choose one
+    if(segment == null || segment == 0) segment = Random.Range(2,10);
+
+    //Load a level from the resource folder, set up its player controls
     var modelName = "level_" + segment;
     var url = "levelSegments/" + modelName;
 
-    //TODO Temp til files are cleaned up
-    var position;
-    position = this.transform.position + Vector3(-600, 0, 0); //Set to end of previous
+    var position : Vector3 ;
+    position = this.transform.position + Vector3(-624, 0, 0); //Set to end of previous
 
-    var rotation = Quaternion.identity;
+    var rotation : Quaternion = Quaternion.identity;
     var instance : GameObject = Instantiate(Resources.Load(url), position, rotation);
 
-    instance.AddComponent(BoxCollider);
+    instance.AddComponent(MeshCollider);
     instance.AddComponent('LevelSegment');
     instance.AddComponent('LevelPrefs');
+
     //Set up anything specific about the model
     instance.name = modelName;
     instance.tag = "levelSegment";
@@ -119,9 +125,9 @@ function loadRandomSegment(segment : int ) {
     instance.GetComponent(LevelPrefs).levelID = segment;
 
     //Double check if prev is not this (the start prev is set to this) Delete prev is not this.
-    if(prev != this) Destroy(prev);
+    if(prev != this && !isStart) Destroy(prev);
 
-    //Set difficult level count to increase
+    //Set segment count on the difficultly script to increase
     difficultyScript.setSegmentCount(difficultyScript.getSegmentCount() + 1);
 }
 
@@ -142,9 +148,7 @@ function levelLogic() {
     If the randomly selected level is the same as the current, then pick again!
     */
     var next = getObjWhenPropertyEquals(prevLevelDif, currentLevelDif);
-
-
-     return next;
+    return next;
 
 }
 
@@ -181,7 +185,6 @@ function getObjWhenPropertyEquals(prev, curr){
         break;
     }
 
-
     if(nextDif == "easy") {
         rand = Random.Range(1, easyLevels.length);
         nextLevel = easyLevels[rand];
@@ -191,9 +194,12 @@ function getObjWhenPropertyEquals(prev, curr){
     } else {
         rand = Random.Range(1, hardLevels.length);
         nextLevel = hardLevels[rand];
-
     }
 
     return nextLevel;
+}
+
+function OnTriggerEnter(other : Collider) {
+  addNext = true;
 }
 

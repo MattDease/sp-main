@@ -62,5 +62,5 @@ function Start () {
 
 function Update () {
 
-    //TODO: Add script to trigger enemies here
+    //TODO: Add script to set up trigger enemies here based on the game's difficulty.
 }

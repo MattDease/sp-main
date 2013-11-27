@@ -17,7 +17,7 @@ public enum difficulty {
 
 private var currentDifficulty : difficulty = difficulty.tutorial;
 
-public var segmentCount : int = 1 ;
+private var segmentCount : int = 1 ;
 
 function getCurrentDifficulty(){
     return currentDifficulty;
