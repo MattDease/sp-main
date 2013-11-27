@@ -42,11 +42,11 @@ function Start(){
 
 function OnGUI (){
     GUI.skin = menuSkin;
-    var screenW = Screen.width;
-    var screenH = Screen.height;
+    var screenW : float  = Screen.width;
+    var screenH : float = Screen.height;
 
-    var newWidth = Screen.width*0.8;
-    var newHeight = Screen.height*0.8;
+    var newWidth : float = Screen.width*0.8;
+    var newHeight : float = Screen.height*0.8;
 
     Gui.textureWidth = 310;
     Gui.textureHeight = 160;
