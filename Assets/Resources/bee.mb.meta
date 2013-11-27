@@ -1,15 +1,58 @@
 fileFormatVersion: 2
-guid: 3e11b2d96a3bb4160bf8b34f945a81aa
+guid: 3aa4954a39121483082269763a3a6332
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: pSphere1
+    100000: Head
+    100002: Hips
+    100004: LeftArm
+    100006: LeftFingerBase
+    100008: LeftFoot
+    100010: LeftForeArm
+    100012: LeftHand
+    100014: LeftLeg
+    100016: LeftToe
+    100018: LeftUpLeg
+    100020: Neck
+    100022: RightArm
+    100024: RightFingerBase
+    100026: RightFoot
+    100028: RightForeArm
+    100030: RightHand
+    100032: RightLeg
+    100034: RightToe
+    100036: RightUpLeg
+    100038: Skin
+    100040: Spine
+    100042: TargetCharacter
+    100044: //RootNode
+    400000: Head
+    400002: Hips
+    400004: LeftArm
+    400006: LeftFingerBase
+    400008: LeftFoot
+    400010: LeftForeArm
+    400012: LeftHand
+    400014: LeftLeg
+    400016: LeftToe
+    400018: LeftUpLeg
+    400020: Neck
+    400022: RightArm
+    400024: RightFingerBase
+    400026: RightFoot
+    400028: RightForeArm
+    400030: RightHand
+    400032: RightLeg
+    400034: RightToe
+    400036: RightUpLeg
+    400038: Skin
+    400040: Spine
+    400042: TargetCharacter
+    400044: //RootNode
+    4300000: Skin
     7400000: Take 001
     9500000: //RootNode
+    13700000: Skin
   materials:
     importMaterials: 1
     materialName: 0
