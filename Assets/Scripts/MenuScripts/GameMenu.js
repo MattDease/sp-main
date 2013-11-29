@@ -1,4 +1,5 @@
 ﻿#pragma strict
+#pragma downcast
 
 private var gameManager : GameObject;
 private var menuScript : Menu;
@@ -67,7 +68,7 @@ function OnGUI (){
 
     if(isHosting == true){
         GUI.Box(Rect (0,GuiHost[0].offset.y - Screen.height*0.1,Screen.width, bgHeight), "");
-    
+
     //Back Button
     if(GUI.Button(Rect(GuiHost[4].offset.x + GuiHost[4].offsetY03 ,GuiHost[4].offset.y + GuiHost[4].offsetY03 ,backTexture.width,backTexture.height), backTexture)){
        leaveFor(menus.main);
@@ -83,7 +84,7 @@ function OnGUI (){
         if(GUI.Button(Rect(GuiHost[1].offset.x,GuiHost[1].offset.y - Screen.height*0.10,200,50), "Start Game")){
             Application.LoadLevel("scene-game");
         }
-    } else 
+    } else
 
         if(GUI.Button(Rect(GuiHost[1].offset.x,GuiHost[1].offset.y,200,50), "Start Game")){
             Application.LoadLevel("scene-game");

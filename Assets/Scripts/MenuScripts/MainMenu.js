@@ -1,4 +1,5 @@
 ﻿#pragma strict
+#pragma downcast
 
 private var menuScript : Menu;
 private var playerScript : PlayerScript;
@@ -50,7 +51,7 @@ function OnGUI (){
 
     Gui.textureWidth = 310;
     Gui.textureHeight = 160;
-    
+
     GuiBack.textureWidth = backTexture.width;
     GuiBack.textureHeight = backTexture.height;
 
@@ -68,7 +69,7 @@ function OnGUI (){
     }
 
     if (characterSelect == true){
-        
+
         //Back Button
         if(GUI.Button(Rect(GuiBack.offset.x + GuiBack.offsetY03 ,GuiBack.offset.y + GuiBack.offsetY03 ,backTexture.width,backTexture.height), backTexture)){
           characterSelect = false;
@@ -109,7 +110,7 @@ function OnGUI (){
             GuiReady.textureWidth = 90;
             GuiReady.textureHeight = 30;
             readyOffset = 30;
-        } 
+        }
 
         else if(Screen.height > 500) {
             readyBtnWidth = 200;
@@ -126,7 +127,7 @@ function OnGUI (){
           } else if (selectMenu == "join") leaveFor(menus.lobby);
             else if (selectMenu == "newGame") leaveFor(menus.host);
         }
-        
+
 
         GuiBack.updateLocation();
         GuiReady.updateLocation();
@@ -134,7 +135,7 @@ function OnGUI (){
 
     } else {
         //Show main menu if Character Selection isn't true
-    
+
         GUILayout.Label("Main Menu");
         GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
 

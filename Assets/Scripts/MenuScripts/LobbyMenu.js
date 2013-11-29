@@ -1,4 +1,5 @@
 ﻿#pragma strict
+#pragma downcast
 
 private var menuScript : Menu;
 private var playerScript : PlayerScript;
@@ -32,7 +33,7 @@ function OnGUI (){
 
     GuiLobby[0].textureWidth = observeTexture.width;
     GuiLobby[0].textureHeight = observeTexture.height;
-    
+
     GuiLobby[1].textureWidth = backTexture.width;
     GuiLobby[1].textureHeight = backTexture.height;
 
@@ -53,7 +54,7 @@ function OnGUI (){
 
     //Back Button
     if(GUI.Button(Rect(GuiLobby[1].offset.x + GuiLobby[1].offsetY03 ,GuiLobby[1].offset.y + GuiLobby[1].offsetY03 ,backTexture.width,backTexture.height), backTexture)){
-        leaveFor(menus.main);    
+        leaveFor(menus.main);
     }
 }
 
