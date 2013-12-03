@@ -45,7 +45,7 @@ function Awake () {
     catch(err){
         Debug.Log("Master server hostname resolution error: " + err.Message);
         //fallback to static IP - may be incorrect!
-        masterServerIp = "192.168.1.145";// "172.19.12.112";
+        masterServerIp = "172.19.12.112";
         Debug.Log("Master server IP fallback to: " + masterServerIp);
     }
 
