@@ -27,9 +27,9 @@ function Start(){
     menuScript = Menu.script;
     playerScript = menuScript.playerScript;
 
-    menuSkin = Resources.LoadAssetAtPath("Assets/MenuSkin.guiskin", GUISkin);
-    observeTexture = Resources.LoadAssetAtPath("Assets/Textures/gui/observe.jpg", Texture2D);
-    backTexture = Resources.LoadAssetAtPath("Assets/Textures/gui/back.jpg", Texture2D);
+    menuSkin = Resources.Load("MenuSkin", GUISkin);
+    observeTexture = Resources.Load("Textures/gui/observe", Texture2D);
+    backTexture = Resources.Load("Textures/gui/back", Texture2D);
 
     GuiLobby = new GuiClasses[2];
     GuiLobby[0] = new GuiClasses();

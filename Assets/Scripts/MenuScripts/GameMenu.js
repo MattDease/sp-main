@@ -35,8 +35,8 @@ function Start(){
     //persist game manager object between scenes
     DontDestroyOnLoad( gameManager );
 
-    menuSkin = Resources.LoadAssetAtPath("Assets/MenuSkin.guiskin", GUISkin);
-    backTexture = Resources.LoadAssetAtPath("Assets/Textures/gui/back.jpg", Texture2D);
+    menuSkin = Resources.Load("MenuSkin", GUISkin);
+    backTexture = Resources.Load("Textures/gui/back", Texture2D);
 
     GuiHost = new GuiClasses[5];
     GuiHost[0] = new GuiClasses();

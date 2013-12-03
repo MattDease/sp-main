@@ -29,11 +29,11 @@ function Start(){
     menuScript = Menu.script;
     playerScript = menuScript.playerScript;
 
-    menuSkin = Resources.LoadAssetAtPath("Assets/MenuSkin.guiskin", GUISkin);
-    quickGameTexture = Resources.LoadAssetAtPath("Assets/Textures/gui/quickgame.jpg", Texture2D);
-    newGameTexture = Resources.LoadAssetAtPath("Assets/Textures/gui/newgame.jpg", Texture2D);
-    joinGameTexture = Resources.LoadAssetAtPath("Assets/Textures/gui/joingame.jpg", Texture2D);
-    backTexture = Resources.LoadAssetAtPath("Assets/Textures/gui/back.jpg", Texture2D);
+    menuSkin = Resources.Load("MenuSkin", GUISkin);
+    quickGameTexture = Resources.Load("Textures/gui/quickgame", Texture2D);
+    newGameTexture = Resources.Load("Textures/gui/newgame", Texture2D);
+    joinGameTexture = Resources.Load("Textures/gui/joingame", Texture2D);
+    backTexture = Resources.Load("Textures/gui/back", Texture2D);
 
     GuiCharacter = new GuiClasses[10];
     for (var x =0; x<GuiCharacter.length; x++){
