@@ -84,8 +84,8 @@ GameObject:
   - 4: {fileID: 134212329}
   - 114: {fileID: 134212330}
   - 114: {fileID: 134212331}
-  - 148: {fileID: 134212332}
-  - 114: {fileID: 134212333}
+  - 114: {fileID: 134212332}
+  - 148: {fileID: 134212333}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -126,7 +126,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 852e141e533f88345abc8728c2e12d80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!148 &134212332
+--- !u!114 &134212332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 134212328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ee1d7dd9ac754d2da13e9fe95d5e79f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!148 &134212333
 NetworkView:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -138,19 +149,6 @@ NetworkView:
   m_ViewID:
     m_ID: 1
     m_Type: 1
---- !u!114 &134212333
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 134212328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7aa6d53d44b4c04e9e680d8a83e7953, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 0}
-  playerList: []
 --- !u!1 &390462233
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,6 +207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b5fd75d97ea03d40be6848392e9c99b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainmenu: {fileID: 0}
 --- !u!114 &390462237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,6 +219,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 153808de4b052ee459066772330d9e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Gui:
+    offsetY30: 0
+    offsetY03: 0
+    offsetY40: 0
+    textureWidth: 0
+    textureHeight: 0
+    pointLocation: 0
+    offset: {x: 0, y: 0}
+  GuiCharacter: []
+  GuiReady:
+    offsetY30: 0
+    offsetY03: 0
+    offsetY40: 0
+    textureWidth: 0
+    textureHeight: 0
+    pointLocation: 0
+    offset: {x: 0, y: 0}
+  GuiBack:
+    offsetY30: 0
+    offsetY03: 0
+    offsetY40: 0
+    textureWidth: 0
+    textureHeight: 0
+    pointLocation: 0
+    offset: {x: 0, y: 0}
+  GuiCharacterNext:
+    offsetY30: 0
+    offsetY03: 0
+    offsetY40: 0
+    textureWidth: 0
+    textureHeight: 0
+    pointLocation: 0
+    offset: {x: 0, y: 0}
+  GuiCharacterBack:
+    offsetY30: 0
+    offsetY03: 0
+    offsetY40: 0
+    textureWidth: 0
+    textureHeight: 0
+    pointLocation: 0
+    offset: {x: 0, y: 0}
+  characterSelect: 0
+  menuSkin: {fileID: 0}
+  quickGameTexture: {fileID: 0}
+  newGameTexture: {fileID: 0}
+  joinGameTexture: {fileID: 0}
+  observeTexture: {fileID: 0}
+  backTexture: {fileID: 0}
 --- !u!114 &390462238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,6 +278,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 119d45adf2816334695b97cb9694ce9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GuiLobby: []
+  menuSkin: {fileID: 0}
+  observeTexture: {fileID: 0}
+  backTexture: {fileID: 0}
 --- !u!114 &390462239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,6 +293,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6150067dbed6a924497f0053c7a79341, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GuiHost: []
+  menuSkin: {fileID: 0}
+  backTexture: {fileID: 0}
 --- !u!114 &390462240
 MonoBehaviour:
   m_ObjectHideFlags: 0

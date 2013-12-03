@@ -8,6 +8,8 @@ private var showMenu : boolean = false;
 private var playerName : String;
 private var newName : String = "";
 
+var mainmenu : MainMenu;
+
 function Start(){
     menuScript = Menu.script;
     playerScript = menuScript.playerScript;
