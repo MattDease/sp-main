@@ -277,6 +277,11 @@ function OnMasterServerEvent(event: MasterServerEvent){
     }
 }
 
+function OnFailedToConnectToMasterServer(info : NetworkConnectionError){
+    Debug.Log("Can't connect to master server: " + info);
+    // TODO handle this case nicely. for now, everything breaks if master server is inaccessible
+}
+
 function sortAndFilterHostList(sourceData : HostData[]){
     hostList.Clear();
     for(var host : HostData in sourceData){
