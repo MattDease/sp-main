@@ -11,10 +11,10 @@ function Start() {
 function OnGUI () {
     // Make a background box (Simple Example GUI), I know its ugly!
     if(isGui){
-        GUI.Box (Rect (10,110,100,60), "Let's load things");
+        GUI.Box (Rect (10,200,100,60), "Let's load things");
 
         // Make the first button. If it is pressed, create the character
-        if (GUI.Button (Rect (20,140,80,20), "Character")) {
+        if (GUI.Button (Rect (20,230,80,20), "Character")) {
             loadCharacter("Name", "bee",Vector3(-25, 1, 40), Quaternion.identity );
         }
     }

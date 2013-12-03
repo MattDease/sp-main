@@ -102,10 +102,11 @@ function OnGUI (){
         if(Screen.height< 500){
             bgHeight = Screen.height*0.47;
         }
-        else bgHeight = Screen.height*0.30;
+        else {
+            bgHeight = Screen.height*0.30;
+        }
 
-        if(isHosting == true){
-            GUI.Box(Rect (0,GuiHost[0].offset.y - Screen.height*0.1,Screen.width, bgHeight), "");
+        GUI.Box(Rect (0,GuiHost[0].offset.y - Screen.height*0.1,Screen.width, bgHeight), "");
 
         //Back Button
         if(GUI.Button(Rect(GuiHost[4].offset.x + GuiHost[4].offsetY03 ,GuiHost[4].offset.y + GuiHost[4].offsetY03 ,backTexture.width,backTexture.height), backTexture)){
@@ -123,7 +124,7 @@ function OnGUI (){
                 gameSetupScript.enterGame();
             }
         }
-        else
+        else{
             if(GUI.Button(Rect(GuiHost[1].offset.x,GuiHost[1].offset.y,200,50), "Start Game")){
                 gameSetupScript.enterGame();
             }

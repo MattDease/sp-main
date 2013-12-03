@@ -122,10 +122,15 @@ function OnGUI (){
 
 
         if(GUI.Button(Rect(GuiReady.offset.x,Screen.height - readyOffset - (Screen.height*0.1), readyBtnWidth, readyBtnHeight), "Ready")){
-          if(selectMenu == "quick"){
-            leaveFor(menus.quickplay);
-          } else if (selectMenu == "join") leaveFor(menus.lobby);
-            else if (selectMenu == "newGame") leaveFor(menus.host);
+            if(selectMenu == "quick"){
+                leaveFor(menus.quickplay);
+            }
+            else if (selectMenu == "join") {
+                leaveFor(menus.lobby);
+            }
+            else if (selectMenu == "newGame") {
+                leaveFor(menus.host);
+            }
         }
 
 
@@ -133,30 +138,31 @@ function OnGUI (){
         GuiReady.updateLocation();
         GuiCharacter[0].updateLocation();
 
-    } else {
+    }
+    else {
         //Show main menu if Character Selection isn't true
 
         GUILayout.Label("Main Menu");
         GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
 
-         if(GUI.Button(Rect(Gui.offset.x,Gui.offset.y,130,160), quickGameTexture)){
+        if(GUI.Button(Rect(Gui.offset.x,Gui.offset.y,130,160), quickGameTexture)){
             //leaveFor(menus.quickplay);
             characterSelect = true;
             selectMenu = "quick";
-         }
+        }
 
-         if(GUI.Button(Rect(Gui.offset.x + 150,Gui.offset.y,150,70), newGameTexture)){
+        if(GUI.Button(Rect(Gui.offset.x + 150,Gui.offset.y,150,70), newGameTexture)){
             //leaveFor(menus.host);
             characterSelect = true;
             selectMenu = "newGame";
-         }
+        }
 
-         if(GUI.Button(Rect(Gui.offset.x + 150,Gui.offset.y + 90,150,70), joinGameTexture)){
+        if(GUI.Button(Rect(Gui.offset.x + 150,Gui.offset.y + 90,150,70), joinGameTexture)){
             //leaveFor(menus.lobby);
             characterSelect = true;
             selectMenu = "join";
-         }
-     }
+        }
+    }
 }
 
 function enter(){
