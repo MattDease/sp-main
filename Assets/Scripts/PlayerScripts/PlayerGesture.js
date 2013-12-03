@@ -23,7 +23,11 @@ private var RUN_SPEED : Vector3 = Vector3 (50, 0, 0);
 private var MAX_HEIGHT : float = 50;
 private var JUMP_SPEED : float = 30;
 
+//temp
+private var debugPlayer : GameObject;
+
 function Start(){
+    debugPlayer = GameObject.Find(PlayerPrefs.GetString("playerName") + "_player");
 
     egg = GameObject.Find("egg");
     eggBody = egg.GetComponent(Rigidbody);
@@ -82,7 +86,7 @@ function Update() {
     if(hasEgg){
        Parent(player, egg);
     }
-
+    debugPlayer.transform.position = model.transform.position;
 }
 
 /* Swipe Info Contains

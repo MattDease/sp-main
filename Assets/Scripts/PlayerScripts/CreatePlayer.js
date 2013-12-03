@@ -2,6 +2,7 @@
 
 private var isGui = true;
 public var mainCam : GameObject;
+public var debugPlayer : GameObject;
 
 function Start() {
     mainCam = GameObject.FindWithTag("MainCamera");
@@ -11,10 +12,10 @@ function Start() {
 function OnGUI () {
     // Make a background box (Simple Example GUI), I know its ugly!
     if(isGui){
-        GUI.Box (Rect (10,110,100,60), "Let's load things");
+        GUI.Box (Rect (10,200,100,60), "Let's load things");
 
         // Make the first button. If it is pressed, create the character
-        if (GUI.Button (Rect (20,140,80,20), "Character")) {
+        if (GUI.Button (Rect (20,230,80,20), "Character")) {
             loadCharacter("Name", "bee",Vector3(-25, 1, 40), Quaternion.identity );
         }
     }
@@ -25,6 +26,9 @@ function loadCharacter(modelName : String, url: String, position: Vector3, rotat
 
     //Load a Character from the resource folder, set up its player controls
     createEgg();
+
+    var temp : GameObject = Network.Instantiate(debugPlayer, position, rotation, 0);
+    temp.name = PlayerPrefs.GetString("playerName") + "_player";
 
     var instance : GameObject = Instantiate(Resources.Load(url), position, rotation);
 

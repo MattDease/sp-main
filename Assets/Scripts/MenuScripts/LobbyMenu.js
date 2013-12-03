@@ -3,9 +3,20 @@
 
 private var menuScript : Menu;
 private var playerScript : PlayerScript;
+private var netScript : Net;
+
+private var hostList : List.<HostData>;
 
 private var showMenu : boolean = false;
 private var isQuickplay : boolean = false;
+private var isConnecting : boolean = false;
+private var filterHosts : boolean = false;
+
+private var connectionErrorMsg : String = "";
+
+function Awake(){
+    netScript = GetComponent(Net);
+}
 
 var GuiLobby : GuiClasses[];
 var menuSkin : GUISkin;
@@ -16,9 +27,9 @@ function Start(){
     menuScript = Menu.script;
     playerScript = menuScript.playerScript;
 
-    menuSkin = Resources.LoadAssetAtPath("Assets/MenuSkin.guiskin", GUISkin);
-    observeTexture = Resources.LoadAssetAtPath("Assets/Textures/gui/observe.jpg", Texture2D);
-    backTexture = Resources.LoadAssetAtPath("Assets/Textures/gui/back.jpg", Texture2D);
+    menuSkin = Resources.Load("MenuSkin", GUISkin);
+    observeTexture = Resources.Load("Textures/gui/observe", Texture2D);
+    backTexture = Resources.Load("Textures/gui/back", Texture2D);
 
     GuiLobby = new GuiClasses[2];
     GuiLobby[0] = new GuiClasses();
@@ -43,20 +54,86 @@ function OnGUI (){
     for(var x =0; x<GuiLobby.length - 1; x++){
         GuiLobby[x].updateLocation();
     }
-    // TODO Implement networking to poll masterserver so a list of active
-    // games can be displayed
 
-    GUI.Box(Rect (0,GuiLobby[0].offset.y + GuiLobby[0].offsetY30 ,Screen.width,30), "Waiting For.....Slow Friends");
+    //GUI.Box(Rect (0,GuiLobby[0].offset.y + GuiLobby[0].offsetY30 ,Screen.width,30), "Waiting For.....Slow Friends");
 
     //Observe Button
-    if(GUI.Button(Rect(GuiLobby[0].offset.x - GuiLobby[0].offsetY03 ,GuiLobby[0].offset.y + GuiLobby[0].offsetY03 ,observeTexture.width,observeTexture.height), observeTexture)){
-    }
+    // if(GUI.Button(Rect(GuiLobby[0].offset.x - GuiLobby[0].offsetY03 ,GuiLobby[0].offset.y + GuiLobby[0].offsetY03 ,observeTexture.width,observeTexture.height), observeTexture)){
+    // }
 
     //Back Button
     if(GUI.Button(Rect(GuiLobby[1].offset.x + GuiLobby[1].offsetY03 ,GuiLobby[1].offset.y + GuiLobby[1].offsetY03 ,backTexture.width,backTexture.height), backTexture)){
         leaveFor(menus.main);
     }
+
+    if(GUILayout.Button("Refresh List")){
+        netScript.FetchHostList(true);
+    }
+
+    if(GUILayout.Button("Toggle host filtering")){
+        filterHosts = !filterHosts;
+    }
+
+    if(isConnecting){
+        GUILayout.Label("Connecting...");
+    }
+
+    if(connectionErrorMsg){
+        GUILayout.Label(connectionErrorMsg);
+    }
+
+    netScript.FetchHostList(false);
+
+    hostList = filterHosts ? netScript.filteredHostList : netScript.hostList;
+
+    GUILayout.Label((filterHosts ? "Connectable" : "All") + " Hosted Games:");
+    if(hostList.Count){
+        for (var element : HostData in hostList){
+            GUILayout.BeginHorizontal();
+            var name : String = element.gameName + " " + element.connectedPlayers + " / " + element.playerLimit;
+            GUILayout.Label(name);
+            GUILayout.Space(5);
+            var hostInfo : String = "[";
+            for (var host : String in element.ip){
+                hostInfo = hostInfo + host + ":" + element.port + " ";
+            }
+            hostInfo += "]";
+            GUILayout.Label(hostInfo);
+            GUILayout.Space(5);
+            GUILayout.FlexibleSpace();
+            if (Network.peerType == NetworkPeerType.Disconnected && GUILayout.Button("Connect")){
+                Debug.Log(onConnect);
+                netScript.connect(element, onConnect);
+                connectionErrorMsg = "";
+                isConnecting = true;
+            }
+            GUILayout.EndHorizontal();
+        }
+    }
+    else{
+        GUILayout.Label("No Games Being Hosted.");
+    }
 }
+
+function onConnect(error: NetworkConnectionError){
+    isConnecting = false;
+    switch(error){
+        case NetworkConnectionError.NoError:
+        case NetworkConnectionError.AlreadyConnectedToServer:
+            var currentMenu = menuScript.stateScript.getCurrentMenu();
+            if(currentMenu == menus.quickplay || currentMenu == menus.lobby){
+                leaveFor(menus.game);
+            }
+            break;
+        case NetworkConnectionError.TooManyConnectedPlayers:
+            connectionErrorMsg = "Cannot connect. Maximum player limit has been reached.";
+            break;
+        default:
+            // unknown/unresolvable error
+            connectionErrorMsg = "Cannot connect to game.";
+            break;
+    }
+};
 
 function enter(quickplay : boolean){
     showMenu = true;

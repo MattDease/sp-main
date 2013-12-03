@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: b6268a99570ea4303a178a04f8e118d1
+guid: eb27bca03ccf36847bef59950375a304
 MonoImporter:
   serializedVersion: 2
   defaultReferences:
-  - mainCam: {instanceID: 0}
-  - debugPlayer: {instanceID: 0}
+  - MenuScripts: {instanceID: 0}
+  - GameManager: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
