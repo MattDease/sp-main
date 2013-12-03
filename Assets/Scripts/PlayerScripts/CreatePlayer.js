@@ -2,6 +2,7 @@
 
 private var isGui = true;
 public var mainCam : GameObject;
+public var debugPlayer : GameObject;
 
 function Start() {
     mainCam = GameObject.FindWithTag("MainCamera");
@@ -25,6 +26,9 @@ function loadCharacter(modelName : String, url: String, position: Vector3, rotat
 
     //Load a Character from the resource folder, set up its player controls
     createEgg();
+
+    var temp : GameObject = Network.Instantiate(debugPlayer, position, rotation, 0);
+    temp.name = PlayerPrefs.GetString("playerName") + "_player";
 
     var instance : GameObject = Instantiate(Resources.Load(url), position, rotation);
 
