@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: eb27bca03ccf36847bef59950375a304
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - MenuScripts: {instanceID: 0}
+  - GameManager: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

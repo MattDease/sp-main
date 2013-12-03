@@ -20,10 +20,8 @@ private var stateScript : StateScript;
 private var lastLevelPrefix = 0;
 
 function Start(){
-    gameManager = GameObject.Find("/GameManager");
-
-    playerScript = gameManager.GetComponent(PlayerScript);
-    stateScript = gameManager.GetComponent(StateScript);
+    playerScript = GetComponent(PlayerScript);
+    stateScript = GetComponent(StateScript);
 }
 
 function enterGame(){
