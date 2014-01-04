@@ -83,8 +83,7 @@ function OnGUI (){
     }
 
     netScript.FetchHostList(false);
-
-    hostList = filterHosts ? netScript.filteredHostList : netScript.hostList;
+    hostList = netScript.GetHostList(filterHosts);
 
     GUILayout.Label((filterHosts ? "Connectable" : "All") + " Hosted Games:");
     if(hostList.Count){

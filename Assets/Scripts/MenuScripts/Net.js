@@ -5,8 +5,11 @@ import System.Net;
 import System.Net.Sockets;
 import System.Collections.Generic;
 
-public var hostList : List.<HostData> = new List.<HostData>();
-public var filteredHostList : List.<HostData> = new List.<HostData>();
+// Configuration. Enable if connection test server is available.
+public var doConnectionTest : boolean = false;
+
+private var hostList : List.<HostData> = new List.<HostData>();
+private var filteredHostList : List.<HostData> = new List.<HostData>();
 
 private var masterServerHostname : String = "scrambled.no-ip.biz";
 private var gameId : String = "scrambled-by-poached_v1.0.0";
@@ -45,7 +48,7 @@ function Awake () {
     catch(err){
         Debug.Log("Master server hostname resolution error: " + err.Message);
         //fallback to static IP - may be incorrect!
-        masterServerIp = "172.19.12.112";
+        masterServerIp = "172.19.14.114";
         Debug.Log("Master server IP fallback to: " + masterServerIp);
     }
 
@@ -60,8 +63,13 @@ function Awake () {
     Network.connectionTesterIP = masterServerIp;
     Network.connectionTesterPort = 10737;
 
-    // Start connection test
-    natCapable = Network.TestConnection();
+    if(doConnectionTest){
+        // Start connection test
+        natCapable = Network.TestConnection();
+    }
+    else{
+        Debug.Log("Connection test skipped due to configuration.");
+    }
 }
 
 function Start () {
@@ -70,8 +78,8 @@ function Start () {
 }
 
 function Update() {
-    // If network test is undetermined, keep running
-    if (!doneTestingNAT) {
+    if (doConnectionTest && !doneTestingNAT) {
+        // If network test is undetermined, keep running
         testConnection();
     }
 }
@@ -174,6 +182,15 @@ function FetchHostList(manual : boolean){
     if(lastHostListRequest == 0 || Time.realtimeSinceStartup > lastHostListRequest + timeout){
         lastHostListRequest = Time.realtimeSinceStartup;
         MasterServer.RequestHostList(gameId);
+    }
+}
+
+function GetHostList(filtered : boolean){
+    if(filtered && doConnectionTest){
+        return filteredHostList;
+    }
+    else{
+        return hostList;
     }
 }
 
