@@ -23,7 +23,7 @@ private var probingPublicIP : boolean = false;
 private var doneTestingNAT : boolean = false;
 private var useNat : boolean = false;
 private var timer : float = 0.0;
-private var doConnectionTest : boolean;
+private var doConnectionTest : boolean = Config.netTestConnection;
 private var connTestMessage : String = "Undetermined NAT capabilities";
 
 private var hostToConnect : HostData = null;
@@ -33,7 +33,6 @@ private var rehostTries : int = 0;
 private var rehostLimit : int = 5;
 
 function Awake () {
-    doConnectionTest = GameObject.Find("GameManager").GetComponent(ConfigScript).netTestConnection;
     // Get Master Server IP from hostname
     try{
         var hostInfo:IPHostEntry = Dns.GetHostEntry(masterServerHostname);
