@@ -34,3 +34,7 @@ function incrementTimesPlayed(){
     timesPlayed++;
     PlayerPrefs.SetInt("timesPlayed", timesPlayed);
 }
+
+function getDistance(){
+    return self.gameObject.transform.position.x;
+}

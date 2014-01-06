@@ -9,6 +9,8 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player = Util.GetPlayerById(playerId);
     player.gameObject = gameObject;
     player.playerScript = this;
+    // Access model using:
+    // player.gameObject.transform.Find("debug_runner");
 
     // TODO - Position players and generally fix issues caused by having multiple remote players.
     if(networkView.isMine){
@@ -25,7 +27,7 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 
 // Do physics changes here
 function FixedUpdate(){
-
+    player.gameObject.rigidbody.velocity = Vector3.right;
 }
 
 function Update(){

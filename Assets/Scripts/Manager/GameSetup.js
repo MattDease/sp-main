@@ -9,6 +9,7 @@ public class Player{
     public var id : String;
     public var gameObject : GameObject;
     public var playerScript : MonoBehaviour;
+    public var distance : float = 0;
 
     public function Player(name:String, networkPlayer:NetworkPlayer, isSelf:boolean){
         this.name = name;
@@ -25,9 +26,12 @@ public var playerPrefab : Transform;
 public var localPlayer : Player;
 public var playerList : Dictionary.<String,Player> = new Dictionary.<String,Player>();
 
+// Game Manager
 private var gameManager : GameObject;
 private var playerScript : PlayerScript;
 private var stateScript : StateScript;
+// Game Scripts
+private var levelManager : LevelManager;
 
 private var lastLevelPrefix = 0;
 
@@ -42,9 +46,21 @@ function enterGame(){
     stateScript.setGameState(GameState.Loading);
 }
 
-function OnNetworkLoadedLevel(){
+function startGameProxy(){
+    networkView.RPC("startGame", RPCMode.All);
+}
+
+@RPC
+function startGame(info : NetworkMessageInfo){
     stateScript.setGameState(GameState.Playing);
     Network.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, 0);
+}
+
+function OnNetworkLoadedLevel(){
+    levelManager = GameObject.Find("GameScripts").GetComponent(LevelManager);
+    if(Network.isServer){
+        levelManager.addSegment();
+    }
 }
 
 //Based on http://docs.unity3d.com/Documentation/Components/net-NetworkLevelLoad.html
