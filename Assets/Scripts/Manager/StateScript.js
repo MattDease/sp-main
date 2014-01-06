@@ -10,7 +10,16 @@ public enum menus {
     highscore
 };
 
+public enum GameState {
+    Uninitialized,
+    Loading,
+    Playing,
+    Observing,
+    Ended
+};
+
 private var currentMenu : menus = menus.start;
+private var currentGameState : GameState = GameState.Uninitialized;
 
 function getCurrentMenu(){
     return currentMenu;
@@ -18,4 +27,12 @@ function getCurrentMenu(){
 
 function setCurrentMenu(newMenu : menus){
     currentMenu = newMenu;
+}
+
+function getGameState(){
+    return currentGameState;
+}
+
+function setGameState(newGameState : GameState){
+    currentGameState = newGameState;
 }

@@ -2,16 +2,28 @@
 
 import System.Collections.Generic;
 
-class Player{
-    var name : String;
-    var isSelf : boolean;
-    var netPlayer : NetworkPlayer;
+public class Player{
+    public var name : String;
+    public var isSelf : boolean;
+    public var netPlayer : NetworkPlayer;
+    public var id : String;
+    public var gameObject : GameObject;
+    public var playerScript : MonoBehaviour;
+
+    public function Player(name:String, networkPlayer:NetworkPlayer, isSelf:boolean){
+        this.name = name;
+        this.isSelf = isSelf;
+        this.netPlayer = networkPlayer;
+        this.id = networkPlayer.guid;
+    }
     //add other player attributes like heath, team, etc here
 }
 
+//Set in editor
 public var playerPrefab : Transform;
 
-public var playerList : List.<Player> = new List.<Player>();
+public var localPlayer : Player;
+public var playerList : Dictionary.<String,Player> = new Dictionary.<String,Player>();
 
 private var gameManager : GameObject;
 private var playerScript : PlayerScript;
@@ -27,12 +39,12 @@ function Start(){
 function enterGame(){
     Network.RemoveRPCsInGroup(0);
     networkView.RPC("loadLevel", RPCMode.AllBuffered, "scene-game", lastLevelPrefix + 1);
+    stateScript.setGameState(GameState.Loading);
 }
 
 function OnNetworkLoadedLevel(){
-    //Start the game!
-    //do stuff like:
-    //var playerInstance : Transform = Network.Instantiate(playerPrefab, pos, rot, 0);
+    stateScript.setGameState(GameState.Playing);
+    Network.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, 0);
 }
 
 //Based on http://docs.unity3d.com/Documentation/Components/net-NetworkLevelLoad.html
@@ -57,25 +69,26 @@ function loadLevel(level : String, levelPrefix : int){
 
 function OnDisconnectedFromServer(){
     playerScript.incrementTimesPlayed();
+    playerScript.setSelf(null);
     stateScript.setCurrentMenu(menus.main);
     Application.LoadLevel("scene-menu");
 }
-function registerPlayerRPC(name : String){
-    networkView.RPC("registerRemotePlayer", RPCMode.OthersBuffered, name);
+function registerPlayerRPC(name : String, player : NetworkPlayer){
+    networkView.RPC("registerRemotePlayer", RPCMode.OthersBuffered, name, player);
     registerPlayer(name, Network.player, true);
 }
 
 @RPC
-function registerRemotePlayer(name : String, info : NetworkMessageInfo){
-    registerPlayer(name, info.sender, false);
+function registerRemotePlayer(name : String, player : NetworkPlayer, info : NetworkMessageInfo){
+    registerPlayer(name, player, false);
 }
 
 function registerPlayer(name : String, netPlayer : NetworkPlayer, isSelf : boolean){
-    var newPlayer = new Player();
-    newPlayer.name = name;
-    newPlayer.isSelf = isSelf;
-    newPlayer.netPlayer = netPlayer;
-    playerList.Add(newPlayer);
+    var newPlayer = new Player(name, netPlayer, isSelf);
+    playerList.Add(netPlayer.guid, newPlayer);
+    if(isSelf){
+        playerScript.setSelf(newPlayer);
+    }
 }
 
 function OnPlayerDisconnected(netPlayer: NetworkPlayer){
@@ -89,13 +102,14 @@ function notifyOtherPlayerDisconnected(netPlayer : NetworkPlayer){
 }
 
 function otherPlayerDisconnected(netPlayer:NetworkPlayer){
-    for(var player : Player in playerList){
+    for(var key : String in playerList.Keys){
+        var player = playerList[key];
         if(player.netPlayer == netPlayer){
+            Network.RemoveRPCs(player.netPlayer);
+            Network.DestroyPlayerObjects(player.netPlayer);
             Debug.Log("Player '" + player.name + "' disconnected.");
-            playerList.Remove(player);
+            playerList.Remove(key);
             break;
         }
     }
-    // Network.RemoveRPCs(player);
-    // Network.DestroyPlayerObjects(player);
 }

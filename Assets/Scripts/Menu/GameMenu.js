@@ -13,7 +13,7 @@ private var isStartingServer : boolean = false;
 private var gameName : String;
 private var playerLimit : int = 4;
 
-private var playerList : List.<Player>;
+public var playerList : Dictionary.<String,Player>;
 
 var GuiHost : GuiClasses[];
 var menuSkin : GUISkin;
@@ -71,7 +71,7 @@ function OnGUI (){
     else if(Network.isClient || (isHosting && Network.isServer)){
         playerList = gameSetupScript.playerList;
         GUILayout.Label("Players:");
-        for(var player:Player in playerList){
+        for(var player:Player in playerList.Values){
             GUILayout.Label(" - " + player.name + (player.isSelf ? " (me)" : ""));
         }
 
@@ -135,7 +135,7 @@ function OnGUI (){
 function onInitialize(success: boolean){
     if(success){
         isStartingServer = false;
-        gameSetupScript.registerPlayerRPC(playerScript.getName());
+        gameSetupScript.registerPlayerRPC(playerScript.getName(), Network.player);
     }
 }
 
@@ -144,7 +144,7 @@ function enter(isNew : boolean){
     isHosting = isNew;
 
     if(Network.isClient){
-        gameSetupScript.registerPlayerRPC(playerScript.getName());
+        gameSetupScript.registerPlayerRPC(playerScript.getName(), Network.player);
     }
 }
 
