@@ -6,8 +6,6 @@ private var stateScript : StateScript;
 private var gameSetupScript : GameSetup;
 private var difficultyScript : DifficultyScript;
 
-private var isDebug : boolean = Config.debug;
-
 function Start(){
     gameManager = GameObject.Find("/GameManager");
 
@@ -18,23 +16,11 @@ function Start(){
 }
 
 function OnGUI(){
-    if(isDebug){
+    if(Config.debug){
         OnDebugGUI();
     }
-    // TODO - Replace with good UI
-    var playerList : Dictionary.<String,Player> = gameSetupScript.playerList;
-    GUILayout.Label("~~~~~~~~~THE GAME~~~~~~~~~~");
-    GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed() + " \n" + difficultyScript.getCurrentDifficulty());
-    for(var player:Player in playerList.Values){
-        GUILayout.Label(" - " + player.name + (player.isSelf ? " (me)" : ""));
-    }
+    // TODO - Add good UI
 
-    if(GUILayout.Button("Leave Game")){
-        Network.Disconnect();
-        playerScript.incrementTimesPlayed();
-        stateScript.setCurrentMenu(menus.highscore);
-        Application.LoadLevel("scene-menu");
-    }
 }
 
 function OnDebugGUI(){
@@ -43,9 +29,23 @@ function OnDebugGUI(){
 
     GUILayout.Label("Debug Menu");
 
-    if (GUILayout.Button ("Example Button")) {
-        // Do whatever
+    if(GUILayout.Button("Leave Game")){
+        Network.Disconnect();
+        playerScript.incrementTimesPlayed();
+        stateScript.setCurrentMenu(menus.highscore);
+        Application.LoadLevel("scene-menu");
     }
+
+    GUILayout.Space(20);
+    GUILayout.Label("Connected Players:");
+    for(var player:Player in gameSetupScript.playerList.Values){
+        GUILayout.Label("- " + player.name + (player.isSelf ? " (me)" : ""));
+    }
+    GUILayout.Space(20);
+
+    GUILayout.Label("Difficulty: " + difficultyScript.getCurrentDifficulty());
+    GUILayout.Space(20);
+    GUILayout.Label("Times Played: " + playerScript.getTimesPlayed());
 
     GUILayout.EndVertical();
     GUILayout.EndArea();

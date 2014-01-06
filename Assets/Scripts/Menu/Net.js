@@ -23,7 +23,6 @@ private var probingPublicIP : boolean = false;
 private var doneTestingNAT : boolean = false;
 private var useNat : boolean = false;
 private var timer : float = 0.0;
-private var doConnectionTest : boolean = Config.netTestConnection;
 private var connTestMessage : String = "Undetermined NAT capabilities";
 
 private var hostToConnect : HostData = null;
@@ -61,7 +60,7 @@ function Awake () {
     Network.connectionTesterIP = masterServerIp;
     Network.connectionTesterPort = 10737;
 
-    if(doConnectionTest){
+    if(Config.netTestConnection){
         // Start connection test
         natCapable = Network.TestConnection();
     }
@@ -76,7 +75,7 @@ function Start () {
 }
 
 function Update() {
-    if (doConnectionTest && !doneTestingNAT) {
+    if (Config.netTestConnection && !doneTestingNAT) {
         // If network test is undetermined, keep running
         testConnection();
     }
@@ -184,7 +183,7 @@ function FetchHostList(manual : boolean){
 }
 
 function GetHostList(filtered : boolean){
-    if(filtered && doConnectionTest){
+    if(filtered && Config.netTestConnection){
         return filteredHostList;
     }
     else{
