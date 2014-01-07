@@ -12,10 +12,8 @@ function Awake () {
     camera.name = "MainCamera";
     var light : GameObject = Instantiate(GameLight);
     light.name = "DirectionalLight";
-    // var gestures : GameObject = Instantiate(Gestures);
-    // gestures.name = "Gestures";
-    // var playerGestures : GameObject = Instantiate(PlayerGestures);
-    // playerGestures.name = "PlayerGestures";
+    var gestures : GameObject = Instantiate(Gestures);
+    gestures.name = "Gestures";
     var menuScripts : GameObject = Instantiate(MenuScripts);
     menuScripts.name = "MenuScripts";
     var gameScripts : GameObject = Instantiate(GameScripts);

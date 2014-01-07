@@ -60,7 +60,7 @@ function Awake () {
     Network.connectionTesterIP = masterServerIp;
     Network.connectionTesterPort = 10737;
 
-    if(Config.netTestConnection){
+    if(Config.TEST_CONNECTION){
         // Start connection test
         natCapable = Network.TestConnection();
     }
@@ -75,7 +75,7 @@ function Start () {
 }
 
 function Update() {
-    if (Config.netTestConnection && !doneTestingNAT) {
+    if (Config.TEST_CONNECTION && !doneTestingNAT) {
         // If network test is undetermined, keep running
         testConnection();
     }
@@ -183,7 +183,7 @@ function FetchHostList(manual : boolean){
 }
 
 function GetHostList(filtered : boolean){
-    if(filtered && Config.netTestConnection){
+    if(filtered && Config.TEST_CONNECTION){
         return filteredHostList;
     }
     else{

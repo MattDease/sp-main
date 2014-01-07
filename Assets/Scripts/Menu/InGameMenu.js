@@ -16,7 +16,7 @@ function Start(){
 }
 
 function OnGUI(){
-    if(Config.debug){
+    if(Config.DEBUG){
         OnDebugGUI();
     }
     // TODO - Add good UI
