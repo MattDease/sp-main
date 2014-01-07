@@ -113,8 +113,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MenuScripts: {fileID: 100000, guid: 90b788d29f7dab64996863b377338d34, type: 2}
+  GameScripts: {fileID: 100000, guid: 75fa353ed2374bb47991945f489737d9, type: 2}
   Gestures: {fileID: 100000, guid: 28c71c97df478c04fa37f95bd4c2e2b7, type: 2}
   PlayerGestures: {fileID: 100000, guid: 9c31a863a119622489049720b2031165, type: 2}
-  StartLevel: {fileID: 100000, guid: 84ee9cdb3515dbd4abd82e7fee2e06b3, type: 2}
   GameCamera: {fileID: 100000, guid: 652a5ebd80f8a794c8a8db62e732b2bc, type: 2}
-  Light: {fileID: 100000, guid: af6adacc27caadf478c2a70d12d75417, type: 2}
+  GameLight: {fileID: 100000, guid: af6adacc27caadf478c2a70d12d75417, type: 2}
