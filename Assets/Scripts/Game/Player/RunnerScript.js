@@ -6,7 +6,9 @@ private var cam : GameObject;
 
 private var currentSpeed : float = Config.RUN_SPEED;
 private var isCrouched : boolean = false;
+private var isGrounded : boolean = true;
 private var crouchTime : float = 0;
+
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     playerId = networkView.viewID.owner.guid;
@@ -50,7 +52,7 @@ function jump(){
     }
     else{
         // TODO only jump if on ground (use raycast)
-        player.gameObject.rigidbody.velocity.y = Config.JUMP_SPEED;
+        if(isGrounded) player.gameObject.rigidbody.velocity.y = Config.JUMP_SPEED;
     }
 }
 
@@ -78,4 +80,15 @@ function startWalk(){
 
 function stopWalk(){
     currentSpeed = Config.RUN_SPEED;
+}
+
+function OnCollisionEnter(theCollision : Collision){
+    if(theCollision.gameObject.tag == "levelSegment")
+        isGrounded = true;
+}
+
+//consider when character is jumping .. it will exit collision.
+function OnCollisionExit(theCollision : Collision){
+    if(theCollision.gameObject.tag == "levelSegment")
+        isGrounded = false;
 }
