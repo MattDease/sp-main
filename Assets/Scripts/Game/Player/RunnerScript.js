@@ -10,8 +10,12 @@ private var isGrounded : boolean = true;
 private var canDoubleJump: boolean = false;
 private var crouchTime : float = 0;
 
+// TODO either move to config file or use mesh info
+private var runnerWidth : float = 0.6;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
+    var playerList : Dictionary.<String,Player> = GameObject.Find("/GameManager").GetComponent(GameSetup).playerList;
+
     playerId = networkView.viewID.owner.guid;
     player = Util.GetPlayerById(playerId);
     player.gameObject = gameObject;
@@ -19,7 +23,6 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
     // Access model using:
     // player.gameObject.transform.Find("debug_runner");
 
-    // TODO - Position players and generally fix issues caused by having multiple remote players.
     if(networkView.isMine){
         player.gameObject.rigidbody.velocity.x = currentSpeed;
         player.gameObject.rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
@@ -29,6 +32,9 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
     else{
         // Change layer so collisions with local player is ignored
         player.gameObject.layer = LayerMask.NameToLayer("Remote Players");
+
+        // TODO Fix. Assumes own player is always the first to be instantiated
+        player.gameObject.transform.position.z = playerList.Count * runnerWidth - runnerWidth/2;
     }
 }
 
