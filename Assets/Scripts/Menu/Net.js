@@ -1,8 +1,9 @@
 #pragma strict
 #pragma downcast
 
-import System.Net;
-import System.Net.Sockets;
+// PRO - Unavailable on Android without Unity Pro. Removed for now.
+// import System.Net;
+// import System.Net.Sockets;
 import System.Collections.Generic;
 
 private var hostList : List.<HostData> = new List.<HostData>();
@@ -33,21 +34,24 @@ private var rehostLimit : int = 5;
 
 function Awake () {
     // Get Master Server IP from hostname
-    try{
-        var hostInfo:IPHostEntry = Dns.GetHostEntry(masterServerHostname);
-        for(var ip:IPAddress in hostInfo.AddressList){
-            if (ip.AddressFamily.ToString() == AddressFamily.InterNetwork.ToString()){
-                var masterServerIp : String = ip.ToString();
-                Debug.Log("Master server hostname resolved to " + masterServerIp);
-            }
-        }
-    }
-    catch(err){
-        Debug.Log("Master server hostname resolution error: " + err.Message);
+    // PRO - Unavailable on Android without Unity Pro. Removed for now.
+    // try{
+    //     var hostInfo:IPHostEntry = Dns.GetHostEntry(masterServerHostname);
+    //     for(var ip:IPAddress in hostInfo.AddressList){
+    //         if (ip.AddressFamily.ToString() == AddressFamily.InterNetwork.ToString()){
+    //             var masterServerIp : String = ip.ToString();
+    //             Debug.Log("Master server hostname resolved to " + masterServerIp);
+    //         }
+    //     }
+    // }
+    // catch(err){
+    //     Debug.Log("Master server hostname resolution error: " + err.Message);
         //fallback to static IP - may be incorrect!
-        masterServerIp = "172.19.14.114";
-        Debug.Log("Master server IP fallback to: " + masterServerIp);
-    }
+        var masterServerIp : String = "172.19.14.114";
+        Debug.Log("Master server IP: " + masterServerIp);
+        // masterServerIp = "172.19.14.114";
+    //     Debug.Log("Master server IP fallback to: " + masterServerIp);
+    // }
 
     // Our Master Server _is_ dedicated but _game_ servers are not dedicated
     // Set this to false to count the host as a player.
