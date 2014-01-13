@@ -20,7 +20,11 @@ private var guiHost : GuiClasses[];
 private var guiObject : GuiClasses [];
 
 var menuSkin : GUISkin;
-var backTexture : Texture2D;
+private var backTexture : Texture2D;
+private var playerTexture : Texture2D;
+private var homeTexture : Texture2D;
+private var startTexture : Texture2D;
+
 
 function Awake(){
     netScript = GetComponent(Net);
@@ -40,6 +44,9 @@ function Start(){
 
     menuSkin = Resources.Load("MenuSkin", GUISkin);
     backTexture = Resources.Load("Textures/gui/back", Texture2D);
+    playerTexture = Resources.Load("Textures/gui/player", Texture2D);
+    homeTexture = Resources.Load("Textures/gui/home", Texture2D);
+    startTexture = Resources.Load("Textures/gui/startBtn", Texture2D);
 
     guiHost = new GuiClasses[5];
     for (var x=0; x<guiHost.length; x++){
@@ -92,7 +99,7 @@ function OnGUI (){
         //Home Btn
         guiObject[1].pointLocation = Points.TopRight;
         guiObject[1].updateLocation();
-        if(GUI.Button(Rect(Screen.width - Screen.width*0.07,guiObject[1].offset.y + Screen.width*0.01,Screen.width*0.06,Screen.height*0.1), "Home")){
+        if(GUI.Button(Rect(Screen.width - Screen.width*0.09,guiObject[1].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), homeTexture)){
             selectCharacter = false;
             leaveFor(menus.main);
         }
@@ -106,7 +113,7 @@ function OnGUI (){
 
         //TODO -- Dynamically place player character gui as they join the room
         //Character
-        if(GUI.Button(Rect(guiHost[1].offset.x,guiHost[1].offset.y,Screen.width*0.15,Screen.height*0.20), "select char")){
+        if(GUI.Button(Rect(guiHost[1].offset.x,guiHost[1].offset.y,Screen.width*0.15,Screen.height*0.20), playerTexture)){
             selectCharacter = true;
         }
 
@@ -118,14 +125,14 @@ function OnGUI (){
 
         GUI.Button(Rect(guiHost[2].offset.x,Screen.height-Screen.height*0.125,Screen.width*0.12,Screen.height*0.10), "Team");
         GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.13 + Screen.width*0.02),Screen.height-Screen.height*0.125,Screen.width*0.12,Screen.height*0.10), "Versus");
-        GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.31 + Screen.width*0.03),Screen.height-Screen.height*0.13,Screen.width*0.17,Screen.height*0.11), "Start");
+        GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.31 + Screen.width*0.03),Screen.height-Screen.height*0.13,Screen.width*0.17,Screen.height*0.11), startTexture);
 
         } else {
             //Back Btn
             guiObject[0].pointLocation = Points.TopLeft;
             guiObject[0].updateLocation();
 
-            if(GUI.Button(Rect(guiObject[0].offset.x + Screen.width*0.01,guiObject[0].offset.y + Screen.width*0.01,Screen.width*0.06,Screen.height*0.1), "Back")){
+            if(GUI.Button(Rect(guiObject[0].offset.x + Screen.width*0.01,guiObject[0].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), backTexture)){
                 selectCharacter = false;
             }
             //Characters gui
@@ -148,7 +155,7 @@ function OnGUI (){
                 if (c==3 || c==4 || c==5){offsetHeight = Screen.height*0.33;}
                 if (c==6 || c==7 || c==8){offsetHeight = Screen.height*0.63;}
 
-                if(GUI.Button(Rect(guiObject[1].offset.x + offsetWidth, guiObject[1].offset.y + offsetHeight,  Screen.width*0.15, Screen.height*0.20), "Char"+c)){
+                if(GUI.Button(Rect(guiObject[1].offset.x + offsetWidth, guiObject[1].offset.y + offsetHeight,  Screen.width*0.15, Screen.height*0.20), playerTexture)){
                     //TODO -- select character
                     selectCharacter = false;
                 }
@@ -160,7 +167,7 @@ function OnGUI (){
                 if(p==1){h=Screen.height*0.33;}
                 if(p==2){h =Screen.height*0.63;}
 
-                if(GUI.Button(Rect(Screen.width*0.75, guiObject[1].offset.y + h,  Screen.width*0.15, Screen.height*0.20), "cmd"+p)){
+                if(GUI.Button(Rect(Screen.width*0.75, guiObject[1].offset.y + h,  Screen.width*0.15, Screen.height*0.20), playerTexture)){
                     selectCharacter = false;
                 }
             }

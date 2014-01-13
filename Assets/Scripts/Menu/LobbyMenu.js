@@ -14,6 +14,10 @@ private var filterHosts : boolean = false;
 
 private var connectionErrorMsg : String = "";
 
+private var guiObject : GuiClasses [];
+private var guiStatusBar: GuiClasses;
+enum Point2 {TopLeft, TopRight, BottomLeft, BottomRight, Center}
+
 function Awake(){
     netScript = GetComponent(Net);
 }
@@ -28,12 +32,14 @@ function Start(){
     playerScript = menuScript.playerScript;
 
     menuSkin = Resources.Load("MenuSkin", GUISkin);
-    observeTexture = Resources.Load("Textures/gui/observe", Texture2D);
     backTexture = Resources.Load("Textures/gui/back", Texture2D);
 
-    GuiLobby = new GuiClasses[2];
-    GuiLobby[0] = new GuiClasses();
-    GuiLobby[1] = new GuiClasses();
+    guiObject = new GuiClasses[4];
+    for (var y=0; y<guiObject.length; y++){
+        guiObject[y] = new GuiClasses();
+    }
+
+    guiStatusBar = new GuiClasses();
 }
 
 function OnGUI (){
@@ -42,29 +48,23 @@ function OnGUI (){
     }
     GUI.skin = menuSkin;
 
-    GuiLobby[0].textureWidth = observeTexture.width;
-    GuiLobby[0].textureHeight = observeTexture.height;
-
-    GuiLobby[1].textureWidth = backTexture.width;
-    GuiLobby[1].textureHeight = backTexture.height;
-
-    GuiLobby[0].pointLocation = GuiLobby[0].Point.TopRight;
-    GuiLobby[1].pointLocation = GuiLobby[1].Point.TopLeft;
-
-    for(var x =0; x<GuiLobby.length - 1; x++){
-        GuiLobby[x].updateLocation();
-    }
-
-    //GUI.Box(Rect (0,GuiLobby[0].offset.y + GuiLobby[0].offsetY30 ,Screen.width,30), "Waiting For.....Slow Friends");
-
-    //Observe Button
-    // if(GUI.Button(Rect(GuiLobby[0].offset.x - GuiLobby[0].offsetY03 ,GuiLobby[0].offset.y + GuiLobby[0].offsetY03 ,observeTexture.width,observeTexture.height), observeTexture)){
-    // }
-
     //Back Button
-    if(GUI.Button(Rect(GuiLobby[1].offset.x + GuiLobby[1].offsetY03 ,GuiLobby[1].offset.y + GuiLobby[1].offsetY03 ,backTexture.width,backTexture.height), backTexture)){
+    guiObject[1].textureWidth = Screen.width*0.08;
+    guiObject[1].textureHeight = Screen.height*0.2;
+    guiObject[1].pointLocation = Points.TopLeft;
+    guiObject[1].updateLocation();
+
+    if(GUI.Button(Rect(guiObject[1].offset.x + Screen.width*0.01,guiObject[1].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), backTexture)){
         leaveFor(menus.main);
     }
+
+    guiStatusBar.textureWidth = Screen.width*0.98;
+    guiStatusBar.textureHeight = Screen.height*0.147;
+    guiStatusBar.pointLocation = Point2.BottomLeft;
+    guiStatusBar.updateLocation();
+
+    //Status Bar
+    GUI.Box(Rect(guiStatusBar.offset.x + Screen.width*0.01,guiStatusBar.offset.y,Screen.width*0.98,Screen.height*0.12), "Status: Waiting for friends...");
 
     if(GUILayout.Button("Refresh List")){
         netScript.FetchHostList(true);
