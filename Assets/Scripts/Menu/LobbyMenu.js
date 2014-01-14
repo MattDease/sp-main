@@ -16,16 +16,13 @@ private var connectionErrorMsg : String = "";
 
 private var guiObject : GuiClasses [];
 private var guiStatusBar: GuiClasses;
-enum Point2 {TopLeft, TopRight, BottomLeft, BottomRight, Center}
+private var status;
+var menuSkin : GUISkin;
+var backTexture : Texture2D;
 
 function Awake(){
     netScript = GetComponent(Net);
 }
-
-var GuiLobby : GuiClasses[];
-var menuSkin : GUISkin;
-var observeTexture : Texture2D;
-var backTexture : Texture2D;
 
 function Start(){
     menuScript = Menu.script;
@@ -58,24 +55,30 @@ function OnGUI (){
         leaveFor(menus.main);
     }
 
-    guiStatusBar.textureWidth = Screen.width*0.98;
+    guiStatusBar.textureWidth = Screen.width*1;
     guiStatusBar.textureHeight = Screen.height*0.147;
-    guiStatusBar.pointLocation = Point2.BottomLeft;
+    guiStatusBar.pointLocation = Points.Center;
     guiStatusBar.updateLocation();
 
     //Status Bar
-    GUI.Box(Rect(guiStatusBar.offset.x + Screen.width*0.01,guiStatusBar.offset.y,Screen.width*0.98,Screen.height*0.12), "Status: Waiting for friends...");
+    GUI.Box(Rect(guiStatusBar.offset.x + Screen.width*0.01,guiStatusBar.offset.y,Screen.width*0.98,Screen.height*0.12), ""+status);
 
-    if(GUILayout.Button("Refresh List")){
+    //Refresh Button
+    guiObject[0].textureWidth = 170;
+    guiObject[0].textureHeight = 20;
+    guiObject[0].pointLocation = Points.Center;
+    guiObject[0].updateLocation();
+
+    if(GUI.Button(Rect(guiObject[0].offset.x,guiObject[0].offset.y - 150,170,20),"Refresh List")){
         netScript.FetchHostList(true);
     }
 
-    if(GUILayout.Button("Toggle host filtering")){
+    if(GUI.Button(Rect(guiObject[0].offset.x,guiObject[0].offset.y - 130,170,20),"Toggle Host Filtering")){
         filterHosts = !filterHosts;
     }
 
     if(isConnecting){
-        GUILayout.Label("Connecting...");
+        status="Connecting...";
     }
 
     if(connectionErrorMsg){
@@ -85,7 +88,7 @@ function OnGUI (){
     netScript.FetchHostList(false);
     hostList = netScript.GetHostList(filterHosts);
 
-    GUILayout.Label((filterHosts ? "Connectable" : "All") + " Hosted Games:");
+    if(GUI.Button(Rect(guiObject[0].offset.x,guiObject[0].offset.y - 100,170,20),""+(filterHosts ? "Connectable" : "All") + " Hosted Games:")){}
     if(hostList.Count){
         for (var element : HostData in hostList){
             GUILayout.BeginHorizontal();
@@ -100,7 +103,7 @@ function OnGUI (){
             GUILayout.Label(hostInfo);
             GUILayout.Space(5);
             GUILayout.FlexibleSpace();
-            if (Network.peerType == NetworkPeerType.Disconnected && GUILayout.Button("Connect")){
+            if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[0].offset.x,guiObject[0].offset.y - 80,170,20),"Connect")){
                 Debug.Log(onConnect);
                 netScript.connect(element, onConnect);
                 connectionErrorMsg = "";
@@ -110,7 +113,8 @@ function OnGUI (){
         }
     }
     else{
-        GUILayout.Label("No Games Being Hosted.");
+        //GUILayout.Label("No Games Being Hosted.");
+        status ="No Games Being Hosted.";
     }
 }
 
