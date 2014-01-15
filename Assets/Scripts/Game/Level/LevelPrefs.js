@@ -2,7 +2,7 @@
 
 var levelID : int;
 
-
+// TODO remove when level generation logic is refactored
 public enum levelDiff {
     easy,
     medium,
