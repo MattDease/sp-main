@@ -12,12 +12,19 @@ private var isHosting : boolean = false;
 private var isStartingServer : boolean = false;
 private var gameName : String;
 private var playerLimit : int = 4;
+private var selectCharacter : boolean = false;
 
 public var playerList : Dictionary.<String,Player>;
 
-var GuiHost : GuiClasses[];
+private var guiHost : GuiClasses[];
+private var guiObject : GuiClasses [];
+
 var menuSkin : GUISkin;
-var backTexture : Texture2D;
+private var backTexture : Texture2D;
+private var playerTexture : Texture2D;
+private var homeTexture : Texture2D;
+private var startTexture : Texture2D;
+
 
 function Awake(){
     netScript = GetComponent(Net);
@@ -37,13 +44,19 @@ function Start(){
 
     menuSkin = Resources.Load("MenuSkin", GUISkin);
     backTexture = Resources.Load("Textures/gui/back", Texture2D);
+    playerTexture = Resources.Load("Textures/gui/player", Texture2D);
+    homeTexture = Resources.Load("Textures/gui/home", Texture2D);
+    startTexture = Resources.Load("Textures/gui/startBtn", Texture2D);
 
-    GuiHost = new GuiClasses[5];
-    GuiHost[0] = new GuiClasses();
-    GuiHost[1] = new GuiClasses();
-    GuiHost[2] = new GuiClasses();
-    GuiHost[3] = new GuiClasses();
-    GuiHost[4] = new GuiClasses();
+    guiHost = new GuiClasses[5];
+    for (var x=0; x<guiHost.length; x++){
+        guiHost[x] = new GuiClasses();
+    }
+
+    guiObject = new GuiClasses[2];
+    for (var y=0; y<guiObject.length; y++){
+        guiObject[y] = new GuiClasses();
+    }
 }
 
 function OnGUI (){
@@ -76,57 +89,87 @@ function OnGUI (){
         }
 
         GUI.skin = menuSkin;
-        GuiHost[0].textureHeight = Screen.height*0.4;
 
-        GuiHost[1].textureHeight = 50;
-        GuiHost[1].textureWidth = 200;
-
-        GuiHost[2].textureHeight = 30;
-        GuiHost[2].textureWidth = 90;
-
-        GuiHost[3].textureHeight = 30;
-        GuiHost[3].textureWidth = 90;
-
-        GuiHost[4].textureHeight = backTexture.height;
-        GuiHost[4].textureWidth = backTexture.width;
-
-        var bgHeight : int;
-
-        for(var x=0; x<4; x++){
-            GuiHost[x].pointLocation = GuiHost[x].Point.Center;
-            GuiHost[x].updateLocation();
-        }
-        GuiHost[4].pointLocation = GuiHost[x].Point.TopLeft;
-        GuiHost[4].updateLocation();
-
-        if(Screen.height< 500){
-            bgHeight = Screen.height*0.47;
-        }
-        else {
-            bgHeight = Screen.height*0.30;
+        var n=0;
+        for(n=0; n<2; n++){
+            guiObject[n].textureWidth = Screen.width*0.06;
+            guiObject[n].textureHeight = Screen.height*0.1;
         }
 
-        GUI.Box(Rect (0,GuiHost[0].offset.y - Screen.height*0.1,Screen.width, bgHeight), "");
-
-        //Back Button
-        if(GUI.Button(Rect(GuiHost[4].offset.x + GuiHost[4].offsetY03 ,GuiHost[4].offset.y + GuiHost[4].offsetY03 ,backTexture.width,backTexture.height), backTexture)){
-           leaveFor(menus.main);
+        //Home Btn
+        guiObject[1].pointLocation = Points.TopRight;
+        guiObject[1].updateLocation();
+        if(GUI.Button(Rect(Screen.width - Screen.width*0.09,guiObject[1].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), homeTexture)){
+            selectCharacter = false;
+            leaveFor(menus.main);
         }
 
-        if(GUI.Button(Rect(GuiHost[2].offset.x - (40 + 15),GuiHost[2].offset.y - Screen.height*0.20,90,30), "TEAM")){
+        if(selectCharacter == false){
+
+        guiHost[1].textureWidth = Screen.width*0.15;
+        guiHost[1].textureHeight = Screen.height*0.2;
+        guiHost[1].pointLocation = Points.Center;
+        guiHost[1].updateLocation();
+
+        //TODO -- Dynamically place player character gui as they join the room
+        //Character
+        if(GUI.Button(Rect(guiHost[1].offset.x,guiHost[1].offset.y,Screen.width*0.15,Screen.height*0.20), playerTexture)){
+            selectCharacter = true;
         }
 
-        if(GUI.Button(Rect(GuiHost[3].offset.x + (40 + 15),GuiHost[3].offset.y - Screen.height*0.20,90,30), "VERSUS")){
-        }
+        //Team, Versus, Start Buttons
+        guiHost[2].textureWidth = Screen.width*0.52;
+        guiHost[2].textureHeight = Screen.height*0.11;
+        guiHost[2].pointLocation = Points.Center;
+        guiHost[2].updateLocation();
 
-        if (Screen.height>500){
-            if(GUI.Button(Rect(GuiHost[1].offset.x,GuiHost[1].offset.y - Screen.height*0.10,200,50), "Start Game")){
-                gameSetupScript.enterGame();
+        GUI.Button(Rect(guiHost[2].offset.x,Screen.height-Screen.height*0.125,Screen.width*0.12,Screen.height*0.10), "Team");
+        GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.13 + Screen.width*0.02),Screen.height-Screen.height*0.125,Screen.width*0.12,Screen.height*0.10), "Versus");
+        GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.31 + Screen.width*0.03),Screen.height-Screen.height*0.13,Screen.width*0.17,Screen.height*0.11), startTexture);
+
+        } else {
+            //Back Btn
+            guiObject[0].pointLocation = Points.TopLeft;
+            guiObject[0].updateLocation();
+
+            if(GUI.Button(Rect(guiObject[0].offset.x + Screen.width*0.01,guiObject[0].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), backTexture)){
+                selectCharacter = false;
             }
-        }
-        else{
-            if(GUI.Button(Rect(GuiHost[1].offset.x,GuiHost[1].offset.y,200,50), "Start Game")){
-                gameSetupScript.enterGame();
+            //Characters gui
+            guiObject[1].textureWidth = Screen.width*0.8;
+            guiObject[1].textureHeight = Screen.height*0.8;
+            guiObject[1].pointLocation = Points.Center;
+            guiObject[1].updateLocation();
+
+            guiObject[0].textureWidth = Screen.width*0.15;
+            guiObject[0].textureHeight = Screen.height*0.2;
+
+            for (var c=0; c<9; c++){
+                var offsetWidth = 0;
+                var offsetHeight = 0;
+                if(c==0 || c==1 || c==2){offsetHeight = Screen.height*0.03;}
+                if (c==1 || c==4 || c==7){
+                    offsetWidth = Screen.width*0.2;
+                }
+                if (c==2 || c==5 || c==8){offsetWidth = Screen.width*0.4;}
+                if (c==3 || c==4 || c==5){offsetHeight = Screen.height*0.33;}
+                if (c==6 || c==7 || c==8){offsetHeight = Screen.height*0.63;}
+
+                if(GUI.Button(Rect(guiObject[1].offset.x + offsetWidth, guiObject[1].offset.y + offsetHeight,  Screen.width*0.15, Screen.height*0.20), playerTexture)){
+                    //TODO -- select character
+                    selectCharacter = false;
+                }
+            }
+            //Commanders gui
+            for(var p=0; p<3; p++){
+                var h = 0;
+                if(p==0){h=Screen.height*0.03;}
+                if(p==1){h=Screen.height*0.33;}
+                if(p==2){h =Screen.height*0.63;}
+
+                if(GUI.Button(Rect(Screen.width*0.75, guiObject[1].offset.y + h,  Screen.width*0.15, Screen.height*0.20), playerTexture)){
+                    selectCharacter = false;
+                }
             }
         }
     }

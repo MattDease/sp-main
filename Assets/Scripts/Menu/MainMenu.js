@@ -7,15 +7,8 @@ private var playerScript : PlayerScript;
 private var showMenu : boolean = false;
 
 //Gui class and variables
-var Gui : GuiClasses;
-var GuiCharacter : GuiClasses[];
-var GuiReady : GuiClasses;
-var GuiBack: GuiClasses;
-var GuiCharacterNext: GuiClasses;
-var GuiCharacterBack: GuiClasses;
-
-var characterSelect : boolean = false;
-var selectMenu; //Check which menu the player selected
+private var guiObject : GuiClasses[];
+enum Points {TopLeft, TopRight, BottomLeft, BottomRight, Center}
 
 //Textures and skins
 var menuSkin : GUISkin;
@@ -35,134 +28,39 @@ function Start(){
     joinGameTexture = Resources.Load("Textures/gui/joingame", Texture2D);
     backTexture = Resources.Load("Textures/gui/back", Texture2D);
 
-    GuiCharacter = new GuiClasses[10];
-    for (var x =0; x<GuiCharacter.length; x++){
-        GuiCharacter[x] = new GuiClasses();
+    guiObject = new GuiClasses[3];
+    for (var x=0; x<guiObject.length; x++){
+        guiObject[x] = new GuiClasses();
     }
 }
 
 function OnGUI (){
     GUI.skin = menuSkin;
-    var screenW : float  = Screen.width;
-    var screenH : float = Screen.height;
-
-    var newWidth : float = Screen.width*0.8;
-    var newHeight : float = Screen.height*0.8;
-
-    Gui.textureWidth = 310;
-    Gui.textureHeight = 160;
-
-    GuiBack.textureWidth = backTexture.width;
-    GuiBack.textureHeight = backTexture.height;
-
-    Gui.updateLocation();
-    Gui.pointLocation = Gui.Point.Center;
-
-    for (var i=0; i<GuiCharacter.length; i++){
-        GuiCharacter[i].textureWidth = Screen.width*0.2;
-        GuiCharacter[i].textureHeight = Screen.height*0.5;
-        GuiCharacter[i].pointLocation = GuiCharacter[i].Point.Center;
-    }
 
     if(!showMenu){
         return;
     }
+    //Main Menu Btns
+    guiObject[2].textureWidth = Screen.width*0.62;
+    guiObject[2].textureHeight = Screen.height*0.55;
+    guiObject[2].pointLocation = Points.Center;
+    guiObject[2].updateLocation();
 
-    if (characterSelect == true){
+    GUILayout.Label("Main Menu");
+    GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
 
-        //Back Button
-        if(GUI.Button(Rect(GuiBack.offset.x + GuiBack.offsetY03 ,GuiBack.offset.y + GuiBack.offsetY03 ,backTexture.width,backTexture.height), backTexture)){
-          characterSelect = false;
-        }
-
-        GUI.Box(Rect(GuiCharacter[1].offset.x, GuiCharacter[1].offset.y - GuiCharacter[1].offsetY03,  Screen.width*0.2, Screen.height*0.5), "Char 1");
-        GUI.Box(Rect(GuiCharacter[2].offset.x - newWidth*0.33, GuiCharacter[2].offset.y - GuiCharacter[1].offsetY03, Screen.width*0.2, Screen.height*0.5), "Char 2");
-        GUI.Box(Rect(GuiCharacter[3].offset.x + newWidth*0.33, GuiCharacter[3].offset.y - GuiCharacter[1].offsetY03, Screen.width*0.2, Screen.height*0.5), "Char 3");
-
-        for (i=0; i<10; i++){
-            GuiCharacter[i].updateLocation();
-        }
-
-        //Button location
-        GuiCharacterNext.pointLocation = GuiCharacterNext.Point.Center;
-        GuiCharacterNext.textureWidth = Screen.width*0.08;
-        GuiCharacterNext.textureHeight = Screen.height*0.3;
-        GuiCharacterNext.updateLocation();
-
-        GuiCharacterBack.pointLocation = GuiCharacterBack.Point.Center;
-        GuiCharacterBack.textureWidth = Screen.width*0.08;
-        GuiCharacterBack.textureHeight = Screen.height*0.3;
-        GuiCharacterBack.updateLocation();
-
-        GUI.Box(Rect(Screen.width - Screen.width*0.08 - Screen.width*0.02, GuiCharacterNext.offset.y - GuiCharacterNext.offsetY03,  Screen.width*0.08, Screen.height*0.3), ">>");
-        GUI.Box(Rect(0 + Screen.width*0.02, GuiCharacterBack.offset.y - GuiCharacterBack.offsetY03,  Screen.width*0.08, Screen.height*0.3), "<<");
-
-
-        GuiReady.pointLocation = GuiReady.Point.Center;
-
-        var readyBtnWidth : int;
-        var readyBtnHeight : int;
-        var readyOffset : int;
-        //Ready Button
-        if(Screen.height < 500) {
-            readyBtnWidth = 90;
-            readyBtnHeight = 30;
-            GuiReady.textureWidth = 90;
-            GuiReady.textureHeight = 30;
-            readyOffset = 30;
-        }
-
-        else if(Screen.height > 500) {
-            readyBtnWidth = 200;
-            readyBtnHeight = 50;
-            GuiReady.textureWidth = 200;
-            GuiReady.textureHeight = 50;
-            readyOffset = 50;
-        }
-
-
-        if(GUI.Button(Rect(GuiReady.offset.x,Screen.height - readyOffset - (Screen.height*0.1), readyBtnWidth, readyBtnHeight), "Ready")){
-            if(selectMenu == "quick"){
-                leaveFor(menus.quickplay);
-            }
-            else if (selectMenu == "join") {
-                leaveFor(menus.lobby);
-            }
-            else if (selectMenu == "newGame") {
-                leaveFor(menus.host);
-            }
-        }
-
-
-        GuiBack.updateLocation();
-        GuiReady.updateLocation();
-        GuiCharacter[0].updateLocation();
-
+    if(GUI.Button(Rect(guiObject[2].offset.x ,guiObject[2].offset.y,Screen.width*0.3, Screen.height*0.55), "Quick Game")){
+        leaveFor(menus.quickplay);
     }
-    else {
-        //Show main menu if Character Selection isn't true
 
-        GUILayout.Label("Main Menu");
-        GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
-
-        if(GUI.Button(Rect(Gui.offset.x,Gui.offset.y,130,160), quickGameTexture)){
-            //leaveFor(menus.quickplay);
-            characterSelect = true;
-            selectMenu = "quick";
-        }
-
-        if(GUI.Button(Rect(Gui.offset.x + 150,Gui.offset.y,150,70), newGameTexture)){
-            //leaveFor(menus.host);
-            characterSelect = true;
-            selectMenu = "newGame";
-        }
-
-        if(GUI.Button(Rect(Gui.offset.x + 150,Gui.offset.y + 90,150,70), joinGameTexture)){
-            //leaveFor(menus.lobby);
-            characterSelect = true;
-            selectMenu = "join";
-        }
+    if(GUI.Button(Rect(guiObject[2].offset.x + Screen.width*0.32,guiObject[2].offset.y,Screen.width*0.3,Screen.height*0.25), "New Game")){
+        leaveFor(menus.host);
     }
+
+    if(GUI.Button(Rect(guiObject[2].offset.x + Screen.width*0.32,guiObject[2].offset.y + Screen.height*0.3,Screen.width*0.3,Screen.height*0.25), "Join Game")){
+        leaveFor(menus.lobby);
+    }
+
 }
 
 function enter(){
