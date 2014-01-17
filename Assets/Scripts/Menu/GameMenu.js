@@ -61,7 +61,7 @@ function OnGUI (){
         GUILayout.Label("Player Limit:");
         playerLimit = parseInt(GUILayout.TextField(playerLimit.ToString(), GUILayout.MinWidth(70))) || 0;
         if (GUILayout.Button ("Start Server")){
-            netScript.startHost(playerLimit, gameName, onInitialize);
+            netScript.startHost(playerLimit, gameName, onServerInitialize);
             isStartingServer = true;
         }
     }
@@ -69,10 +69,10 @@ function OnGUI (){
         GUILayout.Label("Starting server. Please Wait...");
     }
     else if(Network.isClient || (isHosting && Network.isServer)){
-        playerList = gameSetupScript.playerList;
+        playerList = gameSetupScript.game.getPlayers();
         GUILayout.Label("Players:");
         for(var player:Player in playerList.Values){
-            GUILayout.Label(" - " + player.getName() + (player.isSelf() ? " (me)" : ""));
+            GUILayout.Label(" - " + player.getName() + (Util.IsNetworkedPlayerMe(player) ? " (me)" : ""));
         }
 
         GUI.skin = menuSkin;
@@ -132,10 +132,10 @@ function OnGUI (){
     }
 }
 
-function onInitialize(success: boolean){
+function onServerInitialize(success: boolean){
     if(success){
         isStartingServer = false;
-        gameSetupScript.registerPlayerRPC(playerScript.getName(), Network.player);
+        gameSetupScript.registerPlayerProxy(playerScript.getName());
     }
 }
 
@@ -143,8 +143,10 @@ function enter(isNew : boolean){
     showMenu = true;
     isHosting = isNew;
 
+    gameSetupScript.game = new Game();
+
     if(Network.isClient){
-        gameSetupScript.registerPlayerRPC(playerScript.getName(), Network.player);
+        gameSetupScript.registerPlayerProxy(playerScript.getName());
     }
 }
 

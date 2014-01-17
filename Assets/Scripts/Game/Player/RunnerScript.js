@@ -1,7 +1,6 @@
 ﻿#pragma strict
 
 private var player : Runner;
-private var playerId : String;
 private var cam : GameObject;
 
 private var currentSpeed : float = Config.RUN_SPEED;
@@ -14,10 +13,9 @@ private var crouchTime : float = 0;
 private var runnerWidth : float = 0.6;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
-    var playerList : Dictionary.<String,Player> = GameObject.Find("/GameManager").GetComponent(GameSetup).playerList;
+    player = Util.GetPlayerById(networkView.viewID.owner.guid) as Runner;
+    var teammates : Dictionary.<String,Player> = player.getTeam().getTeammates();
 
-    playerId = networkView.viewID.owner.guid;
-    player = Util.GetPlayerById(playerId) as Runner;
     player.gameObject = gameObject;
     player.controller = this;
     // Access model using:
@@ -34,7 +32,7 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
         player.gameObject.layer = LayerMask.NameToLayer("Remote Players");
 
         // TODO Fix. Assumes own player is always the first to be instantiated
-        player.gameObject.transform.position.z = playerList.Count * runnerWidth - runnerWidth/2;
+        player.gameObject.transform.position.z = teammates.Count * runnerWidth - runnerWidth/2;
     }
 }
 
@@ -112,39 +110,45 @@ function OnCollisionExit(theCollision : Collision){
  *  INPUT
  */
 function checkKeyboardInput(){
-    if(Input.GetKeyDown(KeyCode.W)){
-        jump();
-    }
-    if(Input.GetKeyDown(KeyCode.S)){
-        crouch();
-    }
-    if(Input.GetKeyDown(KeyCode.A)){
-        startWalk();
-    }
-    if(Input.GetKeyUp(KeyCode.A)){
-        stopWalk();
-    }
-    if(Input.GetKeyUp(KeyCode.D)){
-        // toss();
+    if(networkView.isMine){
+        if(Input.GetKeyDown(KeyCode.W)){
+            jump();
+        }
+        if(Input.GetKeyDown(KeyCode.S)){
+            crouch();
+        }
+        if(Input.GetKeyDown(KeyCode.A)){
+            startWalk();
+        }
+        if(Input.GetKeyUp(KeyCode.A)){
+            stopWalk();
+        }
+        if(Input.GetKeyUp(KeyCode.D)){
+            // toss();
+        }
     }
 }
 
 function OnEnable(){
-    Gesture.onSwipeE += OnSwipe;
-    Gesture.onLongTapE += OnLongTap;
-    Gesture.onTouchE += OnTouch;
-    Gesture.onTouchUpE += OnRelease;
-    Gesture.onMouse1E += OnTouch;
-    Gesture.onMouse1UpE += OnRelease;
+    if(networkView.isMine){
+        Gesture.onSwipeE += OnSwipe;
+        Gesture.onLongTapE += OnLongTap;
+        Gesture.onTouchE += OnTouch;
+        Gesture.onTouchUpE += OnRelease;
+        Gesture.onMouse1E += OnTouch;
+        Gesture.onMouse1UpE += OnRelease;
+    }
 }
 
 function OnDisable(){
-    Gesture.onSwipeE -= OnSwipe;
-    Gesture.onLongTapE -= OnLongTap;
-    Gesture.onTouchE -= OnTouch;
-    Gesture.onTouchUpE -= OnRelease;
-    Gesture.onMouse1E -= OnTouch;
-    Gesture.onMouse1UpE -= OnRelease;
+    if(networkView.isMine){
+        Gesture.onSwipeE -= OnSwipe;
+        Gesture.onLongTapE -= OnLongTap;
+        Gesture.onTouchE -= OnTouch;
+        Gesture.onTouchUpE -= OnRelease;
+        Gesture.onMouse1E -= OnTouch;
+        Gesture.onMouse1UpE -= OnRelease;
+    }
 }
 
 function OnSwipe(sw:SwipeInfo){

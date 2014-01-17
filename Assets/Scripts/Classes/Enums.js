@@ -20,6 +20,16 @@ public enum GameState {
     Ended
 };
 
+public enum GameMode {
+    Team,
+    Versus
+};
+
+public enum PlayerRole{
+    Runner,
+    Commander
+};
+
 // TODO enable/rethink when level generation is refactored
 // public enum GameDifficulty {
 //     Tutorial,
