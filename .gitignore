@@ -8,3 +8,4 @@ Obj/
 *.DS_store
 *.sublime-project
 *.sublime-workspace
+*.userprefs
