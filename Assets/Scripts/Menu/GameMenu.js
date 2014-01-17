@@ -4,7 +4,7 @@
 private var gameManager : GameObject;
 private var menuScript : Menu;
 private var playerScript : PlayerScript;
-private var gameSetupScript : GameSetup;
+private var gameSetupScript : GameSetupScript;
 private var netScript : Net;
 
 private var showMenu : boolean = false;
@@ -28,7 +28,7 @@ function Start(){
     gameManager = GameObject.Find("/GameManager");
 
     playerScript = gameManager.GetComponent(PlayerScript);
-    gameSetupScript = gameManager.GetComponent(GameSetup);
+    gameSetupScript = gameManager.GetComponent(GameSetupScript);
 
     gameName = playerScript.getName() + "'s Game";
 
