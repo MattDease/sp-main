@@ -82,7 +82,7 @@ function registerRemotePlayer(name : String, player : NetworkPlayer, info : Netw
 }
 
 function registerPlayer(name : String, netPlayer : NetworkPlayer, isSelf : boolean){
-    var newPlayer = new Player(name, netPlayer, isSelf);
+    var newPlayer = new Runner(name, netPlayer, isSelf);
     playerList.Add(netPlayer.guid, newPlayer);
     if(isSelf){
         playerScript.setSelf(newPlayer);
@@ -102,10 +102,10 @@ function notifyOtherPlayerDisconnected(netPlayer : NetworkPlayer){
 function otherPlayerDisconnected(netPlayer:NetworkPlayer){
     for(var key : String in playerList.Keys){
         var player = playerList[key];
-        if(player.netPlayer == netPlayer){
-            Network.RemoveRPCs(player.netPlayer);
-            Network.DestroyPlayerObjects(player.netPlayer);
-            Debug.Log("Player '" + player.name + "' disconnected.");
+        if(player.getNetworkPlayer() == netPlayer){
+            Network.RemoveRPCs(player.getNetworkPlayer());
+            Network.DestroyPlayerObjects(player.getNetworkPlayer());
+            Debug.Log("Player '" + player.getName() + "' disconnected.");
             playerList.Remove(key);
             break;
         }

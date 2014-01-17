@@ -39,7 +39,7 @@ function OnDebugGUI(){
     GUILayout.Space(20);
     GUILayout.Label("Connected Players:");
     for(var player:Player in gameSetupScript.playerList.Values){
-        GUILayout.Label("- " + player.name + (player.isSelf ? " (me)" : ""));
+        GUILayout.Label("- " + player.getName() + (player.isSelf() ? " (me)" : ""));
     }
     GUILayout.Space(20);
 

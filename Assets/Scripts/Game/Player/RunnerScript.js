@@ -1,6 +1,6 @@
 ﻿#pragma strict
 
-private var player : Player;
+private var player : Runner;
 private var playerId : String;
 private var cam : GameObject;
 
@@ -17,7 +17,7 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
     var playerList : Dictionary.<String,Player> = GameObject.Find("/GameManager").GetComponent(GameSetup).playerList;
 
     playerId = networkView.viewID.owner.guid;
-    player = Util.GetPlayerById(playerId);
+    player = Util.GetPlayerById(playerId) as Runner;
     player.gameObject = gameObject;
     player.controller = this;
     // Access model using:

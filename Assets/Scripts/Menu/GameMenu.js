@@ -72,7 +72,7 @@ function OnGUI (){
         playerList = gameSetupScript.playerList;
         GUILayout.Label("Players:");
         for(var player:Player in playerList.Values){
-            GUILayout.Label(" - " + player.name + (player.isSelf ? " (me)" : ""));
+            GUILayout.Label(" - " + player.getName() + (player.isSelf() ? " (me)" : ""));
         }
 
         GUI.skin = menuSkin;
