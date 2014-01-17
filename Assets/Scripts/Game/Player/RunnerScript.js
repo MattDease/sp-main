@@ -51,6 +51,7 @@ function Update(){
     if(isCrouched && Time.timeSinceLevelLoad - crouchTime > Config.CROUCH_DURATION){
         unCrouch();
     }
+    checkKeyboardInput();
 }
 
 function jump(){
@@ -105,4 +106,76 @@ function OnCollisionExit(theCollision : Collision){
         isGrounded = false;
         canDoubleJump = true;
     }
+}
+
+/*
+ *  INPUT
+ */
+function checkKeyboardInput(){
+    if(Input.GetKeyDown(KeyCode.W)){
+        jump();
+    }
+    if(Input.GetKeyDown(KeyCode.S)){
+        crouch();
+    }
+    if(Input.GetKeyDown(KeyCode.A)){
+        startWalk();
+    }
+    if(Input.GetKeyUp(KeyCode.A)){
+        stopWalk();
+    }
+    if(Input.GetKeyUp(KeyCode.D)){
+        // toss();
+    }
+}
+
+function OnEnable(){
+    Gesture.onSwipeE += OnSwipe;
+    Gesture.onLongTapE += OnLongTap;
+    Gesture.onTouchE += OnTouch;
+    Gesture.onTouchUpE += OnRelease;
+    Gesture.onMouse1E += OnTouch;
+    Gesture.onMouse1UpE += OnRelease;
+}
+
+function OnDisable(){
+    Gesture.onSwipeE -= OnSwipe;
+    Gesture.onLongTapE -= OnLongTap;
+    Gesture.onTouchE -= OnTouch;
+    Gesture.onTouchUpE -= OnRelease;
+    Gesture.onMouse1E -= OnTouch;
+    Gesture.onMouse1UpE -= OnRelease;
+}
+
+function OnSwipe(sw:SwipeInfo){
+    // TODO - rewrite
+    //Figure out what direction we are swiping
+    if(sw.direction.x > 0  && sw.angle > 45 && sw.angle < 135 ) {
+        jump();
+    }
+
+    if(sw.direction.x < 0  && sw.angle > 235 && sw.angle < 315 ) {
+        crouch();
+    }
+
+    // TODO find target player based on swipe direction and pass them to a toss function
+    // if(sw.direction.y > 0  && ((sw.angle > 0 && sw.angle < 45) || (sw.angle > 315 && sw.angle < 360)) )  {
+    //     Toss(sw.direction, sw.speed);
+    // }
+
+    // if(sw.direction.y < 0  && sw.angle > 135 && sw.angle < 235 ) {
+    //     Toss(sw.direction, sw.speed);
+    // }
+}
+
+//called when a long tap event is ended
+function OnLongTap(tap:Tap){
+
+}
+
+function OnTouch(pos:Vector2){
+    startWalk();
+}
+function OnRelease(pos:Vector2){
+    stopWalk();
 }
