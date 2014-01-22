@@ -7,6 +7,7 @@ private var MEDIUM_AMOUNT : int = 20;
 private var HARD_AMOUNT : int = 30;
 private var EXPERT_AMOUNT : int = 40;
 
+// TODO remove when level generation logic is refactored
 public enum difficulty {
     tutorial,
     easy,

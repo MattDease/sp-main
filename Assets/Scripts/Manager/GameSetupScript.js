@@ -1,28 +1,12 @@
 ﻿#pragma strict
+#pragma downcast
 
 import System.Collections.Generic;
 
-// TODO rethink this class. for now, add whatever you need to it.
-public class Player{
-    public var name : String;
-    public var isSelf : boolean;
-    public var netPlayer : NetworkPlayer;
-    public var id : String;
-    public var gameObject : GameObject;
-    public var controller : MonoBehaviour;
-    // TODO support commander players & better way to store role...probably extend class
-    public var isRunner : boolean = true;
-
-    public function Player(name:String, networkPlayer:NetworkPlayer, isSelf:boolean){
-        this.name = name;
-        this.isSelf = isSelf;
-        this.netPlayer = networkPlayer;
-        this.id = networkPlayer.guid;
-    }
-}
-
 //Set in editor
 public var playerPrefab : Transform;
+
+public var game : Game;
 
 public var localPlayer : Player;
 public var playerList : Dictionary.<String,Player> = new Dictionary.<String,Player>();
@@ -87,46 +71,51 @@ function loadLevel(level : String, levelPrefix : int){
 function OnDisconnectedFromServer(){
     playerScript.incrementTimesPlayed();
     playerScript.setSelf(null);
+    game.destroy();
+    game = null;
     stateScript.setCurrentMenu(menus.main);
     Application.LoadLevel("scene-menu");
 }
-function registerPlayerRPC(name : String, player : NetworkPlayer){
-    networkView.RPC("registerRemotePlayer", RPCMode.OthersBuffered, name, player);
-    registerPlayer(name, Network.player, true);
+
+function registerPlayerProxy(name : String){
+    if(Network.isServer){
+        // Server can't sent server RPC
+        registerPlayer(name, Network.player);
+    }
+    else{
+        networkView.RPC("registerPlayer", RPCMode.Server, name, Network.player);
+    }
+}
+
+// Server only
+@RPC
+function registerPlayer(name : String, netPlayer : NetworkPlayer){
+    var newPlayerInfo : Array = game.getNewPlayerTeamAndRole();
+    networkView.RPC("addPlayer", RPCMode.AllBuffered, name, newPlayerInfo[0], newPlayerInfo[1].ToString(), netPlayer);
 }
 
 @RPC
-function registerRemotePlayer(name : String, player : NetworkPlayer, info : NetworkMessageInfo){
-    registerPlayer(name, player, false);
-}
+function addPlayer(name : String, teamId : int, role : String, netPlayer : NetworkPlayer, info : NetworkMessageInfo){
+    var playerRole : PlayerRole = System.Enum.Parse(PlayerRole, role);
+    var newPlayer : Player;
+    if(playerRole == PlayerRole.Runner){
+        newPlayer = game.addRunner(name, teamId, netPlayer);
+    }
+    else if(playerRole == PlayerRole.Commander){
+        newPlayer = game.addCommander(name, teamId, netPlayer);
+    }
 
-function registerPlayer(name : String, netPlayer : NetworkPlayer, isSelf : boolean){
-    var newPlayer = new Player(name, netPlayer, isSelf);
-    playerList.Add(netPlayer.guid, newPlayer);
-    if(isSelf){
+    if(Util.IsNetworkedPlayerMe(newPlayer)){
         playerScript.setSelf(newPlayer);
     }
 }
 
+// Server only
 function OnPlayerDisconnected(netPlayer: NetworkPlayer){
-    networkView.RPC("notifyOtherPlayerDisconnected", RPCMode.OthersBuffered, netPlayer);
-    otherPlayerDisconnected(netPlayer);
+    networkView.RPC("removePlayer", RPCMode.AllBuffered, netPlayer);
 }
 
 @RPC
-function notifyOtherPlayerDisconnected(netPlayer : NetworkPlayer){
-    otherPlayerDisconnected(netPlayer);
-}
-
-function otherPlayerDisconnected(netPlayer:NetworkPlayer){
-    for(var key : String in playerList.Keys){
-        var player = playerList[key];
-        if(player.netPlayer == netPlayer){
-            Network.RemoveRPCs(player.netPlayer);
-            Network.DestroyPlayerObjects(player.netPlayer);
-            Debug.Log("Player '" + player.name + "' disconnected.");
-            playerList.Remove(key);
-            break;
-        }
-    }
+function removePlayer(netPlayer:NetworkPlayer){
+    game.removePlayer(netPlayer.guid);
 }
