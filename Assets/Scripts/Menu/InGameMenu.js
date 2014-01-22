@@ -38,7 +38,7 @@ function OnDebugGUI(){
 
     GUILayout.Space(20);
     GUILayout.Label("Connected Players:");
-    for(var player:Player in gameSetupScript.playerList.Values){
+    for(var player:Player in gameSetupScript.game.getPlayers().Values){
         GUILayout.Label("- " + player.getName() + (Util.IsNetworkedPlayerMe(player) ? " (me)" : ""));
     }
     GUILayout.Space(20);
