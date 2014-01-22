@@ -4,6 +4,10 @@
 public class Team{
     private var teammates : Dictionary.<String,Player> = new Dictionary.<String,Player>();
 
+    // cache commonly used values
+    private var runnerCount : int = 0;
+    private var commanderCount : int = 0;
+
     public function Team(){
 
     }
@@ -13,10 +17,22 @@ public class Team{
     }
 
     public function addTeammate(player : Player){
+        if(player.GetType() == Runner){
+            runnerCount++;
+        }
+        if(player.GetType() == Commander){
+            commanderCount++;
+        }
         teammates.Add(player.getId(), player);
     }
 
     public function removeTeammate(id : String){
+        if(teammates[id].GetType() == Runner){
+            runnerCount--;
+        }
+        if(teammates[id].GetType() == Commander){
+            commanderCount--;
+        }
         teammates.Remove(id);
     }
 
