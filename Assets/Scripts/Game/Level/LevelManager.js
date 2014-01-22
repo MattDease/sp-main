@@ -14,7 +14,7 @@ private var gameManager : GameObject;
 private var difficultyScript : DifficultyScript;
 private var playerScript : PlayerScript;
 private var stateScript : StateScript;
-private var gameSetupScript : GameSetup;
+private var gameSetupScript : GameSetupScript;
 
 private var segments : List.<GameObject> = new List.<GameObject>();
 
@@ -29,7 +29,7 @@ function Start () {
     difficultyScript = gameManager.GetComponent(DifficultyScript);
     playerScript = gameManager.GetComponent(PlayerScript);
     stateScript = gameManager.GetComponent(StateScript);
-    gameSetupScript = gameManager.GetComponent(GameSetup);
+    gameSetupScript = gameManager.GetComponent(GameSetupScript);
 }
 
 function Update () {

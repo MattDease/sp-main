@@ -3,7 +3,7 @@
 private var gameManager : GameObject;
 private var playerScript : PlayerScript;
 private var stateScript : StateScript;
-private var gameSetupScript : GameSetup;
+private var gameSetupScript : GameSetupScript;
 private var difficultyScript : DifficultyScript;
 
 function Start(){
@@ -11,7 +11,7 @@ function Start(){
 
     playerScript = gameManager.GetComponent(PlayerScript);
     stateScript = gameManager.GetComponent(StateScript);
-    gameSetupScript = gameManager.GetComponent(GameSetup);
+    gameSetupScript = gameManager.GetComponent(GameSetupScript);
     difficultyScript = gameManager.GetComponent(DifficultyScript);
 }
 
@@ -38,8 +38,8 @@ function OnDebugGUI(){
 
     GUILayout.Space(20);
     GUILayout.Label("Connected Players:");
-    for(var player:Player in gameSetupScript.playerList.Values){
-        GUILayout.Label("- " + player.name + (player.isSelf ? " (me)" : ""));
+    for(var player:Player in gameSetupScript.game.getPlayers().Values){
+        GUILayout.Label("- " + player.getName() + (Util.IsNetworkedPlayerMe(player) ? " (me)" : ""));
     }
     GUILayout.Space(20);
 
