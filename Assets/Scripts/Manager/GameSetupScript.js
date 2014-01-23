@@ -18,7 +18,9 @@ private var stateScript : StateScript;
 // Game Scripts
 private var levelManager : LevelManager;
 
-private var lastLevelPrefix = 0;
+private var readyPlayerCount : int = 0;
+private var startTime : double;
+private var lastLevelPrefix : int = 0;
 
 function Start(){
     playerScript = GetComponent(PlayerScript);
@@ -31,14 +33,55 @@ function enterGame(){
     stateScript.setGameState(GameState.Loading);
 }
 
-function startGameProxy(){
-    networkView.RPC("startGame", RPCMode.All);
+function onLevelReady(){
+    networkView.RPC("createCharacter", RPCMode.All);
 }
 
 @RPC
-function startGame(info : NetworkMessageInfo){
-    stateScript.setGameState(GameState.Playing);
+function createCharacter(info : NetworkMessageInfo){
     Network.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, 0);
+    if(Network.isServer){
+        // Server can't send server RPC
+        playerReady();
+    }
+    else{
+        networkView.RPC("playerReady", RPCMode.Server);
+    }
+}
+
+// Server Only
+@RPC
+function playerReady(){
+    readyPlayerCount++;
+    if(readyPlayerCount == game.getPlayers().Count){
+        networkView.RPC("startCountDown", RPCMode.All);
+    }
+}
+
+@RPC
+function startCountDown(info : NetworkMessageInfo){
+    var delay : double = Config.START_DELAY - (Network.time - info.timestamp);
+    startTime = Time.realtimeSinceStartup + delay;
+    Invoke("startGame", delay);
+}
+
+function getCountDown() : int {
+    if(startTime){
+        var delay : double = startTime - Time.realtimeSinceStartup;
+        if(delay < 0){
+            return 0;
+        }
+        else{
+            return Mathf.Ceil(delay);
+        }
+    }
+    else{
+        return -1;
+    }
+}
+
+function startGame(){
+    game.start();
 }
 
 function OnNetworkLoadedLevel(){

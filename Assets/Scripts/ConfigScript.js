@@ -8,6 +8,7 @@ public static class Config{
     public var DEBUG : boolean = true;
 
     //// GAMEPLAY
+    public var START_DELAY : float = 3;
     public var CAMERA_LEAD : float = 0.25;
     public var MAX_RUNNER_X : float = 0.90;
     public var RUN_SPEED : float = 2;

@@ -25,6 +25,13 @@ public class Game {
         teams.Add(new Team());
     }
 
+    public function start(){
+        stateScript.setGameState(GameState.Playing);
+        for(var player : Player in players.Values){
+            player.script.enabled = true;
+        }
+    }
+
     public function getPlayers() : Dictionary.<String,Player>{
         return players;
     }

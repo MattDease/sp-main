@@ -53,7 +53,7 @@ function onAddSegment(segment : GameObject){
 
     if(segments.Count == 0){
         currentLevelEnd = segmentWidth - segmentOffset;
-        gameSetupScript.startGameProxy();
+        gameSetupScript.onLevelReady();
     }
     else{
         currentLevelEnd += segmentWidth;

@@ -24,7 +24,11 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
     team = player.getTeam();
 
     player.gameObject = gameObject;
+    player.script = this;
     player.controller = this;
+
+    // Disable script updates until game starts
+    this.enabled = false;
 
     if(networkView.isMine){
         camContainer = Instantiate(cameraPrefab, Vector3.zero,  Quaternion.identity);
@@ -33,8 +37,8 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
         var viewport : Vector3 = Camera.main.WorldToViewportPoint(gameObject.transform.position);
         viewport.x += Config.CAMERA_LEAD;
         defaultCameraOffset = Camera.main.ViewportToWorldPoint(viewport);
+        camContainer.transform.localPosition = defaultCameraOffset;
 
-        player.gameObject.rigidbody.velocity.x = currentSpeed;
         player.gameObject.rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
 
         runningPlane = player.gameObject.transform.position;

@@ -36,15 +36,17 @@ function OnDebugGUI(){
         Application.LoadLevel("scene-menu");
     }
 
-    GUILayout.Space(20);
+    GUILayout.Space(10);
+    GUILayout.Label("Game Count Down: " + gameSetupScript.getCountDown());
+    GUILayout.Space(10);
     GUILayout.Label("Connected Players:");
     for(var player:Player in gameSetupScript.game.getPlayers().Values){
         GUILayout.Label("- " + player.getName() + (Util.IsNetworkedPlayerMe(player) ? " (me)" : ""));
     }
-    GUILayout.Space(20);
+    GUILayout.Space(10);
 
     GUILayout.Label("Difficulty: " + difficultyScript.getCurrentDifficulty());
-    GUILayout.Space(20);
+    GUILayout.Space(10);
     GUILayout.Label("Times Played: " + playerScript.getTimesPlayed());
 
     GUILayout.EndVertical();
