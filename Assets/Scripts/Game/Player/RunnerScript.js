@@ -1,9 +1,16 @@
 ﻿#pragma strict
 
+// Set in editor
+public var cameraPrefab : GameObject;
+
 private var player : Runner;
-private var cam : GameObject;
+private var team : Team;
+private var camContainer : GameObject;
 
 private var currentSpeed : float = Config.RUN_SPEED;
+private var runningPlane : Vector3;
+private var defaultCameraOffset : Vector2 = Vector2.zero;
+private var cameraOffset : Vector2 = Vector2.zero;
 private var isCrouched : boolean = false;
 private var isGrounded : boolean = true;
 private var canDoubleJump: boolean = false;
@@ -14,42 +21,60 @@ private var runnerWidth : float = 0.6;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player = Util.GetPlayerById(networkView.viewID.owner.guid) as Runner;
-    var teammates : Dictionary.<String,Player> = player.getTeam().getTeammates();
+    team = player.getTeam();
 
     player.gameObject = gameObject;
     player.controller = this;
-    // Access model using:
-    // player.gameObject.transform.Find("debug_runner");
 
     if(networkView.isMine){
+        camContainer = Instantiate(cameraPrefab, Vector3.zero,  Quaternion.identity);
+        camContainer.transform.parent = player.gameObject.transform;
+
+        var viewport : Vector3 = Camera.main.WorldToViewportPoint(gameObject.transform.position);
+        viewport.x += Config.CAMERA_LEAD;
+        defaultCameraOffset = Camera.main.ViewportToWorldPoint(viewport);
+
         player.gameObject.rigidbody.velocity.x = currentSpeed;
         player.gameObject.rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
 
-        cam = GameObject.Find("MainCamera");
+        runningPlane = player.gameObject.transform.position;
     }
     else{
         // Change layer so collisions with local player is ignored
         player.gameObject.layer = LayerMask.NameToLayer("Remote Players");
 
         // TODO Fix. Assumes own player is always the first to be instantiated
-        player.gameObject.transform.position.z = teammates.Count * runnerWidth - runnerWidth/2;
+        player.gameObject.transform.position.z = team.getTeammates().Count * runnerWidth - runnerWidth/2;
     }
 }
 
 // Do physics changes here
 function FixedUpdate(){
-    player.gameObject.rigidbody.velocity.x = currentSpeed;
+    if(networkView.isMine){
+        player.gameObject.rigidbody.velocity.x = currentSpeed;
+    }
 }
 
 function Update(){
-    if(cam){
-        // TODO better camera positioning that considers other players
-        cam.transform.position.x = player.gameObject.transform.position.x;
+    if(networkView.isMine){
+        if(isCrouched && Time.timeSinceLevelLoad - crouchTime > Config.CROUCH_DURATION){
+            unCrouch();
+        }
+        checkKeyboardInput();
     }
-    if(isCrouched && Time.timeSinceLevelLoad - crouchTime > Config.CROUCH_DURATION){
-        unCrouch();
+}
+
+function LateUpdate(){
+    if(networkView.isMine){
+        //TODO don't start until all players are ready
+        if(Camera.main){
+            cameraOffset += getCameraOffset();
+            if(cameraOffset.x < 0){
+                cameraOffset.x = 0;
+            }
+            camContainer.transform.localPosition = defaultCameraOffset + cameraOffset;
+        }
     }
-    checkKeyboardInput();
 }
 
 function jump(){
@@ -103,6 +128,29 @@ function OnCollisionExit(theCollision : Collision){
     if(theCollision.gameObject.tag == "levelSegment") {
         isGrounded = false;
         canDoubleJump = true;
+    }
+}
+
+private function getCameraOffset() : Vector2 {
+    var leader : Vector3 = Vector3.zero;
+    for(var player : Player in this.team.getTeammates().Values){
+        if(player.GetType() == Runner && !Util.IsNetworkedPlayerMe(player) && (player as Runner).isAlive()){
+            var position : Vector3 = player.gameObject.transform.position;
+            position.y = runningPlane.y;
+            position.z = runningPlane.z;
+            var viewport : Vector3 = Camera.main.WorldToViewportPoint(position);
+            if(viewport.x > leader.x && (viewport.x > Config.MAX_RUNNER_X || cameraOffset.x != 0)){
+                leader = viewport;
+            }
+        }
+    }
+    if(leader != Vector3.zero){
+        var maxX : float = Camera.main.ViewportToWorldPoint(Vector3(Config.MAX_RUNNER_X, leader.y, leader.z)).x;
+        var leadX : float = Camera.main.ViewportToWorldPoint(leader).x;
+        return Vector2(leadX - maxX, 0);
+    }
+    else{
+        return Vector2.zero;
     }
 }
 

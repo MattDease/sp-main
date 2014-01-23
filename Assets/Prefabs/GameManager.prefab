@@ -77,11 +77,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 400002, guid: 13fa43c4fa353d44fa68edbca58ca656, type: 2}
   localPlayer:
-    name: 
-    isSelf: 0
-    id: 
     gameObject: {fileID: 0}
-    playerScript: {fileID: 0}
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1

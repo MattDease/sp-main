@@ -8,8 +8,6 @@ public var GameCamera : GameObject;
 public var GameLight : GameObject;
 
 function Awake () {
-    var camera : GameObject = Instantiate(GameCamera);
-    camera.name = "MainCamera";
     var light : GameObject = Instantiate(GameLight);
     light.name = "DirectionalLight";
     var gestures : GameObject = Instantiate(Gestures);

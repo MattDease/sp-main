@@ -35,13 +35,27 @@ public class Player{
     public function getNetworkPlayer() : NetworkPlayer {
         return this.networkPlayer;
     }
+
+    public function getPosition() : Vector3 {
+        return this.gameObject.transform.position;
+    }
 }
 
 public class Runner extends Player{
     public var controller : RunnerScript;
 
+    private var alive : boolean = true;
+
     public function Runner(name:String, teamId:int, team:Team, networkPlayer:NetworkPlayer){
         super(name, teamId, team, networkPlayer);
+    }
+
+    public function getDistance() : float {
+        return this.gameObject.transform.position.x;
+    }
+
+    public function isAlive() : boolean {
+        return this.alive;
     }
 }
 
