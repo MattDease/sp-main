@@ -87,7 +87,7 @@ function startGame(){
 function OnNetworkLoadedLevel(){
     levelManager = GameObject.Find("GameScripts").GetComponent(LevelManager);
     if(Network.isServer){
-        levelManager.addSegment();
+        levelManager.addFirstSegment();
     }
 }
 

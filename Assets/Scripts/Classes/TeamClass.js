@@ -36,5 +36,31 @@ public class Team{
         teammates.Remove(id);
     }
 
+    public function getLeader() : Runner {
+        var leader : Runner;
+        for(var player : Player in teammates.Values){
+            if(player.GetType() == Runner){
+                var runner : Runner = player as Runner;
+                if(runner.isAlive() && (!leader || runner.getDistance() > leader.getDistance())){
+                    leader = runner;
+                }
+            }
+        }
+        return leader;
+    }
+
+    public function getStraggler() : Runner {
+        var straggler : Runner;
+        for(var player : Player in teammates.Values){
+            if(player.GetType() == Runner){
+                var runner : Runner = player as Runner;
+                if(runner.isAlive() && (!straggler || runner.getDistance() < straggler.getDistance())){
+                    straggler = runner;
+                }
+            }
+        }
+        return straggler;
+    }
+
     // TODO add team validity check methods and gameplay methods.
 }
