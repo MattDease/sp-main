@@ -11,7 +11,6 @@ private var camContainer : GameObject;
 
 private var currentSpeed : float = Config.RUN_SPEED;
 private var runningPlane : Vector3;
-private var defaultCameraOffset : Vector2 = Vector2.zero;
 private var cameraOffset : Vector2 = Vector2.zero;
 private var isCrouched : boolean = false;
 private var isGrounded : boolean = true;
@@ -34,16 +33,14 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 
     if(networkView.isMine){
         camContainer = Instantiate(cameraPrefab, Vector3.zero,  Quaternion.identity);
-        camContainer.transform.parent = player.gameObject.transform;
 
         var viewport : Vector3 = Camera.main.WorldToViewportPoint(gameObject.transform.position);
         viewport.x += Config.CAMERA_LEAD;
-        defaultCameraOffset = Camera.main.ViewportToWorldPoint(viewport);
-        camContainer.transform.localPosition = defaultCameraOffset;
+        Camera.main.transform.localPosition += Camera.main.ViewportToWorldPoint(viewport);
 
         player.gameObject.rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
 
-        runningPlane = player.gameObject.transform.position;
+        runningPlane = player.getPosition();
     }
     else{
         // Change layer so collisions with local player is ignored
@@ -62,10 +59,11 @@ function FixedUpdate(){
 }
 
 function Update(){
-    if(networkView.isMine){
-        var position : Vector3 = player.gameObject.transform.position;
+    if(networkView.isMine && player.isAlive()){
+        var position : Vector3 = player.getPosition();
         if(Camera.main.WorldToViewportPoint(position).x < 0 || position.y < -1){
             player.kill();
+            return;
         }
         if(isCrouched && Time.timeSinceLevelLoad - crouchTime > Config.CROUCH_DURATION){
             unCrouch();
@@ -76,11 +74,16 @@ function Update(){
 
 function LateUpdate(){
     if(networkView.isMine){
-        cameraOffset += getCameraOffset();
-        if(cameraOffset.x < 0){
-            cameraOffset.x = 0;
+        if(player.isAlive()){
+            cameraOffset += getCameraOffset();
+            if(cameraOffset.x < 0){
+                cameraOffset.x = 0;
+            }
+            camContainer.transform.position = player.getPosition() + cameraOffset;
         }
-        camContainer.transform.localPosition = defaultCameraOffset + cameraOffset;
+        else{
+            camContainer.transform.position = team.getObserverCameraPosition();
+        }
     }
 }
 
@@ -142,7 +145,7 @@ private function getCameraOffset() : Vector2 {
     var leader : Vector3 = Vector3.zero;
     for(var player : Runner in this.team.getRunners(true).Values){
         if(!Util.IsNetworkedPlayerMe(player)){
-            var position : Vector3 = player.gameObject.transform.position;
+            var position : Vector3 = player.getPosition();
             position.y = runningPlane.y;
             position.z = runningPlane.z;
             var viewport : Vector3 = Camera.main.WorldToViewportPoint(position);

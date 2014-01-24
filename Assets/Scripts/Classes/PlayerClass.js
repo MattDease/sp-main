@@ -64,8 +64,8 @@ public class Runner extends Player{
     }
 
     public function kill() {
-        Network.Destroy(this.gameObject);
-        this.gameObject = null;
+        //Network.Destroy(this.gameObject);
+        Util.Toggle(this.gameObject, false);
         this.alive = false;
         this.team.killTeammate(this.id);
     }

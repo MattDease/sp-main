@@ -10,8 +10,14 @@ public class Team{
     private var runners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
     private var activeRunners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
 
+    private var alive : boolean = true;
+
     public function Team(){
 
+    }
+
+    public function isAlive() : boolean {
+        return alive;
     }
 
     public function getTeammates() : Dictionary.<String,Player> {
@@ -39,6 +45,9 @@ public class Team{
 
     public function killTeammate(id : String){
         activeRunners.Remove(id);
+        if(activeRunners.Count == 0){
+            this.alive = false;
+        }
     }
 
     public function removeTeammate(id : String){
@@ -76,6 +85,14 @@ public class Team{
             }
         }
         return straggler;
+    }
+
+    public function getObserverCameraPosition() : Vector3 {
+        var total : Vector2 = Vector2.zero;
+        for(var runner : Runner in activeRunners.Values){
+            total += runner.getPosition();
+        }
+        return total / activeRunners.Count;
     }
 
     // TODO add team validity check methods and gameplay methods.
