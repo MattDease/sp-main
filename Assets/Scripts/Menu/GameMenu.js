@@ -24,6 +24,7 @@ private var backTexture : Texture2D;
 private var playerTexture : Texture2D;
 private var homeTexture : Texture2D;
 private var startTexture : Texture2D;
+private var backgroundTexutre : Texture2D;
 
 
 function Awake(){
@@ -47,6 +48,8 @@ function Start(){
     playerTexture = Resources.Load("Textures/gui/player", Texture2D);
     homeTexture = Resources.Load("Textures/gui/home", Texture2D);
     startTexture = Resources.Load("Textures/gui/startBtn", Texture2D);
+    backgroundTexutre = Resources.Load("Textures/gui/mainMenuBackground", Texture2D);
+
 
     guiHost = new GuiClasses[5];
     for (var x=0; x<guiHost.length; x++){
@@ -63,6 +66,7 @@ function OnGUI (){
     if(!showMenu){
         return;
     }
+    GUI.DrawTexture(new Rect(0,0, Screen.width, Screen.height), backgroundTexutre);
 
     //TODO - replace with good UI
     GUILayout.Label("Game Menu" + (isHosting ? " - Host" : ""));
@@ -99,7 +103,7 @@ function OnGUI (){
         //Home Btn
         guiObject[1].pointLocation = Points.TopRight;
         guiObject[1].updateLocation();
-        if(GUI.Button(Rect(Screen.width - Screen.width*0.09,guiObject[1].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), homeTexture)){
+        if(GUI.Button(Rect(Screen.width - Screen.width*0.09,guiObject[1].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), homeTexture, "FullImage")){
             selectCharacter = false;
             leaveFor(menus.main);
         }

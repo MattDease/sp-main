@@ -19,6 +19,7 @@ private var guiStatusBar: GuiClasses;
 private var status;
 var menuSkin : GUISkin;
 var backTexture : Texture2D;
+var backgroundTexutre : Texture2D;
 
 function Awake(){
     netScript = GetComponent(Net);
@@ -37,12 +38,16 @@ function Start(){
     }
 
     guiStatusBar = new GuiClasses();
+    backgroundTexutre = Resources.Load("Textures/gui/mainMenuBackground", Texture2D);
+
 }
 
 function OnGUI (){
     if(!showMenu){
         return;
     }
+    GUI.DrawTexture(new Rect(0,0, Screen.width, Screen.height), backgroundTexutre);
+
     GUI.skin = menuSkin;
 
     //Back Button
@@ -51,7 +56,7 @@ function OnGUI (){
     guiObject[1].pointLocation = Points.TopLeft;
     guiObject[1].updateLocation();
 
-    if(GUI.Button(Rect(guiObject[1].offset.x + Screen.width*0.01,guiObject[1].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), backTexture)){
+    if(GUI.Button(Rect(guiObject[1].offset.x + Screen.width*0.01,guiObject[1].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), backTexture, "FullImage")){
         leaveFor(menus.main);
     }
 
@@ -61,7 +66,7 @@ function OnGUI (){
     guiStatusBar.updateLocation();
 
     //Status Bar
-    GUI.Box(Rect(guiStatusBar.offset.x + Screen.width*0.01,guiStatusBar.offset.y,Screen.width*0.98,Screen.height*0.12), ""+status);
+   // GUI.Box(Rect(guiStatusBar.offset.x + Screen.width*0.01,guiStatusBar.offset.y,Screen.width*0.98,Screen.height*0.12), ""+status);
 
     //Refresh Button
     guiObject[0].textureWidth = 170;
@@ -69,16 +74,8 @@ function OnGUI (){
     guiObject[0].pointLocation = Points.Center;
     guiObject[0].updateLocation();
 
-    if(GUI.Button(Rect(guiObject[0].offset.x,guiObject[0].offset.y - 150,170,20),"Refresh List")){
+    if(GUI.Button(Rect(Screen.width - Screen.width*0.09,guiObject[1].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), backTexture, "FullImage")){
         netScript.FetchHostList(true);
-    }
-
-    if(GUI.Button(Rect(guiObject[0].offset.x,guiObject[0].offset.y - 130,170,20),"Toggle Host Filtering")){
-        filterHosts = !filterHosts;
-    }
-
-    if(isConnecting){
-        status="Connecting...";
     }
 
     if(connectionErrorMsg){
@@ -88,33 +85,38 @@ function OnGUI (){
     netScript.FetchHostList(false);
     hostList = netScript.GetHostList(filterHosts);
 
-    if(GUI.Button(Rect(guiObject[0].offset.x,guiObject[0].offset.y - 100,170,20),""+(filterHosts ? "Connectable" : "All") + " Hosted Games:")){}
     if(hostList.Count){
+        var index = 0;
         for (var element : HostData in hostList){
             GUILayout.BeginHorizontal();
             var name : String = element.gameName + " " + element.connectedPlayers + " / " + element.playerLimit;
+
             GUILayout.Label(name);
-            GUILayout.Space(5);
-            var hostInfo : String = "[";
-            for (var host : String in element.ip){
-                hostInfo = hostInfo + host + ":" + element.port + " ";
-            }
-            hostInfo += "]";
-            GUILayout.Label(hostInfo);
-            GUILayout.Space(5);
-            GUILayout.FlexibleSpace();
-            if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[0].offset.x,guiObject[0].offset.y - 80,170,20),"Connect")){
+            //GUILayout.Space(5);
+            // var hostInfo : String = "[";
+            // for (var host : String in element.ip){
+            //     hostInfo = hostInfo + host + ":" + element.port + " ";
+            // }
+            // hostInfo += "]";
+            // GUILayout.Label(hostInfo);
+            // GUILayout.Space(5);
+            // GUILayout.FlexibleSpace();
+
+
+
+            if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[0].offset.x * index,guiObject[0].offset.y - 80 * index,170,20), name, "JoinGame")){
                 Debug.Log(onConnect);
                 netScript.connect(element, onConnect);
                 connectionErrorMsg = "";
                 isConnecting = true;
             }
             GUILayout.EndHorizontal();
+            ++index;
         }
     }
     else{
         //GUILayout.Label("No Games Being Hosted.");
-        status ="No Games Being Hosted.";
+        //status ="No Games Being Hosted.";
     }
 }
 
