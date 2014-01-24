@@ -1,12 +1,14 @@
 ﻿#pragma strict
 
+import System.Linq;
+import System.Collections.Generic;
+
 // TODO implement this
 public class Team{
     private var teammates : Dictionary.<String,Player> = new Dictionary.<String,Player>();
-
-    // cache commonly used values
-    private var runnerCount : int = 0;
-    private var commanderCount : int = 0;
+    private var commander : Commander;
+    private var runners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
+    private var activeRunners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
 
     public function Team(){
 
@@ -16,22 +18,36 @@ public class Team{
         return teammates;
     }
 
+    public function getCommander() : Commander {
+        return commander;
+    }
+
+    public function getRunners(aliveOnly : boolean) : Dictionary.<String,Runner> {
+        return aliveOnly ? activeRunners : runners;
+    }
+
     public function addTeammate(player : Player){
         if(player.GetType() == Runner){
-            runnerCount++;
+            runners.Add(player.getId(), player as Runner);
+            activeRunners.Add(player.getId(), player as Runner);
         }
         if(player.GetType() == Commander){
-            commanderCount++;
+            commander = player as Commander;
         }
         teammates.Add(player.getId(), player);
     }
 
+    public function killTeammate(id : String){
+        activeRunners.Remove(id);
+    }
+
     public function removeTeammate(id : String){
         if(teammates[id].GetType() == Runner){
-            runnerCount--;
+            runners.Remove(id);
+            activeRunners.Remove(id);
         }
         if(teammates[id].GetType() == Commander){
-            commanderCount--;
+            commander = null;
         }
         teammates.Remove(id);
     }

@@ -1,5 +1,7 @@
 ﻿#pragma strict
 
+import System.Collections.Generic;
+
 // Set in editor
 public var cameraPrefab : GameObject;
 
@@ -48,7 +50,7 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
         player.gameObject.layer = LayerMask.NameToLayer("Remote Players");
 
         // TODO Fix. Assumes own player is always the first to be instantiated
-        player.gameObject.transform.position.z = team.getTeammates().Count * runnerWidth - runnerWidth/2;
+        player.gameObject.transform.position.z = team.getRunners(false).Count * runnerWidth - runnerWidth/2;
     }
 }
 
@@ -61,6 +63,10 @@ function FixedUpdate(){
 
 function Update(){
     if(networkView.isMine){
+        var position : Vector3 = player.gameObject.transform.position;
+        if(Camera.main.WorldToViewportPoint(position).x < 0 || position.y < -1){
+            player.kill();
+        }
         if(isCrouched && Time.timeSinceLevelLoad - crouchTime > Config.CROUCH_DURATION){
             unCrouch();
         }
@@ -70,14 +76,11 @@ function Update(){
 
 function LateUpdate(){
     if(networkView.isMine){
-        //TODO don't start until all players are ready
-        if(Camera.main){
-            cameraOffset += getCameraOffset();
-            if(cameraOffset.x < 0){
-                cameraOffset.x = 0;
-            }
-            camContainer.transform.localPosition = defaultCameraOffset + cameraOffset;
+        cameraOffset += getCameraOffset();
+        if(cameraOffset.x < 0){
+            cameraOffset.x = 0;
         }
+        camContainer.transform.localPosition = defaultCameraOffset + cameraOffset;
     }
 }
 
@@ -137,8 +140,8 @@ function OnCollisionExit(theCollision : Collision){
 
 private function getCameraOffset() : Vector2 {
     var leader : Vector3 = Vector3.zero;
-    for(var player : Player in this.team.getTeammates().Values){
-        if(player.GetType() == Runner && !Util.IsNetworkedPlayerMe(player) && (player as Runner).isAlive()){
+    for(var player : Runner in this.team.getRunners(true).Values){
+        if(!Util.IsNetworkedPlayerMe(player)){
             var position : Vector3 = player.gameObject.transform.position;
             position.y = runningPlane.y;
             position.z = runningPlane.z;

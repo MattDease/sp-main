@@ -3,8 +3,8 @@
 public class Player{
     private var name : String;
     private var teamId : int;
-    private var team : Team;
-    private var id : String;
+    protected var team : Team;
+    protected var id : String;
     private var networkPlayer : NetworkPlayer;
     public var gameObject : GameObject;
     public var script : MonoBehaviour;
@@ -51,12 +51,23 @@ public class Runner extends Player{
         super(name, teamId, team, networkPlayer);
     }
 
+    public function reset() {
+        this.alive = true;
+    }
+
     public function getDistance() : float {
         return this.gameObject.transform.position.x;
     }
 
     public function isAlive() : boolean {
         return this.alive;
+    }
+
+    public function kill() {
+        Network.Destroy(this.gameObject);
+        this.gameObject = null;
+        this.alive = false;
+        this.team.killTeammate(this.id);
     }
 }
 
