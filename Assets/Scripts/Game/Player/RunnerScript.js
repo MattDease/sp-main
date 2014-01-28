@@ -191,9 +191,9 @@ function OnEnable(){
     if(networkView.isMine){
         Gesture.onSwipeE += OnSwipe;
         Gesture.onLongTapE += OnLongTap;
-        Gesture.onTouchE += OnTouch;
+        Gesture.onTouchDownE += OnTouch;
         Gesture.onTouchUpE += OnRelease;
-        Gesture.onMouse1E += OnTouch;
+        Gesture.onMouse1DownE += OnTouch;
         Gesture.onMouse1UpE += OnRelease;
     }
 }
@@ -202,9 +202,9 @@ function OnDisable(){
     if(networkView.isMine){
         Gesture.onSwipeE -= OnSwipe;
         Gesture.onLongTapE -= OnLongTap;
-        Gesture.onTouchE -= OnTouch;
+        Gesture.onTouchDownE -= OnTouch;
         Gesture.onTouchUpE -= OnRelease;
-        Gesture.onMouse1E -= OnTouch;
+        Gesture.onMouse1DownE -= OnTouch;
         Gesture.onMouse1UpE -= OnRelease;
     }
 }
