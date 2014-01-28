@@ -5,6 +5,7 @@ import System.Collections.Generic;
 
 //Set in editor
 public var playerPrefab : Transform;
+public var commanderPrefab : Transform;
 
 public var game : Game;
 
