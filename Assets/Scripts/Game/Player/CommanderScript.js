@@ -30,7 +30,7 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
         var playerPosition : Vector3 = player.getPosition();
         var viewport : Vector3 = Camera.main.WorldToViewportPoint(playerPosition);
         viewport.x = 0.5;
-        viewport.y = 0.5;
+        viewport.y = 0.8;
         player.gameObject.transform.position = Camera.main.ViewportToWorldPoint(viewport);
 
         player.gameObject.rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
@@ -54,7 +54,12 @@ function Update(){
 
 function LateUpdate(){
     if(networkView.isMine){
-
+        var currentTeamPosition : Vector3 = team.getObserverCameraPosition();
+        var deltaX = currentTeamPosition.x - camContainer.transform.position.x;
+        if(!touched){
+            gameObject.transform.position.x += deltaX;
+        }
+        camContainer.transform.position.x += deltaX;
     }
 }
 
@@ -106,7 +111,6 @@ function OnTouch(pos:Vector2){
     var rayDistance : float;
     if(plane.Raycast(ray, rayDistance)) {
         targetPosition = ray.GetPoint(rayDistance);
-        Debug.Log(targetPosition);
     }
 }
 
