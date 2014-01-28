@@ -40,7 +40,12 @@ function onLevelReady(){
 
 @RPC
 function createCharacter(info : NetworkMessageInfo){
-    Network.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, 0);
+    if(playerScript.getSelf().GetType() == Runner){
+        Network.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, 0);
+    }
+    else{
+        Network.Instantiate(commanderPrefab, Vector3.zero, Quaternion.identity, 0);
+    }
     if(Network.isServer){
         // Server can't send server RPC
         playerReady();
