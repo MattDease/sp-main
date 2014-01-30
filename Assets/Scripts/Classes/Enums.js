@@ -16,14 +16,23 @@ public enum GameState {
     Uninitialized,
     Loading,
     Playing,
-    Observing,
-    Ended
+    Ended,
+    Error
 };
 
 public enum GameMode {
     Team,
     Versus
 };
+
+// Team validity status
+public enum TeamStatus {
+    // Team is valid
+    Valid,
+    // Team is not valid
+    // TODO - add values for the various ways a team could be invalid
+    TEMP_NO
+}
 
 public enum PlayerRole{
     Runner,
