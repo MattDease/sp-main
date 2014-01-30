@@ -18,6 +18,7 @@ private var joinGameTexture : Texture2D;
 private var observeTexture : Texture2D;
 private var backTexture : Texture2D;
 private var backgroundTexutre : Texture2D;
+private var buttonText = 40;
 
 
 function Start(){
@@ -30,7 +31,6 @@ function Start(){
     joinGameTexture = Resources.Load("Textures/gui/joingame", Texture2D);
     backTexture = Resources.Load("Textures/gui/back", Texture2D);
     backgroundTexutre = Resources.Load("Textures/gui/mainMenuBackground", Texture2D);
-
 
     guiObject = new GuiClasses[3];
     for (var x=0; x<guiObject.length; x++){
@@ -52,7 +52,13 @@ function OnGUI (){
     guiObject[2].pointLocation = Points.Center;
     guiObject[2].updateLocation();
 
-    if(GUI.Button(Rect(guiObject[2].offset.x ,guiObject[2].offset.y,Screen.width*0.3, Screen.height*0.55), "QUICK GAME")){
+    var yellowStyle : GUIStyle = GUI.skin.GetStyle("YellowButton");
+    var blueButton : GUIStyle = GUI.skin.GetStyle("BlueButton");
+    var whiteButton : GUIStyle = GUI.skin.GetStyle("WhiteButton");
+    yellowStyle.fontSize = blueButton.fontSize =  whiteButton.fontSize = menuScript.getScale() * buttonText;
+
+
+    if(GUI.Button(Rect(guiObject[2].offset.x ,guiObject[2].offset.y,Screen.width*0.3, Screen.height*0.55), "QUICK GAME", "WhiteButton")){
         leaveFor(menus.quickplay);
     }
 

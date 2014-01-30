@@ -63,14 +63,19 @@ function Start(){
 }
 
 function OnGUI (){
+
     if(!showMenu){
         return;
     }
+    GUI.skin = menuSkin;
+
     GUI.DrawTexture(new Rect(0,0, Screen.width, Screen.height), backgroundTexutre);
 
     //TODO - replace with good UI
-    GUILayout.Label("Game Menu" + (isHosting ? " - Host" : ""));
-    GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
+    //GUILayout.Label("Game Menu" + (isHosting ? " - Host" : ""));
+    //GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
+
+    GUI.Label (new Rect (0, Screen.height/2 - Screen.height/2.5 , Screen.width, 0), "Game Name", "Header");
 
     if(isHosting && !Network.isServer){
         GUILayout.Label("Game Name:");
@@ -127,10 +132,11 @@ function OnGUI (){
         guiHost[2].pointLocation = Points.Center;
         guiHost[2].updateLocation();
 
-        GUI.Button(Rect(guiHost[2].offset.x,Screen.height-Screen.height*0.125,Screen.width*0.12,Screen.height*0.10), "Team");
-        GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.13 + Screen.width*0.02),Screen.height-Screen.height*0.125,Screen.width*0.12,Screen.height*0.10), "Versus");
-        GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.31 + Screen.width*0.03),Screen.height-Screen.height*0.13,Screen.width*0.17,Screen.height*0.11), startTexture);
-
+            if(isHosting){
+                GUI.Button(Rect(guiHost[2].offset.x,Screen.height-Screen.height*0.125,Screen.width*0.12,Screen.height*0.10), "Team", "WhiteButton");
+                GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.13 + Screen.width*0.02),Screen.height-Screen.height*0.125,Screen.width*0.12,Screen.height*0.10), "Versus", "WhiteButton");
+                GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.31 + Screen.width*0.03),Screen.height-Screen.height*0.13,Screen.width*0.17,Screen.height*0.11), "Start", "GreenButton");
+            }
         } else {
             //Back Btn
             guiObject[0].pointLocation = Points.TopLeft;
