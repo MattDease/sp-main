@@ -65,7 +65,9 @@ function Update(){
                 }
             }
             else{
-                platform.transform.position.x = player.getPosition().x + platformOffset.x;
+                var position : Vector3 = platform.transform.position;
+                position.x = player.getPosition().x + platformOffset.x;
+                platform.GetComponent(PlatformScript).notifyPosition(position);
             }
         }
     }
