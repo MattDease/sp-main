@@ -115,6 +115,11 @@ function OnTouch(pos:Vector2){
 }
 
 function OnTouchStart(pos:Vector2){
+    var ray : Ray = Camera.main.ScreenPointToRay(pos);
+    var rayDistance : float;
+    if(plane.Raycast(ray, rayDistance)) {
+        targetPosition = ray.GetPoint(rayDistance);
+    }
     touched = true;
 }
 
