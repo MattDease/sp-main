@@ -10,14 +10,34 @@ public class Team{
     private var runners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
     private var activeRunners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
 
+    private var id : int;
     private var alive : boolean = true;
 
-    public function Team(){
+    private var cachedDistance : float = 0;
 
+    public function Team(id : int){
+        this.id = id;
+    }
+
+    public function reset() {
+        alive = true;
+    }
+
+    public function kill() {
+        alive = false;
     }
 
     public function isAlive() : boolean {
         return alive;
+    }
+
+    public function isValid() : TeamStatus {
+        // TODO - replace with a more comprehensive implementation
+        return runners.Count > 0 ? TeamStatus.Valid : TeamStatus.TEMP_NO;
+    }
+
+    public function getId() : int {
+        return this.id;
     }
 
     public function getTeammates() : Dictionary.<String,Player> {
@@ -46,7 +66,7 @@ public class Team{
     public function killTeammate(id : String){
         activeRunners.Remove(id);
         if(activeRunners.Count == 0){
-            this.alive = false;
+            this.kill();
         }
     }
 
@@ -71,6 +91,9 @@ public class Team{
                 }
             }
         }
+        if(leader){
+            cachedDistance = leader.getDistance();
+        }
         return leader;
     }
 
@@ -93,6 +116,16 @@ public class Team{
             total += runner.getPosition();
         }
         return total / activeRunners.Count;
+    }
+
+    public function getDistance() : float {
+        var leader : Runner = this.getLeader();
+        if(leader){
+            return leader.getDistance();
+        }
+        else{
+            return cachedDistance;
+        }
     }
 
     // TODO add team validity check methods and gameplay methods.

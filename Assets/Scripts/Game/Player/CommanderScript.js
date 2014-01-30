@@ -53,7 +53,7 @@ function Update(){
 }
 
 function LateUpdate(){
-    if(networkView.isMine){
+    if(networkView.isMine && team.isAlive()){
         var currentTeamPosition : Vector3 = team.getObserverCameraPosition();
         var deltaX = currentTeamPosition.x - camContainer.transform.position.x;
         if(!touched){

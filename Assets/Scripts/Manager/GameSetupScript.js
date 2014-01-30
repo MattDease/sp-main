@@ -28,6 +28,12 @@ function Start(){
     stateScript = GetComponent(StateScript);
 }
 
+function Update(){
+    if(stateScript.getGameState() != GameState.Uninitialized){
+        game.updateState();
+    }
+}
+
 function enterGame(){
     Network.RemoveRPCsInGroup(0);
     networkView.RPC("loadLevel", RPCMode.AllBuffered, "scene-game", lastLevelPrefix + 1);
@@ -91,9 +97,15 @@ function startGame(){
 }
 
 function OnNetworkLoadedLevel(){
-    levelManager = GameObject.Find("GameScripts").GetComponent(LevelManager);
-    if(Network.isServer){
-        levelManager.addFirstSegment();
+    if(game.isValid()){
+        levelManager = GameObject.Find("GameScripts").GetComponent(LevelManager);
+        if(Network.isServer){
+            levelManager.addFirstSegment();
+        }
+    }
+    else{
+        stateScript.setGameState(GameState.Error);
+        Debug.Log("Game setup is invalid. Cannot Start.");
     }
 }
 
@@ -157,6 +169,12 @@ function addPlayer(name : String, teamId : int, role : String, netPlayer : Netwo
     if(Util.IsNetworkedPlayerMe(newPlayer)){
         playerScript.setSelf(newPlayer);
     }
+}
+
+@RPC
+function killRunner(id : String, info : NetworkMessageInfo){
+    var runner : Runner = Util.GetPlayerById(id) as Runner;
+    runner.kill();
 }
 
 // Server only

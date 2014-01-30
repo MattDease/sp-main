@@ -6,6 +6,9 @@ public class Game {
     private var teams : List.<Team> = new List.<Team>();
     private var players : Dictionary.<String,Player> = new Dictionary.<String,Player>();
 
+    // TODO - set game mode when instantiating game
+    private var mode : GameMode = GameMode.Team;
+
     // Game Manager & scripts
     private var gameManager : GameObject;
     private var playerScript : PlayerScript;
@@ -22,13 +25,34 @@ public class Game {
             difficultyScript = gameManager.GetComponent(DifficultyScript);
         }
 
-        teams.Add(new Team());
+        teams.Add(new Team(teams.Count));
     }
 
     public function start(){
         stateScript.setGameState(GameState.Playing);
         for(var player : Player in players.Values){
             player.script.enabled = true;
+        }
+    }
+
+    public function end(){
+        stateScript.setGameState(GameState.Ended);
+        for(var player : Player in players.Values){
+            player.script.enabled = false;
+        }
+    }
+
+    public function updateState(){
+        if(stateScript.getGameState() == GameState.Playing){
+            var deadTeams : int = 0;
+            for(var team : Team in teams){
+                if(!team.isAlive()){
+                    deadTeams++;
+                }
+            }
+            if(deadTeams == teams.Count){
+                this.end();
+            }
         }
     }
 
@@ -40,8 +64,22 @@ public class Game {
         return teams[i];
     }
 
-    public function getTeams()  : List.<Team>{
+    public function getTeams() : List.<Team>{
         return teams;
+    }
+
+    public function getLeadingTeam() : Team {
+        if(mode == GameMode.Versus){
+            if(teams[0].getDistance() > teams[1].getDistance()){
+                return teams[0];
+            }
+            else{
+                return teams[1];
+            }
+        }
+        else{
+            return teams[0];
+        }
     }
 
     // server-only function, check composition of team(s), assign new player's role,
@@ -73,6 +111,13 @@ public class Game {
         Debug.Log("Player '" + player.getName() + "' disconnected.");
         teams[player.getTeamId()].removeTeammate(id);
         players.Remove(id);
+        if(stateScript.getGameState() != GameState.Uninitialized){
+            // Handle disconnecting players
+            // TODO - handle disconnecting players more elegantly
+            if(!this.isValid()){
+                this.end();
+            }
+        }
     }
 
     // Change player to the other role
@@ -88,6 +133,16 @@ public class Game {
     // Toggle between GameMode.Team and GameMode.Versus
     public function switchMode(){
 
+    }
+
+    // Checks for any errors in the game setup
+    public function isValid() : boolean {
+        for(var team : Team in teams){
+            if(team.isValid() != TeamStatus.Valid){
+                return false;
+            }
+        }
+        return true;
     }
 
     // player is leaving game

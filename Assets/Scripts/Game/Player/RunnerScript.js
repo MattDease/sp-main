@@ -62,6 +62,7 @@ function Update(){
     if(networkView.isMine && player.isAlive()){
         var position : Vector3 = player.getPosition();
         if(Camera.main.WorldToViewportPoint(position).x < 0 || position.y < -1){
+            GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
             player.kill();
             return;
         }
@@ -183,6 +184,12 @@ function checkKeyboardInput(){
         }
         if(Input.GetKeyUp(KeyCode.D)){
             // toss();
+        }
+        if(Config.DEBUG){
+            if(Input.GetKeyUp(KeyCode.K)){
+                GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
+                player.kill();
+            }
         }
     }
 }
