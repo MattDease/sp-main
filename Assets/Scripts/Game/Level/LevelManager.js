@@ -65,14 +65,14 @@ function addSegment(){
 
 function removeSegment(){
     var segment : GameObject = segments[0];
-    firstSegmentEnd += segment.Find("debug_platform").GetComponent(MeshFilter).mesh.bounds.size.x;
+    firstSegmentEnd += segment.Find("debug_platform_v2/base").GetComponent(MeshFilter).mesh.bounds.size.x;
     Network.Destroy(segment);
     segments.RemoveAt(0);
 
 }
 
 function onAddSegment(segment : GameObject){
-    var segmentWidth : float = segment.Find("debug_platform").GetComponent(MeshFilter).mesh.bounds.size.x;
+    var segmentWidth : float = segment.Find("debug_platform_v2/base").GetComponent(MeshFilter).mesh.bounds.size.x;
 
     if(segments.Count == 0){
         firstSegmentEnd = segmentWidth - segmentOffset;

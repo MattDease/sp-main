@@ -31,6 +31,8 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
     // Disable script updates until game starts
     this.enabled = false;
 
+    player.gameObject.transform.position.z = runnerWidth/2;
+
     if(networkView.isMine){
         camContainer = Instantiate(cameraPrefab, Vector3.zero,  Quaternion.identity);
 
@@ -47,7 +49,7 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
         player.gameObject.layer = LayerMask.NameToLayer("Remote Players");
 
         // TODO Fix. Assumes own player is always the first to be instantiated
-        player.gameObject.transform.position.z = team.getRunners(false).Count * runnerWidth - runnerWidth/2;
+        player.gameObject.transform.position.z += team.getRunners(false).Count * runnerWidth;
     }
 }
 
