@@ -13,6 +13,7 @@ private var touched : boolean = false;
 private var plane : Plane = new Plane(Vector3(0, 1, 0), Vector3(1, 1, 0), Vector3(1, 0, 0));
 private var targetPosition : Vector3;
 private var velocity : Vector3 = Vector3.zero;
+private var offsetX : float = 0;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player = Util.GetPlayerById(networkView.viewID.owner.guid) as Commander;
@@ -55,11 +56,10 @@ function Update(){
 function LateUpdate(){
     if(networkView.isMine && team.isAlive()){
         var currentTeamPosition : Vector3 = team.getObserverCameraPosition();
-        var deltaX = currentTeamPosition.x - camContainer.transform.position.x;
         if(!touched){
-            gameObject.transform.position.x += deltaX;
+            gameObject.transform.position.x = currentTeamPosition.x + offsetX;
         }
-        camContainer.transform.position.x += deltaX;
+        camContainer.transform.position.x = currentTeamPosition.x;
     }
 }
 
@@ -124,5 +124,6 @@ function OnTouchStart(pos:Vector2){
 }
 
 function OnTouchEnd(pos:Vector2){
+    offsetX = gameObject.transform.position.x - team.getObserverCameraPosition().x;
     touched = false;
 }
