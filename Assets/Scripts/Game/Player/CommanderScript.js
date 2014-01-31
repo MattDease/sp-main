@@ -30,7 +30,6 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
     if(networkView.isMine){
         camContainer = Instantiate(cameraPrefab, Vector3.zero,  Quaternion.identity);
 
-        player.gameObject.transform.position.z = -1;
         var playerPosition : Vector3 = player.getPosition();
         var viewport : Vector3 = Camera.main.WorldToViewportPoint(playerPosition);
         viewport.x = 0.5;
