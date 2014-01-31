@@ -95,7 +95,6 @@ function jump(){
         unCrouch();
     }
     else{
-        // TODO only jump if on ground (use raycast)
         if(isGrounded || !isGrounded && canDoubleJump) {
             player.gameObject.rigidbody.velocity.y = Config.JUMP_SPEED;
             if(canDoubleJump) canDoubleJump = false;
@@ -130,15 +129,15 @@ function stopWalk(){
 }
 
 function OnCollisionEnter(theCollision : Collision){
-    if(theCollision.gameObject.tag == "levelSegment"){
-      isGrounded = true;
-      canDoubleJump = false;
+    if(theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")){
+        isGrounded = true;
+        canDoubleJump = false;
     }
 }
 
 //consider when character is jumping .. it will exit collision.
 function OnCollisionExit(theCollision : Collision){
-    if(theCollision.gameObject.tag == "levelSegment") {
+    if(theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")) {
         isGrounded = false;
         canDoubleJump = true;
     }
