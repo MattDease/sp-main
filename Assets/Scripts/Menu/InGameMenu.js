@@ -36,16 +36,41 @@ function OnDebugGUI(){
         Application.LoadLevel("scene-menu");
     }
 
-    GUILayout.Space(20);
-    GUILayout.Label("Connected Players:");
-    for(var player:Player in gameSetupScript.game.getPlayers().Values){
-        GUILayout.Label("- " + player.getName() + (Util.IsNetworkedPlayerMe(player) ? " (me)" : ""));
-    }
-    GUILayout.Space(20);
+    var gameState = stateScript.getGameState();
 
-    GUILayout.Label("Difficulty: " + difficultyScript.getCurrentDifficulty());
-    GUILayout.Space(20);
-    GUILayout.Label("Times Played: " + playerScript.getTimesPlayed());
+    GUILayout.Space(10);
+    GUILayout.Label("State: " + gameState.ToString());
+
+    switch(gameState){
+        case GameState.Uninitialized :
+            break;
+        case GameState.Loading :
+            GUILayout.Space(10);
+            GUILayout.Label("Game Starts In: " + gameSetupScript.getCountDown());
+            break;
+        case GameState.Playing :
+            var teams : List.<Team> = gameSetupScript.game.getTeams();
+            for(var team : Team in teams){
+                GUILayout.Space(10);
+                GUILayout.Label("Team " + team.getId() + " - Distance: " + team.getDistance() + (!team.isAlive() ? " - dead" : ""));
+                for(var player : Player in team.getTeammates().Values){
+                    GUILayout.Label("- " + (player.GetType() == Runner ? "(R) " : "(C) ") + player.getName() + (Util.IsNetworkedPlayerMe(player) ? " (me)" : ""));
+                }
+            }
+            break;
+        case GameState.Ended :
+            var winner : Team = gameSetupScript.game.getLeadingTeam();
+            GUILayout.Space(10);
+            GUILayout.Label("Team " + winner.getId() + " Won - Distance: " + winner.getDistance());
+            if(gameSetupScript.game.isValid() && GUILayout.Button("Restart Game")){
+                // TODO - implement
+            }
+            break;
+        case GameState.Error :
+            GUILayout.Space(10);
+            GUILayout.Label("Error in game setup");
+            break;
+    }
 
     GUILayout.EndVertical();
     GUILayout.EndArea();

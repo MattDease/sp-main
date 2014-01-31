@@ -22,7 +22,8 @@ private var waitingForSegment : boolean = false;
 
 private var segmentOffset : float = 4;
 private var newSegmentThreshold : float = 8;
-private var currentLevelEnd : float;
+private var lastSegmentEnd : float;
+private var firstSegmentEnd : float;
 
 function Start () {
     gameManager = GameObject.Find("/GameManager");
@@ -30,33 +31,56 @@ function Start () {
     playerScript = gameManager.GetComponent(PlayerScript);
     stateScript = gameManager.GetComponent(StateScript);
     gameSetupScript = gameManager.GetComponent(GameSetupScript);
+
+    InvokeRepeating("updateLevel", 0.3, 0.3);
 }
 
 function Update () {
+
+}
+
+function updateLevel(){
     if(Network.isClient || waitingForSegment || stateScript.getGameState() != GameState.Playing){
         return;
     }
 
-    if(currentLevelEnd - playerScript.getDistance() < newSegmentThreshold){
+    if(lastSegmentEnd - gameSetupScript.game.getTeam(0).getLeader().getDistance() < newSegmentThreshold){
         addSegment();
     }
+    if(gameSetupScript.game.getTeam(0).getStraggler().getDistance() - firstSegmentEnd > newSegmentThreshold){
+        removeSegment();
+    }
+}
+
+function addFirstSegment(){
+    lastSegmentEnd = -segmentOffset;
+    addSegment();
 }
 
 function addSegment(){
     waitingForSegment = true;
-    var pos = currentLevelEnd ? new Vector3(currentLevelEnd, 0, 0) : new Vector3(-segmentOffset, 0, 0);
+    var pos = new Vector3(lastSegmentEnd, 0, 0);
     Network.Instantiate(segmentPrefab, pos, Quaternion.identity, 0);
 }
 
+function removeSegment(){
+    var segment : GameObject = segments[0];
+    firstSegmentEnd += segment.Find("debug_platform_v2/base").GetComponent(MeshFilter).mesh.bounds.size.x;
+    Network.Destroy(segment);
+    segments.RemoveAt(0);
+
+}
+
 function onAddSegment(segment : GameObject){
-    var segmentWidth : float = segment.Find("debug_platform").GetComponent(MeshFilter).mesh.bounds.size.x;
+    var segmentWidth : float = segment.Find("debug_platform_v2/base").GetComponent(MeshFilter).mesh.bounds.size.x;
 
     if(segments.Count == 0){
-        currentLevelEnd = segmentWidth - segmentOffset;
-        gameSetupScript.startGameProxy();
+        firstSegmentEnd = segmentWidth - segmentOffset;
+        lastSegmentEnd = segmentWidth - segmentOffset;
+        gameSetupScript.onLevelReady();
     }
     else{
-        currentLevelEnd += segmentWidth;
+        lastSegmentEnd += segmentWidth;
     }
 
     waitingForSegment = false;

@@ -1,9 +1,19 @@
 ﻿#pragma strict
 
+import System.Collections.Generic;
+
+// Set in editor
+public var cameraPrefab : GameObject;
+
 private var player : Runner;
-private var cam : GameObject;
+private var team : Team;
+private var camContainer : GameObject;
+private var platform : GameObject;
 
 private var currentSpeed : float = Config.RUN_SPEED;
+private var runningPlane : Vector3;
+private var cameraOffset : Vector2 = Vector2.zero;
+private var prevPlatformPos : Vector2 = Vector2.zero;
 private var isCrouched : boolean = false;
 private var isGrounded : boolean = true;
 private var canDoubleJump: boolean = false;
@@ -14,42 +24,85 @@ private var runnerWidth : float = 0.6;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player = Util.GetPlayerById(networkView.viewID.owner.guid) as Runner;
-    var teammates : Dictionary.<String,Player> = player.getTeam().getTeammates();
+    team = player.getTeam();
 
     player.gameObject = gameObject;
+    player.script = this;
     player.controller = this;
-    // Access model using:
-    // player.gameObject.transform.Find("debug_runner");
+
+    // Disable script updates until game starts
+    this.enabled = false;
+
+    player.gameObject.transform.position.z = runnerWidth/2;
 
     if(networkView.isMine){
-        player.gameObject.rigidbody.velocity.x = currentSpeed;
+        camContainer = Instantiate(cameraPrefab, Vector3.zero,  Quaternion.identity);
+
+        var viewport : Vector3 = Camera.main.WorldToViewportPoint(gameObject.transform.position);
+        viewport.x += Config.CAMERA_LEAD;
+        Camera.main.transform.localPosition += Camera.main.ViewportToWorldPoint(viewport);
+
         player.gameObject.rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
 
-        cam = GameObject.Find("MainCamera");
+        runningPlane = player.getPosition();
     }
     else{
         // Change layer so collisions with local player is ignored
         player.gameObject.layer = LayerMask.NameToLayer("Remote Players");
 
         // TODO Fix. Assumes own player is always the first to be instantiated
-        player.gameObject.transform.position.z = teammates.Count * runnerWidth - runnerWidth/2;
+        player.gameObject.transform.position.z += team.getRunners(false).Count * runnerWidth;
     }
 }
 
 // Do physics changes here
 function FixedUpdate(){
-    player.gameObject.rigidbody.velocity.x = currentSpeed;
+    if(networkView.isMine){
+        if(platform){
+            gameObject.transform.position += platform.transform.position - prevPlatformPos;
+            prevPlatformPos = platform.transform.position;
+        }
+        player.gameObject.rigidbody.velocity.x = currentSpeed;
+    }
 }
 
 function Update(){
-    if(cam){
-        // TODO better camera positioning that considers other players
-        cam.transform.position.x = player.gameObject.transform.position.x;
+    if(networkView.isMine && player.isAlive()){
+        var position : Vector3 = player.getPosition();
+        if(Camera.main.WorldToViewportPoint(position).x < 0 || position.y < -1){
+            GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
+            player.kill();
+            return;
+        }
+        if(isCrouched && Time.timeSinceLevelLoad - crouchTime > Config.CROUCH_DURATION){
+            unCrouch();
+        }
+        if(!platform){
+            var hit : RaycastHit;
+            if(Physics.Raycast(gameObject.transform.position, Vector3.down, hit, 1)) {
+                if(hit.collider.gameObject.CompareTag("moveableX")){
+                    platform = hit.collider.gameObject;
+                    prevPlatformPos = platform.transform.position;
+                }
+            }
+        }
+        checkKeyboardInput();
     }
-    if(isCrouched && Time.timeSinceLevelLoad - crouchTime > Config.CROUCH_DURATION){
-        unCrouch();
+}
+
+function LateUpdate(){
+    if(networkView.isMine){
+        if(player.isAlive()){
+            cameraOffset += getCameraOffset();
+            if(cameraOffset.x < 0){
+                cameraOffset.x = 0;
+            }
+            camContainer.transform.position = player.getPosition() + cameraOffset;
+        }
+        else{
+            camContainer.transform.position = team.getObserverCameraPosition();
+        }
     }
-    checkKeyboardInput();
 }
 
 function jump(){
@@ -57,7 +110,6 @@ function jump(){
         unCrouch();
     }
     else{
-        // TODO only jump if on ground (use raycast)
         if(isGrounded || !isGrounded && canDoubleJump) {
             player.gameObject.rigidbody.velocity.y = Config.JUMP_SPEED;
             if(canDoubleJump) canDoubleJump = false;
@@ -92,17 +144,43 @@ function stopWalk(){
 }
 
 function OnCollisionEnter(theCollision : Collision){
-    if(theCollision.gameObject.tag == "levelSegment"){
-      isGrounded = true;
-      canDoubleJump = false;
+    if(theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")){
+        isGrounded = true;
+        canDoubleJump = false;
     }
 }
 
 //consider when character is jumping .. it will exit collision.
 function OnCollisionExit(theCollision : Collision){
-    if(theCollision.gameObject.tag == "levelSegment") {
+    if(theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")) {
         isGrounded = false;
         canDoubleJump = true;
+        if(platform && theCollision.gameObject.CompareTag("moveableX")){
+            platform = null;
+        }
+    }
+}
+
+private function getCameraOffset() : Vector2 {
+    var leader : Vector3 = Vector3.zero;
+    for(var player : Runner in this.team.getRunners(true).Values){
+        if(!Util.IsNetworkedPlayerMe(player)){
+            var position : Vector3 = player.getPosition();
+            position.y = runningPlane.y;
+            position.z = runningPlane.z;
+            var viewport : Vector3 = Camera.main.WorldToViewportPoint(position);
+            if(viewport.x > leader.x && (viewport.x > Config.MAX_RUNNER_X || cameraOffset.x != 0)){
+                leader = viewport;
+            }
+        }
+    }
+    if(leader != Vector3.zero){
+        var maxX : float = Camera.main.ViewportToWorldPoint(Vector3(Config.MAX_RUNNER_X, leader.y, leader.z)).x;
+        var leadX : float = Camera.main.ViewportToWorldPoint(leader).x;
+        return Vector2(leadX - maxX, 0);
+    }
+    else{
+        return Vector2.zero;
     }
 }
 
@@ -126,6 +204,12 @@ function checkKeyboardInput(){
         if(Input.GetKeyUp(KeyCode.D)){
             // toss();
         }
+        if(Config.DEBUG){
+            if(Input.GetKeyUp(KeyCode.K)){
+                GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
+                player.kill();
+            }
+        }
     }
 }
 
@@ -133,9 +217,9 @@ function OnEnable(){
     if(networkView.isMine){
         Gesture.onSwipeE += OnSwipe;
         Gesture.onLongTapE += OnLongTap;
-        Gesture.onTouchE += OnTouch;
+        Gesture.onTouchDownE += OnTouch;
         Gesture.onTouchUpE += OnRelease;
-        Gesture.onMouse1E += OnTouch;
+        Gesture.onMouse1DownE += OnTouch;
         Gesture.onMouse1UpE += OnRelease;
     }
 }
@@ -144,9 +228,9 @@ function OnDisable(){
     if(networkView.isMine){
         Gesture.onSwipeE -= OnSwipe;
         Gesture.onLongTapE -= OnLongTap;
-        Gesture.onTouchE -= OnTouch;
+        Gesture.onTouchDownE -= OnTouch;
         Gesture.onTouchUpE -= OnRelease;
-        Gesture.onMouse1E -= OnTouch;
+        Gesture.onMouse1DownE -= OnTouch;
         Gesture.onMouse1UpE -= OnRelease;
     }
 }
