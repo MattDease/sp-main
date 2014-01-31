@@ -8,10 +8,12 @@ public var cameraPrefab : GameObject;
 private var player : Runner;
 private var team : Team;
 private var camContainer : GameObject;
+private var platform : GameObject;
 
 private var currentSpeed : float = Config.RUN_SPEED;
 private var runningPlane : Vector3;
 private var cameraOffset : Vector2 = Vector2.zero;
+private var prevPlatformPos : Vector2 = Vector2.zero;
 private var isCrouched : boolean = false;
 private var isGrounded : boolean = true;
 private var canDoubleJump: boolean = false;
@@ -56,6 +58,10 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 // Do physics changes here
 function FixedUpdate(){
     if(networkView.isMine){
+        if(platform){
+            gameObject.transform.position += platform.transform.position - prevPlatformPos;
+            prevPlatformPos = platform.transform.position;
+        }
         player.gameObject.rigidbody.velocity.x = currentSpeed;
     }
 }
@@ -70,6 +76,15 @@ function Update(){
         }
         if(isCrouched && Time.timeSinceLevelLoad - crouchTime > Config.CROUCH_DURATION){
             unCrouch();
+        }
+        if(!platform){
+            var hit : RaycastHit;
+            if(Physics.Raycast(gameObject.transform.position, Vector3.down, hit, 1)) {
+                if(hit.collider.gameObject.CompareTag("moveableX")){
+                    platform = hit.collider.gameObject;
+                    prevPlatformPos = platform.transform.position;
+                }
+            }
         }
         checkKeyboardInput();
     }
@@ -140,6 +155,9 @@ function OnCollisionExit(theCollision : Collision){
     if(theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")) {
         isGrounded = false;
         canDoubleJump = true;
+        if(platform && theCollision.gameObject.CompareTag("moveableX")){
+            platform = null;
+        }
     }
 }
 
