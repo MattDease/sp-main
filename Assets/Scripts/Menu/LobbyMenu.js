@@ -92,19 +92,8 @@ function OnGUI (){
             var name : String = element.gameName + " " + element.connectedPlayers + " / " + element.playerLimit;
 
             GUILayout.Label(name);
-            //GUILayout.Space(5);
-            // var hostInfo : String = "[";
-            // for (var host : String in element.ip){
-            //     hostInfo = hostInfo + host + ":" + element.port + " ";
-            // }
-            // hostInfo += "]";
-            // GUILayout.Label(hostInfo);
-            // GUILayout.Space(5);
-            // GUILayout.FlexibleSpace();
 
-
-
-            if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[0].offset.x * index,guiObject[0].offset.y - 80 * index,170,20), name, "JoinGame")){
+            if ( GUI.Button(Rect(guiObject[0].offset.x * index,guiObject[0].offset.y - 80 * index,170,20), name, "JoinGame")){
                 Debug.Log(onConnect);
                 netScript.connect(element, onConnect);
                 connectionErrorMsg = "";

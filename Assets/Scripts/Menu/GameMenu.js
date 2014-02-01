@@ -26,6 +26,8 @@ private var homeTexture : Texture2D;
 private var startTexture : Texture2D;
 private var backgroundTexutre : Texture2D;
 
+private var headerText = 60;
+var selGridInt : int = 0;
 
 function Awake(){
     netScript = GetComponent(Net);
@@ -67,22 +69,20 @@ function OnGUI (){
     if(!showMenu){
         return;
     }
+
     GUI.skin = menuSkin;
 
     GUI.DrawTexture(new Rect(0,0, Screen.width, Screen.height), backgroundTexutre);
 
-    //TODO - replace with good UI
-    //GUILayout.Label("Game Menu" + (isHosting ? " - Host" : ""));
-    //GUILayout.Label("Player: " + playerScript.getName() + ", Times Played: " + playerScript.getTimesPlayed());
-
+    var headerStyle : GUIStyle = GUI.skin.GetStyle("Header");
+    headerStyle.fontSize = menuScript.getScale() * headerText;
     GUI.Label (new Rect (0, Screen.height/2 - Screen.height/2.5 , Screen.width, 0), "Game Name", "Header");
 
     if(isHosting && !Network.isServer){
-        GUILayout.Label("Game Name:");
         gameName = GUILayout.TextField(gameName, GUILayout.MinWidth(70));
         GUILayout.Label("Player Limit:");
         playerLimit = parseInt(GUILayout.TextField(playerLimit.ToString(), GUILayout.MinWidth(70))) || 0;
-        if (GUILayout.Button ("Start Server")){
+        if (GUI.Button(Rect(0,0, 120, 30), "CREATE GAME", "GreenButton")){
             netScript.startHost(playerLimit, gameName, onInitialize);
             isStartingServer = true;
         }
@@ -92,15 +92,8 @@ function OnGUI (){
     }
     else if(Network.isClient || (isHosting && Network.isServer)){
         playerList = gameSetupScript.playerList;
-        GUILayout.Label("Players:");
-        for(var player:Player in playerList.Values){
-            GUILayout.Label(" - " + player.name + (player.isSelf ? " (me)" : ""));
-        }
 
-        GUI.skin = menuSkin;
-
-        var n=0;
-        for(n=0; n<2; n++){
+        for(var n=0; n<2; n++){
             guiObject[n].textureWidth = Screen.width*0.06;
             guiObject[n].textureHeight = Screen.height*0.1;
         }
@@ -122,9 +115,20 @@ function OnGUI (){
 
         //TODO -- Dynamically place player character gui as they join the room
         //Character
-        if(GUI.Button(Rect(guiHost[1].offset.x,guiHost[1].offset.y,Screen.width*0.15,Screen.height*0.20), playerTexture)){
-            selectCharacter = true;
-        }
+
+        var playerTextures : Texture2D[] = [playerTexture, playerTexture, playerTexture, playerTexture, playerTexture, playerTexture];
+        selGridInt = GUI.SelectionGrid (Rect (guiHost[1].offset.x,guiHost[1].offset.y,Screen.width*0.15,Screen.height*0.20), selGridInt, playerTextures, 2);
+
+
+        // for(var player:Player in playerList.Values){
+
+        //     GUI.Label(Rect(0,0, Screen.width, Screen.height + 70 ), player.name + (player.isSelf ? " (me)" : ""), "WhiteText");
+
+        //     if(GUI.Button(Rect(guiHost[1].offset.x,guiHost[1].offset.y,Screen.width*0.15,Screen.height*0.20), playerTexture, "FullImage")){
+        //     selectCharacter = true;
+        // }
+        // }
+
 
         //Team, Versus, Start Buttons
         guiHost[2].textureWidth = Screen.width*0.52;
@@ -133,9 +137,9 @@ function OnGUI (){
         guiHost[2].updateLocation();
 
             if(isHosting){
-                GUI.Button(Rect(guiHost[2].offset.x,Screen.height-Screen.height*0.125,Screen.width*0.12,Screen.height*0.10), "Team", "WhiteButton");
-                GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.13 + Screen.width*0.02),Screen.height-Screen.height*0.125,Screen.width*0.12,Screen.height*0.10), "Versus", "WhiteButton");
-                GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.31 + Screen.width*0.03),Screen.height-Screen.height*0.13,Screen.width*0.17,Screen.height*0.11), "Start", "GreenButton");
+                GUI.Button(Rect(guiHost[2].offset.x,Screen.height-Screen.height*0.125,Screen.width*0.12,Screen.height*0.10), "TEAM", "WhiteButton");
+                GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.13 + Screen.width*0.02),Screen.height-Screen.height*0.125,Screen.width*0.12,Screen.height*0.10), "VERSUS", "WhiteButton");
+                GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.31 + Screen.width*0.03),Screen.height-Screen.height*0.13,Screen.width*0.17,Screen.height*0.11), "START", "GreenButton");
             }
         } else {
             //Back Btn
@@ -165,7 +169,7 @@ function OnGUI (){
                 if (c==3 || c==4 || c==5){offsetHeight = Screen.height*0.33;}
                 if (c==6 || c==7 || c==8){offsetHeight = Screen.height*0.63;}
 
-                if(GUI.Button(Rect(guiObject[1].offset.x + offsetWidth, guiObject[1].offset.y + offsetHeight,  Screen.width*0.15, Screen.height*0.20), playerTexture)){
+                if(GUI.Button(Rect(guiObject[1].offset.x + offsetWidth, guiObject[1].offset.y + offsetHeight,  Screen.width*0.15, Screen.height*0.20), playerTexture, "FullImage")){
                     //TODO -- select character
                     selectCharacter = false;
                 }

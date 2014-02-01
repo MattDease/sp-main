@@ -51,20 +51,15 @@ function OnGUI (){
             leaveFor(menus.main);
         }
     }
-    else{
-        //prompt for name
+   else{
         GUI.Label(Rect(0,0, Screen.width - 175, Screen.height + 60),"Enter your name:", "PlainText");
-
-
+        newName = GUI.TextField(Rect (Screen.width/2 + 40, Screen.height/2 + 25, menuScript.getScale() * 200, menuScript.getScale() * 200), newName, 20);
         if(newName && GUI.Button(Rect(0,0, Screen.width,Screen.height), "", "FullImage")){
             playerName = newName;
             playerScript.setName(newName);
             leaveFor(menus.main);
         }
-
-        newName = GUILayout.TextField(newName, 20);
-
-   }
+}
 
 }
 
@@ -77,26 +72,3 @@ function leaveFor(newMenu : menus){
     menuScript.stateScript.setCurrentMenu(newMenu);
     menuScript.open();
 }
-
-
-function onTouchKeyboard()
-{
-    // var tempString = "YO";
-    // if ( !iskBoardOpen )
-    // {
-    //    keyboard = TouchScreenKeyboard.Open( tempString, TouchScreenKeyboardType.Default, false, false, false, false, "Default Keyboard" );
-    //    iskBoardOpen = true;
-    // }
-
-    // if ( keyboard.done )
-    // {
-    //    kBoardString = keyboard.text;
-    //    tempString = "";
-    //    iskBoardOpen = false;
-    // }
-    // else
-    // {
-    //    kBoardString = keyboard.text;
-    // }
-}
-
