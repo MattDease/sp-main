@@ -9,10 +9,6 @@ import System.Collections.Generic;
 private var hostList : List.<HostData> = new List.<HostData>();
 private var filteredHostList : List.<HostData> = new List.<HostData>();
 
-private var masterServerHostname : String = "scrambled.no-ip.biz";
-private var gameId : String = "scrambled-by-poached_v1.0.0";
-private var gamePort : int = 25002;
-
 private var lastHostListRequest : float = 0;
 //client
 private var connectCallback : Function;
@@ -36,7 +32,7 @@ function Awake () {
     // Get Master Server IP from hostname
     // PRO - Unavailable on Android without Unity Pro. Removed for now.
     // try{
-    //     var hostInfo:IPHostEntry = Dns.GetHostEntry(masterServerHostname);
+    //     var hostInfo:IPHostEntry = Dns.GetHostEntry(Config.MASTER_SERVER_HOSTNAME);
     //     for(var ip:IPAddress in hostInfo.AddressList){
     //         if (ip.AddressFamily.ToString() == AddressFamily.InterNetwork.ToString()){
     //             var masterServerIp : String = ip.ToString();
@@ -47,7 +43,7 @@ function Awake () {
     // catch(err){
     //     Debug.Log("Master server hostname resolution error: " + err.Message);
         //fallback to static IP - may be incorrect!
-        var masterServerIp : String = "172.19.14.114";
+        var masterServerIp : String = Config.MASTER_SERVER_IP;
         Debug.Log("Master server IP: " + masterServerIp);
         // masterServerIp = "172.19.14.114";
     //     Debug.Log("Master server IP fallback to: " + masterServerIp);
@@ -75,7 +71,7 @@ function Awake () {
 
 function Start () {
     MasterServer.ClearHostList();
-    MasterServer.RequestHostList(gameId);
+    MasterServer.RequestHostList(Config.GAME_ID);
 }
 
 function Update() {
@@ -135,7 +131,7 @@ function OnFailedToConnect(error: NetworkConnectionError){
 }
 
 function startHost(numPlayers : int, name : String, callback : Function){
-    Debug.Log("Starting server. Players: " + numPlayers + " Port: " + gamePort + " NAT?: " + useNat);
+    Debug.Log("Starting server. Players: " + numPlayers + " Port: " + Config.GAME_PORT + " NAT?: " + useNat);
     // Reduce number of players by one to account for server host who is a player
     numPlayers--;
     if(numPlayers <= 1){
@@ -143,7 +139,7 @@ function startHost(numPlayers : int, name : String, callback : Function){
         numPlayers = 2;
     }
     initializeCallback = callback;
-    var serverError = Network.InitializeServer(numPlayers, gamePort, useNat);
+    var serverError = Network.InitializeServer(numPlayers, Config.GAME_PORT, useNat);
     if(serverError != NetworkConnectionError.NoError){
         Debug.Log("Error starting server: " + serverError);
         if(initializeCallback){
@@ -154,7 +150,7 @@ function startHost(numPlayers : int, name : String, callback : Function){
 }
 
 function OnServerInitialized(){
-    MasterServer.RegisterHost(gameId, name, natCapable.ToString());
+    MasterServer.RegisterHost(Config.GAME_ID, name, natCapable.ToString());
 }
 
 function retryFailedHost(){
@@ -169,7 +165,7 @@ function retryFailedHost(){
     }
     Debug.Log("Retry registering host. Retry #" + reconnectionTries);
     yield WaitForSeconds(0.1);
-    MasterServer.RegisterHost(gameId, name, natCapable.ToString());
+    MasterServer.RegisterHost(Config.GAME_ID, name, natCapable.ToString());
 }
 
 //limit host list requests to once every 30 seconds or 3 seconds if forcing it.
@@ -182,7 +178,7 @@ function FetchHostList(manual : boolean){
 
     if(lastHostListRequest == 0 || Time.realtimeSinceStartup > lastHostListRequest + timeout){
         lastHostListRequest = Time.realtimeSinceStartup;
-        MasterServer.RequestHostList(gameId);
+        MasterServer.RequestHostList(Config.GAME_ID);
     }
 }
 
@@ -218,7 +214,7 @@ function testConnection() {
         // This case is a bit special as we now need to check if we can
         // cicrumvent the blocking by using NAT punchthrough
         case ConnectionTesterStatus.PublicIPPortBlocked:
-            connTestMessage = "Non-connectble public IP address (port " + gamePort +" blocked), running a server is impossible.";
+            connTestMessage = "Non-connectble public IP address (port " + Config.GAME_PORT +" blocked), running a server is impossible.";
             useNat = true;
 
             // If no NAT punchthrough test has been performed on this public IP, force a test
