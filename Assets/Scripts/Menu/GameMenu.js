@@ -22,12 +22,15 @@ private var guiObject : GuiClasses [];
 var menuSkin : GUISkin;
 private var backTexture : Texture2D;
 private var playerTexture : Texture2D;
+private var commanderTexture : Texture2D;
 private var homeTexture : Texture2D;
 private var startTexture : Texture2D;
 private var backgroundTexutre : Texture2D;
 
+private var selGridInt : int = 0;
+private var playerTextures :Texture[ ] = new Texture[9];;
+
 private var headerText = 60;
-var selGridInt : int = 0;
 
 function Awake(){
     netScript = GetComponent(Net);
@@ -116,18 +119,15 @@ function OnGUI (){
         //TODO -- Dynamically place player character gui as they join the room
         //Character
 
-        var playerTextures : Texture2D[] = [playerTexture, playerTexture, playerTexture, playerTexture, playerTexture, playerTexture];
-        selGridInt = GUI.SelectionGrid (Rect (guiHost[1].offset.x,guiHost[1].offset.y,Screen.width*0.15,Screen.height*0.20), selGridInt, playerTextures, 2);
 
+        for(var player:Player in playerList.Values){
 
-        // for(var player:Player in playerList.Values){
+            GUI.Label(Rect(0,0, Screen.width, Screen.height + 70 ), player.name + (player.isSelf ? " (me)" : ""), "WhiteText");
 
-        //     GUI.Label(Rect(0,0, Screen.width, Screen.height + 70 ), player.name + (player.isSelf ? " (me)" : ""), "WhiteText");
-
-        //     if(GUI.Button(Rect(guiHost[1].offset.x,guiHost[1].offset.y,Screen.width*0.15,Screen.height*0.20), playerTexture, "FullImage")){
-        //     selectCharacter = true;
-        // }
-        // }
+            if(GUI.Button(Rect(guiHost[1].offset.x,guiHost[1].offset.y,Screen.width*0.15,Screen.height*0.20), playerTexture, "FullImage")){
+            selectCharacter = true;
+        }
+        }
 
 
         //Team, Versus, Start Buttons
@@ -146,7 +146,7 @@ function OnGUI (){
             guiObject[0].pointLocation = Points.TopLeft;
             guiObject[0].updateLocation();
 
-            if(GUI.Button(Rect(guiObject[0].offset.x + Screen.width*0.01,guiObject[0].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), backTexture)){
+            if(GUI.Button(Rect(guiObject[0].offset.x + Screen.width*0.01,guiObject[0].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), backTexture, "FullImage")){
                 selectCharacter = false;
             }
             //Characters gui
@@ -158,22 +158,30 @@ function OnGUI (){
             guiObject[0].textureWidth = Screen.width*0.15;
             guiObject[0].textureHeight = Screen.height*0.2;
 
-            for (var c=0; c<9; c++){
-                var offsetWidth = 0;
-                var offsetHeight = 0;
-                if(c==0 || c==1 || c==2){offsetHeight = Screen.height*0.03;}
-                if (c==1 || c==4 || c==7){
-                    offsetWidth = Screen.width*0.2;
-                }
-                if (c==2 || c==5 || c==8){offsetWidth = Screen.width*0.4;}
-                if (c==3 || c==4 || c==5){offsetHeight = Screen.height*0.33;}
-                if (c==6 || c==7 || c==8){offsetHeight = Screen.height*0.63;}
-
-                if(GUI.Button(Rect(guiObject[1].offset.x + offsetWidth, guiObject[1].offset.y + offsetHeight,  Screen.width*0.15, Screen.height*0.20), playerTexture, "FullImage")){
-                    //TODO -- select character
-                    selectCharacter = false;
-                }
+            for(var i=0; i<9; i++){
+                playerTexture = Resources.Load("Textures/gui/player" + i, Texture2D);
+                playerTextures[i] = playerTexture;
             }
+            selGridInt = GUI.SelectionGrid (Rect (0, 0, Screen.height, Screen.width), selGridInt, playerTextures, 9);
+            // for (var c=0; c<9; c++){
+            //     var offsetWidth = 0;
+            //     var offsetHeight = 0;
+            //     if(c==0 || c==1 || c==2){offsetHeight = Screen.height*0.03;}
+            //     if (c==1 || c==4 || c==7){
+            //         offsetWidth = Screen.width*0.2;
+            //     }
+            //     if (c==2 || c==5 || c==8){offsetWidth = Screen.width*0.4;}
+            //     if (c==3 || c==4 || c==5){offsetHeight = Screen.height*0.33;}
+            //     if (c==6 || c==7 || c==8){offsetHeight = Screen.height*0.63;}
+
+            //     playerTexture = Resources.Load("Textures/gui/player" + c, Texture2D);
+
+            //     if(GUI.Button(Rect(guiObject[1].offset.x + offsetWidth, guiObject[1].offset.y + offsetHeight,  Screen.width*0.15, Screen.height*0.20), playerTexture, "FullImage")){
+            //         //TODO -- select character
+            //         selectCharacter = false;
+            //     }
+            // }
+
             //Commanders gui
             for(var p=0; p<3; p++){
                 var h = 0;
@@ -181,7 +189,9 @@ function OnGUI (){
                 if(p==1){h=Screen.height*0.33;}
                 if(p==2){h =Screen.height*0.63;}
 
-                if(GUI.Button(Rect(Screen.width*0.75, guiObject[1].offset.y + h,  Screen.width*0.15, Screen.height*0.20), playerTexture)){
+                commanderTexture = Resources.Load("Textures/gui/commander" + p, Texture2D);
+
+                if(GUI.Button(Rect(Screen.width*0.75, guiObject[1].offset.y + h,  Screen.width*0.15, Screen.height*0.20), commanderTexture)){
                     selectCharacter = false;
                 }
             }
