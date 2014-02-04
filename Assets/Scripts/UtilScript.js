@@ -15,4 +15,18 @@ public static class Util{
         return Network.player == player.getNetworkPlayer();
     }
 
+    public function Toggle(obj : GameObject) {
+        var renderers = obj.GetComponentsInChildren.<Renderer>();
+        for (var r : Renderer in renderers) {
+        r.enabled = !r.enabled;
+        }
+    }
+
+    public function Toggle(obj : GameObject, visible : boolean) {
+        var renderers = obj.GetComponentsInChildren.<Renderer>();
+        for (var r : Renderer in renderers) {
+        r.enabled = visible;
+        }
+    }
+
 }
