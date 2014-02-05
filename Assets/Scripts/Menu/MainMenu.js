@@ -58,7 +58,7 @@ function OnGUI (){
     yellowStyle.fontSize = blueButton.fontSize =  whiteButton.fontSize = menuScript.getScale() * buttonText;
 
 
-    if(GUI.Button(Rect(guiObject[2].offset.x ,guiObject[2].offset.y,Screen.width*0.3, Screen.height*0.55), "QUICK GAME", "WhiteButton")){
+    if(GUI.Button(Rect(guiObject[2].offset.x ,guiObject[2].offset.y,Screen.width*0.3, Screen.height*0.55), "QUICK GAME", "LargeWhiteButton")){
         leaveFor(menus.quickplay);
     }
 

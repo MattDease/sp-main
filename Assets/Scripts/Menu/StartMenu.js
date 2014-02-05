@@ -13,10 +13,7 @@ private var backgroundTexutre : Texture2D;
 private var startBtnTexture : Texture2D;
 private var headerText = 270;
 private var bodyText = 60;
-private var keyboard : TouchScreenKeyboard;
-private var iskBoardOpen : boolean = false;
-private var kBoardString : String;
-var mainmenu : MainMenu;
+private var guiLogin : GuiClasses[];
 
 function Start(){
     menuScript = Menu.script;
@@ -26,8 +23,11 @@ function Start(){
     startBtnTexture = Resources.Load("Textures/gui/startBtn", Texture2D);
     menuSkin = Resources.Load("MenuSkin", GUISkin);
 
+    guiLogin = new GuiClasses[2];
+    for (var x=0; x<guiLogin.length; x++){
+        guiLogin[x] = new GuiClasses();
+    }
 }
-
 
 function OnGUI (){
     if(!showMenu){
@@ -52,14 +52,25 @@ function OnGUI (){
         }
     }
    else{
-        GUI.Label(Rect(0,0, Screen.width - 175, Screen.height + 60),"Enter your name:", "PlainText");
-        newName = GUI.TextField(Rect (Screen.width/2 + 40, Screen.height/2 + 25, menuScript.getScale() * 200, menuScript.getScale() * 200), newName, 20);
+        guiLogin[0].textureWidth =  menuScript.getScale() * 400;
+        guiLogin[0].textureHeight =  menuScript.getScale() * 100;
+        guiLogin[0].pointLocation = Points.Center;
+        guiLogin[0].updateLocation();
+
+        guiLogin[1].textureWidth = 300;
+        guiLogin[1].textureHeight = 100;
+        guiLogin[1].pointLocation = Points.Center;
+        guiLogin[1].updateLocation();
+
+
+        GUI.Label(Rect(guiLogin[1].offset.x - Screen.width/7, guiLogin[1].offset.y + 20,  300, 100),"Enter your name:", "PlainText");
+        newName = GUI.TextField(Rect (guiLogin[0].offset.x + Screen.width/7, guiLogin[0].offset.y + 20, menuScript.getScale() * 400, menuScript.getScale() * 100), newName, 20);
         if(newName && GUI.Button(Rect(0,0, Screen.width,Screen.height), "", "FullImage")){
             playerName = newName;
             playerScript.setName(newName);
             leaveFor(menus.main);
         }
-}
+    }
 
 }
 

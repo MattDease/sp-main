@@ -18,6 +18,7 @@ public var playerList : Dictionary.<String,Player>;
 
 private var guiHost : GuiClasses[];
 private var guiObject : GuiClasses [];
+private var guiNewGame: GuiClasses [];
 
 var menuSkin : GUISkin;
 private var backTexture : Texture2D;
@@ -26,8 +27,9 @@ private var commanderTexture : Texture2D;
 private var homeTexture : Texture2D;
 private var startTexture : Texture2D;
 private var backgroundTexutre : Texture2D;
+private var createNewOverlayTexture : Texture2D;
 
-private var selGridInt : int = 0;
+private var selectedPlayerIndex : int = 0;
 private var playerTextures :Texture[ ] = new Texture[9];;
 
 private var headerText = 60;
@@ -54,6 +56,7 @@ function Start(){
     homeTexture = Resources.Load("Textures/gui/home", Texture2D);
     startTexture = Resources.Load("Textures/gui/startBtn", Texture2D);
     backgroundTexutre = Resources.Load("Textures/gui/mainMenuBackground", Texture2D);
+    createNewOverlayTexture = Resources.Load("Textures/gui/createNewOverlay", Texture2D);
 
 
     guiHost = new GuiClasses[5];
@@ -64,6 +67,17 @@ function Start(){
     guiObject = new GuiClasses[2];
     for (var y=0; y<guiObject.length; y++){
         guiObject[y] = new GuiClasses();
+    }
+
+    guiNewGame = new GuiClasses[4];
+    for (var z=0; z<guiNewGame.length; z++){
+        guiNewGame[z] = new GuiClasses();
+    }
+
+
+    for(var i=0; i<9; i++){
+        playerTexture = Resources.Load("Textures/gui/player" + i, Texture2D);
+        playerTextures[i] = playerTexture;
     }
 }
 
@@ -79,13 +93,39 @@ function OnGUI (){
 
     var headerStyle : GUIStyle = GUI.skin.GetStyle("Header");
     headerStyle.fontSize = menuScript.getScale() * headerText;
-    GUI.Label (new Rect (0, Screen.height/2 - Screen.height/2.5 , Screen.width, 0), "Game Name", "Header");
 
     if(isHosting && !Network.isServer){
-        gameName = GUILayout.TextField(gameName, GUILayout.MinWidth(70));
-        GUILayout.Label("Player Limit:");
-        playerLimit = parseInt(GUILayout.TextField(playerLimit.ToString(), GUILayout.MinWidth(70))) || 0;
-        if (GUI.Button(Rect(0,0, 120, 30), "CREATE GAME", "GreenButton")){
+        GUI.Label (new Rect (0, Screen.height/2 - Screen.height/2.5 , Screen.width, 0), "NEW GAME", "Header");
+
+        guiNewGame[0].textureWidth = 300;
+        guiNewGame[0].textureHeight = 100;
+        guiNewGame[0].pointLocation = Points.Center;
+        guiNewGame[0].updateLocation();
+
+        guiNewGame[1].textureWidth =  menuScript.getScale() * 400;
+        guiNewGame[1].textureHeight =  menuScript.getScale() * 100;
+        guiNewGame[1].pointLocation = Points.Center;
+        guiNewGame[1].updateLocation();
+
+        guiNewGame[2].textureWidth = 120;
+        guiNewGame[2].textureHeight = 30;
+        guiNewGame[2].pointLocation = Points.Center;
+        guiNewGame[2].updateLocation();
+
+        guiNewGame[3].textureWidth = Screen.width/1.5;
+        guiNewGame[3].textureHeight = Screen.height/1.5;
+        guiNewGame[3].pointLocation = Points.Center;
+        guiNewGame[3].updateLocation();
+
+        GUI.DrawTexture(new Rect(guiNewGame[3].offset.x, guiNewGame[3].offset.y, Screen.width/1.5, Screen.height/1.5), createNewOverlayTexture);
+
+        GUI.Label(Rect(guiNewGame[0].offset.x, guiNewGame[0].offset.y + 20,  300, 100),"Game Name", "PlainText");
+        gameName = GUI.TextField(Rect (guiNewGame[1].offset.x, guiNewGame[1].offset.y, menuScript.getScale() * 400, menuScript.getScale() * 100), gameName, 20);
+        GUI.Label(Rect(guiNewGame[0].offset.x, guiNewGame[0].offset.y + 20,  300, 100),"Player Limit", "PlainText");
+        playerLimit = parseInt(GUI.TextField(Rect (guiNewGame[1].offset.x, guiNewGame[1].offset.y, menuScript.getScale() * 400, menuScript.getScale() * 100), playerLimit.ToString(), 20)) || 0;
+
+        //playerLimit = parseInt(GUILayout.TextField(playerLimit.ToString(), GUILayout.MinWidth(70))) || 0;
+        if (GUI.Button(Rect(guiNewGame[2].offset.x, guiNewGame[2].offset.y + 20, 120, 30), "CREATE", "GreenButton")){
             netScript.startHost(playerLimit, gameName, onInitialize);
             isStartingServer = true;
         }
@@ -124,9 +164,9 @@ function OnGUI (){
 
             GUI.Label(Rect(0,0, Screen.width, Screen.height + 70 ), player.name + (player.isSelf ? " (me)" : ""), "WhiteText");
 
-            if(GUI.Button(Rect(guiHost[1].offset.x,guiHost[1].offset.y,Screen.width*0.15,Screen.height*0.20), playerTexture, "FullImage")){
-            selectCharacter = true;
-        }
+            if(GUI.Button(Rect(guiHost[1].offset.x,guiHost[1].offset.y,Screen.width*0.15,Screen.height*0.20),  playerTextures[selectedPlayerIndex], "FullImage")){
+                selectCharacter = true;
+            }
         }
 
 
@@ -139,7 +179,10 @@ function OnGUI (){
             if(isHosting){
                 GUI.Button(Rect(guiHost[2].offset.x,Screen.height-Screen.height*0.125,Screen.width*0.12,Screen.height*0.10), "TEAM", "WhiteButton");
                 GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.13 + Screen.width*0.02),Screen.height-Screen.height*0.125,Screen.width*0.12,Screen.height*0.10), "VERSUS", "WhiteButton");
-                GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.31 + Screen.width*0.03),Screen.height-Screen.height*0.13,Screen.width*0.17,Screen.height*0.11), "START", "GreenButton");
+                if(GUI.Button(Rect(guiHost[2].offset.x + (Screen.width*0.31 + Screen.width*0.03),Screen.height-Screen.height*0.13,Screen.width*0.17,Screen.height*0.11), "START", "GreenButton")){
+                    gameSetupScript.enterGame();
+                }
+
             }
         } else {
             //Back Btn
@@ -158,29 +201,25 @@ function OnGUI (){
             guiObject[0].textureWidth = Screen.width*0.15;
             guiObject[0].textureHeight = Screen.height*0.2;
 
-            for(var i=0; i<9; i++){
-                playerTexture = Resources.Load("Textures/gui/player" + i, Texture2D);
-                playerTextures[i] = playerTexture;
+
+            for (var c=0; c<9; c++){
+                var offsetWidth = 0;
+                var offsetHeight = 0;
+                if(c==0 || c==1 || c==2){offsetHeight = Screen.height*0.03;}
+                if (c==1 || c==4 || c==7){
+                    offsetWidth = Screen.width*0.2;
+                }
+                if (c==2 || c==5 || c==8){offsetWidth = Screen.width*0.4;}
+                if (c==3 || c==4 || c==5){offsetHeight = Screen.height*0.33;}
+                if (c==6 || c==7 || c==8){offsetHeight = Screen.height*0.63;}
+
+                playerTexture = Resources.Load("Textures/gui/player" + c, Texture2D);
+
+                if(GUI.Button(Rect(guiObject[1].offset.x + offsetWidth, guiObject[1].offset.y + offsetHeight,  Screen.width*0.15, Screen.height*0.20), playerTexture, "FullImage")){
+                    selectedPlayerIndex = c;
+                    selectCharacter = false;
+                }
             }
-            selGridInt = GUI.SelectionGrid (Rect (0, 0, Screen.height, Screen.width), selGridInt, playerTextures, 9);
-            // for (var c=0; c<9; c++){
-            //     var offsetWidth = 0;
-            //     var offsetHeight = 0;
-            //     if(c==0 || c==1 || c==2){offsetHeight = Screen.height*0.03;}
-            //     if (c==1 || c==4 || c==7){
-            //         offsetWidth = Screen.width*0.2;
-            //     }
-            //     if (c==2 || c==5 || c==8){offsetWidth = Screen.width*0.4;}
-            //     if (c==3 || c==4 || c==5){offsetHeight = Screen.height*0.33;}
-            //     if (c==6 || c==7 || c==8){offsetHeight = Screen.height*0.63;}
-
-            //     playerTexture = Resources.Load("Textures/gui/player" + c, Texture2D);
-
-            //     if(GUI.Button(Rect(guiObject[1].offset.x + offsetWidth, guiObject[1].offset.y + offsetHeight,  Screen.width*0.15, Screen.height*0.20), playerTexture, "FullImage")){
-            //         //TODO -- select character
-            //         selectCharacter = false;
-            //     }
-            // }
 
             //Commanders gui
             for(var p=0; p<3; p++){

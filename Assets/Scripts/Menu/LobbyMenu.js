@@ -19,6 +19,8 @@ private var guiStatusBar: GuiClasses;
 private var status;
 var menuSkin : GUISkin;
 var backTexture : Texture2D;
+var refreshTexture : Texture2D;
+
 var backgroundTexutre : Texture2D;
 
 function Awake(){
@@ -31,6 +33,7 @@ function Start(){
 
     menuSkin = Resources.Load("MenuSkin", GUISkin);
     backTexture = Resources.Load("Textures/gui/back", Texture2D);
+    refreshTexture = Resources.Load("Textures/gui/refresh", Texture2D);
 
     guiObject = new GuiClasses[4];
     for (var y=0; y<guiObject.length; y++){
@@ -74,7 +77,7 @@ function OnGUI (){
     guiObject[0].pointLocation = Points.Center;
     guiObject[0].updateLocation();
 
-    if(GUI.Button(Rect(Screen.width - Screen.width*0.09,guiObject[1].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), backTexture, "FullImage")){
+    if(GUI.Button(Rect(Screen.width - Screen.width*0.09,guiObject[1].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), refreshTexture, "FullImage")){
         netScript.FetchHostList(true);
     }
 
