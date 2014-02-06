@@ -44,6 +44,8 @@ function OnGUI (){
     var localStyle : GUIStyle = GUI.skin.GetStyle("PlainText");
     localStyle.fontSize = menuScript.getScale() * bodyText;
 
+    GUI.skin.textField.fontSize = menuScript.getScale() * bodyText;
+
     if(playerName){
         GUI.Label(Rect(0,0, Screen.width, Screen.height + 60 ), "Welcome back, " + playerName, "PlainText");
 
