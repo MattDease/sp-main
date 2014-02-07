@@ -121,7 +121,7 @@ function OnGUI (){
         guiNewGame[0].pointLocation = Points.Center;
         guiNewGame[0].updateLocation();
 
-        guiNewGame[1].textureWidth =  menuScript.getScale() * 800;
+        guiNewGame[1].textureWidth =  Screen.width/2.2;
         guiNewGame[1].textureHeight =  menuScript.getScale() * 100;
         guiNewGame[1].pointLocation = Points.Center;
         guiNewGame[1].updateLocation();
@@ -139,9 +139,9 @@ function OnGUI (){
         GUI.DrawTexture(new Rect(guiNewGame[3].offset.x, guiNewGame[3].offset.y, Screen.width/1.5, Screen.height/1.5), createNewOverlayTexture);
 
         GUI.Label(Rect(guiNewGame[0].offset.x, guiNewGame[0].offset.y - Screen.height/5,  300, 100),"Game Name", "PlainText");
-        gameName = GUI.TextField(Rect (guiNewGame[1].offset.x, guiNewGame[1].offset.y - Screen.height/12 , menuScript.getScale() * 800, menuScript.getScale() * 100), gameName, 20);
+        gameName = GUI.TextField(Rect (guiNewGame[1].offset.x, guiNewGame[1].offset.y - Screen.height/12 , Screen.width/2.2, menuScript.getScale() * 100), gameName, 20);
         GUI.Label(Rect(guiNewGame[0].offset.x, guiNewGame[0].offset.y + Screen.height/24,  300, 100),"Player Limit", "PlainText");
-        playerLimit = parseInt(GUI.TextField(Rect (guiNewGame[1].offset.x, guiNewGame[1].offset.y + Screen.height/6, menuScript.getScale() * 800, menuScript.getScale() * 100), playerLimit.ToString(), 20)) || 0;
+        playerLimit = parseInt(GUI.TextField(Rect (guiNewGame[1].offset.x, guiNewGame[1].offset.y + Screen.height/6, Screen.width/2.2, menuScript.getScale() * 100), playerLimit.ToString(), 20)) || 0;
 
         //playerLimit = parseInt(GUILayout.TextField(playerLimit.ToString(), GUILayout.MinWidth(70))) || 0;
         if (GUI.Button(Rect(guiNewGame[2].offset.x, guiNewGame[2].offset.y + Screen.height/2.5, Screen.width/5.5,Screen.height/10), "CREATE", "GreenButton")){

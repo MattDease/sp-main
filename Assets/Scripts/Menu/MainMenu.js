@@ -54,7 +54,7 @@ function OnGUI (){
 
     var yellowStyle : GUIStyle = GUI.skin.GetStyle("YellowButton");
     var blueButton : GUIStyle = GUI.skin.GetStyle("BlueButton");
-    var whiteButton : GUIStyle = GUI.skin.GetStyle("WhiteButton");
+    var whiteButton : GUIStyle = GUI.skin.GetStyle("LargeWhiteButton");
     yellowStyle.fontSize = blueButton.fontSize =  whiteButton.fontSize = menuScript.getScale() * buttonText;
 
 
