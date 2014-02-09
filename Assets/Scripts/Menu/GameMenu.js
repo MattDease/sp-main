@@ -1,4 +1,4 @@
-﻿#pragma strict
+#pragma strict
 #pragma downcast
 
 private var gameManager : GameObject;
@@ -116,7 +116,7 @@ function OnGUI (){
     if(isHosting && !Network.isServer){
         GUI.Label (new Rect (0, Screen.height/2 - Screen.height/2.5 , Screen.width, 0), "NEW GAME", "Header");
 
-        guiNewGame[0].textureWidth = 300;
+        guiNewGame[0].textureWidth = Screen.width;
         guiNewGame[0].textureHeight = 100;
         guiNewGame[0].pointLocation = Points.Center;
         guiNewGame[0].updateLocation();
@@ -138,9 +138,9 @@ function OnGUI (){
 
         GUI.DrawTexture(new Rect(guiNewGame[3].offset.x, guiNewGame[3].offset.y, Screen.width/1.5, Screen.height/1.5), createNewOverlayTexture);
 
-        GUI.Label(Rect(guiNewGame[0].offset.x, guiNewGame[0].offset.y - Screen.height/5,  300, 100),"Game Name", "PlainText");
+        GUI.Label(Rect(guiNewGame[0].offset.x, guiNewGame[0].offset.y - Screen.height/5,  Screen.width, 100),"Game Name", "PlainText");
         gameName = GUI.TextField(Rect (guiNewGame[1].offset.x, guiNewGame[1].offset.y - Screen.height/12 , Screen.width/2.2, menuScript.getScale() * 100), gameName, 20);
-        GUI.Label(Rect(guiNewGame[0].offset.x, guiNewGame[0].offset.y + Screen.height/24,  300, 100),"Player Limit", "PlainText");
+        GUI.Label(Rect(guiNewGame[0].offset.x, guiNewGame[0].offset.y + Screen.height/24,  Screen.width, 100),"Player Limit", "PlainText");
         playerLimit = parseInt(GUI.TextField(Rect (guiNewGame[1].offset.x, guiNewGame[1].offset.y + Screen.height/6, Screen.width/2.2, menuScript.getScale() * 100), playerLimit.ToString(), 20)) || 0;
 
         //playerLimit = parseInt(GUILayout.TextField(playerLimit.ToString(), GUILayout.MinWidth(70))) || 0;
@@ -150,6 +150,7 @@ function OnGUI (){
         }
     }
     else if(isStartingServer){
+       //TODO
         GUILayout.Label("Starting server. Please Wait...");
     }
     else if(Network.isClient || (isHosting && Network.isServer)){

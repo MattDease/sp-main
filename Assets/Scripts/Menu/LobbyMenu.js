@@ -17,9 +17,14 @@ private var connectionErrorMsg : String = "";
 private var guiObject : GuiClasses [];
 private var guiStatusBar: GuiClasses;
 private var status;
-var menuSkin : GUISkin;
-var backTexture : Texture2D;
-var refreshTexture : Texture2D;
+private var menuSkin : GUISkin;
+private var backTexture : Texture2D;
+private var refreshTexture : Texture2D;
+private var createNewOverlayTexture : Texture2D;
+
+
+private var buttonText = 40;
+private var bodyText = 50;
 
 var backgroundTexutre : Texture2D;
 
@@ -35,13 +40,14 @@ function Start(){
     backTexture = Resources.Load("Textures/gui/back", Texture2D);
     refreshTexture = Resources.Load("Textures/gui/refresh", Texture2D);
 
-    guiObject = new GuiClasses[4];
+    guiObject = new GuiClasses[5];
     for (var y=0; y<guiObject.length; y++){
         guiObject[y] = new GuiClasses();
     }
 
     guiStatusBar = new GuiClasses();
     backgroundTexutre = Resources.Load("Textures/gui/mainMenuBackground", Texture2D);
+    createNewOverlayTexture = Resources.Load("Textures/gui/createNewOverlay", Texture2D);
 
 }
 
@@ -53,23 +59,18 @@ function OnGUI (){
 
     GUI.skin = menuSkin;
 
-    //Back Button
-    guiObject[1].textureWidth = Screen.width*0.08;
-    guiObject[1].textureHeight = Screen.height*0.2;
+//Back Button
+    guiObject[1].textureWidth = Screen.width * 0.08;
+    guiObject[1].textureHeight = Screen.height * 0.2;
     guiObject[1].pointLocation = Points.TopLeft;
     guiObject[1].updateLocation();
 
-    if(GUI.Button(Rect(guiObject[1].offset.x + Screen.width*0.01,guiObject[1].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), backTexture, "FullImage")){
+    var labelStyle: GUIStyle = GUI.skin.GetStyle("JoinGame");
+    labelStyle.fontSize = menuScript.getScale() * buttonText;
+
+    if (GUI.Button(Rect(guiObject[1].offset.x + Screen.width * 0.01, guiObject[1].offset.y - Screen.height * 0.01, Screen.width * 0.08, Screen.height * 0.2), backTexture, "FullImage")) {
         leaveFor(menus.main);
     }
-
-    guiStatusBar.textureWidth = Screen.width*1;
-    guiStatusBar.textureHeight = Screen.height*0.147;
-    guiStatusBar.pointLocation = Points.Center;
-    guiStatusBar.updateLocation();
-
-    //Status Bar
-   // GUI.Box(Rect(guiStatusBar.offset.x + Screen.width*0.01,guiStatusBar.offset.y,Screen.width*0.98,Screen.height*0.12), ""+status);
 
     //Refresh Button
     guiObject[0].textureWidth = 170;
@@ -77,39 +78,104 @@ function OnGUI (){
     guiObject[0].pointLocation = Points.Center;
     guiObject[0].updateLocation();
 
-    if(GUI.Button(Rect(Screen.width - Screen.width*0.09,guiObject[1].offset.y - Screen.height*0.01,Screen.width*0.08,Screen.height*0.2), refreshTexture, "FullImage")){
+    if (GUI.Button(Rect(Screen.width - Screen.width * 0.09, guiObject[1].offset.y - Screen.height * 0.01, Screen.width * 0.08, Screen.height * 0.2), refreshTexture, "FullImage")) {
         netScript.FetchHostList(true);
     }
 
-    if(connectionErrorMsg){
-        GUILayout.Label(connectionErrorMsg);
-    }
+    // if(connectionErrorMsg){
+    //     GUILayout.Label(connectionErrorMsg);
+    // }
+
+    //Center for JoinGame Button
+    guiObject[3].textureWidth = (Screen.width * 1.3) * 0.2;
+    guiObject[3].textureHeight = Screen.width * 0.2;
+    guiObject[3].pointLocation = Points.Center;
+    guiObject[3].updateLocation();
 
     netScript.FetchHostList(false);
     hostList = netScript.GetHostList(filterHosts);
 
-    if(hostList.Count){
+    if (hostList.Count) {
         var index = 0;
-        for (var element : HostData in hostList){
-            GUILayout.BeginHorizontal();
-            var name : String = element.gameName + " " + element.connectedPlayers + " / " + element.playerLimit;
+        for (var element: HostData in hostList) {
 
-            GUILayout.Label(name);
+            var name: String = element.gameName + "\n\n " + element.connectedPlayers + " / " + element.playerLimit;
 
-            if ( GUI.Button(Rect(guiObject[0].offset.x * index,guiObject[0].offset.y - 80 * index,170,20), name, "JoinGame")){
-                Debug.Log(onConnect);
-                netScript.connect(element, onConnect);
-                connectionErrorMsg = "";
-                isConnecting = true;
+            var f_connected: float = element.connectedPlayers;
+            var f_playerLimit: float = element.playerLimit;
+            var gamePercentage = f_connected / f_playerLimit;
+            Debug.Log(gamePercentage);
+
+
+            switch (index) {
+            case 0:
+
+                if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[3].offset.x, guiObject[3].offset.y - guiObject[3].offset.y / 1.4, (Screen.width * 1.3) * 0.2, Screen.width * 0.2), name , "JoinGame")) {
+                    Debug.Log(onConnect);
+                    netScript.connect(element, onConnect);
+                    connectionErrorMsg = "";
+                    isConnecting = true;
+                }
+
+                break;
+            case 1:
+
+                if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[3].offset.x - (guiObject[3].offset.x / 1.1), guiObject[3].offset.y, (Screen.width * 1.3) * 0.2, Screen.width * 0.2), name, "JoinGame")) {
+                    Debug.Log(onConnect);
+                    netScript.connect(element, onConnect);
+                    connectionErrorMsg = "";
+                    isConnecting = true;
+                }
+                break;
+            case 2:
+
+                if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[3].offset.x + (guiObject[3].offset.x / 1.1), guiObject[3].offset.y, (Screen.width * 1.3) * 0.2, Screen.width * 0.2), name, "JoinGame")) {
+                    Debug.Log(onConnect);
+                    netScript.connect(element, onConnect);
+                    connectionErrorMsg = "";
+                    isConnecting = true;
+                }
+
+                break;
+            case 3:
+                if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[3].offset.x - guiObject[3].offset.x / 1.9, guiObject[3].offset.y + guiObject[3].offset.y / 1.1, (Screen.width * 1.3) * 0.2, Screen.width * 0.2), name, "JoinGame")) {
+                    Debug.Log(onConnect);
+                    netScript.connect(element, onConnect);
+                    connectionErrorMsg = "";
+                    isConnecting = true;
+                }
+                break;
+            case 4:
+                if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[3].offset.x + guiObject[3].offset.x / 1.9, guiObject[3].offset.y + guiObject[3].offset.y / 1.1, (Screen.width * 1.3) * 0.2, Screen.width * 0.2), name, "JoinGame")) {
+                    Debug.Log(onConnect);
+                    netScript.connect(element, onConnect);
+                    connectionErrorMsg = "";
+                    isConnecting = true;
+                }
+                break;
             }
-            GUILayout.EndHorizontal();
+
             ++index;
         }
-    }
-    else{
-        //GUILayout.Label("No Games Being Hosted.");
+    } else {
+
+    var localStyle : GUIStyle = GUI.skin.GetStyle("PlainText");
+    localStyle.fontSize = menuScript.getScale() * bodyText;
+
+
+        guiObject[4].textureWidth = Screen.width/1.5;
+        guiObject[4].textureHeight = Screen.height/1.5;
+        guiObject[4].pointLocation = Points.Center;
+        guiObject[4].updateLocation();
+
+        GUI.DrawTexture(new Rect(guiObject[4].offset.x, guiObject[4].offset.y, Screen.width/1.5, Screen.height/1.5), createNewOverlayTexture);
+         GUI.Label(Rect(0,0, Screen.width, Screen.height),"No Games Being Hosted", "PlainText");
+
         //status ="No Games Being Hosted.";
     }
+
+
+
 }
 
 function onConnect(error: NetworkConnectionError){
