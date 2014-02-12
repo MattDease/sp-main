@@ -215,8 +215,8 @@ function OnGUI() {
             guiHost[2].updateLocation();
 
             if (isHosting) {
-                GUI.Button(Rect(guiHost[2].offset.x, Screen.height - Screen.height * 0.125, Screen.width * 0.12, Screen.height * 0.10), "TEAM", "WhiteButton");
-                GUI.Button(Rect(guiHost[2].offset.x + (Screen.width * 0.13 + Screen.width * 0.02), Screen.height - Screen.height * 0.125, Screen.width * 0.12, Screen.height * 0.10), "VERSUS", "WhiteButton");
+                GUI.Button(Rect(guiHost[2].offset.x, Screen.height - Screen.height * 0.125, Screen.width * 0.17, Screen.height * 0.11), "TEAM", "WhiteButton");
+                GUI.Button(Rect(guiHost[2].offset.x + (Screen.width * 0.13 + Screen.width * 0.02), Screen.height - Screen.height * 0.125, Screen.width * 0.17, Screen.height * 0.11), "VERSUS", "WhiteButton");
                 if (GUI.Button(Rect(guiHost[2].offset.x + (Screen.width * 0.31 + Screen.width * 0.03), Screen.height - Screen.height * 0.13, Screen.width * 0.17, Screen.height * 0.11), "START", "GreenButton")) {
                     gameSetupScript.enterGame();
                 }
