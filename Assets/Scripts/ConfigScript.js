@@ -23,8 +23,12 @@ public static class Config{
     public var WALK_SPEED : float = 1;
     // Upward impulse speed in m/s.
     public var JUMP_SPEED : float = 7;
+    // Enemy speed in m/s.
+    public var ENEMY_SPEED : float = 1;
     // Time in seconds of the runner crouch state.
     public var CROUCH_DURATION : float = 1;
+    // Time in seconds of the runner attack state.
+    public var ATTACK_DURATION : float = 1;
 
     //// NETWORKING
     // ID that all hosts will use to register their game with the master server.

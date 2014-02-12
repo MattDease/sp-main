@@ -6,6 +6,7 @@ import System.Collections.Generic;
 public var cameraPrefab : GameObject;
 
 private var player : Runner;
+private var model : GameObject;
 private var team : Team;
 private var camContainer : GameObject;
 private var platform : GameObject;
@@ -15,15 +16,18 @@ private var runningPlane : Vector3;
 private var cameraOffset : Vector2 = Vector2.zero;
 private var prevPlatformPos : Vector2 = Vector2.zero;
 private var isCrouched : boolean = false;
+private var isAttacking : boolean = false;
 private var isGrounded : boolean = true;
 private var canDoubleJump: boolean = false;
 private var crouchTime : float = 0;
+private var attackTime : float = 0;
 
 // TODO either move to config file or use mesh info
 private var runnerWidth : float = 0.6;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player = Util.GetPlayerById(networkView.viewID.owner.guid) as Runner;
+    model = gameObject.transform.Find("debug_runner").gameObject;
     team = player.getTeam();
 
     player.gameObject = gameObject;
@@ -73,6 +77,9 @@ function Update(){
         }
         if(isCrouched && Time.timeSinceLevelLoad - crouchTime > Config.CROUCH_DURATION){
             unCrouch();
+        }
+        if(isAttacking && Time.timeSinceLevelLoad - attackTime > Config.ATTACK_DURATION){
+            stopAttack();
         }
         if(!platform){
             var hit : RaycastHit;
@@ -130,6 +137,20 @@ function unCrouch(){
 
     // TEMP. replace with animation
     player.gameObject.transform.localScale.y = 1;
+}
+
+function attack(){
+    attackTime = Time.timeSinceLevelLoad;
+
+    if(isAttacking) return;
+    model.renderer.material.color = Color.green;
+    isAttacking = true;
+}
+
+function stopAttack(){
+    if(!isAttacking) return;
+    model.renderer.material.color = Color.gray;
+    isAttacking = false;
 }
 
 function startWalk(){
@@ -259,6 +280,9 @@ function OnLongTap(tap:Tap){
 }
 
 function OnTouch(pos:Vector2){
+    // FIXME triggering attack here is wrong
+    attack();
+
     startWalk();
 }
 function OnRelease(pos:Vector2){
