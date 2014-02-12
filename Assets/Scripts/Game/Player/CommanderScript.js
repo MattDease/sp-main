@@ -108,7 +108,6 @@ function checkKeyboardInput(){
 
 function OnEnable(){
     if(networkView.isMine){
-        Debug.Log("enable");
         setOffset();
 
         touched = false;
