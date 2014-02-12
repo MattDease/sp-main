@@ -21,18 +21,17 @@ private var menuSkin : GUISkin;
 private var backTexture : Texture2D;
 private var refreshTexture : Texture2D;
 private var createNewOverlayTexture : Texture2D;
-
+private var backgroundTexutre : Texture2D;
 
 private var buttonText = 40;
 private var bodyText = 50;
 
-var backgroundTexutre : Texture2D;
 
-function Awake(){
+function Awake() {
     netScript = GetComponent(Net);
 }
 
-function Start(){
+function Start() {
     menuScript = Menu.script;
     playerScript = menuScript.playerScript;
 
@@ -41,7 +40,7 @@ function Start(){
     refreshTexture = Resources.Load("Textures/gui/refresh", Texture2D);
 
     guiObject = new GuiClasses[5];
-    for (var y=0; y<guiObject.length; y++){
+    for (var y = 0; y < guiObject.length; y++) {
         guiObject[y] = new GuiClasses();
     }
 
@@ -51,15 +50,15 @@ function Start(){
 
 }
 
-function OnGUI (){
-    if(!showMenu){
+function OnGUI() {
+    if (!showMenu) {
         return;
     }
-    GUI.DrawTexture(new Rect(0,0, Screen.width, Screen.height), backgroundTexutre);
+    GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), backgroundTexutre);
 
     GUI.skin = menuSkin;
 
-//Back Button
+    //Back Button
     guiObject[1].textureWidth = Screen.width * 0.08;
     guiObject[1].textureHeight = Screen.height * 0.2;
     guiObject[1].pointLocation = Points.TopLeft;
@@ -85,7 +84,6 @@ function OnGUI (){
     // if(connectionErrorMsg){
     //     GUILayout.Label(connectionErrorMsg);
     // }
-
     //Center for JoinGame Button
     guiObject[3].textureWidth = (Screen.width * 1.3) * 0.2;
     guiObject[3].textureHeight = Screen.width * 0.2;
@@ -105,10 +103,11 @@ function OnGUI (){
             var f_playerLimit: float = element.playerLimit;
             var gamePercentage = f_connected / f_playerLimit;
 
+            //TODO: Temp just showing the first five. Need to add some logic in here.
             switch (index) {
             case 0:
 
-                if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[3].offset.x, guiObject[3].offset.y - guiObject[3].offset.y / 1.4, (Screen.width * 1.3) * 0.2, Screen.width * 0.2), name , "JoinGame")) {
+                if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[3].offset.x, guiObject[3].offset.y - guiObject[3].offset.y / 1.4, (Screen.width * 1.3) * 0.2, Screen.width * 0.2), name, "JoinGame")) {
                     Debug.Log(onConnect);
                     netScript.connect(element, onConnect);
                     connectionErrorMsg = "";
@@ -157,17 +156,17 @@ function OnGUI (){
         }
     } else {
 
-    var localStyle : GUIStyle = GUI.skin.GetStyle("PlainText");
-    localStyle.fontSize = menuScript.getScale() * bodyText;
+        var localStyle: GUIStyle = GUI.skin.GetStyle("PlainText");
+        localStyle.fontSize = menuScript.getScale() * bodyText;
 
 
-        guiObject[4].textureWidth = Screen.width/1.5;
-        guiObject[4].textureHeight = Screen.height/1.5;
+        guiObject[4].textureWidth = Screen.width / 1.5;
+        guiObject[4].textureHeight = Screen.height / 1.5;
         guiObject[4].pointLocation = Points.Center;
         guiObject[4].updateLocation();
 
-        GUI.DrawTexture(new Rect(guiObject[4].offset.x, guiObject[4].offset.y, Screen.width/1.5, Screen.height/1.5), createNewOverlayTexture);
-         GUI.Label(Rect(0,0, Screen.width, Screen.height),"No Games Being Hosted", "PlainText");
+        GUI.DrawTexture(new Rect(guiObject[4].offset.x, guiObject[4].offset.y, Screen.width / 1.5, Screen.height / 1.5), createNewOverlayTexture);
+        GUI.Label(Rect(0, 0, Screen.width, Screen.height), "No Games Being Hosted", "PlainText");
 
         //status ="No Games Being Hosted.";
     }
@@ -176,32 +175,32 @@ function OnGUI (){
 
 }
 
-function onConnect(error: NetworkConnectionError){
+function onConnect(error: NetworkConnectionError) {
     isConnecting = false;
-    switch(error){
-        case NetworkConnectionError.NoError:
-        case NetworkConnectionError.AlreadyConnectedToServer:
-            var currentMenu = menuScript.stateScript.getCurrentMenu();
-            if(currentMenu == menus.quickplay || currentMenu == menus.lobby){
-                leaveFor(menus.game);
-            }
-            break;
-        case NetworkConnectionError.TooManyConnectedPlayers:
-            connectionErrorMsg = "Cannot connect. Maximum player limit has been reached.";
-            break;
-        default:
-            // unknown/unresolvable error
-            connectionErrorMsg = "Cannot connect to game.";
-            break;
+    switch (error) {
+    case NetworkConnectionError.NoError:
+    case NetworkConnectionError.AlreadyConnectedToServer:
+        var currentMenu = menuScript.stateScript.getCurrentMenu();
+        if (currentMenu == menus.quickplay || currentMenu == menus.lobby) {
+            leaveFor(menus.game);
+        }
+        break;
+    case NetworkConnectionError.TooManyConnectedPlayers:
+        connectionErrorMsg = "Cannot connect. Maximum player limit has been reached.";
+        break;
+    default:
+        // unknown/unresolvable error
+        connectionErrorMsg = "Cannot connect to game.";
+        break;
     }
 };
 
-function enter(quickplay : boolean){
+function enter(quickplay: boolean) {
     showMenu = true;
     isQuickplay = quickplay;
 }
 
-function leaveFor(newMenu : menus){
+function leaveFor(newMenu: menus) {
     showMenu = false;
     menuScript.stateScript.setCurrentMenu(newMenu);
     menuScript.open();
