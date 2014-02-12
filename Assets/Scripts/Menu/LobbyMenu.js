@@ -104,8 +104,6 @@ function OnGUI (){
             var f_connected: float = element.connectedPlayers;
             var f_playerLimit: float = element.playerLimit;
             var gamePercentage = f_connected / f_playerLimit;
-            Debug.Log(gamePercentage);
-
 
             switch (index) {
             case 0:

@@ -12,6 +12,7 @@ public class Player{
     public var controller : MonoBehaviour;
     // TODO support commander players & better way to store role...probably extend class
     public var isRunner : boolean = true;
+    public var selectedCharacter : int = 0;
 
     public function Player(name:String, networkPlayer:NetworkPlayer, isSelf:boolean){
         this.name = name;

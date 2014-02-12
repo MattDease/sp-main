@@ -30,11 +30,14 @@ private var backgroundTexutre : Texture2D;
 private var createNewOverlayTexture : Texture2D;
 
 private var selectedPlayerIndex : int = 0;
-private var playerTextures :Texture[ ] = new Texture[9];;
+private var playerTextures :Texture[ ] = new Texture[12];
 
 private var headerText = 60;
 private var bodyText = 50;
 private var buttonText = 40;
+
+private var charactersNames : String[] = ["Diane","Luke","Ruth", "Sarah", "Dan", "Ben", "Lauren", "Rachel", "Bill", "Maddy", "Bradley", "Daisy"];
+
 
 function Awake(){
     netScript = GetComponent(Net);
@@ -71,14 +74,17 @@ function Start(){
         guiObject[y] = new GuiClasses();
     }
 
-    guiNewGame = new GuiClasses[4];
+    guiNewGame = new GuiClasses[5];
     for (var z=0; z<guiNewGame.length; z++){
         guiNewGame[z] = new GuiClasses();
     }
 
-
-    for(var i=0; i<9; i++){
-        playerTexture = Resources.Load("Textures/gui/player" + i, Texture2D);
+    for(var i=0; i<12; i++){
+        if(i < 9) {
+            playerTexture = Resources.Load("Textures/gui/player" + i, Texture2D);
+        } else {
+            playerTexture = Resources.Load("Textures/gui/commander" + i, Texture2D);
+        }
         playerTextures[i] = playerTexture;
     }
 }
@@ -99,9 +105,11 @@ function OnGUI (){
     var headerStyle : GUIStyle = GUI.skin.GetStyle("Header");
     headerStyle.fontSize = menuScript.getScale() * headerText;
 
-
     var greenStyle : GUIStyle = GUI.skin.GetStyle("GreenButton");
     greenStyle.fontSize = menuScript.getScale() * buttonText;
+
+    var whiteText : GUIStyle = GUI.skin.GetStyle("WhiteText");
+    whiteText.fontSize = menuScript.getScale() * buttonText;
 
     GUI.skin.textField.fontSize = menuScript.getScale() * bodyText;
 
@@ -150,8 +158,13 @@ function OnGUI (){
         }
     }
     else if(isStartingServer){
-       //TODO
-        GUILayout.Label("Starting server. Please Wait...");
+        guiNewGame[4].textureWidth = Screen.width/1.5;
+        guiNewGame[4].textureHeight = Screen.height/1.5;
+        guiNewGame[4].pointLocation = Points.Center;
+        guiNewGame[4].updateLocation();
+
+        GUI.DrawTexture(new Rect(guiNewGame[4].offset.x, guiNewGame[4].offset.y, Screen.width/1.5, Screen.height/1.5), createNewOverlayTexture);
+        GUI.Label(Rect(0,0, Screen.width, Screen.height),"Starting server. Please Wait...", "PlainText");
     }
     else if(Network.isClient || (isHosting && Network.isServer)){
         playerList = gameSetupScript.playerList;
@@ -172,13 +185,22 @@ function OnGUI (){
         //Character
 
 
+        var index = 0;
         for(var player:Player in playerList.Values){
 
-            GUI.Label(Rect(0,0, Screen.width, Screen.height + 70 ), player.name + (player.isSelf ? " (me)" : ""), "WhiteText");
-
-            if(GUI.Button(Rect(guiHost[1].offset.x,guiHost[1].offset.y,Screen.width*0.15,Screen.height*0.20),  playerTextures[selectedPlayerIndex], "FullImage")){
+            if(player.isSelf){
+                if(GUI.Button(Rect(guiHost[1].offset.x - guiHost[1].offset.x/(index +1), guiHost[1].offset.y,Screen.width*0.15,Screen.height*0.20),  playerTextures[player.selectedCharacter], "FullImage")){
                 selectCharacter = true;
+                }
+
+                player.selectedCharacter = selectedPlayerIndex;
+                if(player.selectedCharacter > 8) player.isRunner = false;
+            } else {
+                GUI.Button(Rect(guiHost[1].offset.x - guiHost[1].offset.x/(index +1), guiHost[1].offset.y,Screen.width*0.15,Screen.height*0.20),  playerTextures[player.selectedCharacter], "FullImage");
             }
+
+            GUI.Label(Rect(guiHost[1].offset.x - guiHost[1].offset.x/(index +1),guiHost[1].offset.y + Screen.height*0.2 - 10,Screen.width*0.15,Screen.height*0.20), player.name + (player.isSelf ? " (me)" : ""), "WhiteText");
+            ++index;
         }
 
 
@@ -231,6 +253,8 @@ function OnGUI (){
                     selectedPlayerIndex = c;
                     selectCharacter = false;
                 }
+                GUI.Label(Rect(guiObject[1].offset.x + offsetWidth, (guiObject[1].offset.y + offsetHeight) +(Screen.height*0.20/1.4) ,Screen.width*0.15,Screen.height*0.20), charactersNames[c], "WhiteText");
+
             }
 
             //Commanders gui
@@ -240,11 +264,16 @@ function OnGUI (){
                 if(p==1){h=Screen.height*0.33;}
                 if(p==2){h =Screen.height*0.63;}
 
-                commanderTexture = Resources.Load("Textures/gui/commander" + p, Texture2D);
+                var count = 9 + p;
+                commanderTexture = Resources.Load("Textures/gui/commander" + count, Texture2D);
 
-                if(GUI.Button(Rect(Screen.width*0.75, guiObject[1].offset.y + h,  Screen.width*0.15, Screen.height*0.20), commanderTexture)){
+                if(GUI.Button(Rect(Screen.width*0.75, guiObject[1].offset.y + h,  Screen.width*0.15, Screen.height*0.20), commanderTexture, "FullImage")){
+                    selectedPlayerIndex = count;
                     selectCharacter = false;
                 }
+
+                GUI.Label(Rect(Screen.width*0.75, guiObject[1].offset.y + h + (Screen.height*0.20/1.4) ,Screen.width*0.15,Screen.height*0.20), charactersNames[count], "WhiteText");
+
             }
         }
     }
