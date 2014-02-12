@@ -812,6 +812,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 184fff7a874bd2643bc9e1df0c33cb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemies:
+  - start: {fileID: 400032}
+    end: {fileID: 400034}
+    prefab: {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
+  - start: {fileID: 400020}
+    end: {fileID: 400028}
+    prefab: {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
+  - start: {fileID: 400018}
+    end: {fileID: 400026}
+    prefab: {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
+  - start: {fileID: 400016}
+    end: {fileID: 400024}
+    prefab: {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
+  - start: {fileID: 400014}
+    end: {fileID: 400022}
+    prefab: {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1

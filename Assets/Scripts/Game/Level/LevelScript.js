@@ -1,5 +1,7 @@
 ﻿#pragma strict
 
+public var enemies : List.<Enemy>;
+
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     var player : Player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
     if(player.GetType() == Commander){

@@ -74,6 +74,14 @@ function removeSegment(){
 function onAddSegment(segment : GameObject){
     var segmentWidth : float = segment.Find("debug_platform3/main").GetComponent(MeshFilter).mesh.bounds.size.x;
 
+    var enemies : List.<Enemy> = segment.GetComponent(LevelScript).enemies;
+
+    for(var i : int = 0; i < enemies.Count; i++){
+        var enemy : Enemy = enemies[i];
+        var go : GameObject = Network.Instantiate(enemy.prefab, enemy.end.position, Quaternion.identity, 0);
+        go.GetComponent(EnemyScript).startMove(enemy.start.position, enemy.end.position);
+    }
+
     if(segments.Count == 0){
         firstSegmentEnd = segmentWidth - segmentOffset;
         lastSegmentEnd = segmentWidth - segmentOffset;

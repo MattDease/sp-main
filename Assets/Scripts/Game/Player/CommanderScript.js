@@ -49,26 +49,29 @@ function Update(){
         if(touched){
             gameObject.transform.position = Vector3.SmoothDamp(player.getPosition(), targetPosition, velocity, 0.07);
 
-            if(!platform){
-                if(Vector3.Distance(gameObject.transform.position, targetPosition) < 0.3){
-                    var hit : RaycastHit;
-                    if (Physics.Raycast(gameObject.transform.position, Vector3.forward, hit)) {
+            var hit : RaycastHit;
+            if (Physics.Raycast(gameObject.transform.position, Vector3.forward, hit)){
+                if(hit.collider.gameObject.CompareTag("enemy")){
+                    hit.collider.gameObject.GetComponent(EnemyScript).notifyKill();
+                }
+                if(!platform){
+                    if(Vector3.Distance(gameObject.transform.position, targetPosition) < 0.3){
                         if(hit.collider.gameObject.CompareTag("moveableX") || hit.collider.gameObject.CompareTag("moveableY")){
                             platform = hit.collider.gameObject;
                             platformOffset = platform.transform.position - gameObject.transform.position;
                         }
                     }
                 }
-            }
-            else{
-                var position : Vector3 = platform.transform.position;
-                if(platform.CompareTag("moveableX")){
-                    position.x = player.getPosition().x + platformOffset.x;
+                else{
+                    var position : Vector3 = platform.transform.position;
+                    if(platform.CompareTag("moveableX")){
+                        position.x = player.getPosition().x + platformOffset.x;
+                    }
+                    else if(platform.CompareTag("moveableY")){
+                        position.y = player.getPosition().y + platformOffset.y;
+                    }
+                    platform.GetComponent(PlatformScript).notifyPosition(position);
                 }
-                else if(platform.CompareTag("moveableY")){
-                    position.y = player.getPosition().y + platformOffset.y;
-                }
-                platform.GetComponent(PlatformScript).notifyPosition(position);
             }
         }
     }

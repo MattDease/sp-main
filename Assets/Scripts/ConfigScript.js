@@ -24,7 +24,7 @@ public static class Config{
     // Upward impulse speed in m/s.
     public var JUMP_SPEED : float = 7;
     // Enemy speed in m/s.
-    public var ENEMY_SPEED : float = 1;
+    public var ENEMY_SPEED : float = 0.3;
     // Time in seconds of the runner crouch state.
     public var CROUCH_DURATION : float = 1;
     // Time in seconds of the runner attack state.

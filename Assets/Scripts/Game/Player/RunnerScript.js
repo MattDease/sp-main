@@ -161,6 +161,18 @@ function stopWalk(){
     currentSpeed = Config.RUN_SPEED;
 }
 
+function OnTriggerEnter(other : Collider){
+    if(other.gameObject.CompareTag("enemy")){
+        if(isAttacking){
+            other.gameObject.GetComponent(EnemyScript).notifyKill();
+        }
+        else{
+            GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
+            player.kill();
+        }
+    }
+}
+
 function OnCollisionEnter(theCollision : Collision){
     if(theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")){
         isGrounded = true;
