@@ -30,9 +30,6 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player.script = this;
     player.controller = this;
 
-    // Disable script updates until game starts
-    this.enabled = false;
-
     player.gameObject.transform.position.z = runnerWidth/2;
 
     if(networkView.isMine){
@@ -59,7 +56,7 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 function FixedUpdate(){
     if(networkView.isMine){
         if(platform){
-            gameObject.transform.position += platform.transform.position - prevPlatformPos;
+            gameObject.transform.position += Vector2(platform.transform.position.x, platform.transform.position.y) - prevPlatformPos;
             prevPlatformPos = platform.transform.position;
         }
         player.gameObject.rigidbody.velocity.x = currentSpeed;
@@ -80,7 +77,7 @@ function Update(){
         if(!platform){
             var hit : RaycastHit;
             if(Physics.Raycast(gameObject.transform.position, Vector3.down, hit, 1)) {
-                if(hit.collider.gameObject.CompareTag("moveableX")){
+                if(hit.collider.gameObject.CompareTag("moveableX") || hit.collider.gameObject.CompareTag("moveableY")){
                     platform = hit.collider.gameObject;
                     prevPlatformPos = platform.transform.position;
                 }

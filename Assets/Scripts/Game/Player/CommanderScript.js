@@ -10,7 +10,7 @@ private var team : Team;
 private var camContainer : GameObject;
 
 private var touched : boolean = false;
-private var plane : Plane = new Plane(Vector3(0, 1, -1), Vector3(1, 1, -1), Vector3(1, 0, -1));
+private var plane : Plane = new Plane(Vector3(0, 1, -2), Vector3(1, 1, -2), Vector3(1, 0, -2));
 private var targetPosition : Vector3;
 private var velocity : Vector3 = Vector3.zero;
 private var offsetX : float = 0;
@@ -24,13 +24,10 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player.gameObject = gameObject;
     player.script = this;
 
-    // Disable script updates until game starts
-    this.enabled = false;
-
     if(networkView.isMine){
         camContainer = Instantiate(cameraPrefab, Vector3.zero,  Quaternion.identity);
 
-        var playerPosition : Vector3 = player.getPosition();
+        var playerPosition : Vector3 = gameObject.transform.position;
         var viewport : Vector3 = Camera.main.WorldToViewportPoint(playerPosition);
         viewport.x = 0.5;
         viewport.y = 0.8;
@@ -56,7 +53,7 @@ function Update(){
                 if(Vector3.Distance(gameObject.transform.position, targetPosition) < 0.3){
                     var hit : RaycastHit;
                     if (Physics.Raycast(gameObject.transform.position, Vector3.forward, hit)) {
-                        if(hit.collider.gameObject.CompareTag("moveableX")){
+                        if(hit.collider.gameObject.CompareTag("moveableX") || hit.collider.gameObject.CompareTag("moveableY")){
                             platform = hit.collider.gameObject;
                             platformOffset = platform.transform.position - gameObject.transform.position;
                         }
@@ -65,7 +62,12 @@ function Update(){
             }
             else{
                 var position : Vector3 = platform.transform.position;
-                position.x = player.getPosition().x + platformOffset.x;
+                if(platform.CompareTag("moveableX")){
+                    position.x = player.getPosition().x + platformOffset.x;
+                }
+                else if(platform.CompareTag("moveableY")){
+                    position.y = player.getPosition().y + platformOffset.y;
+                }
                 platform.GetComponent(PlatformScript).notifyPosition(position);
             }
         }
@@ -79,6 +81,7 @@ function LateUpdate(){
             gameObject.transform.position.x = currentTeamPosition.x + offsetX;
         }
         camContainer.transform.position.x = currentTeamPosition.x;
+        camContainer.transform.position.y = currentTeamPosition.y/2;
     }
 }
 
@@ -88,6 +91,10 @@ function OnCollisionEnter(theCollision : Collision){
 
 function OnCollisionExit(theCollision : Collision){
 
+}
+
+function setOffset(){
+    offsetX = gameObject.transform.position.x - team.getObserverCameraPosition().x;
 }
 
 /*
@@ -101,6 +108,9 @@ function checkKeyboardInput(){
 
 function OnEnable(){
     if(networkView.isMine){
+        Debug.Log("enable");
+        setOffset();
+
         touched = false;
 
         Gesture.onTouchE += OnTouch;
@@ -143,7 +153,7 @@ function OnTouchStart(pos:Vector2){
 }
 
 function OnTouchEnd(pos:Vector2){
-    offsetX = gameObject.transform.position.x - team.getObserverCameraPosition().x;
+    setOffset();
     platform = null;
     platformOffset = Vector2.zero;
     touched = false;
