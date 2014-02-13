@@ -5,12 +5,14 @@ static public var script : Menu;
 public var gameManager : GameObject;
 public var playerScript : PlayerScript;
 public var stateScript : StateScript;
+public var style : GUIStyle;
 
 private var startMenuScript : StartMenu;
 private var mainMenuScript : MainMenu;
 private var lobbyMenuScript : LobbyMenu;
 private var gameMenuScript : GameMenu;
 private var highscoreMenuScript : HighscoreMenu;
+private var optimizedHeight : float = 1024;
 
 function Awake(){
     script = this;
@@ -22,12 +24,12 @@ function Awake(){
     lobbyMenuScript = GetComponent(LobbyMenu);
     gameMenuScript = GetComponent(GameMenu);
     highscoreMenuScript = GetComponent(HighscoreMenu);
+
 }
 
 function Start(){
     playerScript = gameManager.GetComponent(PlayerScript);
     stateScript = gameManager.GetComponent(StateScript);
-
     open();
 }
 
@@ -59,4 +61,9 @@ function open(){
             Debug.LogError("Unknown menu: " + menuName);
             break;
     }
+}
+
+function getScale () : float
+{
+    return Screen.height / optimizedHeight;
 }

@@ -135,7 +135,7 @@ function OnFailedToConnect(error: NetworkConnectionError){
 }
 
 function startHost(numPlayers : int, name : String, callback : Function){
-    Debug.Log("Starting server. Players: " + numPlayers + " Port: " + gamePort + " NAT?: " + useNat);
+    Debug.Log("Starting server. Game Name: " + name + "  Players: " + numPlayers + " Port: " + gamePort + " NAT?: " + useNat);
     // Reduce number of players by one to account for server host who is a player
     numPlayers--;
     if(numPlayers <= 1){

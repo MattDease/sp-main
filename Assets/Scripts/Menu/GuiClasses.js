@@ -7,11 +7,11 @@ var offsetY40 = Screen.height * 0.43; //Move by 43% of the screen
 	var textureHeight :int = 0;
 
 	enum Point {TopLeft, TopRight, BottomLeft, BottomRight, Center}
-	var pointLocation: int;
-
 	var offset: Vector2; //new location of texture
 
-function updateLocation(){
+
+
+function setLocation(pointLocation : int){
 
 	switch(pointLocation){
 

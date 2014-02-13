@@ -3,6 +3,7 @@
 private var playerName : String;
 private var timesPlayed : int = 0;
 private var self : Player;
+private var selectedCharacter : String = "0";
 
 function Awake () {
     playerName = PlayerPrefs.GetString("playerName", "");
@@ -18,6 +19,13 @@ function setName(name : String){
     playerName = name;
 }
 
+function setImage(characterName : String){
+    selectedCharacter = characterName;
+}
+
+function getImage(){
+    return selectedCharacter;
+}
 function getSelf(){
     return self;
 }
