@@ -8,6 +8,7 @@ public class Player{
     private var networkPlayer : NetworkPlayer;
     public var gameObject : GameObject;
     public var script : MonoBehaviour;
+    public var selectedCharacter : int = 0;
 
     public function Player(name:String, teamId:int, team:Team, networkPlayer:NetworkPlayer){
         this.name = name;

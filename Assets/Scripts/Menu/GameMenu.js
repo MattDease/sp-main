@@ -185,13 +185,13 @@ function OnGUI() {
             var index = 0;
             for (var player: Player in playerList.Values) {
 
-                if (player.isSelf) {
+                if (Util.IsNetworkedPlayerMe(player)) {
                     if (GUI.Button(Rect(guiHost[1].offset.x - guiHost[1].offset.x / (index + 1), guiHost[1].offset.y, Screen.width * 0.15, Screen.height * 0.20), playerTextures[player.selectedCharacter], "FullImage")) {
                         selectCharacter = true;
                     }
 
                     player.selectedCharacter = selectedPlayerIndex;
-                    if (player.selectedCharacter > 8) player.isRunner = false;
+                    //if (player.selectedCharacter > 8) player.isRunner = false;
                 } else {
                     GUI.Button(Rect(guiHost[1].offset.x - guiHost[1].offset.x / (index + 1), guiHost[1].offset.y, Screen.width * 0.15, Screen.height * 0.20), playerTextures[player.selectedCharacter], "FullImage");
                 }
@@ -298,9 +298,10 @@ function onServerInitialize(success: boolean){
     }
 }
 
-function enter(isNew: boolean) {
+function enter(isNew : boolean){
     showMenu = true;
     isHosting = isNew;
+
     gameSetupScript.game = new Game();
 
     if(Network.isClient){
@@ -308,7 +309,7 @@ function enter(isNew: boolean) {
     }
 }
 
-function leaveFor(newMenu: menus) {
+function leaveFor(newMenu : menus){
     showMenu = false;
     menuScript.stateScript.setCurrentMenu(newMenu);
     menuScript.open();
