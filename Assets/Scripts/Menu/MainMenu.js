@@ -49,8 +49,7 @@ function OnGUI() {
     //Main Menu Btns
     guiObject[2].textureWidth = Screen.width * 0.62;
     guiObject[2].textureHeight = Screen.height * 0.55;
-    guiObject[2].pointLocation = Points.Center;
-    guiObject[2].updateLocation();
+    guiObject[2].setLocation(Points.Center);
 
     var yellowStyle: GUIStyle = GUI.skin.GetStyle("YellowButton");
     var blueButton: GUIStyle = GUI.skin.GetStyle("BlueButton");

@@ -55,13 +55,11 @@ function OnGUI() {
     } else {
         guiLogin[0].textureWidth = menuScript.getScale() * 400;
         guiLogin[0].textureHeight = menuScript.getScale() * 100;
-        guiLogin[0].pointLocation = Points.Center;
-        guiLogin[0].updateLocation();
+        guiLogin[0].setLocation(Points.Center);
 
         guiLogin[1].textureWidth = 300;
         guiLogin[1].textureHeight = 100;
-        guiLogin[1].pointLocation = Points.Center;
-        guiLogin[1].updateLocation();
+        guiLogin[1].setLocation(Points.Center);
 
 
         GUI.Label(Rect(guiLogin[1].offset.x - Screen.width / 7, guiLogin[1].offset.y + 20, 300, 100), "Enter your name:", "PlainText");

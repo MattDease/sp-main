@@ -61,8 +61,7 @@ function OnGUI() {
     //Back Button
     guiObject[1].textureWidth = Screen.width * 0.08;
     guiObject[1].textureHeight = Screen.height * 0.2;
-    guiObject[1].pointLocation = Points.TopLeft;
-    guiObject[1].updateLocation();
+    guiObject[1].setLocation(Points.TopLeft);
 
     var labelStyle: GUIStyle = GUI.skin.GetStyle("JoinGame");
     labelStyle.fontSize = menuScript.getScale() * buttonText;
@@ -74,8 +73,7 @@ function OnGUI() {
     //Refresh Button
     guiObject[0].textureWidth = 170;
     guiObject[0].textureHeight = 20;
-    guiObject[0].pointLocation = Points.Center;
-    guiObject[0].updateLocation();
+    guiObject[0].setLocation(Points.Center);
 
     if (GUI.Button(Rect(Screen.width - Screen.width * 0.09, guiObject[1].offset.y - Screen.height * 0.01, Screen.width * 0.08, Screen.height * 0.2), refreshTexture, "FullImage")) {
         netScript.FetchHostList(true);
@@ -87,8 +85,7 @@ function OnGUI() {
     //Center for JoinGame Button
     guiObject[3].textureWidth = (Screen.width * 1.3) * 0.2;
     guiObject[3].textureHeight = Screen.width * 0.2;
-    guiObject[3].pointLocation = Points.Center;
-    guiObject[3].updateLocation();
+    guiObject[3].setLocation(Points.Center);
 
     netScript.FetchHostList(false);
     hostList = netScript.GetHostList(filterHosts);
@@ -97,60 +94,39 @@ function OnGUI() {
         var index = 0;
         for (var element: HostData in hostList) {
 
-            var name: String = element.gameName + "\n\n " + element.connectedPlayers + " / " + element.playerLimit;
-
             var f_connected: float = element.connectedPlayers;
             var f_playerLimit: float = element.playerLimit;
             var gamePercentage = f_connected / f_playerLimit;
 
             //TODO: Temp just showing the first five. Need to add some logic in here.
+            var placementY: float;
+            var placementX: float;
+
+
             switch (index) {
             case 0:
-
-                if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[3].offset.x, guiObject[3].offset.y - guiObject[3].offset.y / 1.4, (Screen.width * 1.3) * 0.2, Screen.width * 0.2), name, "JoinGame")) {
-                    Debug.Log(onConnect);
-                    netScript.connect(element, onConnect);
-                    connectionErrorMsg = "";
-                    isConnecting = true;
-                }
-
+                placementX = guiObject[3].offset.x;
+                placementY = guiObject[3].offset.y - guiObject[3].offset.y / 1.4;
                 break;
             case 1:
-
-                if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[3].offset.x - (guiObject[3].offset.x / 1.1), guiObject[3].offset.y, (Screen.width * 1.3) * 0.2, Screen.width * 0.2), name, "JoinGame")) {
-                    Debug.Log(onConnect);
-                    netScript.connect(element, onConnect);
-                    connectionErrorMsg = "";
-                    isConnecting = true;
-                }
+                placementX = guiObject[3].offset.x - (guiObject[3].offset.x / 1.1);
+                placementY = guiObject[3].offset.y;
                 break;
             case 2:
-
-                if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[3].offset.x + (guiObject[3].offset.x / 1.1), guiObject[3].offset.y, (Screen.width * 1.3) * 0.2, Screen.width * 0.2), name, "JoinGame")) {
-                    Debug.Log(onConnect);
-                    netScript.connect(element, onConnect);
-                    connectionErrorMsg = "";
-                    isConnecting = true;
-                }
-
+                placementX = guiObject[3].offset.x + (guiObject[3].offset.x / 1.1);
+                placementY = guiObject[3].offset.y;
                 break;
             case 3:
-                if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[3].offset.x - guiObject[3].offset.x / 1.9, guiObject[3].offset.y + guiObject[3].offset.y / 1.1, (Screen.width * 1.3) * 0.2, Screen.width * 0.2), name, "JoinGame")) {
-                    Debug.Log(onConnect);
-                    netScript.connect(element, onConnect);
-                    connectionErrorMsg = "";
-                    isConnecting = true;
-                }
+                placementX = guiObject[3].offset.x - guiObject[3].offset.x / 1.9;
+                placementY = guiObject[3].offset.y + guiObject[3].offset.y / 1.1;
                 break;
             case 4:
-                if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(guiObject[3].offset.x + guiObject[3].offset.x / 1.9, guiObject[3].offset.y + guiObject[3].offset.y / 1.1, (Screen.width * 1.3) * 0.2, Screen.width * 0.2), name, "JoinGame")) {
-                    Debug.Log(onConnect);
-                    netScript.connect(element, onConnect);
-                    connectionErrorMsg = "";
-                    isConnecting = true;
-                }
+                placementX = guiObject[3].offset.x + guiObject[3].offset.x / 1.9;
+                placementY = guiObject[3].offset.y + guiObject[3].offset.y / 1.1;
                 break;
             }
+
+            joinGame(element, placementX, placementY);
 
             ++index;
         }
@@ -162,16 +138,25 @@ function OnGUI() {
 
         guiObject[4].textureWidth = Screen.width / 1.5;
         guiObject[4].textureHeight = Screen.height / 1.5;
-        guiObject[4].pointLocation = Points.Center;
-        guiObject[4].updateLocation();
+        guiObject[4].setLocation(Points.Center);
 
         GUI.DrawTexture(new Rect(guiObject[4].offset.x, guiObject[4].offset.y, Screen.width / 1.5, Screen.height / 1.5), createNewOverlayTexture);
         GUI.Label(Rect(0, 0, Screen.width, Screen.height), "No Games Being Hosted", "PlainText");
-
-        //status ="No Games Being Hosted.";
     }
 
 
+
+}
+
+function joinGame(element : HostData, placementX : float, placementY : float){
+
+    var name: String = element.gameName + "\n\n " + element.connectedPlayers + " / " + element.playerLimit;
+
+    if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(placementX, placementY, (Screen.width * 1.3) * 0.2, Screen.width * 0.2), name, "JoinGame")) {
+        netScript.connect(element, onConnect);
+        connectionErrorMsg = "";
+        isConnecting = true;
+    }
 
 }
 

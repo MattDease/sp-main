@@ -115,8 +115,8 @@ function OnGUI() {
     GUI.skin.textField.fontSize = menuScript.getScale() * bodyText;
 
     //Home Btn
-    guiObject[1].pointLocation = Points.TopRight;
-    guiObject[1].updateLocation();
+    guiObject[1].setLocation(Points.TopRight);
+
     if (GUI.Button(Rect(Screen.width - Screen.width * 0.09, guiObject[1].offset.y - Screen.height * 0.01, Screen.width * 0.08, Screen.height * 0.2), homeTexture, "FullImage")) {
         selectCharacter = false;
         leaveFor(menus.main);
@@ -128,23 +128,19 @@ function OnGUI() {
 
         guiNewGame[0].textureWidth = Screen.width;
         guiNewGame[0].textureHeight = 100;
-        guiNewGame[0].pointLocation = Points.Center;
-        guiNewGame[0].updateLocation();
+        guiNewGame[0].setLocation(Points.Center);
 
         guiNewGame[1].textureWidth = Screen.width / 2.2;
         guiNewGame[1].textureHeight = menuScript.getScale() * 100;
-        guiNewGame[1].pointLocation = Points.Center;
-        guiNewGame[1].updateLocation();
+        guiNewGame[1].setLocation(Points.Center);
 
         guiNewGame[2].textureWidth = Screen.width / 5.5;
         guiNewGame[2].textureHeight = Screen.height / 10;
-        guiNewGame[2].pointLocation = Points.Center;
-        guiNewGame[2].updateLocation();
+        guiNewGame[2].setLocation(Points.Center);
 
         guiNewGame[3].textureWidth = Screen.width / 1.5;
         guiNewGame[3].textureHeight = Screen.height / 1.5;
-        guiNewGame[3].pointLocation = Points.Center;
-        guiNewGame[3].updateLocation();
+        guiNewGame[3].setLocation(Points.Center);
 
         GUI.DrawTexture(new Rect(guiNewGame[3].offset.x, guiNewGame[3].offset.y, Screen.width / 1.5, Screen.height / 1.5), createNewOverlayTexture);
 
@@ -164,8 +160,7 @@ function OnGUI() {
     else if (isStartingServer) {
         guiNewGame[4].textureWidth = Screen.width / 1.5;
         guiNewGame[4].textureHeight = Screen.height / 1.5;
-        guiNewGame[4].pointLocation = Points.Center;
-        guiNewGame[4].updateLocation();
+        guiNewGame[4].setLocation(Points.Center);
 
         GUI.DrawTexture(new Rect(guiNewGame[4].offset.x, guiNewGame[4].offset.y, Screen.width / 1.5, Screen.height / 1.5), createNewOverlayTexture);
         GUI.Label(Rect(0, 0, Screen.width, Screen.height), "Starting server. Please Wait...", "PlainText");
@@ -184,8 +179,7 @@ function OnGUI() {
 
             guiHost[1].textureWidth = Screen.width * 0.15;
             guiHost[1].textureHeight = Screen.height * 0.2;
-            guiHost[1].pointLocation = Points.Center;
-            guiHost[1].updateLocation();
+            guiHost[1].setLocation(Points.Center);
 
             //TODO -- Dynamically place player character gui as they join the room
             //Character
@@ -211,8 +205,7 @@ function OnGUI() {
             //Team, Versus, Start Buttons
             guiHost[2].textureWidth = Screen.width * 0.52;
             guiHost[2].textureHeight = Screen.height * 0.11;
-            guiHost[2].pointLocation = Points.Center;
-            guiHost[2].updateLocation();
+            guiHost[2].setLocation(Points.Center);
 
             if (isHosting) {
                 GUI.Button(Rect(guiHost[2].offset.x, Screen.height - Screen.height * 0.125, Screen.width * 0.17, Screen.height * 0.11), "TEAM", "WhiteButton");
@@ -227,8 +220,8 @@ function OnGUI() {
         /* ----------  CHARACTER SELECTION SCREEN ---------- */
         else {
             //Back Btn
-            guiObject[0].pointLocation = Points.TopLeft;
-            guiObject[0].updateLocation();
+            guiObject[0].setLocation(Points.TopLeft);
+
 
             if (GUI.Button(Rect(guiObject[0].offset.x + Screen.width * 0.01, guiObject[0].offset.y - Screen.height * 0.01, Screen.width * 0.08, Screen.height * 0.2), backTexture, "FullImage")) {
                 selectCharacter = false;
@@ -236,8 +229,7 @@ function OnGUI() {
             //Characters gui
             guiObject[1].textureWidth = Screen.width * 0.8;
             guiObject[1].textureHeight = Screen.height * 0.8;
-            guiObject[1].pointLocation = Points.Center;
-            guiObject[1].updateLocation();
+            guiObject[1].setLocation(Points.Center);
 
             guiObject[0].textureWidth = Screen.width * 0.15;
             guiObject[0].textureHeight = Screen.height * 0.2;
