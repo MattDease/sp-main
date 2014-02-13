@@ -39,6 +39,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   segmentPrefab: {fileID: 100030, guid: 0532f737270f01d4c87acc6028408eeb, type: 2}
+  enemyPrefabs:
+  - {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
+  - {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
+  - {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
+  - {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

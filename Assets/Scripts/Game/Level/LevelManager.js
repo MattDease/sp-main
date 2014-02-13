@@ -8,7 +8,8 @@ import System.Collections.Generic;
 // - reimplement difficulty functionality
 
 // Set in editor
-public var segmentPrefab : GameObject;
+public var segmentPrefab : GameObject; //TODO change to list
+public var enemyPrefabs : List.<GameObject>;
 
 private var gameManager : GameObject;
 private var difficultyScript : DifficultyScript;
@@ -71,14 +72,12 @@ function removeSegment(){
 
 }
 
-function onAddSegment(segment : GameObject){
+function onAddSegment(segment : GameObject, enemies : List.<Enemy>){
     var segmentWidth : float = segment.Find("debug_platform3/main").GetComponent(MeshFilter).mesh.bounds.size.x;
-
-    var enemies : List.<Enemy> = segment.GetComponent(LevelScript).enemies;
 
     for(var i : int = 0; i < enemies.Count; i++){
         var enemy : Enemy = enemies[i];
-        var go : GameObject = Network.Instantiate(enemy.prefab, enemy.end.position, Quaternion.identity, 0);
+        var go : GameObject = Network.Instantiate(enemyPrefabs[enemy.prefabIndex], enemy.end.position, Quaternion.identity, 0);
         go.GetComponent(EnemyScript).startMove(enemy.start.position, enemy.end.position);
     }
 
