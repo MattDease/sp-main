@@ -44,6 +44,9 @@ MonoBehaviour:
   - {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
   - {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
   - {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
+  signPrefabs:
+  - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
+  - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

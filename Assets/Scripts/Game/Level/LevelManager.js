@@ -10,6 +10,7 @@ import System.Collections.Generic;
 // Set in editor
 public var segmentPrefab : GameObject; //TODO change to list
 public var enemyPrefabs : List.<GameObject>;
+public var signPrefabs : List.<GameObject>;
 
 private var gameManager : GameObject;
 private var difficultyScript : DifficultyScript;
