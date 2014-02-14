@@ -11,6 +11,7 @@ import System.Collections.Generic;
 public var segmentPrefab : GameObject; //TODO change to list
 public var enemyPrefabs : List.<GameObject>;
 public var signPrefabs : List.<GameObject>;
+public var coinPrefab : GameObject;
 
 private var gameManager : GameObject;
 private var difficultyScript : DifficultyScript;
@@ -73,13 +74,17 @@ function removeSegment(){
 
 }
 
-function onAddSegment(segment : GameObject, enemies : List.<Enemy>){
+function onAddSegment(segment : GameObject, enemies : List.<Enemy>, coins : List.<Transform>){
     var segmentWidth : float = segment.Find("debug_platform3/main").GetComponent(MeshFilter).mesh.bounds.size.x;
 
     for(var i : int = 0; i < enemies.Count; i++){
         var enemy : Enemy = enemies[i];
         var go : GameObject = Network.Instantiate(enemyPrefabs[enemy.prefabIndex], enemy.end.position, Quaternion.identity, 0);
         go.GetComponent(EnemyScript).startMove(enemy.start.position, enemy.end.position);
+    }
+
+    for(var j : int = 0; j < coins.Count; j++){
+        Network.Instantiate(coinPrefab, coins[j].position, Quaternion.identity, 0);
     }
 
     if(segments.Count == 0){

@@ -2,6 +2,7 @@
 
 public var spawns : List.<Transform>;
 public var tutorialPoints : List.<Transform>;
+public var coins : List.<Transform>;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     var player : Player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
@@ -27,13 +28,14 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
     }
 
     // TODO - only show signs appropriate for player role
+    var signs : List.<GameObject> = GameObject.Find("/GameScripts").GetComponent(LevelManager).signPrefabs;
     for(var k : int = 0; k < tutorialPoints.Count; k++){
         var locator : Transform = tutorialPoints[k];
         var signIndex : int = int.Parse(locator.name.Split("_"[0])[1]);
-        var sign : GameObject = GameObject.Find("/GameScripts").GetComponent(LevelManager).signPrefabs[signIndex];
-        Instantiate(sign, locator.position, Quaternion.identity);
+        Instantiate(signs[signIndex], locator.position, Quaternion.identity);
     }
+
     if(Network.isServer){
-        GameObject.Find("GameScripts").GetComponent(LevelManager).onAddSegment(gameObject, enemies);
+        GameObject.Find("GameScripts").GetComponent(LevelManager).onAddSegment(gameObject, enemies, coins);
     }
 }

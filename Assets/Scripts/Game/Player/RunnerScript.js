@@ -171,6 +171,9 @@ function OnTriggerEnter(other : Collider){
             player.kill();
         }
     }
+    else if(other.gameObject.CompareTag("coin")){
+        other.gameObject.GetComponent(CoinScript).notifyKill();
+    }
 }
 
 function OnCollisionEnter(theCollision : Collision){
