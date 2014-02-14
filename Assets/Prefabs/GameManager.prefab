@@ -75,8 +75,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ebb4ab5232594843a1a57b09dfe4302, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 0}
-  commanderPrefab: {fileID: 0}
+  playerPrefab: {fileID: 400002, guid: 13fa43c4fa353d44fa68edbca58ca656, type: 2}
+  commanderPrefab: {fileID: 400002, guid: e2e5a53ab02b29d4f887d519cef14439, type: 2}
   localPlayer:
     gameObject: {fileID: 0}
     script: {fileID: 0}
