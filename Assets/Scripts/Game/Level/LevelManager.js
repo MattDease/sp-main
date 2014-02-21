@@ -8,7 +8,7 @@ import System.Collections.Generic;
 // - reimplement difficulty functionality
 
 // Set in editor
-public var segmentPrefab : GameObject; //TODO change to list
+public var segmentPrefabs : List.<GameObject>;
 public var enemyPrefabs : List.<GameObject>;
 public var signPrefabs : List.<GameObject>;
 public var coinPrefab : GameObject;
@@ -63,19 +63,20 @@ function addFirstSegment(){
 function addSegment(){
     waitingForSegment = true;
     var pos = new Vector3(lastSegmentEnd, 0, 0);
-    Network.Instantiate(segmentPrefab, pos, Quaternion.identity, 0);
+    // TODO - Use difficulty to determine next segment.
+    Network.Instantiate(segmentPrefabs[Random.Range(0, segmentPrefabs.Count)], pos, Quaternion.identity, 0);
 }
 
 function removeSegment(){
     var segment : GameObject = segments[0];
-    firstSegmentEnd += segment.Find("debug_platform3/main").GetComponent(MeshFilter).mesh.bounds.size.x;
+    firstSegmentEnd += segment.Find("model/main").GetComponent(MeshFilter).mesh.bounds.size.x;
     Network.Destroy(segment);
     segments.RemoveAt(0);
 
 }
 
 function onAddSegment(segment : GameObject, enemies : List.<Enemy>, coins : List.<Transform>){
-    var segmentWidth : float = segment.Find("debug_platform3/main").GetComponent(MeshFilter).mesh.bounds.size.x;
+    var segmentWidth : float = segment.Find("model/main").GetComponent(MeshFilter).mesh.bounds.size.x;
 
     for(var i : int = 0; i < enemies.Count; i++){
         var enemy : Enemy = enemies[i];
