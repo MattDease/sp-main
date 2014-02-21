@@ -81,7 +81,7 @@ function onAddSegment(segment : GameObject, enemies : List.<Enemy>, coins : List
     for(var i : int = 0; i < enemies.Count; i++){
         var enemy : Enemy = enemies[i];
         var go : GameObject = Network.Instantiate(enemyPrefabs[enemy.prefabIndex], enemy.end.position, Quaternion.identity, 0);
-        go.GetComponent(EnemyScript).startMove(enemy.start.position, enemy.end.position);
+        go.GetComponent(EnemyScript).init(enemy.start.position, enemy.end.position, enemy.prefabIndex == 3);
     }
 
     for(var j : int = 0; j < coins.Count; j++){
