@@ -38,7 +38,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3f86fa1f66996f44b393e01538e4492, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  segmentPrefab: {fileID: 100002, guid: eef753e3274a51848a76d140ce98ea07, type: 2}
+  segmentPrefabs:
+  - {fileID: 100002, guid: eef753e3274a51848a76d140ce98ea07, type: 2}
+  enemyPrefabs:
+  - {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
+  - {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
+  - {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
+  - {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
+  signPrefabs:
+  - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
+  - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
+  - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
+  coinPrefab: {fileID: 100002, guid: 9f8f307fe1ce8894dbd94b1820f83dbd, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

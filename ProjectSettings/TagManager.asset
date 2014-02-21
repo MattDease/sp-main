@@ -6,6 +6,11 @@ TagManager:
   - levelSegment
   - moveableX
   - moveableY
+  - tutorialCommander
+  - tutorialRunner
+  - tutorialEgg
+  - enemy
+  - coin
   - 
   Builtin Layer 0: Default
   Builtin Layer 1: TransparentFX

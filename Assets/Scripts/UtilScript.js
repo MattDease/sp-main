@@ -18,14 +18,14 @@ public static class Util{
     public function Toggle(obj : GameObject) {
         var renderers = obj.GetComponentsInChildren.<Renderer>();
         for (var r : Renderer in renderers) {
-        r.enabled = !r.enabled;
+            r.enabled = !r.enabled;
         }
     }
 
     public function Toggle(obj : GameObject, visible : boolean) {
         var renderers = obj.GetComponentsInChildren.<Renderer>();
         for (var r : Renderer in renderers) {
-        r.enabled = visible;
+            r.enabled = visible;
         }
     }
 

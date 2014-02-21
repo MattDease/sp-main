@@ -6,6 +6,7 @@ import System.Collections.Generic;
 public var cameraPrefab : GameObject;
 
 private var player : Runner;
+private var model : GameObject;
 private var team : Team;
 private var camContainer : GameObject;
 private var platform : GameObject;
@@ -15,23 +16,23 @@ private var runningPlane : Vector3;
 private var cameraOffset : Vector2 = Vector2.zero;
 private var prevPlatformPos : Vector2 = Vector2.zero;
 private var isCrouched : boolean = false;
+private var isAttacking : boolean = false;
 private var isGrounded : boolean = true;
 private var canDoubleJump: boolean = false;
 private var crouchTime : float = 0;
+private var attackTime : float = 0;
 
 // TODO either move to config file or use mesh info
 private var runnerWidth : float = 0.6;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player = Util.GetPlayerById(networkView.viewID.owner.guid) as Runner;
+    model = gameObject.transform.Find("debug_runner").gameObject;
     team = player.getTeam();
 
     player.gameObject = gameObject;
     player.script = this;
     player.controller = this;
-
-    // Disable script updates until game starts
-    this.enabled = false;
 
     player.gameObject.transform.position.z = runnerWidth/2;
 
@@ -59,7 +60,7 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 function FixedUpdate(){
     if(networkView.isMine){
         if(platform){
-            gameObject.transform.position += platform.transform.position - prevPlatformPos;
+            gameObject.transform.position += Vector2(platform.transform.position.x, platform.transform.position.y) - prevPlatformPos;
             prevPlatformPos = platform.transform.position;
         }
         player.gameObject.rigidbody.velocity.x = currentSpeed;
@@ -77,10 +78,13 @@ function Update(){
         if(isCrouched && Time.timeSinceLevelLoad - crouchTime > Config.CROUCH_DURATION){
             unCrouch();
         }
+        if(isAttacking && Time.timeSinceLevelLoad - attackTime > Config.ATTACK_DURATION){
+            stopAttack();
+        }
         if(!platform){
             var hit : RaycastHit;
             if(Physics.Raycast(gameObject.transform.position, Vector3.down, hit, 1)) {
-                if(hit.collider.gameObject.CompareTag("moveableX")){
+                if(hit.collider.gameObject.CompareTag("moveableX") || hit.collider.gameObject.CompareTag("moveableY")){
                     platform = hit.collider.gameObject;
                     prevPlatformPos = platform.transform.position;
                 }
@@ -135,12 +139,41 @@ function unCrouch(){
     player.gameObject.transform.localScale.y = 1;
 }
 
+function attack(){
+    attackTime = Time.timeSinceLevelLoad;
+
+    if(isAttacking) return;
+    model.renderer.material.color = Color.green;
+    isAttacking = true;
+}
+
+function stopAttack(){
+    if(!isAttacking) return;
+    model.renderer.material.color = Color.gray;
+    isAttacking = false;
+}
+
 function startWalk(){
     currentSpeed = Config.WALK_SPEED;
 }
 
 function stopWalk(){
     currentSpeed = Config.RUN_SPEED;
+}
+
+function OnTriggerEnter(other : Collider){
+    if(other.gameObject.CompareTag("enemy")){
+        if(isAttacking){
+            other.gameObject.GetComponent(EnemyScript).notifyKill();
+        }
+        else{
+            GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
+            player.kill();
+        }
+    }
+    else if(other.gameObject.CompareTag("coin")){
+        other.gameObject.GetComponent(CoinScript).notifyKill();
+    }
 }
 
 function OnCollisionEnter(theCollision : Collision){
@@ -262,6 +295,9 @@ function OnLongTap(tap:Tap){
 }
 
 function OnTouch(pos:Vector2){
+    // FIXME triggering attack here is wrong
+    attack();
+
     startWalk();
 }
 function OnRelease(pos:Vector2){
