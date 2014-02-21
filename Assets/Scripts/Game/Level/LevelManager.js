@@ -23,7 +23,7 @@ private var segments : List.<GameObject> = new List.<GameObject>();
 
 private var waitingForSegment : boolean = false;
 
-private var segmentOffset : float = 4;
+private var segmentOffset : float = 0.5;
 private var newSegmentThreshold : float = 8;
 private var lastSegmentEnd : float;
 private var firstSegmentEnd : float;
