@@ -42,6 +42,10 @@ public class Game {
         }
     }
 
+    public function getState(){
+        return stateScript.getGameState();
+    }
+
     public function updateState(){
         if(stateScript.getGameState() == GameState.Playing){
             var deadTeams : int = 0;
