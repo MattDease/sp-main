@@ -1,6 +1,6 @@
 ﻿#pragma strict
 
-var menuSkin : GUISkin;
+private var menuSkin : GUISkin;
 
 private var menuScript : Menu;
 private var playerScript : PlayerScript;

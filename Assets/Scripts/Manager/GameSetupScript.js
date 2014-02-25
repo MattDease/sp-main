@@ -177,6 +177,31 @@ function killRunner(id : String, info : NetworkMessageInfo){
     runner.kill();
 }
 
+@RPC
+function updateReadyStatus(id : String, isReady : boolean, info : NetworkMessageInfo){
+    var runner : Runner = Util.GetPlayerById(id) as Runner;
+    runner.isReady = isReady;
+}
+
+@RPC
+function updateCharacter(id : String, selectedChar : int, info : NetworkMessageInfo){
+    var runner : Runner = Util.GetPlayerById(id) as Runner;
+    runner.selectedCharacter = selectedChar;
+}
+
+@RPC
+function changeToCommander(id : String, selectedChar : int, info : NetworkMessageInfo){
+
+    Debug.Log("Killing Runner with " + id + "Changing to Commander with id " + selectedChar);
+
+    var runner : Runner = Util.GetPlayerById(id) as Runner;
+    runner.destroy();
+
+   // addPlayer(runner.getName, runner.teamId, PlayerRole.Commander, runner.netPlayer)
+
+}
+
+
 // Server only
 function OnPlayerDisconnected(netPlayer: NetworkPlayer){
     networkView.RPC("removePlayer", RPCMode.AllBuffered, netPlayer);

@@ -8,8 +8,8 @@ public class Player{
     private var networkPlayer : NetworkPlayer;
     public var gameObject : GameObject;
     public var script : MonoBehaviour;
-    public var selectedCharacter : int = 0;
-
+    public var selectedCharacter : int = 11;
+    public var isReady : boolean = false;
     public function Player(name:String, teamId:int, team:Team, networkPlayer:NetworkPlayer){
         this.name = name;
         this.teamId = teamId;
@@ -69,6 +69,10 @@ public class Runner extends Player{
         Util.Toggle(this.gameObject, false);
         this.alive = false;
         this.team.killTeammate(this.id);
+    }
+
+    public function destroy() {
+        UnityEngine.Object.Destroy(this.gameObject);
     }
 }
 

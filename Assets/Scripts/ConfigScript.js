@@ -15,7 +15,9 @@ public static class Config{
     public var WALK_SPEED : float = 1;
     public var JUMP_SPEED : float = 7;
     public var CROUCH_DURATION : float = 1;
+    public var MAX_TEAM_COUNT : int = 5;
 
+    var layoutOffset = 0;
     //// NETWORKING
     // Enable if connection test server is available.
     // Tests the type of the device's connection.

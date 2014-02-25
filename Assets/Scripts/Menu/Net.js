@@ -6,7 +6,7 @@
 // import System.Net.Sockets;
 import System.Collections.Generic;
 
-private var hostList : List.<HostData> = new List.<HostData>();
+public var hostList : List.<HostData> = new List.<HostData>();
 private var filteredHostList : List.<HostData> = new List.<HostData>();
 
 private var masterServerHostname : String = "scrambled.no-ip.biz";
@@ -47,7 +47,7 @@ function Awake () {
     // catch(err){
     //     Debug.Log("Master server hostname resolution error: " + err.Message);
         //fallback to static IP - may be incorrect!
-        var masterServerIp : String = "172.19.14.114";
+        var masterServerIp : String = "172.19.12.112";
         Debug.Log("Master server IP: " + masterServerIp);
         // masterServerIp = "172.19.14.114";
     //     Debug.Log("Master server IP fallback to: " + masterServerIp);
@@ -134,8 +134,8 @@ function OnFailedToConnect(error: NetworkConnectionError){
     }
 }
 
-function startHost(numPlayers : int, name : String, callback : Function){
-    Debug.Log("Starting server. Game Name: " + name + "  Players: " + numPlayers + " Port: " + gamePort + " NAT?: " + useNat);
+function startHost(numPlayers : int, gameName : String, callback : Function){
+    Debug.Log("Starting server. Game Name: " + gameName + "  Players: " + numPlayers + " Port: " + gamePort + " NAT?: " + useNat);
     // Reduce number of players by one to account for server host who is a player
     numPlayers--;
     if(numPlayers <= 1){
