@@ -37,7 +37,6 @@ function Update(){
 function enterGame(){
     Network.RemoveRPCsInGroup(0);
     networkView.RPC("loadLevel", RPCMode.AllBuffered, "scene-game", lastLevelPrefix + 1);
-    stateScript.setGameState(GameState.Loading);
 }
 
 function onLevelReady(){
@@ -113,6 +112,8 @@ function OnNetworkLoadedLevel(){
 @RPC
 function loadLevel(level : String, levelPrefix : int){
     lastLevelPrefix = levelPrefix;
+
+    stateScript.setGameState(GameState.Loading);
 
     Network.SetSendingEnabled(0, false);
     Network.isMessageQueueRunning = false;
