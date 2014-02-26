@@ -26,7 +26,7 @@ private var attackTime : float = 0;
 private var runnerWidth : float = 0.6;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
-    player = Util.GetPlayerById(networkView.viewID.owner.guid) as Runner;
+    player = Util.GetPlayerById(networkView.viewID.owner.ToString()) as Runner;
     model = gameObject.transform.Find("debug_runner").gameObject;
     team = player.getTeam();
 
@@ -58,7 +58,7 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 
 // Do physics changes here
 function FixedUpdate(){
-    if(networkView.isMine){
+    if(networkView.isMine && player.isAlive()){
         if(platform){
             gameObject.transform.position += Vector2(platform.transform.position.x, platform.transform.position.y) - prevPlatformPos;
             prevPlatformPos = platform.transform.position;
@@ -103,7 +103,7 @@ function LateUpdate(){
             }
             camContainer.transform.position = player.getPosition() + cameraOffset;
         }
-        else{
+        else if(team.getRunners(true).Count > 0){
             camContainer.transform.position = team.getObserverCameraPosition();
         }
     }
@@ -166,7 +166,7 @@ function OnTriggerEnter(other : Collider){
         if(isAttacking){
             other.gameObject.GetComponent(EnemyScript).notifyKill();
         }
-        else{
+        else if(networkView.isMine){
             GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
             player.kill();
         }

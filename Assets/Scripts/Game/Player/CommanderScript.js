@@ -18,7 +18,7 @@ private var platform : GameObject;
 private var platformOffset : Vector2 = Vector2.zero;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
-    player = Util.GetPlayerById(networkView.viewID.owner.guid) as Commander;
+    player = Util.GetPlayerById(networkView.viewID.owner.ToString()) as Commander;
     team = player.getTeam();
 
     player.gameObject = gameObject;
