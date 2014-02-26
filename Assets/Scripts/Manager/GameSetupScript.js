@@ -184,5 +184,5 @@ function OnPlayerDisconnected(netPlayer: NetworkPlayer){
 
 @RPC
 function removePlayer(netPlayer:NetworkPlayer){
-    game.removePlayer(netPlayer.guid);
+    game.removePlayer(netPlayer.ToString());
 }

@@ -26,7 +26,7 @@ private var attackTime : float = 0;
 private var runnerWidth : float = 0.6;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
-    player = Util.GetPlayerById(networkView.viewID.owner.guid) as Runner;
+    player = Util.GetPlayerById(networkView.viewID.owner.ToString()) as Runner;
     model = gameObject.transform.Find("debug_runner").gameObject;
     team = player.getTeam();
 

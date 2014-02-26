@@ -15,7 +15,7 @@ public class Player{
         this.teamId = teamId;
         this.team = team;
         this.networkPlayer = networkPlayer;
-        this.id = networkPlayer.guid;
+        this.id = networkPlayer.ToString();
     }
 
     public function getName() : String {
