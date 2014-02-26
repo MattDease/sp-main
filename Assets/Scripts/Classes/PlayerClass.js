@@ -67,6 +67,8 @@ public class Runner extends Player{
 
     public function kill() {
         Util.Toggle(this.gameObject, false);
+        this.gameObject.transform.position.x = 0;
+        this.gameObject.rigidbody.velocity = Vector3.zero;
         this.alive = false;
         this.team.killTeammate(this.id);
     }
