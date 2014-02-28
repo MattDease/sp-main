@@ -3,6 +3,7 @@
 private var game : Game;
 private var speed : float;
 private var distance : float;
+private var alive : boolean;
 private var startTime : float;
 private var start : Vector3;
 private var end : Vector3;
@@ -10,6 +11,7 @@ private var idle : boolean;
 private var isCardinal : boolean;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
+    alive = true;
     game = GameObject.Find("/GameManager").GetComponent(GameSetupScript).game;
 }
 
@@ -47,16 +49,31 @@ function Update(){
     }
 }
 
+function isAlive(){
+    return alive;
+}
+
 function notifyKill(){
-    if(Network.isServer){
-        kill();
-    }
-    else{
-        networkView.RPC("kill", RPCMode.Server);
+    if(alive){
+        if(Network.isServer){
+            kill();
+        }
+        else{
+            networkView.RPC("kill", RPCMode.Server);
+        }
     }
 }
 
 @RPC
 function kill(){
-    Network.Destroy(gameObject);
+    alive = false;
+    Util.Toggle(gameObject, false);
+
+    networkView.RPC("syncKill", RPCMode.OthersBuffered);
+}
+
+@RPC
+function syncKill(){
+    alive = false;
+    Util.Toggle(gameObject, false);
 }

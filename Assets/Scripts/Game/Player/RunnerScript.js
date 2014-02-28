@@ -7,6 +7,7 @@ public var cameraPrefab : GameObject;
 
 private var player : Runner;
 private var model : GameObject;
+private var animator : Animator;
 private var team : Team;
 private var camContainer : GameObject;
 private var platform : GameObject;
@@ -15,19 +16,17 @@ private var currentSpeed : float = Config.RUN_SPEED;
 private var runningPlane : Vector3;
 private var cameraOffset : Vector2 = Vector2.zero;
 private var prevPlatformPos : Vector2 = Vector2.zero;
-private var isCrouched : boolean = false;
 private var isAttacking : boolean = false;
 private var isGrounded : boolean = true;
-private var canDoubleJump: boolean = false;
-private var crouchTime : float = 0;
-private var attackTime : float = 0;
+private var isDoubleJump: boolean = false;
 
 // TODO either move to config file or use mesh info
 private var runnerWidth : float = 0.6;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player = Util.GetPlayerById(networkView.viewID.owner.ToString()) as Runner;
-    model = gameObject.transform.Find("debug_runner").gameObject;
+    model = gameObject.transform.Find("model").gameObject;
+    animator = model.GetComponent(Animator);
     team = player.getTeam();
 
     player.gameObject = gameObject;
@@ -68,18 +67,30 @@ function FixedUpdate(){
 }
 
 function Update(){
+    var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+    var transState : AnimatorTransitionInfo = animator.GetAnimatorTransitionInfo(0);
+    if(animState.IsName("Base Layer.Locomotion")){
+        animator.SetBool("IsDoubleJump", false);
+        animator.SetBool("HasDoubleJumped", false);
+        animator.SetBool("Toss", false);
+    }
+    else if(animState.IsName("Base Layer.Jump")){
+        if(!animator.IsInTransition(0)){
+            animator.SetBool("Jump", false);
+        }
+        if(isDoubleJump){
+            animator.SetBool("HasDoubleJumped", true);
+        }
+    }
+    if(animState.IsName("Base Layer.AttackRight")){
+        animator.SetBool("Attack", false);
+    }
     if(networkView.isMine && player.isAlive()){
         var position : Vector3 = player.getPosition();
         if(Camera.main.WorldToViewportPoint(position).x < 0 || position.y < -1){
             GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
             player.kill();
             return;
-        }
-        if(isCrouched && Time.timeSinceLevelLoad - crouchTime > Config.CROUCH_DURATION){
-            unCrouch();
-        }
-        if(isAttacking && Time.timeSinceLevelLoad - attackTime > Config.ATTACK_DURATION){
-            stopAttack();
         }
         if(!platform){
             var hit : RaycastHit;
@@ -109,61 +120,70 @@ function LateUpdate(){
     }
 }
 
+@RPC
 function jump(){
-    if(isCrouched){
-        unCrouch();
-    }
-    else{
-        if(isGrounded || !isGrounded && canDoubleJump) {
+    if(isGrounded || !isGrounded && !isDoubleJump) {
+        var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        if(animState.IsName("Base Layer.Locomotion")){
+            animator.SetBool("Jump", true);
             player.gameObject.rigidbody.velocity.y = Config.JUMP_SPEED;
-            if(canDoubleJump) canDoubleJump = false;
+        }
+        else if(animState.IsName("Base Layer.Jump")){
+            animator.SetBool("IsDoubleJump", true);
+            isDoubleJump = true;
+            player.gameObject.rigidbody.velocity.y = Config.JUMP_SPEED;
         }
     }
 }
 
-function crouch(){
-    crouchTime = Time.timeSinceLevelLoad;
-
-    if(isCrouched) return;
-    isCrouched = true;
-
-    // TEMP. replace with animation
-    player.gameObject.transform.localScale.y = 0.5;
+@RPC
+function takeoff(){
+    isGrounded = false;
+    animator.SetBool("IsGrounded", false);
 }
 
-function unCrouch(){
-    if(!isCrouched) return;
-    isCrouched = false;
-
-    // TEMP. replace with animation
-    player.gameObject.transform.localScale.y = 1;
+@RPC
+function land(){
+    isGrounded = true;
+    animator.SetBool("IsGrounded", true);
+    isDoubleJump = false;
 }
 
+@RPC
 function attack(){
-    attackTime = Time.timeSinceLevelLoad;
-
-    if(isAttacking) return;
-    model.renderer.material.color = Color.green;
-    isAttacking = true;
+    animator.SetTrigger("Attack");
 }
 
-function stopAttack(){
-    if(!isAttacking) return;
-    model.renderer.material.color = Color.gray;
-    isAttacking = false;
+@RPC
+function grab(){
+    animator.SetTrigger("Catch");
 }
 
+@RPC
+function toss(){
+    if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.EggLocomotion")){
+        animator.SetBool("Catch", false);
+        animator.SetBool("Toss", true);
+    }
+}
+
+@RPC
 function startWalk(){
     currentSpeed = Config.WALK_SPEED;
+    animator.SetFloat("Speed", 0.5);
 }
 
+@RPC
 function stopWalk(){
     currentSpeed = Config.RUN_SPEED;
+    animator.SetFloat("Speed", 0.2);
 }
 
 function OnTriggerEnter(other : Collider){
+    var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+    var transState : AnimatorTransitionInfo = animator.GetAnimatorTransitionInfo(0);
     if(other.gameObject.CompareTag("enemy")){
-        if(isAttacking){
+        if(animState.IsName("Base Layer.AttackRight") || transState.IsUserName("startAttack") || transState.IsUserName("stopAttack")){
             other.gameObject.GetComponent(EnemyScript).notifyKill();
         }
         else if(networkView.isMine){
@@ -177,17 +197,17 @@ function OnTriggerEnter(other : Collider){
 }
 
 function OnCollisionEnter(theCollision : Collision){
-    if(theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")){
-        isGrounded = true;
-        canDoubleJump = false;
+    if(networkView.isMine && theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")){
+        land();
+        networkView.RPC("land", RPCMode.Others);
     }
 }
 
 //consider when character is jumping .. it will exit collision.
 function OnCollisionExit(theCollision : Collision){
-    if(theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")) {
-        isGrounded = false;
-        canDoubleJump = true;
+    if(networkView.isMine && theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")) {
+        takeoff();
+        networkView.RPC("takeoff", RPCMode.Others);
         if(platform && theCollision.gameObject.CompareTag("moveableX")){
             platform = null;
         }
@@ -224,18 +244,27 @@ function checkKeyboardInput(){
     if(networkView.isMine){
         if(Input.GetKeyDown(KeyCode.W)){
             jump();
-        }
-        if(Input.GetKeyDown(KeyCode.S)){
-            crouch();
+            networkView.RPC("jump", RPCMode.Others);
         }
         if(Input.GetKeyDown(KeyCode.A)){
             startWalk();
+            networkView.RPC("startWalk", RPCMode.Others);
         }
         if(Input.GetKeyUp(KeyCode.A)){
             stopWalk();
+            networkView.RPC("stopWalk", RPCMode.Others);
         }
         if(Input.GetKeyUp(KeyCode.D)){
-            // toss();
+            attack();
+            networkView.RPC("attack", RPCMode.Others);
+        }
+        if(Input.GetKeyUp(KeyCode.T)){
+            toss();
+            networkView.RPC("toss", RPCMode.Others);
+        }
+        if(Input.GetKeyUp(KeyCode.C)){
+            grab();
+            networkView.RPC("grab", RPCMode.Others);
         }
         if(Config.DEBUG){
             if(Input.GetKeyUp(KeyCode.K)){
@@ -275,10 +304,6 @@ function OnSwipe(sw:SwipeInfo){
         jump();
     }
 
-    if(sw.direction.x < 0  && sw.angle > 235 && sw.angle < 315 ) {
-        crouch();
-    }
-
     // TODO find target player based on swipe direction and pass them to a toss function
     // if(sw.direction.y > 0  && ((sw.angle > 0 && sw.angle < 45) || (sw.angle > 315 && sw.angle < 360)) )  {
     //     Toss(sw.direction, sw.speed);
@@ -296,10 +321,10 @@ function OnLongTap(tap:Tap){
 
 function OnTouch(pos:Vector2){
     // FIXME triggering attack here is wrong
-    attack();
+    // attack();
 
-    startWalk();
+    // startWalk();
 }
 function OnRelease(pos:Vector2){
-    stopWalk();
+    // stopWalk();
 }
