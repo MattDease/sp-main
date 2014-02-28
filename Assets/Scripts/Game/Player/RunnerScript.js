@@ -162,7 +162,7 @@ function grab(){
 }
 
 function toss(forward : boolean){
-    if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.EggLocomotion") && eggScript.isHoldingEgg(player.getId())){
+    if(eggScript.isHoldingEgg(player.getId())){
         var target = team.getClosestRunner(player, forward);
         if(target){
             syncToss();

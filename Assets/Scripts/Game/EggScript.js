@@ -28,17 +28,17 @@ function Update(){
     if(networkView.isMine){
         if(inTransit){
             if(target.isAlive()){
-                if(true || Vector3.Distance(transform.position, target.getPosition()) < 0.02){
+                if(Vector3.Distance(transform.position, target.getPosition()) < 0.2){
                     networkView.RPC("setHolder", RPCMode.All, target.getId());
                 }
-                // TODO - move egg smoothly between holder and target
                 // Temporarily throw directly between
-                //transform.position = Vector3.MoveTowards(transform.position, target.getPosition(), temp_speed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, target.getPosition(), temp_speed * Time.deltaTime);
             }
             else{
                 // Abort throw progress if target dies while egg is in transit
                 // TODO - Implement a more elegant solution
                 inTransit = false;
+                setHolder(holder.getId());
             }
         }
         else{
@@ -47,8 +47,8 @@ function Update(){
     }
     else if(inTransit){
         // TODO - set local z position
-        // var progressPercent : float = Vector3.Distance(holder.getPosition(), transform.position) /Vector3.Distance(holder.getPosition(), target.getPosition());
-        // transform.position.z = Mathf.Lerp(holder.getPosition().z, target.getPosition().z, progressPercent);
+        var progressPercent : float = Vector3.Distance(holder.getPosition(), transform.position) / Vector3.Distance(holder.getPosition(), target.getPosition());
+        transform.position.z = Mathf.Lerp(holder.getPosition().z, target.getPosition().z, progressPercent);
     }
 }
 
