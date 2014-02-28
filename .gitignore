@@ -9,3 +9,7 @@ Obj/
 *.sublime-project
 *.sublime-workspace
 *.userprefs
+
+# Project-specfic
+Assets/Animation/Materials/
+Assets/Animation/Avatar/Materials/
