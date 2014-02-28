@@ -15,7 +15,7 @@ public class Player{
         this.teamId = teamId;
         this.team = team;
         this.networkPlayer = networkPlayer;
-        this.id = networkPlayer.guid;
+        this.id = networkPlayer.ToString();
     }
 
     public function getName() : String {
@@ -74,6 +74,8 @@ public class Runner extends Player{
 
     public function kill() {
         Util.Toggle(this.gameObject, false);
+        this.gameObject.transform.position.x = 0;
+        this.gameObject.rigidbody.velocity = Vector3.zero;
         this.alive = false;
         this.team.killTeammate(this.id);
     }

@@ -37,7 +37,6 @@ function Update(){
 function enterGame(){
     Network.RemoveRPCsInGroup(0);
     networkView.RPC("loadLevel", RPCMode.AllBuffered, "scene-game", lastLevelPrefix + 1);
-    stateScript.setGameState(GameState.Loading);
 }
 
 function onLevelReady(){
@@ -50,7 +49,7 @@ function createCharacter(info : NetworkMessageInfo){
         Network.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, 0);
     }
     else{
-        Network.Instantiate(commanderPrefab, Vector3(0, 0, -1), Quaternion.identity, 0);
+        Network.Instantiate(commanderPrefab, Vector3(0, 0, -2), Quaternion.identity, 0);
     }
     if(Network.isServer){
         // Server can't send server RPC
@@ -113,6 +112,8 @@ function OnNetworkLoadedLevel(){
 @RPC
 function loadLevel(level : String, levelPrefix : int){
     lastLevelPrefix = levelPrefix;
+
+    stateScript.setGameState(GameState.Loading);
 
     Network.SetSendingEnabled(0, false);
     Network.isMessageQueueRunning = false;
@@ -209,5 +210,5 @@ function OnPlayerDisconnected(netPlayer: NetworkPlayer){
 
 @RPC
 function removePlayer(netPlayer:NetworkPlayer){
-    game.removePlayer(netPlayer.guid);
+    game.removePlayer(netPlayer.ToString());
 }
