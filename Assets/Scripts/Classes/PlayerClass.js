@@ -12,8 +12,6 @@ public class Player{
     public var isReady : boolean = false;
     public function Player(name:String, networkPlayer:NetworkPlayer){
         this.name = name;
-        this.teamId = teamId;
-        this.team = team;
         this.networkPlayer = networkPlayer;
         this.id = networkPlayer.ToString();
     }
