@@ -67,35 +67,30 @@ function FixedUpdate(){
 }
 
 function Update(){
+    var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+    var transState : AnimatorTransitionInfo = animator.GetAnimatorTransitionInfo(0);
+    if(animState.IsName("Base Layer.Locomotion")){
+        animator.SetBool("IsDoubleJump", false);
+        animator.SetBool("HasDoubleJumped", false);
+        animator.SetBool("Toss", false);
+    }
+    else if(animState.IsName("Base Layer.Jump")){
+        if(!animator.IsInTransition(0)){
+            animator.SetBool("Jump", false);
+        }
+        if(isDoubleJump){
+            animator.SetBool("HasDoubleJumped", true);
+        }
+    }
+    if(animState.IsName("Base Layer.AttackRight")){
+        animator.SetBool("Attack", false);
+    }
     if(networkView.isMine && player.isAlive()){
-        var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        var transState : AnimatorTransitionInfo = animator.GetAnimatorTransitionInfo(0);
         var position : Vector3 = player.getPosition();
         if(Camera.main.WorldToViewportPoint(position).x < 0 || position.y < -1){
             GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
             player.kill();
             return;
-        }
-        if(animState.IsName("Base Layer.Locomotion")){
-            animator.SetBool("IsDoubleJump", false);
-            animator.SetBool("HasDoubleJumped", false);
-        }
-        else if(animState.IsName("Base Layer.Jump")){
-            if(!animator.IsInTransition(0)){
-                animator.SetBool("Jump", false);
-            }
-            if(isDoubleJump){
-                animator.SetBool("HasDoubleJumped", true);
-            }
-        }
-        else if(animState.IsName("Base Layer.AttackRight")){
-            animator.SetBool("Attack", false);
-        }
-        else if(animator.GetBool("Catch")){
-            animator.SetBool("Catch", false);
-        }
-        else if(animator.GetBool("Toss")){
-            animator.SetBool("Toss", false);
         }
         if(!platform){
             var hit : RaycastHit;
@@ -125,6 +120,7 @@ function LateUpdate(){
     }
 }
 
+@RPC
 function jump(){
     if(isGrounded || !isGrounded && !isDoubleJump) {
         var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -140,25 +136,44 @@ function jump(){
     }
 }
 
+@RPC
+function takeoff(){
+    isGrounded = false;
+    animator.SetBool("IsGrounded", false);
+}
+
+@RPC
+function land(){
+    isGrounded = true;
+    animator.SetBool("IsGrounded", true);
+    isDoubleJump = false;
+}
+
+@RPC
 function attack(){
-    animator.SetBool("Attack", true);
+    animator.SetTrigger("Attack");
 }
 
+@RPC
 function grab(){
-    animator.SetBool("Catch", true);
+    animator.SetTrigger("Catch");
 }
 
+@RPC
 function toss(){
     if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.EggLocomotion")){
+        animator.SetBool("Catch", false);
         animator.SetBool("Toss", true);
     }
 }
 
+@RPC
 function startWalk(){
     currentSpeed = Config.WALK_SPEED;
     animator.SetFloat("Speed", 0.5);
 }
 
+@RPC
 function stopWalk(){
     currentSpeed = Config.RUN_SPEED;
     animator.SetFloat("Speed", 0.2);
@@ -182,18 +197,17 @@ function OnTriggerEnter(other : Collider){
 }
 
 function OnCollisionEnter(theCollision : Collision){
-    if(theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")){
-        isGrounded = true;
-        animator.SetBool("IsGrounded", true);
-        isDoubleJump = false;
+    if(networkView.isMine && theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")){
+        land();
+        networkView.RPC("land", RPCMode.Others);
     }
 }
 
 //consider when character is jumping .. it will exit collision.
 function OnCollisionExit(theCollision : Collision){
-    if(theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")) {
-        isGrounded = false;
-        animator.SetBool("IsGrounded", false);
+    if(networkView.isMine && theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")) {
+        takeoff();
+        networkView.RPC("takeoff", RPCMode.Others);
         if(platform && theCollision.gameObject.CompareTag("moveableX")){
             platform = null;
         }
@@ -230,21 +244,27 @@ function checkKeyboardInput(){
     if(networkView.isMine){
         if(Input.GetKeyDown(KeyCode.W)){
             jump();
+            networkView.RPC("jump", RPCMode.Others);
         }
         if(Input.GetKeyDown(KeyCode.A)){
             startWalk();
+            networkView.RPC("startWalk", RPCMode.Others);
         }
         if(Input.GetKeyUp(KeyCode.A)){
             stopWalk();
+            networkView.RPC("stopWalk", RPCMode.Others);
         }
         if(Input.GetKeyUp(KeyCode.D)){
             attack();
+            networkView.RPC("attack", RPCMode.Others);
         }
         if(Input.GetKeyUp(KeyCode.T)){
             toss();
+            networkView.RPC("toss", RPCMode.Others);
         }
         if(Input.GetKeyUp(KeyCode.C)){
             grab();
+            networkView.RPC("grab", RPCMode.Others);
         }
         if(Config.DEBUG){
             if(Input.GetKeyUp(KeyCode.K)){
