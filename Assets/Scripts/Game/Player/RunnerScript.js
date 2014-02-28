@@ -11,6 +11,8 @@ private var animator : Animator;
 private var team : Team;
 private var camContainer : GameObject;
 private var platform : GameObject;
+private var egg : GameObject;
+private var eggScript : EggScript;
 
 private var currentSpeed : float = Config.RUN_SPEED;
 private var runningPlane : Vector3;
@@ -277,6 +279,9 @@ function checkKeyboardInput(){
 
 function OnEnable(){
     if(networkView.isMine){
+        egg = team.getEgg();
+        eggScript = egg.GetComponent(EggScript);
+
         Gesture.onSwipeE += OnSwipe;
         Gesture.onLongTapE += OnLongTap;
         Gesture.onTouchDownE += OnTouch;
