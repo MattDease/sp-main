@@ -18,11 +18,11 @@ public static class Config{
     // die if they go off-screen to the left.
     public var MAX_RUNNER_X : float = 0.90;
     // Running speed in m/s of the runner.
-    public var RUN_SPEED : float = 2;
+    public var RUN_SPEED : float = 2.7;
     // Walking speed in m/s of the runner.
-    public var WALK_SPEED : float = 1;
+    public var WALK_SPEED : float = 1.4;
     // Upward impulse speed in m/s.
-    public var JUMP_SPEED : float = 7;
+    public var JUMP_SPEED : float = 5.5;
     // Enemy speed in m/s.
     public var ENEMY_SPEED : float = 0.3;
     // Time in seconds of the runner crouch state.
