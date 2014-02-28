@@ -53,6 +53,8 @@ private var charactersNames : String[] = ["Diane","Ruth","Luke", "Sarah", "Dan",
 public var playerList : Dictionary.<String,Player>;
 public var teamList : List.<Team>;
 
+private var teamOneFull : boolean = false;
+private var teamTwoFull : boolean = false;
 
 function Awake() {
     netScript = GetComponent(Net);
@@ -212,7 +214,7 @@ function OnGUI() {
 
             var teamPlayer : Dictionary.<String,Player> = team.getTeammates();
             for (var teammate: Player in teamPlayer.Values) {
-                    Debug.Log("Team One: " + team.getId() + " --- " + teammate.getName());
+                  //  Debug.Log("Team One: " + team.getId() + " --- " + teammate.getName());
             }
 
         }
@@ -232,7 +234,7 @@ function OnGUI() {
 
             var currentTeamCount : int = 0;
             var teamCount: int = playerList.Count;
-            var isVersus : boolean = false;
+            var isVersus : boolean = true;
             var showEmpty : boolean = false;
             var playerCount = 0;
             var layoutOffset = 0;
@@ -308,57 +310,151 @@ function OnGUI() {
                 var leftLayoutCount = 0;
                 var rightLayoutCount = 0;
 
-                GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height*0.05 - Screen.height*0.13, guiVersus[4].textureWidth, guiVersus[4].textureHeight), arrowTexture, "FullImage");
-                GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height*0.05 + Screen.height*0.13, guiVersus[4].textureWidth, guiVersus[4].textureHeight), arrowDownTexture, "FullImage");
+               //Need to check to see if team is full, so if teamCount is full, show faded arrow
+               // if team is full, set teamOneFull - teamTwoFull to true...
+                if(teamList[1].getTeammates().Count == 5) teamOneFull = true;
+                else teamOneFull = false;
 
-                    //Team 1
-                    for (var a = 0; a < Config.MAX_TEAM_COUNT; a ++) {
+                if(teamList[2].getTeammates().Count == 5) teamTwoFull = true;
+                else teamTwoFull = false;
 
-                        switch(a){
-                            case 0:
-                                layoutOffset = (-2) * guiVersus[3].textureWidth;
-                            break;
-                            case 1:
-                                layoutOffset = (-1) * guiVersus[3].textureWidth;
-                            break;
-                            case 2:
-                                layoutOffset = 0;
-                            break;
-                            case 3:
-                                layoutOffset = (1) * guiVersus[3].textureWidth;
-                            break;
-                            case 4:
-                                layoutOffset = (2) * guiVersus[3].textureWidth;
-                            break;
+                //Check to see if on a team already, if on team 1, arrow needs to pount down...
+               if(playerScript.getSelf().getTeamId() == 1) {
+
+                if(GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height*0.05 - Screen.height*0.13, guiVersus[4].textureWidth, guiVersus[4].textureHeight), arrowDownTexture, "FullImage")){
+                    gameSetupScript.game.removeTeam(playerScript.getSelf(), 1, Network.player);
+                }
+
+               } else if (playerScript.getSelf().getTeamId() == 2){
+                    if(GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height*0.05 + Screen.height*0.13, guiVersus[4].textureWidth, guiVersus[4].textureHeight), arrowTexture, "FullImage")) {
+                        gameSetupScript.game.removeTeam(playerScript.getSelf(), 2, Network.player);
+
+                    }
+               }
+               else {
+                    if(GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height*0.05 - Screen.height*0.13, guiVersus[4].textureWidth, guiVersus[4].textureHeight), (teamOneFull ? arrowTextureDisabled : arrowTexture), "FullImage")){
+                        if(!teamOneFull) {
+                            gameSetupScript.game.setTeam(playerScript.getSelf(), 1, teamList[1], Network.player);
                         }
-
-                        GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height*0.05 - guiVersus[3].offset.y/1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[11], "FullImage");
                     }
 
-                    //Team 2
-
-                    for (var b = 0; b < Config.MAX_TEAM_COUNT; b ++) {
-
-                        switch(b){
-                            case 0:
-                                layoutOffset = (-2) * guiVersus[3].textureWidth;
-                            break;
-                            case 1:
-                                layoutOffset = (-1) * guiVersus[3].textureWidth;
-                            break;
-                            case 2:
-                                layoutOffset = 0;
-                            break;
-                            case 3:
-                                layoutOffset = (1) * guiVersus[3].textureWidth;
-                            break;
-                            case 4:
-                                layoutOffset = (2) * guiVersus[3].textureWidth;
-                            break;
+                    if(GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height*0.05 + Screen.height*0.13, guiVersus[4].textureWidth, guiVersus[4].textureHeight), (teamTwoFull ? arrowDownTextureDisabled : arrowDownTexture), "FullImage")) {
+                        if(!teamTwoFull) {
+                            gameSetupScript.game.setTeam(playerScript.getSelf(), 2, teamList[2], Network.player);
                         }
 
-                        GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height*0.05 + guiVersus[3].offset.y/1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[11], "FullImage");
                     }
+               }
+                 //Team 1
+                var teamOneShowEmpty : boolean = false;
+                var teamOneCount : int = 0;
+                var teamOneMates : Dictionary.<String,Player> = teamList[1].getTeammates();
+
+                for (var a = 0; a < Config.MAX_TEAM_COUNT; a ++) {
+
+                teamOneCount = a;
+
+                if (teamOneCount > teamList[1].getTeammates().Count -1 ) {
+                    teamOneShowEmpty = true;
+                    teamOneCount = 11;
+                } else {
+                    cPlayer = teamOneMates[teamOneMates.Keys.ToList()[a]];
+                }
+
+                switch(a){
+                    case 0:
+                        layoutOffset = (-2) * guiVersus[3].textureWidth;
+                    break;
+                    case 1:
+                        layoutOffset = (-1) * guiVersus[3].textureWidth;
+                    break;
+                    case 2:
+                        layoutOffset = 0;
+                    break;
+                    case 3:
+                        layoutOffset = (1) * guiVersus[3].textureWidth;
+                    break;
+                    case 4:
+                        layoutOffset = (2) * guiVersus[3].textureWidth;
+                    break;
+                }
+
+                if(teamOneShowEmpty){
+                  GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height*0.05 - guiVersus[3].offset.y/1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[teamOneCount], "FullImage");
+                }
+                else if(!teamOneShowEmpty) {
+                    if (Util.IsNetworkedPlayerMe(cPlayer)) {
+                        if (GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height*0.05 - guiVersus[3].offset.y/1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerSelfTextures[cPlayer.selectedCharacter], "FullImage")) {
+                            selectCharacter = true;
+                        }
+                    } else {
+                        GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height*0.05 - guiVersus[3].offset.y/1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[cPlayer.selectedCharacter], "FullImage");
+                    }
+
+                    GUI.Label(Rect(guiHost[1].offset.x + layoutOffset, guiHost[1].offset.y  + Screen.height * 0.2 - 15, Screen.width * 0.15, Screen.height * 0.20), cPlayer.getName(), "WhiteText");
+
+                    if (cPlayer.isReady) {
+                        GUI.Button(Rect(guiHost[1].offset.x + layoutOffset + guiHost[1].textureWidth / 1.6, guiHost[1].offset.y - guiHost[1].textureHeight / 6, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
+                    }
+
+                }
+
+            }
+
+            //Team 2
+            var teamTwoShowEmpty : boolean = false;
+            var teamTwoCount : int = 0;
+            var teamTwoMates : Dictionary.<String,Player> = teamList[2].getTeammates();
+
+            for (var b = 0; b < Config.MAX_TEAM_COUNT; b ++) {
+
+                teamTwoCount = b;
+
+                if (teamTwoCount > teamList[2].getTeammates().Count -1 ) {
+                    teamTwoShowEmpty = true;
+                    teamOneCount = 11;
+                } else {
+                    cPlayer = teamTwoMates[teamTwoMates.Keys.ToList()[b]];
+                }
+                switch(b){
+                    case 0:
+                        layoutOffset = (-2) * guiVersus[3].textureWidth;
+                    break;
+                    case 1:
+                        layoutOffset = (-1) * guiVersus[3].textureWidth;
+                    break;
+                    case 2:
+                        layoutOffset = 0;
+                    break;
+                    case 3:
+                        layoutOffset = (1) * guiVersus[3].textureWidth;
+                    break;
+                    case 4:
+                        layoutOffset = (2) * guiVersus[3].textureWidth;
+                    break;
+                }
+
+
+                if(teamTwoShowEmpty){
+                    GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height*0.05 + guiVersus[3].offset.y/1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[11], "FullImage");
+                }
+                else if(!teamTwoShowEmpty) {
+                    if (Util.IsNetworkedPlayerMe(cPlayer)) {
+                        if (GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height*0.05 + guiVersus[3].offset.y/1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerSelfTextures[cPlayer.selectedCharacter], "FullImage")) {
+                            selectCharacter = true;
+                        }
+                    } else {
+                        GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height*0.05 + guiVersus[3].offset.y/1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[cPlayer.selectedCharacter], "FullImage");
+                    }
+
+                    GUI.Label(Rect(guiHost[1].offset.x + layoutOffset, guiHost[1].offset.y  + Screen.height * 0.2 - 15, Screen.width * 0.15, Screen.height * 0.20), cPlayer.getName(), "WhiteText");
+
+                    if (cPlayer.isReady) {
+                        GUI.Button(Rect(guiHost[1].offset.x + layoutOffset + guiHost[1].textureWidth / 1.6, guiHost[1].offset.y - guiHost[1].textureHeight / 6, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
+                    }
+
+                }
+            }
 
                     //Middle - go through all the players and list the ones not assigned to a team
 
@@ -366,37 +462,39 @@ function OnGUI() {
 
                         cPlayer = playerList[playerList.Keys.ToList()[e]];
 
-                        if(teamCount % 2 == 1) {
+                        if(cPlayer.getTeamId() == 0 ){
 
-                            if(e == 0) {
-                               layoutOffset = 0;
-                            } else if (e % 2 == 1) {
-                                leftLayoutCount++;
-                                layoutOffset = leftLayoutCount * guiVersus[2].textureWidth;
-                            } else {
-                                rightLayoutCount++;
-                                layoutOffset = (-rightLayoutCount) * guiVersus[2].textureWidth;
-                            }
-                            GUI.Button(Rect( guiVersus[2].offset.x + layoutOffset,  guiVersus[2].offset.y - Screen.height*0.05,  guiVersus[2].textureWidth ,  guiVersus[2].textureHeight ), (Util.IsNetworkedPlayerMe(cPlayer) ? playerSelfTextures[cPlayer.selectedCharacter] : playerTextures[cPlayer.selectedCharacter]) , "FullImage");
+                            if(teamCount % 2 == 1) {
 
-                        } else {
-                            if (e % 2 == 1) {
-                                leftLayoutCount++;
-                                if(leftLayoutCount == 1) {
-                                    layoutOffset = leftLayoutCount * guiVersus[2].textureWidth/2;
-                                } else layoutOffset = leftLayoutCount * guiVersus[2].textureWidth - guiVersus[2].textureWidth/2;
-
-                            } else {
-                                rightLayoutCount++;
-
-                                if(rightLayoutCount == 1) {
-                                    layoutOffset = (-rightLayoutCount) * guiVersus[2].textureWidth/2;
+                                if(e == 0) {
+                                   layoutOffset = 0;
+                                } else if (e % 2 == 1) {
+                                    leftLayoutCount++;
+                                    layoutOffset = leftLayoutCount * guiVersus[2].textureWidth;
+                                } else {
+                                    rightLayoutCount++;
+                                    layoutOffset = (-rightLayoutCount) * guiVersus[2].textureWidth;
                                 }
-                                else layoutOffset = (-rightLayoutCount) * guiVersus[2].textureWidth + guiVersus[2].textureWidth/2;
+                                GUI.Button(Rect( guiVersus[2].offset.x + layoutOffset,  guiVersus[2].offset.y - Screen.height*0.05,  guiVersus[2].textureWidth ,  guiVersus[2].textureHeight ), (Util.IsNetworkedPlayerMe(cPlayer) ? playerSelfTextures[cPlayer.selectedCharacter] : playerTextures[cPlayer.selectedCharacter]) , "FullImage");
+
+                            } else {
+                                if (e % 2 == 1) {
+                                    leftLayoutCount++;
+                                    if(leftLayoutCount == 1) {
+                                        layoutOffset = leftLayoutCount * guiVersus[2].textureWidth/2;
+                                    } else layoutOffset = leftLayoutCount * guiVersus[2].textureWidth - guiVersus[2].textureWidth/2;
+
+                                } else {
+                                    rightLayoutCount++;
+
+                                    if(rightLayoutCount == 1) {
+                                        layoutOffset = (-rightLayoutCount) * guiVersus[2].textureWidth/2;
+                                    }
+                                    else layoutOffset = (-rightLayoutCount) * guiVersus[2].textureWidth + guiVersus[2].textureWidth/2;
+                                }
+
+                                GUI.Button(Rect( guiVersus[2].offset.x + layoutOffset,  guiVersus[2].offset.y - Screen.height*0.05,  guiVersus[2].textureWidth ,  guiVersus[2].textureHeight ), playerTextures[cPlayer.selectedCharacter], "FullImage");
                             }
-
-                            GUI.Button(Rect( guiVersus[2].offset.x + layoutOffset,  guiVersus[2].offset.y - Screen.height*0.05,  guiVersus[2].textureWidth ,  guiVersus[2].textureHeight ), playerTextures[cPlayer.selectedCharacter], "FullImage");
-
                         }
                     }
 
@@ -466,7 +564,6 @@ function OnGUI() {
 
                 if (GUI.Button(Rect(guiObject[1].offset.x + offsetWidth, guiObject[1].offset.y + offsetHeight, Screen.width * 0.15, Screen.height * 0.20), playerTexture, "FullImage")) {
                     playerScript.getSelf().selectedCharacter = c;
-                    Debug.Log("In Game Menu Runner Selected");
                     GameObject.Find("/GameManager").networkView.RPC("updateCharacter", RPCMode.OthersBuffered, playerScript.getSelf().getId(), playerScript.getSelf().selectedCharacter);
                     selectCharacter = false;
                 }
@@ -492,7 +589,6 @@ function OnGUI() {
 
                 if (GUI.Button(Rect(Screen.width * 0.75, guiObject[1].offset.y + h, Screen.width * 0.15, Screen.height * 0.20), commanderTexture, "FullImage")) {
                     playerScript.getSelf().selectedCharacter = count;
-                    Debug.Log("In Game Menu SelectingCommander");
                     GameObject.Find("/GameManager").networkView.RPC("changeToCommander", RPCMode.OthersBuffered, playerScript.getSelf().getId(), playerScript.getSelf().selectedCharacter );
                     selectCharacter = false;
                 }

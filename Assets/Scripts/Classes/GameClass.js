@@ -16,6 +16,8 @@ public class Game {
     private var gameSetupScript : GameSetupScript;
     private var difficultyScript : DifficultyScript;
 
+    private var isVersus : boolean = true;
+
     public function Game(){
         gameManager = GameObject.Find("/GameManager");
         if(gameManager != null){
@@ -25,7 +27,14 @@ public class Game {
             difficultyScript = gameManager.GetComponent(DifficultyScript);
         }
 
-        teams.Add(new Team(teams.Count));
+        if(isVersus){
+            teams.Add(new Team(0));
+            teams.Add(new Team(1));
+            teams.Add(new Team(2));
+
+        } else {
+            teams.Add(new Team(teams.Count));
+        }
     }
 
     public function start(){
@@ -89,10 +98,25 @@ public class Game {
         return [0, PlayerRole.Runner];
     }
 
+    public function addPlayer (name : String, networkPlayer:NetworkPlayer): Player {
+        var player : Player = createPlayer(name, networkPlayer);
+        players.Add(player.getId(), player);
+        return player;
+    }
+
+    public function setTeam (player: Player, teamId:int, team:Team, networkPlayer:NetworkPlayer) {
+        player.setTeam(teamId, teams[teamId]);
+        teams[teamId].addTeammate(player);
+
+    }
+
+    public function removeTeam (player: Player, teamId:int, networkPlayer:NetworkPlayer) {
+        player.setTeam(0, teams[0]);
+        teams[teamId].removeTeammate(player.getId());
+    }
     public function addRunner(name:String, teamId:int, networkPlayer:NetworkPlayer) : Runner {
         var runner : Runner = createRunner(name, teamId, networkPlayer);
         players.Add(runner.getId(), runner);
-        teams[runner.getTeamId()].addTeammate(runner);
         return runner;
     }
 
@@ -100,7 +124,6 @@ public class Game {
     public function addCommander(name:String, teamId:int, networkPlayer:NetworkPlayer) : Commander {
         var commander : Commander = createCommander(name, teamId, networkPlayer);
         players.Add(commander.getId(), commander);
-        teams[commander.getTeamId()].addTeammate(commander);
         return commander;
     }
 
@@ -149,7 +172,9 @@ public class Game {
     public function destroy(){
 
     }
-
+    private function createPlayer (name:String, networkPlayer:NetworkPlayer):Player {
+        return new Player (name, networkPlayer);
+    }
     private function createRunner(name:String, teamId:int, networkPlayer:NetworkPlayer) : Runner {
         return new Runner(name, teamId, teams[teamId], networkPlayer);
     }

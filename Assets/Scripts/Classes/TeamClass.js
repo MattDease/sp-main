@@ -53,13 +53,15 @@ public class Team{
     }
 
     public function addTeammate(player : Player){
-        if(player.GetType() == Runner){
-            runners.Add(player.getId(), player as Runner);
-            activeRunners.Add(player.getId(), player as Runner);
-        }
-        if(player.GetType() == Commander){
-            commander = player as Commander;
-        }
+
+        // if(player.GetType() == Runner){
+        //     runners.Add(player.getId(), player as Runner);
+        //     activeRunners.Add(player.getId(), player as Runner);
+        // }
+        // if(player.GetType() == Commander){
+        //     commander = player as Commander;
+        // }
+
         teammates.Add(player.getId(), player);
     }
 
