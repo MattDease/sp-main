@@ -161,12 +161,21 @@ function grab(){
     animator.SetTrigger("Catch");
 }
 
-@RPC
-function toss(){
-    if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.EggLocomotion")){
-        animator.SetBool("Catch", false);
-        animator.SetBool("Toss", true);
+function toss(forward : boolean){
+    if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.EggLocomotion") && eggScript.isHoldingEgg(player.getId())){
+        var target = team.getClosestRunner(player, forward);
+        if(target){
+            syncToss();
+            networkView.RPC("syncToss", RPCMode.Others);
+            egg.networkView.RPC("startThrow", RPCMode.All, target.getId());
+        }
     }
+}
+
+@RPC
+function syncToss(){
+    animator.SetBool("Catch", false);
+    animator.SetBool("Toss", true);
 }
 
 @RPC
@@ -260,15 +269,17 @@ function checkKeyboardInput(){
             attack();
             networkView.RPC("attack", RPCMode.Others);
         }
-        if(Input.GetKeyUp(KeyCode.T)){
-            toss();
-            networkView.RPC("toss", RPCMode.Others);
+        if(Input.GetKeyUp(KeyCode.R)){
+            toss(false);
         }
-        if(Input.GetKeyUp(KeyCode.C)){
-            grab();
-            networkView.RPC("grab", RPCMode.Others);
+        if(Input.GetKeyUp(KeyCode.T)){
+            toss(true);
         }
         if(Config.DEBUG){
+            if(Input.GetKeyUp(KeyCode.C)){
+                grab();
+                networkView.RPC("grab", RPCMode.Others);
+            }
             if(Input.GetKeyUp(KeyCode.K)){
                 GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
                 player.kill();

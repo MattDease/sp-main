@@ -58,6 +58,7 @@ function Update(){
 function setHolder(holderId : String){
     this.holderId = holderId;
     var runner : Runner = Util.GetPlayerById(holderId) as Runner;
+    runner.controller.grab();
     transform.position = runner.getPosition();
     inTransit = false;
 }
