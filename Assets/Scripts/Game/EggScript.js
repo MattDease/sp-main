@@ -3,8 +3,8 @@
 private var game : Game;
 private var team : Team;
 
-private var holderId : String;
-private var targetId : String;
+private var holder : Runner;
+private var target : Runner;
 private var inTransit : boolean = false;
 
 private var temp_speed : float = 4;
@@ -25,10 +25,8 @@ function Update(){
     if(game.getState() != GameState.Playing){
         return;
     }
-    var holder : Runner = Util.GetPlayerById(holderId) as Runner;
     if(networkView.isMine){
         if(inTransit){
-            var target : Runner = Util.GetPlayerById(targetId) as Runner;
             if(target.isAlive()){
                 if(true || Vector3.Distance(transform.position, target.getPosition()) < 0.02){
                     networkView.RPC("setHolder", RPCMode.All, target.getId());
@@ -44,7 +42,7 @@ function Update(){
             }
         }
         else{
-            transform.position = Util.GetPlayerById(holderId).getPosition();
+            transform.position = holder.getPosition();
         }
     }
     else if(inTransit){
@@ -56,16 +54,15 @@ function Update(){
 
 @RPC
 function setHolder(holderId : String){
-    this.holderId = holderId;
-    var runner : Runner = Util.GetPlayerById(holderId) as Runner;
-    runner.controller.grab();
-    transform.position = runner.getPosition();
+    this.holder = Util.GetPlayerById(holderId) as Runner;
+    this.holder.controller.grab();
+    transform.position = this.holder.getPosition();
     inTransit = false;
 }
 
 @RPC
 function startThrow(targetId : String){
-    this.targetId = targetId;
+    this.target = Util.GetPlayerById(targetId) as Runner;
     inTransit = true;
 }
 
@@ -73,5 +70,5 @@ function isHoldingEgg(id : String){
     if(inTransit){
         return false;
     }
-    return holderId == id;
+    return holder.getId() == id;
 }
