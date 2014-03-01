@@ -6,6 +6,7 @@ import System.Collections.Generic;
 //Set in editor
 public var playerPrefab : Transform;
 public var commanderPrefab : Transform;
+public var eggPrefab : Transform;
 
 public var game : Game;
 
@@ -64,7 +65,14 @@ function createCharacter(info : NetworkMessageInfo){
 @RPC
 function playerReady(){
     readyPlayerCount++;
-    if(readyPlayerCount == game.getPlayers().Count){
+    var players : Dictionary.<String, Player> = game.getPlayers();
+    if(readyPlayerCount == players.Count){
+        if(Config.USE_EGG){
+            // TODO support multiple teams
+            var holder = game.getTeam(0).getRandomRunner();
+            var egg : Transform = Network.Instantiate(eggPrefab, holder.getPosition(), Quaternion.identity, 0);
+            egg.networkView.RPC("setHolder", RPCMode.All, holder.getId());
+        }
         networkView.RPC("startCountDown", RPCMode.All);
     }
 }
