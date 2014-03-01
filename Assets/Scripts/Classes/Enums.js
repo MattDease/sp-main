@@ -34,8 +34,21 @@ public enum TeamStatus {
     TEMP_NO
 }
 
-public enum PlayerRole{
+public enum PlayerRole {
     Runner,
+    Commander
+};
+
+public enum EnemyType {
+    Beetle,
+    Worm,
+    Wasp,
+    Cardinal,
+};
+
+public enum SignType {
+    Runner,
+    Egg,
     Commander
 };
 

@@ -6,6 +6,8 @@ import System.Collections.Generic;
 public var cameraPrefab : GameObject;
 
 private var player : Commander;
+private var model : GameObject;
+private var animator : Animator;
 private var team : Team;
 private var camContainer : GameObject;
 
@@ -20,6 +22,8 @@ private var platformOffset : Vector2 = Vector2.zero;
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player = Util.GetPlayerById(networkView.viewID.owner.ToString()) as Commander;
     team = player.getTeam();
+    model = gameObject.transform.Find("model").gameObject;
+    animator = model.GetComponent(Animator);
 
     player.gameObject = gameObject;
     player.script = this;
@@ -45,6 +49,10 @@ function FixedUpdate(){
 }
 
 function Update(){
+    var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+    if(animState.IsName("Base Layer.Attack") && !animator.IsInTransition(0)){
+        animator.SetBool("attack", false);
+    }
     if(networkView.isMine){
         if(touched){
             gameObject.transform.position = Vector3.SmoothDamp(player.getPosition(), targetPosition, velocity, 0.07);
@@ -53,6 +61,8 @@ function Update(){
             if (Physics.Raycast(gameObject.transform.position, Vector3.forward, hit)){
                 if(hit.collider.gameObject.CompareTag("enemy")){
                     hit.collider.gameObject.GetComponent(EnemyScript).notifyKill();
+                    attack();
+                    networkView.RPC("attack", RPCMode.Others);
                 }
                 if(!platform){
                     if(Vector3.Distance(gameObject.transform.position, targetPosition) < 0.3){
@@ -74,6 +84,7 @@ function Update(){
                 }
             }
         }
+        checkKeyboardInput();
     }
 }
 
@@ -100,12 +111,22 @@ function setOffset(){
     offsetX = gameObject.transform.position.x - team.getObserverCameraPosition().x;
 }
 
+@RPC
+function attack(){
+    animator.SetBool("attack", true);
+}
+
 /*
  *  INPUT
  */
 function checkKeyboardInput(){
     if(networkView.isMine){
-
+        if(Config.DEBUG){
+            if(Input.GetKeyDown(KeyCode.A)){
+                attack();
+                networkView.RPC("attack", RPCMode.Others);
+            }
+        }
     }
 }
 
