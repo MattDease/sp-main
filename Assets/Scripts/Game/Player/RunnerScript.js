@@ -200,6 +200,7 @@ function OnTriggerEnter(other : Collider){
         else if(networkView.isMine){
             GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
             player.kill();
+            other.gameObject.GetComponent(EnemyScript).notifyAttack();
         }
     }
     else if(other.gameObject.CompareTag("coin")){
