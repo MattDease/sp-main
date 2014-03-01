@@ -11,6 +11,8 @@ private var animator : Animator;
 private var team : Team;
 private var camContainer : GameObject;
 private var platform : GameObject;
+private var egg : GameObject;
+private var eggScript : EggScript;
 
 private var currentSpeed : float = Config.RUN_SPEED;
 private var runningPlane : Vector3;
@@ -159,12 +161,21 @@ function grab(){
     animator.SetTrigger("Catch");
 }
 
-@RPC
-function toss(){
-    if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.EggLocomotion")){
-        animator.SetBool("Catch", false);
-        animator.SetBool("Toss", true);
+function toss(forward : boolean){
+    if(eggScript.isHoldingEgg(player.getId())){
+        var target = team.getClosestRunner(player, forward);
+        if(target){
+            syncToss();
+            networkView.RPC("syncToss", RPCMode.Others);
+            egg.networkView.RPC("startThrow", RPCMode.All, target.getId());
+        }
     }
+}
+
+@RPC
+function syncToss(){
+    animator.SetBool("Catch", false);
+    animator.SetBool("Toss", true);
 }
 
 @RPC
@@ -258,15 +269,19 @@ function checkKeyboardInput(){
             attack();
             networkView.RPC("attack", RPCMode.Others);
         }
-        if(Input.GetKeyUp(KeyCode.T)){
-            toss();
-            networkView.RPC("toss", RPCMode.Others);
-        }
-        if(Input.GetKeyUp(KeyCode.C)){
-            grab();
-            networkView.RPC("grab", RPCMode.Others);
+        if(Config.USE_EGG){
+            if(Input.GetKeyUp(KeyCode.R)){
+                toss(false);
+            }
+            if(Input.GetKeyUp(KeyCode.T)){
+                toss(true);
+            }
         }
         if(Config.DEBUG){
+            if(Input.GetKeyUp(KeyCode.C)){
+                grab();
+                networkView.RPC("grab", RPCMode.Others);
+            }
             if(Input.GetKeyUp(KeyCode.K)){
                 GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
                 player.kill();
@@ -277,6 +292,11 @@ function checkKeyboardInput(){
 
 function OnEnable(){
     if(networkView.isMine){
+        if(Config.USE_EGG){
+            egg = team.getEgg();
+            eggScript = egg.GetComponent(EggScript);
+        }
+
         Gesture.onSwipeE += OnSwipe;
         Gesture.onLongTapE += OnLongTap;
         Gesture.onTouchDownE += OnTouch;
