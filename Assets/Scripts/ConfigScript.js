@@ -7,7 +7,7 @@ public static class Config{
     // General debug mode of the game.
     public var DEBUG : boolean = true;
     // Enable/Disable the egg in the game.
-    public var USE_EGG : boolean = true;
+    public var USE_EGG : boolean = false;
 
     //// GAMEPLAY
     // Once all players are ready, the delay in seconds before the game starts.

@@ -269,11 +269,13 @@ function checkKeyboardInput(){
             attack();
             networkView.RPC("attack", RPCMode.Others);
         }
-        if(Input.GetKeyUp(KeyCode.R)){
-            toss(false);
-        }
-        if(Input.GetKeyUp(KeyCode.T)){
-            toss(true);
+        if(Config.USE_EGG){
+            if(Input.GetKeyUp(KeyCode.R)){
+                toss(false);
+            }
+            if(Input.GetKeyUp(KeyCode.T)){
+                toss(true);
+            }
         }
         if(Config.DEBUG){
             if(Input.GetKeyUp(KeyCode.C)){
@@ -290,8 +292,10 @@ function checkKeyboardInput(){
 
 function OnEnable(){
     if(networkView.isMine){
-        egg = team.getEgg();
-        eggScript = egg.GetComponent(EggScript);
+        if(Config.USE_EGG){
+            egg = team.getEgg();
+            eggScript = egg.GetComponent(EggScript);
+        }
 
         Gesture.onSwipeE += OnSwipe;
         Gesture.onLongTapE += OnLongTap;

@@ -46,7 +46,7 @@ function Update(){
         }
     }
     else if(inTransit){
-        // TODO - set local z position
+        // set local z position
         var progressPercent : float = Vector3.Distance(holder.getPosition(), transform.position) / Vector3.Distance(holder.getPosition(), target.getPosition());
         transform.position.z = Mathf.Lerp(holder.getPosition().z, target.getPosition().z, progressPercent);
     }
