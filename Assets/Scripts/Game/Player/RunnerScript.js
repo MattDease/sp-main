@@ -329,14 +329,11 @@ function OnSwipe(sw:SwipeInfo){
         networkView.RPC("jump", RPCMode.Others);
     }
 
-    // TODO find target player based on swipe direction and pass them to a toss function
-    // if(sw.direction.y > 0  && ((sw.angle > 0 && sw.angle < 45) || (sw.angle > 315 && sw.angle < 360)) )  {
-    //     Toss(sw.direction, sw.speed);
-    // }
-
-    // if(sw.direction.y < 0  && sw.angle > 135 && sw.angle < 235 ) {
-    //     Toss(sw.direction, sw.speed);
-    // }
+    if(Config.USE_EGG){
+        if(sw.direction.y >= 0  )  {
+            toss(true);
+        }
+    }
 }
 
 //called when a long tap event is ended
