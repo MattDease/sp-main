@@ -19,7 +19,7 @@ function Start() {
     menuScript = Menu.script;
     playerScript = menuScript.playerScript;
     playerName = playerScript.getName();
-    backgroundTexutre = Resources.Load("Textures/gui/background", Texture2D);
+    backgroundTexutre = Resources.Load("Textures/gui/mainMenuBackground", Texture2D);
     startBtnTexture = Resources.Load("Textures/gui/startBtn", Texture2D);
     menuSkin = Resources.Load("MenuSkin", GUISkin);
 
@@ -47,7 +47,7 @@ function OnGUI() {
     GUI.skin.textField.fontSize = menuScript.getScale() * bodyText;
 
     if (playerName) {
-        GUI.Label(Rect(0, 0, Screen.width, Screen.height + 60), "Welcome back, " + playerName, "PlainText");
+        GUI.Label(Rect(0, 0, Screen.width, Screen.height + Screen.height/7.8), "Welcome back, " + playerName, "PlainText");
 
         if (GUI.Button(Rect(0, 0, Screen.width, Screen.height), "", "FullImage")) {
             leaveFor(menus.main);

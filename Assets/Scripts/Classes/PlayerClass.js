@@ -2,16 +2,18 @@
 
 public class Player{
     private var name : String;
-    private var teamId : int;
+    private var teamId : int = 0;
     protected var team : Team;
     protected var id : String;
     private var networkPlayer : NetworkPlayer;
     public var gameObject : GameObject;
     public var script : MonoBehaviour;
-    public var selectedCharacter : int = 11;
-    public var isReady : boolean = false;
-    public function Player(name:String, networkPlayer:NetworkPlayer){
+    private var selectedCharacter : int = 11;
+    private var isReady : boolean = false;
+    public function Player(name:String, teamId:int, team:Team, networkPlayer:NetworkPlayer){
         this.name = name;
+        this.teamId = teamId;
+        this.team = team;
         this.networkPlayer = networkPlayer;
         this.id = networkPlayer.ToString();
     }
@@ -44,6 +46,22 @@ public class Player{
     public function getPosition() : Vector3 {
         return this.gameObject.transform.position;
     }
+
+    public function setCharacter(characterId : int){
+        this.selectedCharacter = characterId;
+    }
+
+    public function getCharacter() : int {
+        return this.selectedCharacter;
+    }
+
+    public function updateReadyStatus(status: boolean) {
+        this.isReady = status;
+    }
+
+    public function getReadyStatus() : boolean {
+        return this.isReady;
+    }
 }
 
 public class Runner extends Player{
@@ -52,9 +70,7 @@ public class Runner extends Player{
     private var alive : boolean = true;
 
     public function Runner(name:String, teamId:int, team:Team, networkPlayer:NetworkPlayer){
-        super(name, networkPlayer);
-        setTeam(teamId, team);
-
+        super(name, teamId, team, networkPlayer);
     }
 
     public function reset() {
@@ -87,7 +103,6 @@ public class Commander extends Player{
     // public var controller : CommanderScript;
 
     public function Commander(name:String, teamId:int, team:Team, networkPlayer:NetworkPlayer){
-        super(name, networkPlayer);
-        setTeam(teamId, team);
+        super(name, teamId, team, networkPlayer);
     }
 }

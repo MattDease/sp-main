@@ -69,6 +69,18 @@ public class Game {
         }
     }
 
+    public function getPlayerswoTeam() : Dictionary.<String, Player> {
+
+        var playersWOTeam : Dictionary.<String, Player> = new Dictionary.<String, Player>();
+
+        for(var player : Player in players.Values){
+            if(player.getTeamId() == 0)
+                playersWOTeam.Add(player.getId(), player);
+        }
+
+        return playersWOTeam;
+    }
+
     public function getPlayers() : Dictionary.<String,Player>{
         return players;
     }
@@ -99,25 +111,27 @@ public class Game {
     // and return [the team, the role].
     public function getNewPlayerTeamAndRole() : Array{
         //TODO implement fanciness
-        return [0, PlayerRole.Runner];
+        return [0, PlayerRole.Player];
     }
 
-    public function addPlayer (name : String, networkPlayer:NetworkPlayer): Player {
-        var player : Player = createPlayer(name, networkPlayer);
+    public function addPlayer (name : String, teamId: int, networkPlayer:NetworkPlayer): Player {
+        var player : Player = createPlayer(name, teamId, networkPlayer);
         players.Add(player.getId(), player);
         return player;
     }
 
-    public function setTeam (player: Player, teamId:int, team:Team, networkPlayer:NetworkPlayer) {
+    public function setTeam (player: Player, teamId:int, networkPlayer:NetworkPlayer) {
         player.setTeam(teamId, teams[teamId]);
         teams[teamId].addTeammate(player);
 
     }
 
     public function removeTeam (player: Player, teamId:int, networkPlayer:NetworkPlayer) {
-        player.setTeam(0, teams[0]);
+        player.setTeam(0, null);
         teams[teamId].removeTeammate(player.getId());
+        player.setCharacter(11);
     }
+
     public function addRunner(name:String, teamId:int, networkPlayer:NetworkPlayer) : Runner {
         var runner : Runner = createRunner(name, teamId, networkPlayer);
         players.Add(runner.getId(), runner);
@@ -130,6 +144,7 @@ public class Game {
         players.Add(commander.getId(), commander);
         return commander;
     }
+
 
     public function removePlayer(id : String){
         var player = players[id];
@@ -176,8 +191,8 @@ public class Game {
     public function destroy(){
 
     }
-    private function createPlayer (name:String, networkPlayer:NetworkPlayer):Player {
-        return new Player (name, networkPlayer);
+    private function createPlayer (name:String, teamId: int, networkPlayer:NetworkPlayer):Player {
+        return new Player(name, teamId, teams[teamId], networkPlayer);
     }
     private function createRunner(name:String, teamId:int, networkPlayer:NetworkPlayer) : Runner {
         return new Runner(name, teamId, teams[teamId], networkPlayer);

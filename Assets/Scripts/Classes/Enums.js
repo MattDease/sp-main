@@ -36,7 +36,8 @@ public enum TeamStatus {
 
 public enum PlayerRole{
     Runner,
-    Commander
+    Commander,
+    Player
 };
 
 // TODO enable/rethink when level generation is refactored

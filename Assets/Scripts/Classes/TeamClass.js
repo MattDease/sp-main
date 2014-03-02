@@ -9,6 +9,7 @@ public class Team{
     private var commander : Commander;
     private var runners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
     private var activeRunners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
+    private var selectedCharacters : List.<int> = new List.<int>();
 
     private var id : int;
     private var alive : boolean = true;
@@ -50,6 +51,18 @@ public class Team{
 
     public function getRunners(aliveOnly : boolean) : Dictionary.<String,Runner> {
         return aliveOnly ? activeRunners : runners;
+    }
+
+    public function updateSelectedCharacters(selectedChar : int ) {
+        selectedCharacters.Add(selectedChar);
+    }
+
+    public function removeSelectedCharacters(selectedChar : int ) {
+        selectedCharacters.Remove(selectedChar);
+    }
+
+    public function getSelectedCharacters() : List.<int> {
+        return selectedCharacters;
     }
 
     public function addTeammate(player : Player){

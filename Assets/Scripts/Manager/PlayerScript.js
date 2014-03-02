@@ -2,7 +2,7 @@
 
 private var playerName : String;
 private var timesPlayed : int = 0;
-private var self : Player;
+public var self : Player;
 private var selectedCharacter : String = "0";
 
 function Awake () {
