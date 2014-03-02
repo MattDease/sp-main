@@ -304,6 +304,7 @@ function OnEnable(){
         Gesture.onTouchUpE += OnRelease;
         Gesture.onMouse1DownE += OnTouch;
         Gesture.onMouse1UpE += OnRelease;
+        Gesture.onMultiTapE += OnTap;
     }
 }
 
@@ -315,14 +316,17 @@ function OnDisable(){
         Gesture.onTouchUpE -= OnRelease;
         Gesture.onMouse1DownE -= OnTouch;
         Gesture.onMouse1UpE -= OnRelease;
+        Gesture.onMultiTapE -= OnTap;
+
     }
 }
 
 function OnSwipe(sw:SwipeInfo){
     // TODO - rewrite
     //Figure out what direction we are swiping
-    if(sw.direction.x > 0  && sw.angle > 45 && sw.angle < 135 ) {
+    if(sw.direction.x >= 0) {
         jump();
+        networkView.RPC("jump", RPCMode.Others);
     }
 
     // TODO find target player based on swipe direction and pass them to a toss function
@@ -340,12 +344,18 @@ function OnLongTap(tap:Tap){
 
 }
 
-function OnTouch(pos:Vector2){
-    // FIXME triggering attack here is wrong
-    // attack();
+function OnTap(tap:Tap){
+    attack();
+    networkView.RPC("attack", RPCMode.Others);
 
-    // startWalk();
+}
+
+function OnTouch(pos:Vector2){
+    startWalk();
+    networkView.RPC("startWalk", RPCMode.Others);
+
 }
 function OnRelease(pos:Vector2){
-    // stopWalk();
+    stopWalk();
+    networkView.RPC("startWalk", RPCMode.Others);
 }
