@@ -34,10 +34,23 @@ public enum TeamStatus {
     TEMP_NO
 }
 
-public enum PlayerRole{
+public enum PlayerRole {
     Runner,
     Commander,
     Player
+};
+
+public enum EnemyType {
+    Beetle,
+    Worm,
+    Wasp,
+    Cardinal,
+};
+
+public enum SignType {
+    Runner,
+    Egg,
+    Commander
 };
 
 // TODO enable/rethink when level generation is refactored

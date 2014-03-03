@@ -219,7 +219,7 @@ function OnGUI() {
 
         showStatusBar = true;
         playerList = gameSetupScript.game.getPlayers();
-        playerwoTeamList = gameSetupScript.game.getPlayerswoTeam();
+        if (isVersus) playerwoTeamList = gameSetupScript.game.getPlayerswoTeam();
         teamList = gameSetupScript.game.getTeams();
 
 
@@ -291,7 +291,7 @@ function OnGUI() {
                             GUI.Label(Rect(guiHost[1].offset.x + layoutOffset, guiHost[1].offset.y  + Screen.height * 0.2 - 15, Screen.width * 0.15, Screen.height * 0.20), cPlayer.getName(), "WhiteText");
 
                             if (cPlayer.getReadyStatus()) {
-                                GUI.Button(Rect(guiHost[1].offset.x + layoutOffset + guiHost[1].textureWidth / 1.6, guiHost[1].offset.y - guiHost[1].textureHeight / 6, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
+                                GUI.Button(Rect(guiHost[1].offset.x + layoutOffset + guiHost[1].textureWidth /2 + 10 , guiHost[1].offset.y - guiHost[1].textureHeight /6 , menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
                             }
                         }
                          ++playerCount;
@@ -603,7 +603,7 @@ function OnGUI() {
                 }
 
                 if(isAlreadySelected) {
-                    GUI.Button(Rect(guiObject[1].offset.x + offsetWidth + guiObject[0].textureWidth/1.7, (guiObject[1].offset.y + offsetHeight) + (Screen.height * 0.20 / 1.4) -guiObject[0].textureHeight/1.1, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
+                    GUI.Button(Rect(guiObject[1].offset.x + offsetWidth + guiObject[0].textureWidth /2 + 10 , (guiObject[1].offset.y + offsetHeight) + (Screen.height * 0.20 / 1.4) -guiObject[0].textureHeight/1.1, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
                 }
 
                 GUI.Label(Rect(guiObject[1].offset.x + offsetWidth, (guiObject[1].offset.y + offsetHeight) + (Screen.height * 0.20 / 1.4), Screen.width * 0.15, Screen.height * 0.20), charactersNames[c], "WhiteText");

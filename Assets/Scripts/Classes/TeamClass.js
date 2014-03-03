@@ -10,6 +10,7 @@ public class Team{
     private var runners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
     private var activeRunners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
     private var selectedCharacters : List.<int> = new List.<int>();
+    private var egg : GameObject;
 
     private var id : int;
     private var alive : boolean = true;
@@ -41,6 +42,14 @@ public class Team{
         return this.id;
     }
 
+    public function setEgg(egg : GameObject){
+        this.egg = egg;
+    }
+
+    public function getEgg() : GameObject{
+        return this.egg;
+    }
+
     public function getTeammates() : Dictionary.<String,Player> {
         return teammates;
     }
@@ -65,15 +74,39 @@ public class Team{
         return selectedCharacters;
     }
 
+    public function getRandomRunner() : Runner {
+        var index : int = Random.Range(0, runners.Keys.Count);
+        var key : String = runners.Keys.ToArray()[index];
+        return runners['0'];
+    }
+
+    public function getClosestRunner(player : Player, forward : boolean) : Runner {
+        var position : Vector3 = player.gameObject.transform.position;
+        var closeRunner : Runner = null;
+        var distanceX : float;
+        for(var runner : Runner in runners.Values){
+            if(runner.getId() != player.getId()){
+                var dist : float = runner.getPosition().x - position.x;
+                if(!distanceX || Mathf.Abs(dist) < distanceX){
+                    if((dist >= 0 && forward) || (dist <= 0 && !forward)){
+                        closeRunner = runner;
+                        distanceX = dist;
+                    }
+                }
+            }
+        }
+        return closeRunner;
+    }
+
     public function addTeammate(player : Player){
 
-        // if(player.GetType() == Runner){
-        //     runners.Add(player.getId(), player as Runner);
-        //     activeRunners.Add(player.getId(), player as Runner);
-        // }
-        // if(player.GetType() == Commander){
-        //     commander = player as Commander;
-        // }
+        if(player.GetType() == Runner){
+            runners.Add(player.getId(), player as Runner);
+            activeRunners.Add(player.getId(), player as Runner);
+        }
+        if(player.GetType() == Commander){
+            commander = player as Commander;
+        }
 
         teammates.Add(player.getId(), player);
     }

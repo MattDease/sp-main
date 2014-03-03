@@ -1,0 +1,4 @@
+# Ignore all animation materials
+Materials.meta
+Materials/
+Avatar/Materials/

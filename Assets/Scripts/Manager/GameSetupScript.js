@@ -6,6 +6,7 @@ import System.Collections.Generic;
 //Set in editor
 public var playerPrefab : Transform;
 public var commanderPrefab : Transform;
+public var eggPrefab : Transform;
 
 public var game : Game;
 
@@ -64,7 +65,14 @@ function createCharacter(info : NetworkMessageInfo){
 @RPC
 function playerReady(){
     readyPlayerCount++;
-    if(readyPlayerCount == game.getPlayers().Count){
+    var players : Dictionary.<String, Player> = game.getPlayers();
+    if(readyPlayerCount == players.Count){
+        if(Config.USE_EGG){
+            // TODO support multiple teams
+            var holder = game.getTeam(0).getRandomRunner();
+            var egg : Transform = Network.Instantiate(eggPrefab, holder.getPosition(), Quaternion.identity, 0);
+            egg.networkView.RPC("setHolder", RPCMode.All, holder.getId());
+        }
         networkView.RPC("startCountDown", RPCMode.All);
     }
 }
@@ -228,24 +236,24 @@ function changeRole(id : String, newRole : String, netPlayer: NetworkPlayer, inf
     var playerRole : PlayerRole = System.Enum.Parse(PlayerRole, newRole);
     var player: Player;
 
-    if(playerRole == PlayerRole.Runner){
-//        player = game.createRunner(player.getName(), player.getTeamId(), netPlayer);
-    }
-    else if(playerRole == PlayerRole.Commander){
-        //player = Util.GetPlayerById(id) as Commander;
-    }
-
-    Debug.Log("---" + playerRole);
-
-    var playerList : Dictionary.<String,Player> = game.getPlayers();
-
-    if (playerList.ContainsKey(id)){
-        Debug.Log("Contains key");
-        playerList[id] = player;
-    }
-//     else {
-//         playerList.Add(id, player);
+//     if(playerRole == PlayerRole.Runner){
+// //        player = game.createRunner(player.getName(), player.getTeamId(), netPlayer);
 //     }
+//     else if(playerRole == PlayerRole.Commander){
+//         //player = Util.GetPlayerById(id) as Commander;
+//     }
+
+//     Debug.Log("---" + playerRole);
+
+//     var playerList : Dictionary.<String,Player> = game.getPlayers();
+
+//     if (playerList.ContainsKey(id)){
+//         Debug.Log("Contains key");
+//         playerList[id] = player;
+//     }
+// //     else {
+// //         playerList.Add(id, player);
+// //     }
  }
 
 // Server only

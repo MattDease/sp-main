@@ -16,7 +16,7 @@ public class Game {
     private var gameSetupScript : GameSetupScript;
     private var difficultyScript : DifficultyScript;
 
-    private var isVersus : boolean = true;
+    private var isVersus : boolean = false;
 
     public function Game(){
         gameManager = GameObject.Find("/GameManager");
@@ -28,9 +28,9 @@ public class Game {
         }
 
         if(isVersus){
-            teams.Add(new Team(0));
-            teams.Add(new Team(1));
-            teams.Add(new Team(2));
+            // teams.Add(new Team(0));
+            // teams.Add(new Team(1));
+            // teams.Add(new Team(2));
 
         } else {
             teams.Add(new Team(teams.Count));
@@ -111,12 +111,13 @@ public class Game {
     // and return [the team, the role].
     public function getNewPlayerTeamAndRole() : Array{
         //TODO implement fanciness
-        return [0, PlayerRole.Player];
+        return [0, PlayerRole.Runner];
     }
 
     public function addPlayer (name : String, teamId: int, networkPlayer:NetworkPlayer): Player {
         var player : Player = createPlayer(name, teamId, networkPlayer);
         players.Add(player.getId(), player);
+        this.setTeam(player, teamId, networkPlayer);
         return player;
     }
 
@@ -135,6 +136,7 @@ public class Game {
     public function addRunner(name:String, teamId:int, networkPlayer:NetworkPlayer) : Runner {
         var runner : Runner = createRunner(name, teamId, networkPlayer);
         players.Add(runner.getId(), runner);
+        this.setTeam(runner, teamId, networkPlayer);
         return runner;
     }
 
@@ -142,6 +144,7 @@ public class Game {
     public function addCommander(name:String, teamId:int, networkPlayer:NetworkPlayer) : Commander {
         var commander : Commander = createCommander(name, teamId, networkPlayer);
         players.Add(commander.getId(), commander);
+        this.setTeam(commander, teamId, networkPlayer);
         return commander;
     }
 
@@ -180,6 +183,7 @@ public class Game {
     // Checks for any errors in the game setup
     public function isValid() : boolean {
         for(var team : Team in teams){
+
             if(team.isValid() != TeamStatus.Valid){
                 return false;
             }
