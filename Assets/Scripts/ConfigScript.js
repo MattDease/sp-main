@@ -34,6 +34,8 @@ public static class Config{
     // Distance in x-axis between runner and cardinal's end point that will
     // trigger the cardinal to attack
     public var CARDINAL_TRIGGER_DISTANCE : float = 4;
+    // Relative to the level segment, the commander's offset in the z-axis, + is away from the camera
+    public var COMMANDER_DEPTH_OFFSET : float = -0.5;
 
     //// NETWORKING
     // ID that all hosts will use to register their game with the master server.
