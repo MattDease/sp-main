@@ -67,7 +67,10 @@ function Update(){
     else if(speed){
         var pt : float = Mathf.PingPong(Time.time * speed, 1);
         var newPosition : Vector3 = Vector3.Lerp(start, end, pt);
-        transform.rotation.y = (newPosition.x - transform.position.x > 0) ? 0 : 180;
+        var rotationY : float = (newPosition.x - transform.position.x > 0) ? 0 : 180;
+        if(rotationY != transform.rotation.y){
+            networkView.RPC("rotate", RPCMode.All, rotationY);
+        }
         transform.position = newPosition;
     }
 }
@@ -85,6 +88,11 @@ function notifyKill(){
             networkView.RPC("kill", RPCMode.Server);
         }
     }
+}
+
+@RPC
+function rotate(degrees : float){
+    transform.rotation.y = degrees;
 }
 
 @RPC

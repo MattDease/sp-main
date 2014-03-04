@@ -194,13 +194,14 @@ function OnTriggerEnter(other : Collider){
     var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
     var transState : AnimatorTransitionInfo = animator.GetAnimatorTransitionInfo(0);
     if(other.gameObject.CompareTag("enemy")){
+        var enemyScript : EnemyScript = other.gameObject.GetComponent(EnemyScript);
         if(animState.IsName("Base Layer.AttackRight") || transState.IsUserName("startAttack") || transState.IsUserName("stopAttack")){
-            other.gameObject.GetComponent(EnemyScript).notifyKill();
+            enemyScript.notifyKill();
         }
-        else if(networkView.isMine){
+        else if(networkView.isMine && enemyScript.isAlive()){
             GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
             player.kill();
-            other.gameObject.GetComponent(EnemyScript).notifyAttack();
+            enemyScript.notifyAttack();
         }
     }
     else if(other.gameObject.CompareTag("coin")){
