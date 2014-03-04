@@ -19,7 +19,7 @@ private var playerScript : PlayerScript;
 private var stateScript : StateScript;
 private var gameSetupScript : GameSetupScript;
 
-private var segments : List.<GameObject> = new List.<GameObject>();
+private var segments : List.< List.<GameObject> > = new List.< List.<GameObject> >();
 
 private var waitingForSegment : boolean = false;
 
@@ -68,24 +68,32 @@ function addSegment(){
 }
 
 function removeSegment(){
-    var segment : GameObject = segments[0];
-    firstSegmentEnd += segment.Find("model/main").GetComponent(MeshFilter).mesh.bounds.size.x;
-    Network.Destroy(segment);
+    var objects : List.<GameObject> = segments[0];
+    var levelSegment : GameObject = objects[0];
+    firstSegmentEnd += levelSegment.Find("model/main").GetComponent(MeshFilter).mesh.bounds.size.x;
+    while(objects.Count){
+        Network.Destroy(objects[0]);
+        objects.RemoveAt(0);
+    }
     segments.RemoveAt(0);
-
 }
 
 function onAddSegment(segment : GameObject, enemies : List.<Enemy>, coins : List.<Transform>){
     var segmentWidth : float = segment.Find("model/main").GetComponent(MeshFilter).mesh.bounds.size.x;
+    var objects : List.<GameObject> = new List.<GameObject>();
+    objects.Add(segment);
 
+    var go : GameObject;
     for(var i : int = 0; i < enemies.Count; i++){
         var enemy : Enemy = enemies[i];
-        var go : GameObject = Network.Instantiate(enemyPrefabs[enemy.prefabIndex], enemy.end.position, Quaternion.identity, 0);
+        go = Network.Instantiate(enemyPrefabs[enemy.prefabIndex], enemy.end.position, Quaternion.identity, 0);
         go.GetComponent(EnemyScript).init(enemy.start.position, enemy.end.position);
+        objects.Add(go);
     }
 
     for(var j : int = 0; j < coins.Count; j++){
-        Network.Instantiate(coinPrefab, coins[j].position, Quaternion.identity, 0);
+        go = Network.Instantiate(coinPrefab, coins[j].position, Quaternion.identity, 0);
+        objects.Add(go);
     }
 
     if(segments.Count == 0){
@@ -98,5 +106,5 @@ function onAddSegment(segment : GameObject, enemies : List.<Enemy>, coins : List
     }
 
     waitingForSegment = false;
-    segments.Add(segment);
+    segments.Add(objects);
 }
