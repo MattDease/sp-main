@@ -12,7 +12,9 @@ private var team : Team;
 private var camContainer : GameObject;
 
 private var touched : boolean = false;
-private var plane : Plane = new Plane(Vector3(0, 1, -2), Vector3(1, 1, -2), Vector3(1, 0, -2));
+private var plane : Plane = new Plane(Vector3(0, 1, Config.COMMANDER_DEPTH_OFFSET),
+                                      Vector3(1, 1, Config.COMMANDER_DEPTH_OFFSET),
+                                      Vector3(1, 0, Config.COMMANDER_DEPTH_OFFSET));
 private var targetPosition : Vector3;
 private var velocity : Vector3 = Vector3.zero;
 private var offsetX : float = 0;

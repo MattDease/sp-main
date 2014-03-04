@@ -2,15 +2,30 @@
 
 public var min : Vector2;
 public var max : Vector2;
+public var gravity : boolean = false;
 
 private var initialPosition : Vector2;
+private var releaseThreshold : int = 0.2;
+private var lastPositionTime : float = 0;
+private var gravitySpeed : float = 3;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     initialPosition = gameObject.transform.position;
 }
 
+function Update(){
+    if(networkView.isMine){
+        if(gravity && transform.position.y > initialPosition.y + min.y && Time.time - lastPositionTime > releaseThreshold){
+            var target : Vector3 = transform.position;
+            target.y = min.y;
+            syncPosition(Vector3.MoveTowards(transform.position, target, gravitySpeed * Time.deltaTime));
+        }
+    }
+}
+
 function notifyPosition(position : Vector3){
     var diff : Vector2 = position - initialPosition;
+    lastPositionTime = Time.time;
     if(gameObject.CompareTag("moveableX")){
         if(diff.x < min.x){
             position.x = initialPosition.x + min.x;
@@ -28,12 +43,16 @@ function notifyPosition(position : Vector3){
         }
     }
     if(position != gameObject.transform.position){
-        if(Network.isServer){
-            setPosition(position);
-        }
-        else{
-            networkView.RPC("setPosition", RPCMode.Server, position);
-        }
+        syncPosition(position);
+    }
+}
+
+function syncPosition(position : Vector3){
+    if(Network.isServer){
+        setPosition(position);
+    }
+    else{
+        networkView.RPC("setPosition", RPCMode.Server, position);
     }
 }
 

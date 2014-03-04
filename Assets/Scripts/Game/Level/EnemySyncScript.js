@@ -7,25 +7,21 @@ private var syncStartPosition : Vector3 = Vector3.zero;
 private var syncEndPosition : Vector3 = Vector3.zero;
 
 function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo) {
-    var posX : float = 0;
-    var posY : float = 0;
+    var position : Vector3 = Vector3.zero;
     if (stream.isWriting) {
-        posX = transform.position.x;
-        posY = transform.position.y;
+        position = transform.position;
 
-        stream.Serialize(posX);
-        stream.Serialize(posY);
+        stream.Serialize(position);
     }
     else {
-        stream.Serialize(posX);
-        stream.Serialize(posY);
+        stream.Serialize(position);
 
         syncTime = 0;
         syncDelay = Time.time - lastSynchronizationTime;
         lastSynchronizationTime = Time.time;
 
         syncStartPosition = transform.position;
-        syncEndPosition = Vector3(posX, posY, transform.position.z);
+        syncEndPosition = position;
     }
 }
 
