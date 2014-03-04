@@ -27,6 +27,8 @@ function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo) {
         syncDelay = Time.time - lastSynchronizationTime;
         lastSynchronizationTime = Time.time;
 
+        rigidbody.velocity = velocity;
+
         syncStartPosition = transform.position;
         syncEndPosition = Vector3(posX, posY, transform.position.z) + velocity * syncDelay;
     }

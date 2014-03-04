@@ -3,9 +3,9 @@
 private var game : Game;
 private var team : Team;
 
-private var holder : Runner;
-private var target : Runner;
-private var inTransit : boolean = false;
+public var inTransit : boolean = false;
+public var holder : Runner;
+public var target : Runner;
 
 private var temp_speed : float = 4;
 
@@ -58,6 +58,7 @@ function setHolder(holderId : String){
     this.holder.controller.grab();
     transform.position = this.holder.getPosition();
     inTransit = false;
+    GetComponent(EggSyncScript).enabled = true;
 }
 
 @RPC
