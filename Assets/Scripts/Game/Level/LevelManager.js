@@ -3,8 +3,6 @@
 import System.Collections.Generic;
 
 // General TODOs
-// - remove old segments
-// - consider position of all active players when creating/destroying segments
 // - reimplement difficulty functionality
 
 // Set in editor
@@ -24,7 +22,7 @@ private var segments : List.< List.<GameObject> > = new List.< List.<GameObject>
 private var waitingForSegment : boolean = false;
 
 private var segmentOffset : float = 0.5;
-private var newSegmentThreshold : float = 8;
+private var newSegmentThreshold : float = 50;
 private var lastSegmentEnd : float;
 private var firstSegmentEnd : float;
 
