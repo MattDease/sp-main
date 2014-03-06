@@ -35,8 +35,6 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player.script = this;
     player.controller = this;
 
-    player.gameObject.transform.position.z = runnerWidth/2;
-
     if(networkView.isMine){
         camContainer = Instantiate(cameraPrefab, Vector3.zero,  Quaternion.identity);
 
@@ -49,11 +47,12 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
         runningPlane = player.getPosition();
     }
     else{
+        team.runnerCreationCount++;
+
         // Change layer so collisions with local player is ignored
         player.gameObject.layer = LayerMask.NameToLayer("Remote Players");
 
-        // TODO Fix. Assumes own player is always the first to be instantiated
-        player.gameObject.transform.position.z += team.getRunners(false).Count * runnerWidth;
+        player.gameObject.transform.position.z += team.runnerCreationCount * Config.RUNNER_LANE_WIDTH;
     }
 }
 

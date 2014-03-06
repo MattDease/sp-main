@@ -36,6 +36,10 @@ public static class Config{
     public var CARDINAL_TRIGGER_DISTANCE : float = 4;
     // Relative to the level segment, the commander's offset in the z-axis, + is away from the camera
     public var COMMANDER_DEPTH_OFFSET : float = -0.5;
+    // Relative to the world origin, the opposing team's offset in the z-axis, + is away from the camera
+    public var TEAM_DEPTH_OFFSET : float = 4;
+    // Spacing in the z-axis between runners on the same team
+    public var RUNNER_LANE_WIDTH : float = 0.6;
 
     //// NETWORKING
     // ID that all hosts will use to register their game with the master server.
