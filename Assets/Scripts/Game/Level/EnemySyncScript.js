@@ -6,6 +6,11 @@ private var syncTime : float = 0;
 private var syncStartPosition : Vector3 = Vector3.zero;
 private var syncEndPosition : Vector3 = Vector3.zero;
 
+function Start(){
+    syncStartPosition = transform.position;
+    syncEndPosition = transform.position;
+}
+
 function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo) {
     var position : Vector3 = Vector3.zero;
     if (stream.isWriting) {
