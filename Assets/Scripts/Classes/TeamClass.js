@@ -5,6 +5,8 @@ import System.Collections.Generic;
 
 // TODO implement this
 public class Team{
+    public var runnerCreationCount : int = 0;
+
     private var teammates : Dictionary.<String,Player> = new Dictionary.<String,Player>();
     private var commander : Commander;
     private var runners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
