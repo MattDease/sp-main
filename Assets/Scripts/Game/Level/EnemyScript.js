@@ -13,13 +13,24 @@ private var startTime : float;
 private var start : Vector3;
 private var end : Vector3;
 private var idle : boolean = false;
+private var player : Player;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     alive = true;
-    game = GameObject.Find("/GameManager").GetComponent(GameSetupScript).game;
+    var gameManager : GameObject =  GameObject.Find("/GameManager");
+    player = gameManager.GetComponent(PlayerScript).getSelf();
+    game = gameManager.GetComponent(GameSetupScript).game;
 
     model = gameObject.transform.Find("model").gameObject;
     animator = model.GetComponent(Animator);
+}
+
+@RPC
+function initEnemy(teamId : int, hostTeam : boolean){
+    if(!hostTeam){
+        transform.position.z -= Config.TEAM_DEPTH_OFFSET;
+    }
+    transform.position.z += (teamId == player.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
 }
 
 function init(pt1 : Vector3, pt2 : Vector3){

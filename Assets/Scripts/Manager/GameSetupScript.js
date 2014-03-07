@@ -46,11 +46,14 @@ function onLevelReady(){
 
 @RPC
 function createCharacter(info : NetworkMessageInfo){
+    var go : Transform;
     if(playerScript.getSelf().GetType() == Runner){
-        Network.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, 0);
+        go = Network.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, 0);
+        go.networkView.RPC("initRunner", RPCMode.All, playerScript.getSelf().getTeamId());
     }
     else{
-        Network.Instantiate(commanderPrefab, Vector3(0, 0, Config.COMMANDER_DEPTH_OFFSET), Quaternion.identity, 0);
+        go = Network.Instantiate(commanderPrefab, Vector3(0, 0, Config.COMMANDER_DEPTH_OFFSET), Quaternion.identity, 0);
+        go.networkView.RPC("initCommander", RPCMode.All, playerScript.getSelf().getTeamId());
     }
     if(Network.isServer){
         // Server can't send server RPC
@@ -106,8 +109,11 @@ function startGame(){
 function OnNetworkLoadedLevel(){
     if(game.isValid()){
         levelManager = GameObject.Find("GameScripts").GetComponent(LevelManager);
+
         if(Network.isServer){
-            levelManager.addFirstSegment();
+            for(var team : Team in game.getTeams()){
+                levelManager.addFirstSegment(team.getId());
+            }
         }
     }
     else{
