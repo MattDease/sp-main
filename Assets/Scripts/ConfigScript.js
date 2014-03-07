@@ -37,7 +37,7 @@ public static class Config{
     // Relative to the level segment, the commander's offset in the z-axis, + is away from the camera
     public var COMMANDER_DEPTH_OFFSET : float = -0.5;
     // Relative to the world origin, the opposing team's offset in the z-axis, + is away from the camera
-    public var TEAM_DEPTH_OFFSET : float = 4;
+    public var TEAM_DEPTH_OFFSET : float = 8;
     // Spacing in the z-axis between runners on the same team
     public var RUNNER_LANE_WIDTH : float = 0.6;
 

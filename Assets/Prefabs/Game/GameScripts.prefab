@@ -40,7 +40,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   segmentPrefabs:
   - {fileID: 100096, guid: 69a09460c704a934ba12f383ba755645, type: 2}
-  - {fileID: 100090, guid: df1b6ae36bc03844798902cfa5eff844, type: 2}
   enemyPrefabs:
   - {fileID: 100122, guid: 48a50ecdab9835b41b1e05028c318ded, type: 2}
   - {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
