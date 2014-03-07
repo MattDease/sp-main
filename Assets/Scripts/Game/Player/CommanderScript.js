@@ -43,6 +43,11 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
     }
 }
 
+@RPC
+function initCommander(teamId : int){
+    transform.position.z += (teamId == player.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
+}
+
 // Do physics changes here
 function FixedUpdate(){
     if(networkView.isMine){
@@ -60,7 +65,7 @@ function Update(){
             gameObject.transform.position = Vector3.SmoothDamp(player.getPosition(), targetPosition, velocity, 0.07);
 
             var hit : RaycastHit;
-            if (Physics.Raycast(gameObject.transform.position, Vector3.forward, hit)){
+            if (Physics.Raycast(gameObject.transform.position, Vector3.forward, hit, 4)){
                 if(hit.collider.gameObject.CompareTag("enemy")){
                     hit.collider.gameObject.GetComponent(EnemyScript).notifyKill();
                     attack();
