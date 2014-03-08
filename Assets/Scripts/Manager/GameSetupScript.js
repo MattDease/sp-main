@@ -4,13 +4,11 @@
 import System.Collections.Generic;
 
 //Set in editor
-public var playerPrefab : Transform;
-public var commanderPrefab : Transform;
+public var characterPrefabs : List.<Transform>;
 public var eggPrefab : Transform;
 
 public var game : Game;
 
-public var localPlayer : Player;
 public var playerList : Dictionary.<String,Player> = new Dictionary.<String,Player>();
 
 // Game Manager
@@ -46,14 +44,15 @@ function onLevelReady(){
 
 @RPC
 function createCharacter(info : NetworkMessageInfo){
+    var player : Player = playerScript.getSelf();
     var go : Transform;
     var me : Player = playerScript.getSelf();
     if(me.GetType() == Runner){
-        go = Network.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, 0);
+        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3.zero, Quaternion.identity, 0);
         go.networkView.RPC("initRunner", RPCMode.All, me.getId(), me.getTeamId());
     }
     else{
-        go = Network.Instantiate(commanderPrefab, Vector3(0, 0, Config.COMMANDER_DEPTH_OFFSET), Quaternion.identity, 0);
+        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3(0, 0, Config.COMMANDER_DEPTH_OFFSET), Quaternion.identity, 0);
         go.networkView.RPC("initCommander", RPCMode.All, me.getId(), me.getTeamId());
     }
     if(Network.isServer){

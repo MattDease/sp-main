@@ -41,6 +41,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c83495a810d13de43aa887c9249098a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  self:
+    gameObject: {fileID: 0}
+    script: {fileID: 0}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -63,13 +66,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ebb4ab5232594843a1a57b09dfe4302, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 400088, guid: a814a5e007fd94fd990aebcc9da04c63, type: 2}
-  commanderPrefab: {fileID: 400000, guid: 9c157f8a1bd11434d9b9374a1b7d0844, type: 2}
+  characterPrefabs:
+  - {fileID: 400090, guid: e7ae7c479b3b24675ae704207bcb0d39, type: 2}
+  - {fileID: 400090, guid: e7ae7c479b3b24675ae704207bcb0d39, type: 2}
+  - {fileID: 400088, guid: c092d2e03d221456da0d9f037f083687, type: 2}
+  - {fileID: 400090, guid: 8dee170fcc67141abbecc351c3145188, type: 2}
+  - {fileID: 400088, guid: f24dc53ff33854962b95d03ca0518f05, type: 2}
+  - {fileID: 400088, guid: f24dc53ff33854962b95d03ca0518f05, type: 2}
+  - {fileID: 400088, guid: a814a5e007fd94fd990aebcc9da04c63, type: 2}
+  - {fileID: 400088, guid: a814a5e007fd94fd990aebcc9da04c63, type: 2}
+  - {fileID: 400088, guid: a814a5e007fd94fd990aebcc9da04c63, type: 2}
+  - {fileID: 400000, guid: 9c157f8a1bd11434d9b9374a1b7d0844, type: 2}
+  - {fileID: 400104, guid: 9e243f64c2db7498ba10114eb87daa74, type: 2}
+  - {fileID: 400104, guid: 9e243f64c2db7498ba10114eb87daa74, type: 2}
   eggPrefab: {fileID: 400002, guid: debd9c21e3e974b07af00bbbb355176f, type: 2}
-  localPlayer:
-    gameObject: {fileID: 0}
-    script: {fileID: 0}
-    selectedCharacter: 0
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1
