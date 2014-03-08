@@ -179,12 +179,14 @@ public class Game {
         var runner : Runner = createRunner(name, teamId, netPlayer);
         players[playerId] = runner;
         playerScript.setSelf(runner);
+        this.setTeam(runner, teamId, netPlayer);
         return runner;
     }
 
     public function changeToCommander(playerId : String, name:String, teamId:int, netPlayer :NetworkPlayer) : Commander{
         var commander : Commander = createCommander(name, teamId, netPlayer);
         players[playerId] = commander;
+        this.setTeam(commander, teamId, netPlayer);
         playerScript.setSelf(commander);
         return commander;
     }
@@ -192,6 +194,7 @@ public class Game {
     public function changeToPlayer(playerId : String, name:String, teamId:int, netPlayer :NetworkPlayer) : Player{
         var player : Player = createPlayer(name, teamId, netPlayer);
         players[playerId] = player;
+        this.setTeam(player, teamId, netPlayer);
         playerScript.setSelf(player);
         return player;
     }
