@@ -9,6 +9,7 @@ public class Team{
     private var commander : Commander;
     private var runners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
     private var activeRunners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
+    private var selectedCharacters : List.<int> = new List.<int>();
     private var egg : GameObject;
 
     private var id : int;
@@ -61,6 +62,18 @@ public class Team{
         return aliveOnly ? activeRunners : runners;
     }
 
+    public function updateSelectedCharacters(selectedChar : int ) {
+        selectedCharacters.Add(selectedChar);
+    }
+
+    public function removeSelectedCharacters(selectedChar : int ) {
+        selectedCharacters.Remove(selectedChar);
+    }
+
+    public function getSelectedCharacters() : List.<int> {
+        return selectedCharacters;
+    }
+
     public function getRandomRunner() : Runner {
         var index : int = Random.Range(0, runners.Keys.Count);
         var key : String = runners.Keys.ToArray()[index];
@@ -86,6 +99,7 @@ public class Team{
     }
 
     public function addTeammate(player : Player){
+
         if(player.GetType() == Runner){
             runners.Add(player.getId(), player as Runner);
             activeRunners.Add(player.getId(), player as Runner);
@@ -93,6 +107,7 @@ public class Team{
         if(player.GetType() == Commander){
             commander = player as Commander;
         }
+
         teammates.Add(player.getId(), player);
     }
 

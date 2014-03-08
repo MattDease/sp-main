@@ -168,12 +168,15 @@ function registerPlayer(name : String, netPlayer : NetworkPlayer){
 function addPlayer(name : String, teamId : int, role : String, netPlayer : NetworkPlayer, info : NetworkMessageInfo){
     var playerRole : PlayerRole = System.Enum.Parse(PlayerRole, role);
     var newPlayer : Player;
+
     if(playerRole == PlayerRole.Runner){
         newPlayer = game.addRunner(name, teamId, netPlayer);
     }
     else if(playerRole == PlayerRole.Commander){
         newPlayer = game.addCommander(name, teamId, netPlayer);
     }
+    else newPlayer = game.addPlayer(name, teamId,  netPlayer);
+
 
     if(Util.IsNetworkedPlayerMe(newPlayer)){
         playerScript.setSelf(newPlayer);
@@ -185,6 +188,67 @@ function killRunner(id : String, info : NetworkMessageInfo){
     var runner : Runner = Util.GetPlayerById(id) as Runner;
     runner.kill();
 }
+
+@RPC
+function updateReadyStatus(id : String, isReady : boolean, info : NetworkMessageInfo){
+    var player : Player = Util.GetPlayerById(id);
+    player.updateReadyStatus(isReady);
+}
+
+@RPC
+function updateCharacter(id : String, selectedChar : int, netPlayer : NetworkPlayer, info : NetworkMessageInfo){
+    var player : Player = Util.GetPlayerById(id) as Player;
+
+    if(player.getCharacter() != 11)
+        game.getTeam(player.getTeamId()).removeSelectedCharacters(player.getCharacter());
+
+    if(selectedChar != 11) game.getTeam(player.getTeamId()).updateSelectedCharacters(selectedChar);
+
+    player.setCharacter(selectedChar);
+
+    if(player.getCharacter() > 9 && selectedChar < 9){
+        networkView.RPC("changeRole", RPCMode.AllBuffered, id, PlayerRole.Runner.ToString(), player.getTeamId(), netPlayer);
+    } else if(player.getCharacter() < 9 && selectedChar > 9) {
+//        Commander
+        networkView.RPC("changeRole", RPCMode.AllBuffered, id, PlayerRole.Commander.ToString(), player.getTeamId(), netPlayer);
+    }
+
+}
+
+@RPC
+function setTeam(id : String, teamId: int, netPlayer : NetworkPlayer, info : NetworkMessageInfo ) {
+    var player : Player = Util.GetPlayerById(id);
+    game.setTeam(player, teamId, netPlayer);
+}
+@RPC
+function removeTeam(id : String, teamId: int, netPlayer : NetworkPlayer, info : NetworkMessageInfo ) {
+    var player : Player = Util.GetPlayerById(id);
+    game.getTeam(player.getTeamId()).removeSelectedCharacters(player.getCharacter());
+    game.removeTeam(player, teamId, netPlayer);
+    networkView.RPC("updateCharacter", RPCMode.AllBuffered, id, 11, netPlayer);
+    networkView.RPC("updateReadyStatus", RPCMode.AllBuffered, id, false);
+    networkView.RPC("changeRole", RPCMode.AllBuffered, id, PlayerRole.Player.ToString(), player.getTeamId(), netPlayer);
+}
+
+@RPC
+function changeRole(id : String, newRole : String, teamId:int, netPlayer: NetworkPlayer, info : NetworkMessageInfo){
+
+    var playerRole : PlayerRole = System.Enum.Parse(PlayerRole, newRole);
+    var player : Player;
+
+    if(playerRole == PlayerRole.Runner){
+        player = game.changeToRunner(id, name, teamId, netPlayer);
+
+    }
+    else if(playerRole == PlayerRole.Commander){
+        player = game.changeToCommander(id, name, teamId, netPlayer);
+    }
+
+    else if(playerRole == PlayerRole.Player){
+       // player = game.changeToPlayer(id, name, teamId, netPlayer);
+    }
+
+ }
 
 // Server only
 function OnPlayerDisconnected(netPlayer: NetworkPlayer){
