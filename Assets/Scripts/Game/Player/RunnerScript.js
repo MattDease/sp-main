@@ -304,7 +304,7 @@ function OnEnable(){
         Gesture.onTouchUpE += OnRelease;
         Gesture.onMouse1DownE += OnTouch;
         Gesture.onMouse1UpE += OnRelease;
-        Gesture.onMultiTapE += OnTap;
+        Gesture.onShortTapE += OnTap;
     }
 }
 
@@ -316,7 +316,7 @@ function OnDisable(){
         Gesture.onTouchUpE -= OnRelease;
         Gesture.onMouse1DownE -= OnTouch;
         Gesture.onMouse1UpE -= OnRelease;
-        Gesture.onMultiTapE -= OnTap;
+        Gesture.onShortTapE -= OnTap;
 
     }
 }
@@ -324,8 +324,9 @@ function OnDisable(){
 function OnSwipe(sw:SwipeInfo){
     // TODO - rewrite
     //Figure out what direction we are swiping
-    if(sw.direction.x >= 0) {
+    if(sw.direction.x >= 0 && sw.angle < 180) {
         jump();
+        Debug.Log(sw.direction.x + "---" + sw.angle);
         networkView.RPC("jump", RPCMode.Others);
     }
 
@@ -341,7 +342,7 @@ function OnLongTap(tap:Tap){
 
 }
 
-function OnTap(tap:Tap){
+function OnTap(tap: Vector2){
     attack();
     networkView.RPC("attack", RPCMode.Others);
 
@@ -354,5 +355,5 @@ function OnTouch(pos:Vector2){
 }
 function OnRelease(pos:Vector2){
     stopWalk();
-    networkView.RPC("startWalk", RPCMode.Others);
+    networkView.RPC("stopWalk", RPCMode.Others);
 }

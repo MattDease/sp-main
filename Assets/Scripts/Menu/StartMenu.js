@@ -53,7 +53,7 @@ function OnGUI() {
             leaveFor(menus.main);
         }
     } else {
-        guiLogin[0].textureWidth = menuScript.getScale() * 400;
+        guiLogin[0].textureWidth = Screen.width/3;
         guiLogin[0].textureHeight = menuScript.getScale() * 100;
         guiLogin[0].setLocation(Points.Center);
 
@@ -61,10 +61,15 @@ function OnGUI() {
         guiLogin[1].textureHeight = 100;
         guiLogin[1].setLocation(Points.Center);
 
+        GUI.BeginGroup (new Rect (0, 0, Screen.width, Screen.height));
 
-        GUI.Label(Rect(guiLogin[1].offset.x - Screen.width / 7, guiLogin[1].offset.y + 20, 300, 100), "Enter your name:", "PlainText");
-        newName = GUI.TextField(Rect(guiLogin[0].offset.x + Screen.width / 7, guiLogin[0].offset.y + 20, menuScript.getScale() * 400, menuScript.getScale() * 100), newName, 20);
+
+        GUI.EndGroup ();
+
+        GUI.Label(Rect(guiLogin[0].offset.x - guiLogin[0].textureWidth/2, guiLogin[0].offset.y + guiLogin[0].offset.y/4 ,  guiLogin[0].textureWidth, guiLogin[0].textureHeight), "Enter your name:", "PlainText");
+        newName = GUI.TextField(Rect(guiLogin[0].offset.x + guiLogin[0].textureWidth/2, guiLogin[0].offset.y + guiLogin[0].offset.y /4, guiLogin[0].textureWidth, menuScript.getScale() * 100), newName, 20);
         if (newName && GUI.Button(Rect(0, 0, Screen.width, Screen.height), "", "FullImage")) {
+
             playerName = newName;
             playerScript.setName(newName);
             leaveFor(menus.main);

@@ -2,7 +2,7 @@
 
 public class Player{
     private var name : String;
-    private var teamId : int = 0;
+    private var teamId : int = 100;
     protected var team : Team;
     protected var id : String;
     private var networkPlayer : NetworkPlayer;

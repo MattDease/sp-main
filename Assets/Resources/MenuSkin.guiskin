@@ -295,7 +295,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 0}
-    m_FontSize: 16
+    m_FontSize: 22
     m_FontStyle: 0
     m_Alignment: 3
     m_WordWrap: 0
@@ -1239,7 +1239,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: 9e7d3b63646cf466ea89af3abd745f9e, type: 3}
-    m_FontSize: 89
+    m_FontSize: 122
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 0
@@ -1297,7 +1297,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: fead603e66f6646dc990de8bef04c3c5, type: 3}
-    m_FontSize: 13
+    m_FontSize: 18
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 0
@@ -1355,7 +1355,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: fead603e66f6646dc990de8bef04c3c5, type: 3}
-    m_FontSize: 13
+    m_FontSize: 18
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 0
@@ -1413,7 +1413,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: fead603e66f6646dc990de8bef04c3c5, type: 3}
-    m_FontSize: 13
+    m_FontSize: 18
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 0
@@ -1529,7 +1529,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: 0c40687b12b2047759d33c731e61bc97, type: 3}
-    m_FontSize: 13
+    m_FontSize: 15
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 1
@@ -1587,7 +1587,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: 0c40687b12b2047759d33c731e61bc97, type: 3}
-    m_FontSize: 16
+    m_FontSize: 22
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 1
@@ -1645,7 +1645,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: 55050354259354b118fb2461766c0983, type: 3}
-    m_FontSize: 19
+    m_FontSize: 27
     m_FontStyle: 1
     m_Alignment: 4
     m_WordWrap: 1
@@ -1761,7 +1761,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: 0c40687b12b2047759d33c731e61bc97, type: 3}
-    m_FontSize: 13
+    m_FontSize: 18
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 1
@@ -1819,7 +1819,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: fead603e66f6646dc990de8bef04c3c5, type: 3}
-    m_FontSize: 13
+    m_FontSize: 18
     m_FontStyle: 1
     m_Alignment: 4
     m_WordWrap: 1

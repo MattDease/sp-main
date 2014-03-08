@@ -191,28 +191,27 @@ function killRunner(id : String, info : NetworkMessageInfo){
 
 @RPC
 function updateReadyStatus(id : String, isReady : boolean, info : NetworkMessageInfo){
-    var runner : Runner = Util.GetPlayerById(id) as Runner;
-    runner.updateReadyStatus(isReady);
+    var player : Player = Util.GetPlayerById(id);
+    player.updateReadyStatus(isReady);
 }
 
 @RPC
 function updateCharacter(id : String, selectedChar : int, netPlayer : NetworkPlayer, info : NetworkMessageInfo){
     var player : Player = Util.GetPlayerById(id) as Player;
 
-    if(player.getCharacter() > 9 && selectedChar < 9){
-        //Runner
-        networkView.RPC("changeRole", RPCMode.AllBuffered, id, PlayerRole.Runner.ToString(), netPlayer);
-    } else if(player.getCharacter() < 9 && selectedChar > 9) {
-        //Commander
-        networkView.RPC("changeRole", RPCMode.AllBuffered, id, PlayerRole.Commander.ToString(), netPlayer);
-    }
+    if(player.getCharacter() != 11)
+        game.getTeam(player.getTeamId()).removeSelectedCharacters(player.getCharacter());
 
-    //Change Roles before we do character updates!
-    if(player.getCharacter() != 11) game.getTeam(player.getTeamId()).removeSelectedCharacters(player.getCharacter());
+    if(selectedChar != 11) game.getTeam(player.getTeamId()).updateSelectedCharacters(selectedChar);
 
     player.setCharacter(selectedChar);
 
-    if(selectedChar != 11) game.getTeam(player.getTeamId()).updateSelectedCharacters(selectedChar);
+    if(player.getCharacter() > 9 && selectedChar < 9){
+        networkView.RPC("changeRole", RPCMode.AllBuffered, id, PlayerRole.Runner.ToString(), player.getTeamId(), netPlayer);
+    } else if(player.getCharacter() < 9 && selectedChar > 9) {
+//        Commander
+        networkView.RPC("changeRole", RPCMode.AllBuffered, id, PlayerRole.Commander.ToString(), player.getTeamId(), netPlayer);
+    }
 
 }
 
@@ -226,34 +225,29 @@ function removeTeam(id : String, teamId: int, netPlayer : NetworkPlayer, info : 
     var player : Player = Util.GetPlayerById(id);
     game.getTeam(player.getTeamId()).removeSelectedCharacters(player.getCharacter());
     game.removeTeam(player, teamId, netPlayer);
-    networkView.RPC("updateCharacter", RPCMode.AllBuffered, id, 11);
+    networkView.RPC("updateCharacter", RPCMode.AllBuffered, id, 11, netPlayer);
     networkView.RPC("updateReadyStatus", RPCMode.AllBuffered, id, false);
+    networkView.RPC("changeRole", RPCMode.AllBuffered, id, PlayerRole.Player.ToString(), player.getTeamId(), netPlayer);
 }
 
 @RPC
-function changeRole(id : String, newRole : String, netPlayer: NetworkPlayer, info : NetworkMessageInfo){
+function changeRole(id : String, newRole : String, teamId:int, netPlayer: NetworkPlayer, info : NetworkMessageInfo){
 
     var playerRole : PlayerRole = System.Enum.Parse(PlayerRole, newRole);
-    var player: Player;
+    var player : Player;
 
-//     if(playerRole == PlayerRole.Runner){
-// //        player = game.createRunner(player.getName(), player.getTeamId(), netPlayer);
-//     }
-//     else if(playerRole == PlayerRole.Commander){
-//         //player = Util.GetPlayerById(id) as Commander;
-//     }
+    if(playerRole == PlayerRole.Runner){
+        player = game.changeToRunner(id, name, teamId, netPlayer);
 
-//     Debug.Log("---" + playerRole);
+    }
+    else if(playerRole == PlayerRole.Commander){
+        player = game.changeToCommander(id, name, teamId, netPlayer);
+    }
 
-//     var playerList : Dictionary.<String,Player> = game.getPlayers();
+    else if(playerRole == PlayerRole.Player){
+       // player = game.changeToPlayer(id, name, teamId, netPlayer);
+    }
 
-//     if (playerList.ContainsKey(id)){
-//         Debug.Log("Contains key");
-//         playerList[id] = player;
-//     }
-// //     else {
-// //         playerList.Add(id, player);
-// //     }
  }
 
 // Server only
