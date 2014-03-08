@@ -29,6 +29,8 @@ public static class Config{
     public var ENEMY_SPEED : float = 0.3;
     // Time in seconds of the runner crouch state.
     public var CROUCH_DURATION : float = 1;
+
+    public var MAX_TEAM_COUNT : int = 5;
     // Time in seconds of the runner attack state.
     public var ATTACK_DURATION : float = 1;
     // Distance in x-axis between runner and cardinal's end point that will

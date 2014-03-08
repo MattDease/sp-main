@@ -36,7 +36,8 @@ public enum TeamStatus {
 
 public enum PlayerRole {
     Runner,
-    Commander
+    Commander,
+    Player
 };
 
 public enum EnemyType {

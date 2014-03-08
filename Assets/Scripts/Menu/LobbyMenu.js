@@ -93,7 +93,6 @@ function OnGUI() {
     if (hostList.Count) {
         var index = 0;
         for (var element: HostData in hostList) {
-
             var f_connected: float = element.connectedPlayers;
             var f_playerLimit: float = element.playerLimit;
             var gamePercentage = f_connected / f_playerLimit;
