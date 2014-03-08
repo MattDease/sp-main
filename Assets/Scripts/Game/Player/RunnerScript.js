@@ -22,9 +22,6 @@ private var isAttacking : boolean = false;
 private var isGrounded : boolean = true;
 private var isDoubleJump: boolean = false;
 
-// TODO either move to config file or use mesh info
-private var runnerWidth : float = 0.6;
-
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player = Util.GetPlayerById(networkView.viewID.owner.ToString()) as Runner;
     model = gameObject.transform.Find("model").gameObject;

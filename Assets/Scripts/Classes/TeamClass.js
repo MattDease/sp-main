@@ -3,7 +3,6 @@
 import System.Linq;
 import System.Collections.Generic;
 
-// TODO implement this
 public class Team{
     public var runnerCreationCount : int = 0;
 

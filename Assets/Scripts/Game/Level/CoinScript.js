@@ -34,7 +34,6 @@ function notifyKill(){
 
 @RPC
 function kill(){
-    //TODO track coin kills on server
     alive = false;
     Util.Toggle(gameObject, false);
 
