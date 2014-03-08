@@ -268,8 +268,6 @@ function OnGUI() {
                         cPlayer = playerList[playerList.Keys.ToList()[d]];
                         if(cPlayer.getTeamId() == 100) cPlayer.setTeam(0, gameSetupScript.game.getTeam(0));
 
-                        Debug.Log(cPlayer.getCharacter());
-
                     }
                     //Layout of the players squares
                     switch (playerCount) {
@@ -351,8 +349,6 @@ function OnGUI() {
                         playerScript.getSelf().setCharacter(11);
                         playerScript.getSelf().updateReadyStatus(false);
 
-                        Debug.Log("---" + playerScript.getSelf().GetType() +"--- with Team Id: " + playerScript.getSelf().getTeamId() + "character -" + playerScript.getSelf().getCharacter() );
-
                     }
 
                 } else if (playerScript.getSelf().getTeamId() == 1) {
@@ -367,17 +363,12 @@ function OnGUI() {
                         playerScript.getSelf().setCharacter(11);
                         playerScript.getSelf().updateReadyStatus(false);
 
-                        Debug.Log("---" + playerScript.getSelf().GetType() +"--- with Team Id: " + playerScript.getSelf().getTeamId()+ "character -" + playerScript.getSelf().getCharacter() );
-
-
                     }
                 } else {
                     if (GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height * 0.05 - Screen.height * 0.1, guiVersus[4].textureWidth, guiVersus[4].textureHeight), (teamOneFull ? arrowTextureDisabled : arrowTexture), "FullImage")) {
                         if (!teamOneFull) {
                             gameSetupScript.game.setTeam(playerScript.getSelf(), 0, Network.player);
                             GameObject.Find("/GameManager").networkView.RPC("setTeam", RPCMode.OthersBuffered, playerScript.getSelf().getId(), 0, Network.player);
-
-                            Debug.Log("---" + playerScript.getSelf().GetType() +"--- with Team Id: " + playerScript.getSelf().getTeamId()+ "character -" + playerScript.getSelf().getCharacter() );
 
                         }
                     }
@@ -386,8 +377,6 @@ function OnGUI() {
                         if (!teamTwoFull) {
                             gameSetupScript.game.setTeam(playerScript.getSelf(), 1, Network.player);
                             GameObject.Find("/GameManager").networkView.RPC("setTeam", RPCMode.OthersBuffered, playerScript.getSelf().getId(), 1, Network.player);
-
-                        Debug.Log("---" + playerScript.getSelf().GetType() +"--- with Team Id: " + playerScript.getSelf().getTeamId() + "character -" + playerScript.getSelf().getCharacter() );
 
                         }
                     }

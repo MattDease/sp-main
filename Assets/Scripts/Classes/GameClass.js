@@ -81,13 +81,9 @@ public class Game {
 
         for(var player : Player in players.Values){
 
-           // Debug.Log(player.getTeamId());
-
             if(player.getTeamId() == 100)
                 playersWOTeam.Add(player.getId(), player);
         }
-
-//      Debug.Log("Total Player " + players.Count + " Players without Teams " + playersWOTeam.Count);
 
         return playersWOTeam;
     }
