@@ -205,7 +205,7 @@ function updateReadyStatus(id : String, isReady : boolean, info : NetworkMessage
 function updateCharacter(id : String, selectedChar : int, netPlayer : NetworkPlayer, info : NetworkMessageInfo){
     var player : Player = Util.GetPlayerById(id) as Player;
 
-    if(player.getCharacter() != 21)
+    if(player.getCharacter() != 12)
         game.getTeam(player.getTeamId()).removeSelectedCharacters(player.getCharacter());
 
     if(selectedChar != 12) game.getTeam(player.getTeamId()).updateSelectedCharacters(selectedChar);
