@@ -178,18 +178,21 @@ public class Game {
     public function changeToRunner(playerId : String, name:String, teamId:int, netPlayer :NetworkPlayer) : Runner {
         var runner : Runner = createRunner(name, teamId, netPlayer);
         players[playerId] = runner;
+        playerScript.setSelf(runner);
         return runner;
     }
 
     public function changeToCommander(playerId : String, name:String, teamId:int, netPlayer :NetworkPlayer) : Commander{
         var commander : Commander = createCommander(name, teamId, netPlayer);
         players[playerId] = commander;
+        playerScript.setSelf(commander);
         return commander;
     }
 
     public function changeToPlayer(playerId : String, name:String, teamId:int, netPlayer :NetworkPlayer) : Player{
         var player : Player = createPlayer(name, teamId, netPlayer);
         players[playerId] = player;
+        playerScript.setSelf(player);
         return player;
     }
 

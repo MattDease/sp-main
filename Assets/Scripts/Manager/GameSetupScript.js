@@ -205,10 +205,10 @@ function updateReadyStatus(id : String, isReady : boolean, info : NetworkMessage
 function updateCharacter(id : String, selectedChar : int, netPlayer : NetworkPlayer, info : NetworkMessageInfo){
     var player : Player = Util.GetPlayerById(id) as Player;
 
-    if(player.getCharacter() != 11)
+    if(player.getCharacter() != 21)
         game.getTeam(player.getTeamId()).removeSelectedCharacters(player.getCharacter());
 
-    if(selectedChar != 11) game.getTeam(player.getTeamId()).updateSelectedCharacters(selectedChar);
+    if(selectedChar != 12) game.getTeam(player.getTeamId()).updateSelectedCharacters(selectedChar);
 
     player.setCharacter(selectedChar);
 
@@ -231,7 +231,7 @@ function removeTeam(id : String, teamId: int, netPlayer : NetworkPlayer, info : 
     var player : Player = Util.GetPlayerById(id);
     game.getTeam(player.getTeamId()).removeSelectedCharacters(player.getCharacter());
     game.removeTeam(player, teamId, netPlayer);
-    networkView.RPC("updateCharacter", RPCMode.AllBuffered, id, 11, netPlayer);
+    networkView.RPC("updateCharacter", RPCMode.AllBuffered, id, 12, netPlayer);
     networkView.RPC("updateReadyStatus", RPCMode.AllBuffered, id, false);
     networkView.RPC("changeRole", RPCMode.AllBuffered, id, PlayerRole.Player.ToString(), player.getTeamId(), netPlayer);
 }
@@ -252,6 +252,10 @@ function changeRole(id : String, newRole : String, teamId:int, netPlayer: Networ
 
     else if(playerRole == PlayerRole.Player){
        // player = game.changeToPlayer(id, name, teamId, netPlayer);
+    }
+
+    if(Util.IsNetworkedPlayerMe(player)){
+        playerScript.setSelf(player);
     }
 
  }

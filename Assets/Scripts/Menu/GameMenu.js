@@ -116,7 +116,7 @@ function Start() {
         if (i < 9) {
             playerTexture = Resources.Load("Textures/gui/player" + i, Texture2D);
             playerSelfTexture = Resources.Load("Textures/gui/player" + i + "_self", Texture2D);
-        } else if (i < 11) {
+        } else if (i < 12) {
             playerTexture = Resources.Load("Textures/gui/commander" + i, Texture2D);
             playerSelfTexture = Resources.Load("Textures/gui/commander" + i + "_self", Texture2D);
         } else {
@@ -263,7 +263,7 @@ function OnGUI() {
 
                     if (currentTeamCount > teamCount - 1) {
                         showEmpty = true;
-                        currentTeamCount = 11;
+                        currentTeamCount = 12;
                     } else {
                         cPlayer = playerList[playerList.Keys.ToList()[d]];
                         if(cPlayer.getTeamId() == 100) cPlayer.setTeam(0, gameSetupScript.game.getTeam(0));
@@ -346,7 +346,7 @@ function OnGUI() {
 
                         GameObject.Find("/GameManager").networkView.RPC("removeTeam", RPCMode.OthersBuffered, playerScript.getSelf().getId(), 0, Network.player);
                         gameSetupScript.game.setTeam(playerScript.getSelf(), 100, Network.player);
-                        playerScript.getSelf().setCharacter(11);
+                        playerScript.getSelf().setCharacter(12);
                         playerScript.getSelf().updateReadyStatus(false);
 
                     }
@@ -360,7 +360,7 @@ function OnGUI() {
                         GameObject.Find("/GameManager").networkView.RPC("removeTeam", RPCMode.OthersBuffered, playerScript.getSelf().getId(), 1, Network.player);
 
                         gameSetupScript.game.setTeam(playerScript.getSelf(), 100, Network.player);
-                        playerScript.getSelf().setCharacter(11);
+                        playerScript.getSelf().setCharacter(12);
                         playerScript.getSelf().updateReadyStatus(false);
 
                     }
@@ -393,7 +393,7 @@ function OnGUI() {
 
                     if (teamOneCount > teamList[0].getTeammates().Count - 1) {
                         teamOneShowEmpty = true;
-                        teamOneCount = 11;
+                        teamOneCount = 12;
                     } else {
                         cPlayer = teamOneMates[teamOneMates.Keys.ToList()[a]];
                     }
@@ -447,7 +447,7 @@ function OnGUI() {
 
                     if (teamTwoCount > teamList[1].getTeammates().Count - 1) {
                         teamTwoShowEmpty = true;
-                        teamOneCount = 11;
+                        teamOneCount = 12;
                     } else {
                         cPlayer = teamTwoMates[teamTwoMates.Keys.ToList()[b]];
                     }
@@ -471,7 +471,7 @@ function OnGUI() {
 
 
                     if (teamTwoShowEmpty) {
-                        GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 + guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[11], "FullImage");
+                        GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 + guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[12], "FullImage");
                     } else if (!teamTwoShowEmpty) {
                         if (Util.IsNetworkedPlayerMe(cPlayer)) {
                             if (GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 + guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerSelfTextures[cPlayer.getCharacter()], "FullImage")) {
@@ -616,15 +616,15 @@ function OnGUI() {
 
                         var playerR: Player = playerScript.getSelf();
 
-                        if(playerR.getCharacter() != 11) gameSetupScript.game.getTeam(playerR.getTeamId()).removeSelectedCharacters(playerR.getCharacter());
+                        if(playerR.getCharacter() != 12) gameSetupScript.game.getTeam(playerR.getTeamId()).removeSelectedCharacters(playerR.getCharacter());
 
-                        playerR.setCharacter(c);
-
-                        gameSetupScript.game.getTeam(playerR.getTeamId()).updateSelectedCharacters(c);
-
-                        if (playerR.getCharacter() > 9 || playerR.getCharacter() == 11) {
+                        if (playerR.getCharacter() > 8 || playerR.getCharacter() == 12) {
                             gameSetupScript.game.changeToRunner(playerR.getId(), playerR.getName(), playerR.getTeamId(), Network.player);
                         }
+
+                        playerScript.getSelf().setCharacter(c);
+
+                        gameSetupScript.game.getTeam(playerR.getTeamId()).updateSelectedCharacters(c);
 
                         GameObject.Find("/GameManager").networkView.RPC("updateCharacter", RPCMode.OthersBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getCharacter(), Network.player);
 
@@ -641,6 +641,7 @@ function OnGUI() {
                     GUI.color = tmpColor;
                     GUI.Button(Rect(guiObject[1].offset.x + offsetWidth + guiObject[0].textureWidth / 2 + 10, (guiObject[1].offset.y + offsetHeight) + (Screen.height * 0.20 / 1.4) - guiObject[0].textureHeight / 1.1, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
                 }
+
 
                 GUI.Label(Rect(guiObject[1].offset.x + offsetWidth, (guiObject[1].offset.y + offsetHeight) + (Screen.height * 0.20 / 1.4), Screen.width * 0.15, Screen.height * 0.20), charactersNames[c], "WhiteText");
 
@@ -683,14 +684,13 @@ function OnGUI() {
                         var player = playerScript.getSelf();
 
 
-                        if(player.getCharacter() != 11) gameSetupScript.game.getTeam(player.getTeamId()).removeSelectedCharacters(player.getCharacter());
-                        player.setCharacter(count);
+                        if(player.getCharacter() != 12) gameSetupScript.game.getTeam(player.getTeamId()).removeSelectedCharacters(player.getCharacter());
 
-
-                        if (player.getCharacter() < 9 || player.getCharacter() == 11) {
+                        if (player.getCharacter() < 9 || player.getCharacter() == 12) {
                             gameSetupScript.game.changeToCommander(player.getId(), player.getName(), player.getTeamId(), Network.player);
                         }
 
+                        playerScript.getSelf().setCharacter(count);
 
                         GameObject.Find("/GameManager").networkView.RPC("updateCharacter", RPCMode.OthersBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getCharacter(), Network.player);
 
