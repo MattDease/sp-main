@@ -4,13 +4,11 @@
 import System.Collections.Generic;
 
 //Set in editor
-public var playerPrefab : Transform;
-public var commanderPrefab : Transform;
+public var characterPrefabs : List.<Transform>;
 public var eggPrefab : Transform;
 
 public var game : Game;
 
-public var localPlayer : Player;
 public var playerList : Dictionary.<String,Player> = new Dictionary.<String,Player>();
 
 // Game Manager
@@ -46,14 +44,15 @@ function onLevelReady(){
 
 @RPC
 function createCharacter(info : NetworkMessageInfo){
+    var player : Player = playerScript.getSelf();
     var go : Transform;
-    if(playerScript.getSelf().GetType() == Runner){
-        go = Network.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, 0);
-        go.networkView.RPC("initRunner", RPCMode.All, playerScript.getSelf().getTeamId());
+    if(player.GetType() == Runner){
+        go = Network.Instantiate(characterPrefabs[player.getCharacter()], Vector3.zero, Quaternion.identity, 0);
+        go.networkView.RPC("initRunner", RPCMode.All, player.getTeamId());
     }
     else{
-        go = Network.Instantiate(commanderPrefab, Vector3(0, 0, Config.COMMANDER_DEPTH_OFFSET), Quaternion.identity, 0);
-        go.networkView.RPC("initCommander", RPCMode.All, playerScript.getSelf().getTeamId());
+        go = Network.Instantiate(characterPrefabs[player.getCharacter()], Vector3(0, 0, Config.COMMANDER_DEPTH_OFFSET), Quaternion.identity, 0);
+        go.networkView.RPC("initCommander", RPCMode.All, player.getTeamId());
     }
     if(Network.isServer){
         // Server can't send server RPC

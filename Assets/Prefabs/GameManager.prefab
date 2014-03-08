@@ -63,13 +63,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ebb4ab5232594843a1a57b09dfe4302, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 400086, guid: 4a19987a936d90e40840ee82f583c9e8, type: 2}
-  commanderPrefab: {fileID: 400000, guid: 9c157f8a1bd11434d9b9374a1b7d0844, type: 2}
+  characterPrefabs:
+  - {fileID: 400086, guid: 4a19987a936d90e40840ee82f583c9e8, type: 2}
+  - {fileID: 400086, guid: 4a19987a936d90e40840ee82f583c9e8, type: 2}
+  - {fileID: 400086, guid: 4a19987a936d90e40840ee82f583c9e8, type: 2}
+  - {fileID: 400086, guid: 4a19987a936d90e40840ee82f583c9e8, type: 2}
+  - {fileID: 400086, guid: 4a19987a936d90e40840ee82f583c9e8, type: 2}
+  - {fileID: 400086, guid: 4a19987a936d90e40840ee82f583c9e8, type: 2}
+  - {fileID: 400086, guid: 4a19987a936d90e40840ee82f583c9e8, type: 2}
+  - {fileID: 400086, guid: 4a19987a936d90e40840ee82f583c9e8, type: 2}
+  - {fileID: 400086, guid: 4a19987a936d90e40840ee82f583c9e8, type: 2}
+  - {fileID: 400000, guid: 9c157f8a1bd11434d9b9374a1b7d0844, type: 2}
+  - {fileID: 400000, guid: 9c157f8a1bd11434d9b9374a1b7d0844, type: 2}
+  - {fileID: 400000, guid: 9c157f8a1bd11434d9b9374a1b7d0844, type: 2}
   eggPrefab: {fileID: 400002, guid: 7e25a7a59b5bd5f4d9b32c202068ff76, type: 2}
   localPlayer:
     gameObject: {fileID: 0}
     script: {fileID: 0}
-    selectedCharacter: 0
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1
