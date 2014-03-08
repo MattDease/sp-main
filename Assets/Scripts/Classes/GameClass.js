@@ -16,7 +16,7 @@ public class Game {
     private var gameSetupScript : GameSetupScript;
     private var difficultyScript : DifficultyScript;
 
-    private var isVersus : boolean = true;
+    private var isVersus : boolean = false;
 
     public function Game(){
         gameManager = GameObject.Find("/GameManager");
