@@ -119,6 +119,16 @@ function OnNetworkLoadedLevel(){
 //Based on http://docs.unity3d.com/Documentation/Components/net-NetworkLevelLoad.html
 @RPC
 function loadLevel(level : String, levelPrefix : int){
+
+    // Log team data produced by menu interface
+    if(Config.MENU_DEBUG){
+        Debug.Log("I am a " + (Network.isServer ? "Server" : "Client"));
+        Debug.Log("I am player " + playerScript.getSelf().getId() + ", on team " + playerScript.getSelf().getTeamId());
+        for(var player : Player in game.getPlayers().Values){
+            Debug.Log(player.ToString());
+        }
+    }
+
     lastLevelPrefix = levelPrefix;
 
     stateScript.setGameState(GameState.Loading);
