@@ -207,17 +207,16 @@ function updateCharacter(id : String, selectedChar : int, netPlayer : NetworkPla
     if(player.getCharacter() != 12)
         game.getTeam(player.getTeamId()).removeSelectedCharacters(player.getCharacter());
 
-    if(selectedChar != 12) game.getTeam(player.getTeamId()).updateSelectedCharacters(selectedChar);
-
-    player.setCharacter(selectedChar);
-
-    if(player.getCharacter() > 9 && selectedChar < 9){
-        networkView.RPC("changeRole", RPCMode.AllBuffered, id, PlayerRole.Runner.ToString(), player.getTeamId(), netPlayer);
-    } else if(player.getCharacter() < 9 && selectedChar > 9) {
-//        Commander
-        networkView.RPC("changeRole", RPCMode.AllBuffered, id, PlayerRole.Commander.ToString(), player.getTeamId(), netPlayer);
+    if(selectedChar != 12 && player.getTeamId() != 100){
+        game.getTeam(player.getTeamId()).updateSelectedCharacters(selectedChar);
     }
 
+    if(player.getCharacter() > 9 && selectedChar < 9){
+        networkView.RPC("changeRole", RPCMode.AllBuffered, id, PlayerRole.Runner.ToString(), player.getTeamId(), selectedChar, netPlayer);
+    } else if(player.getCharacter() < 9 && selectedChar > 9) {
+//        Commander
+        networkView.RPC("changeRole", RPCMode.AllBuffered, id, PlayerRole.Commander.ToString(), player.getTeamId(), selectedChar, netPlayer);
+    }
 }
 
 @RPC
@@ -236,7 +235,7 @@ function removeTeam(id : String, teamId: int, netPlayer : NetworkPlayer, info : 
 }
 
 @RPC
-function changeRole(id : String, newRole : String, teamId:int, netPlayer: NetworkPlayer, info : NetworkMessageInfo){
+function changeRole(id : String, newRole : String, teamId:int, character : int, netPlayer: NetworkPlayer, info : NetworkMessageInfo){
 
     var playerRole : PlayerRole = System.Enum.Parse(PlayerRole, newRole);
     var player : Player;
@@ -252,6 +251,8 @@ function changeRole(id : String, newRole : String, teamId:int, netPlayer: Networ
     else if(playerRole == PlayerRole.Player){
        // player = game.changeToPlayer(id, name, teamId, netPlayer);
     }
+
+    player.setCharacter(character);
 
     if(Util.IsNetworkedPlayerMe(player)){
         playerScript.setSelf(player);
