@@ -62,6 +62,16 @@ public class Player{
     public function getReadyStatus() : boolean {
         return this.isReady;
     }
+
+    public function ToString() : String {
+        var str : String = "";
+        str += "NAME[" + this.name + "] ";
+        str += "ID[" + this.id + "] ";
+        str += "TEAMID[" + this.teamId + "] ";
+        str += "TYPE[" + this.GetType() + "] ";
+        str += "CHARACTER[" + this.selectedCharacter + "] ";
+        return str;
+    }
 }
 
 public class Runner extends Player{
