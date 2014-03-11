@@ -5,6 +5,8 @@ import System.Collections.Generic;
 // Set in editor
 public var cameraPrefab : GameObject;
 
+public var depth : float = 0;
+
 private var player : Runner;
 private var model : GameObject;
 private var animator : Animator;
@@ -60,6 +62,7 @@ function initRunner(teamId : int){
             player.gameObject.transform.position.z -= Config.RUNNER_LANE_WIDTH;
         }
         transform.position.z += (teamId == me.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
+        depth = transform.position.z;
     }
 }
 
