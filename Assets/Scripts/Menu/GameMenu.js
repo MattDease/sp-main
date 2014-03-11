@@ -641,11 +641,11 @@ function OnGUI() {
                             gameSetupScript.game.changeToRunner(playerR.getId(), playerR.getName(), playerR.getTeamId(), Network.player);
                         }
 
-                        GameObject.Find("/GameManager").networkView.RPC("updateCharacter", RPCMode.OthersBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getCharacter(), Network.player);
+                        GameObject.Find("/GameManager").networkView.RPC("updateCharacter", RPCMode.AllBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getCharacter(), Network.player);
 
                         if (playerScript.getSelf().getReadyStatus()) {
                             playerScript.getSelf().updateReadyStatus(false);
-                            GameObject.Find("/GameManager").networkView.RPC("updateReadyStatus", RPCMode.OthersBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
+                            GameObject.Find("/GameManager").networkView.RPC("updateReadyStatus", RPCMode.AllBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
 
                         }
                         selectCharacter = false;
@@ -707,11 +707,11 @@ function OnGUI() {
                         }
 
 
-                        GameObject.Find("/GameManager").networkView.RPC("updateCharacter", RPCMode.OthersBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getCharacter(), Network.player);
+                        GameObject.Find("/GameManager").networkView.RPC("updateCharacter", RPCMode.AllBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getCharacter(), Network.player);
 
                         if (playerScript.getSelf().getReadyStatus()) {
                             playerScript.getSelf().updateReadyStatus(false);
-                            GameObject.Find("/GameManager").networkView.RPC("updateReadyStatus", RPCMode.OthersBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
+                            GameObject.Find("/GameManager").networkView.RPC("updateReadyStatus", RPCMode.AllBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
                         }
 
                         selectCharacter = false;
