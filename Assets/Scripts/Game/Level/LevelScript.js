@@ -32,6 +32,15 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 
     // TODO - only show signs appropriate for player role
     var signs : List.<GameObject> = GameObject.Find("/GameScripts").GetComponent(LevelManager).signPrefabs;
+
+    if(player.GetType() == Runner){
+        Debug.Log("Show Runner Signs");
+
+    } else if(player.GetType() == Commander){
+             Debug.Log("Show Commander Signs");
+    }
+
+
     for(var k : int = 0; k < tutorialPoints.Count; k++){
         var locator : Transform = tutorialPoints[k];
         var signIndex : int = int.Parse(locator.name.Split("_"[0])[1]);

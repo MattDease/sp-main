@@ -117,7 +117,7 @@ public class Game {
     // server-only function, check composition of team(s), assign new player's role,
     // and return [the team, the role].
     public function getNewPlayerTeamAndRole() : Array{
-        return [100, PlayerRole.Player];
+        return [100, PlayerRole.Runner];
     }
 
     public function addPlayer (name : String, teamId: int, networkPlayer:NetworkPlayer): Player {
@@ -213,7 +213,7 @@ public class Game {
 
         for(var team : Team in teams){
             if(team.isValid() != TeamStatus.Valid){
-               return false;
+              // return false;
             }
         }
 

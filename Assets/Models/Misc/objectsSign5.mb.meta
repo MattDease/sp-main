@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 92de55f3e5d5f45839598134f3952ba2
+guid: 8a02451f31d494b6dac53e33f1722831
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -19,7 +19,8 @@ ModelImporter:
     3300002: t_1
     4300000: t_1
     4300002: polySurface1
-    7400000: Take 001
+    7400000: Hidden_5
+    7400002: Shown_5
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -35,7 +36,79 @@ ModelImporter:
     animationScaleError: .5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Hidden_5
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 1.10000002
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: pCylinder2
+        weight: 1
+      - path: pCylinder2/transform1
+        weight: 1
+      - path: t_1
+        weight: 1
+      - path: t_1/polySurface1
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Shown_5
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 45
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: pCylinder2
+        weight: 1
+      - path: pCylinder2/transform1
+        weight: 1
+      - path: t_1
+        weight: 1
+      - path: t_1/polySurface1
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
     isReadable: 1
   meshes:
     lODScreenPercentages: []

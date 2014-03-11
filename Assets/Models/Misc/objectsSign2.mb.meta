@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: eecf1398b8cb3463199bcde26b4749cb
+guid: 172ae62370cd249d5931f3983d2b1b39
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -12,8 +12,8 @@ ModelImporter:
     2300000: pCube4
     3300000: pCube4
     4300000: pCube4
-    7400000: Hidden
-    7400002: Shown
+    7400000: Hidden_2
+    7400002: Shown_2
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -31,7 +31,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Hidden
+      name: Hidden_2
       takeName: Take 001
       firstFrame: 1
       lastFrame: 1.10000002
@@ -40,7 +40,7 @@ ModelImporter:
       level: 0
       cycleOffset: 0
       loop: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -63,7 +63,7 @@ ModelImporter:
       maskType: 0
       maskSource: {instanceID: 0}
     - serializedVersion: 16
-      name: Shown
+      name: Shown_2
       takeName: Take 001
       firstFrame: 1
       lastFrame: 12
