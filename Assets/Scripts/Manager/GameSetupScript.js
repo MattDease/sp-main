@@ -175,6 +175,11 @@ function registerPlayer(name : String, netPlayer : NetworkPlayer){
 }
 
 @RPC
+function setVersusMode(isVersus : boolean){
+    game.setIsVersus(isVersus);
+}
+
+@RPC
 function addPlayer(name : String, teamId : int, role : String, netPlayer : NetworkPlayer, info : NetworkMessageInfo){
     var playerRole : PlayerRole = System.Enum.Parse(PlayerRole, role);
     var newPlayer : Player;

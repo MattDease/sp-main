@@ -27,12 +27,8 @@ public class Game {
             difficultyScript = gameManager.GetComponent(DifficultyScript);
         }
 
-        if(isVersus){
-            teams.Add(new Team(0));
-            teams.Add(new Team(1));
-        } else {
-            teams.Add(new Team(teams.Count));
-        }
+        teams.Add(new Team(0));
+
     }
 
     public function start(){
@@ -59,6 +55,23 @@ public class Game {
 
     public function setIsVersus(isVersus:boolean) {
         this.isVersus = isVersus;
+        teams[0].removeAllTeammates();
+
+        if(isVersus){
+            //Add another team
+            for(var player : Player in players.Values){
+                player.setTeam(100, null);
+                player.setCharacter(12);
+            }
+            teams.Add(new Team(1));
+        } else {
+            //Remove second team
+            for(var player : Player in players.Values){
+                player.setTeam(0, getTeam(0));
+                player.setCharacter(12);
+            }
+            teams.Remove(getTeam(1));
+        }
     }
 
     public function updateState(){

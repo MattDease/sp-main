@@ -129,6 +129,10 @@ public class Team{
         teammates.Remove(id);
     }
 
+    public function removeAllTeammates() {
+        selectedCharacters.Clear();
+        teammates.Clear();
+    }
     public function getLeader() : Runner {
         var leader : Runner;
         for(var player : Player in teammates.Values){

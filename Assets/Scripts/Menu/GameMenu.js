@@ -14,7 +14,7 @@ private var gameName : String;
 private var playerLimit : int = 4;
 private var selectCharacter : boolean = false;
 private var showStatusBar : boolean = false;
-private var isVersus : boolean;
+private var isVersus : boolean = false;
 
 
 private var guiHost : GuiClasses[];
@@ -128,7 +128,6 @@ function Start() {
 
     }
 
-    isVersus = gameSetupScript.game.getIsVersus();
 }
 
 
@@ -149,6 +148,24 @@ function OnGUI() {
         GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), statusMessage, "WhiteText");
 
     }
+
+    isVersus = gameSetupScript.game.getIsVersus();
+
+//if (teamCount > Config.MAX_TEAM_COUNT && !isVersus || Input.GetKey('v')) {
+    if (Input.GetKey('v') && !isVersus) {
+        gameSetupScript.game.setIsVersus(true);
+        GameObject.Find("/GameManager").networkView.RPC("setVersusMode", RPCMode.OthersBuffered, true);
+        isVersus = gameSetupScript.game.getIsVersus();
+    }
+    //else if(teamCount < Config.MAX_TEAM_COUNT && isVersus || Input.GetKey('t')){
+    else if(Input.GetKey('t') && isVersus){
+        gameSetupScript.game.setIsVersus(false);
+        GameObject.Find("/GameManager").networkView.RPC("setVersusMode", RPCMode.OthersBuffered, false);
+        isVersus = gameSetupScript.game.getIsVersus();
+        Debug.Log(isVersus);
+    }
+
+
 
     //Scales different text based on windows size
     var localStyle: GUIStyle = GUI.skin.GetStyle("PlainText");
@@ -229,7 +246,6 @@ function OnGUI() {
         showStatusBar = true;
         playerList = gameSetupScript.game.getPlayers();
 
-        if (isVersus) playerwoTeamList = gameSetupScript.game.getPlayerswoTeam();
         teamList = gameSetupScript.game.getTeams();
 
 
@@ -251,10 +267,9 @@ function OnGUI() {
             var layoutOffset = 0;
             var cPlayer: Player;
 
-            if (teamCount > Config.MAX_TEAM_COUNT) {
-                gameSetupScript.game.setIsVersus(true);
-                isVersus = true;
-            }
+
+            if (isVersus) playerwoTeamList = gameSetupScript.game.getPlayerswoTeam();
+
 
             if (!isVersus) {
                 for (var d = 0; d < Config.MAX_TEAM_COUNT; d++) {
