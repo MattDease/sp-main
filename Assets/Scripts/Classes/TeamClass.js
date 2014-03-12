@@ -71,7 +71,7 @@ public class Team{
     public function getRandomRunner() : Runner {
         var index : int = Random.Range(0, runners.Keys.Count);
         var key : String = runners.Keys.ToArray()[index];
-        return runners['0'];
+        return runners[key];
     }
 
     public function getClosestRunner(player : Player, forward : boolean) : Runner {

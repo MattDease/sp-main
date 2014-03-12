@@ -72,9 +72,11 @@ function playerReady(){
     if(readyPlayerCount == players.Count){
         if(Config.USE_EGG){
             // TODO support multiple teams
-            var holder = game.getTeam(0).getRandomRunner();
-            var egg : Transform = Network.Instantiate(eggPrefab, holder.getPosition(), Quaternion.identity, 0);
-            egg.networkView.RPC("setHolder", RPCMode.All, holder.getId());
+            for(var team : Team in game.getTeams()){
+                var holder = team.getRandomRunner();
+                var egg : Transform = Network.Instantiate(eggPrefab, holder.getPosition(), Quaternion.identity, 0);
+                egg.networkView.RPC("setHolder", RPCMode.All, holder.getId());
+            }
         }
         networkView.RPC("startCountDown", RPCMode.All);
     }

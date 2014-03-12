@@ -45,6 +45,9 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 
         runningPlane = player.getPosition();
     }
+    else{
+        Util.Toggle(gameObject, false);
+    }
 }
 
 @RPC
@@ -63,6 +66,7 @@ function initRunner(teamId : int){
         }
         transform.position.z += (teamId == me.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
         depth = transform.position.z;
+        Invoke("show", 0.3);
     }
 }
 
@@ -129,6 +133,10 @@ function LateUpdate(){
             camContainer.transform.position = team.getObserverCameraPosition();
         }
     }
+}
+
+function show(){
+    Util.Toggle(gameObject, true);
 }
 
 @RPC
