@@ -14,6 +14,7 @@ private var start : Vector3;
 private var end : Vector3;
 private var idle : boolean = false;
 private var player : Player;
+private var teamId : int;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     alive = true;
@@ -30,6 +31,7 @@ function initEnemy(teamId : int, hostTeam : boolean){
     if(!hostTeam){
         transform.position.z -= Config.TEAM_DEPTH_OFFSET;
     }
+    this.teamId = teamId;
     transform.position.z += (teamId == player.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
 }
 
@@ -55,12 +57,11 @@ function Update(){
             animator.SetBool("attack", false);
         }
     }
-    if(!networkView.isMine || game.getState() != GameState.Playing){
+    if(!networkView.isMine || game.getState() != GameState.Playing || !game.getTeam(teamId).isAlive()){
         return;
     }
     if(type == EnemyType.Cardinal){
-        // FIXME add support for two teams
-        if(idle && end.x - game.getTeam(0).getLeader().getPosition().x < Config.CARDINAL_TRIGGER_DISTANCE){
+        if(idle && end.x - game.getTeam(teamId).getLeader().getPosition().x < Config.CARDINAL_TRIGGER_DISTANCE){
             idle = false;
             startTime = Time.time;
         }
