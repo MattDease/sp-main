@@ -15,6 +15,8 @@ public class Team{
     private var id : int;
     private var alive : boolean = true;
 
+    private var coinCount : int = 0;
+
     private var cachedDistance : float = 0;
 
     public function Team(id : int){
@@ -27,6 +29,10 @@ public class Team{
 
     public function kill() {
         alive = false;
+    }
+
+    public function collectCoin() {
+        coinCount++;
     }
 
     public function isAlive() : boolean {
@@ -160,6 +166,14 @@ public class Team{
         else{
             return cachedDistance;
         }
+    }
+
+    public function getCoinCount() : int {
+        return this.coinCount;
+    }
+
+    public function getPoints() : float {
+        return this.getDistance() + this.getCoinCount();
     }
 
     // TODO add team validity check methods and gameplay methods.

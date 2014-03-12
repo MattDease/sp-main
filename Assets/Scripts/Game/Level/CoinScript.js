@@ -34,9 +34,7 @@ function notifyKill(){
 
 @RPC
 function kill(){
-    alive = false;
-    Util.Toggle(gameObject, false);
-
+    syncKill();
     networkView.RPC("syncKill", RPCMode.OthersBuffered);
 }
 
@@ -44,4 +42,5 @@ function kill(){
 function syncKill(){
     alive = false;
     Util.Toggle(gameObject, false);
+    player.getTeam().collectCoin();
 }
