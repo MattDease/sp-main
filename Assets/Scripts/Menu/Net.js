@@ -20,6 +20,7 @@ private var probingPublicIP : boolean = false;
 private var doneTestingNAT : boolean = false;
 private var useNat : boolean = false;
 private var timer : float = 0.0;
+private var gameName : String = "";
 private var connTestMessage : String = "Undetermined NAT capabilities";
 
 private var hostToConnect : HostData = null;
@@ -132,6 +133,7 @@ function OnFailedToConnect(error: NetworkConnectionError){
 
 function startHost(numPlayers : int, name : String, callback : Function){
     Debug.Log("Starting server. Game Name: " + name + "  Players: " + numPlayers + " Port: " + Config.GAME_PORT + " NAT?: " + useNat);
+    this.gameName = name;
     // Reduce number of players by one to account for server host who is a player
     numPlayers--;
     if(numPlayers <= 1){
@@ -150,7 +152,7 @@ function startHost(numPlayers : int, name : String, callback : Function){
 }
 
 function OnServerInitialized(){
-    MasterServer.RegisterHost(Config.GAME_ID, name, natCapable.ToString());
+    MasterServer.RegisterHost(Config.GAME_ID, gameName, natCapable.ToString());
 }
 
 function retryFailedHost(){
@@ -165,7 +167,7 @@ function retryFailedHost(){
     }
     Debug.Log("Retry registering host. Retry #" + reconnectionTries);
     yield WaitForSeconds(0.1);
-    MasterServer.RegisterHost(Config.GAME_ID, name, natCapable.ToString());
+    MasterServer.RegisterHost(Config.GAME_ID, gameName, natCapable.ToString());
 }
 
 //limit host list requests to once every 30 seconds or 3 seconds if forcing it.
