@@ -1,10 +1,14 @@
 ﻿#pragma strict
 
+private var game : Game;
 private var player : Player;
 private var alive : boolean;
+private var teamId : int;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
-    player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
+    var gameManager : GameObject = GameObject.Find("/GameManager");
+    game = gameManager.GetComponent(GameSetupScript).game;
+    player = gameManager.GetComponent(PlayerScript).getSelf();
     alive = true;
 }
 
@@ -13,6 +17,7 @@ function initCoin(teamId : int, hostTeam : boolean){
     if(!hostTeam){
         transform.position.z -= Config.TEAM_DEPTH_OFFSET;
     }
+    this.teamId = teamId;
     transform.position.z += (teamId == player.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
 }
 
@@ -42,5 +47,5 @@ function kill(){
 function syncKill(){
     alive = false;
     Util.Toggle(gameObject, false);
-    player.getTeam().collectCoin();
+    game.getTeam(teamId).collectCoin();
 }

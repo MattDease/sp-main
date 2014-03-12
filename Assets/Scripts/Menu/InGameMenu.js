@@ -52,7 +52,7 @@ function OnDebugGUI(){
             var teams : List.<Team> = gameSetupScript.game.getTeams();
             for(var team : Team in teams){
                 GUILayout.Space(10);
-                GUILayout.Label("Team " + team.getId() + " - Distance: " + team.getDistance() + (!team.isAlive() ? " - dead" : ""));
+                GUILayout.Label("Team " + team.getId() + " - Distance: " + team.getDistance() + " - Coins: " + team.getCoinCount() + (!team.isAlive() ? " - dead" : ""));
                 for(var player : Player in team.getTeammates().Values){
                     GUILayout.Label("- " + (player.GetType() == Runner ? "(R) " : "(C) ") + player.getName() + (Util.IsNetworkedPlayerMe(player) ? " (me)" : ""));
                 }
