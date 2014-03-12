@@ -50,24 +50,6 @@ Transition:
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 0
---- !u!1101 &110109325
-Transition:
-  m_ObjectHideFlags: 3
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_SrcState: {fileID: 110293493}
-  m_DstState: {fileID: 110200000}
-  m_TransitionDuration: .315789491
-  m_TransitionOffset: 0
-  m_Conditions:
-  - m_ConditionMode: 5
-    m_ConditionEvent: Attack
-    m_EventTreshold: 0
-    m_ExitTime: .680000007
-  m_Atomic: 1
-  m_Solo: 0
-  m_Mute: 0
 --- !u!1101 &110128531
 Transition:
   m_ObjectHideFlags: 3
@@ -104,21 +86,21 @@ Transition:
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 0
---- !u!1101 &110175389
+--- !u!1101 &110161979
 Transition:
   m_ObjectHideFlags: 3
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: 
-  m_SrcState: {fileID: 110269514}
-  m_DstState: {fileID: 110200000}
-  m_TransitionDuration: .545454502
+  m_SrcState: {fileID: 110293493}
+  m_DstState: {fileID: 110269514}
+  m_TransitionDuration: .23999998
   m_TransitionOffset: 0
   m_Conditions:
-  - m_ConditionMode: 2
+  - m_ConditionMode: 1
     m_ConditionEvent: death
     m_EventTreshold: 0
-    m_ExitTime: .454545498
+    m_ExitTime: .75999999
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 0
@@ -157,7 +139,7 @@ State:
   m_ObjectHideFlags: 3
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: cardinalAttack
+  m_Name: Attack
   m_Speed: 1
   m_CycleOffset: 0
   m_Motions:
@@ -188,13 +170,12 @@ StateMachine:
       - {fileID: 110100000}
       - {fileID: 110130077}
     data:
+      first: {fileID: 110269514}
+      second: []
+    data:
       first: {fileID: 110293493}
       second:
-      - {fileID: 110109325}
-    data:
-      first: {fileID: 110269514}
-      second:
-      - {fileID: 110175389}
+      - {fileID: 110161979}
   m_MotionSetCount: 1
   m_AnyStatePosition: {x: -12, y: 12, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}

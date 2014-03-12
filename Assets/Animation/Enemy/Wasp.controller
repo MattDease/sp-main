@@ -157,7 +157,7 @@ State:
   m_ObjectHideFlags: 3
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: waspAttack
+  m_Name: Attack
   m_Speed: 1
   m_CycleOffset: 0
   m_Motions:
@@ -188,13 +188,13 @@ StateMachine:
       - {fileID: 110100000}
       - {fileID: 110130077}
     data:
-      first: {fileID: 110293493}
-      second:
-      - {fileID: 110109325}
-    data:
       first: {fileID: 110269514}
       second:
       - {fileID: 110175389}
+    data:
+      first: {fileID: 110293493}
+      second:
+      - {fileID: 110109325}
   m_MotionSetCount: 1
   m_AnyStatePosition: {x: -12, y: 12, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}

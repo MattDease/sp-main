@@ -12,7 +12,11 @@ private var alive : boolean;
 private var startTime : float;
 private var start : Vector3;
 private var end : Vector3;
+private var typeCount : int;
 private var idle : boolean = false;
+private var isPlaying : boolean = false;
+private var lastWormAttack : float = 0;
+
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     alive = true;
@@ -22,11 +26,12 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
     animator = model.GetComponent(Animator);
 }
 
-function init(pt1 : Vector3, pt2 : Vector3){
+function init(pt1 : Vector3, pt2 : Vector3, typeCount : int){
     // TODO adjust based on difficulty
-    speed  = Random.Range(0.0, 0.2) + Config.ENEMY_SPEED;
+    speed  = Random.Range(0.0, 0.2) + (type == EnemyType.Cardinal ? Config.CARDINAL_SPEED : Config.WASP_BEETLE_SPEED);
     start = pt1;
     end = pt2;
+    this.typeCount = typeCount;
     distance = Vector3.Distance(pt1, pt2);
     if((type == EnemyType.Cardinal) || (type == EnemyType.Worm)){
         idle = true;
@@ -41,17 +46,35 @@ function Update(){
             Util.Toggle(gameObject, false);
         }
         if(animState.IsName("Base Layer.Attack") && !animator.IsInTransition(0)){
-            animator.SetBool("attack", false);
+            if(type != EnemyType.Cardinal){
+                animator.SetBool("attack", false);
+            }
+        }
+        if(animState.IsName("Base Layer.Idle") && !animator.IsInTransition(0)){
+            if(type == EnemyType.Worm && !idle){
+                idle = true;
+                lastWormAttack = Time.time;
+            }
         }
     }
-    if(!networkView.isMine || game.getState() != GameState.Playing){
+
+    if(!networkView.isMine || !isAlive() || game.getState() != GameState.Playing){
         return;
     }
+
+    if(!isPlaying){
+        isPlaying = true;
+        if(type == EnemyType.Worm){
+            lastWormAttack = Time.time + (typeCount%3 * Config.WORM_DELAY_OFFSET);
+        }
+    }
+
     if(type == EnemyType.Cardinal){
         // FIXME add support for two teams
         if(idle && end.x - game.getTeam(0).getLeader().getPosition().x < Config.CARDINAL_TRIGGER_DISTANCE){
             idle = false;
             startTime = Time.time;
+            notifyAttack();
         }
         if(!idle){
             var progress : float = ((Time.time - startTime) * speed)/distance;
@@ -62,7 +85,10 @@ function Update(){
         }
     }
     else if(type == EnemyType.Worm){
-        // TODO toggle between attack and idle at regular intervals
+        if(Time.time - lastWormAttack > Config.WORM_DELAY && idle){
+            idle = false;
+            notifyAttack();
+        }
     }
     else if(speed){
         var pt : float = Mathf.PingPong(Time.time * speed, 1);
