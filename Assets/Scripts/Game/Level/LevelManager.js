@@ -122,11 +122,12 @@ function onAddSegment(teamId : int, segment : GameObject, enemies : List.<Enemy>
 
     var go : GameObject;
     var position : Vector3;
+    var typeCount : int[] = [0, 0, 0, 0];
     for(var i : int = 0; i < enemies.Count; i++){
         var enemy : Enemy = enemies[i];
-        go = Network.Instantiate(enemyPrefabs[enemy.prefabIndex], enemy.end.position, Quaternion.identity, 0);
-        go.networkView.RPC("initEnemy", RPCMode.All, teamId, teamId == playerScript.getSelf().getTeamId());
-        go.GetComponent(EnemyScript).init(enemy.start.position, enemy.end.position);
+        go = Network.Instantiate(enemyPrefabs[enemy.prefabIndex], enemy.start.position, Quaternion.identity, 0);
+        go.GetComponent(EnemyScript).init(enemy.start.position, enemy.end.position, typeCount[enemy.prefabIndex]);
+        typeCount[enemy.prefabIndex]++;
         objects.Add(go);
     }
 

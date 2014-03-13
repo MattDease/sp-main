@@ -25,12 +25,18 @@ public static class Config{
     public var WALK_SPEED : float = 1.4;
     // Upward impulse speed in m/s.
     public var JUMP_SPEED : float = 5.5;
-    // Enemy speed in m/s.
-    public var ENEMY_SPEED : float = 0.3;
     // Time in seconds of the runner crouch state.
     public var CROUCH_DURATION : float = 1;
     // Time in seconds of the runner attack state.
     public var ATTACK_DURATION : float = 1;
+    // Wasp and beetle enemy speed in m/s.
+    public var WASP_BEETLE_SPEED : float = 0.3;
+    // Cardinal enemy speed in m/s.
+    public var CARDINAL_SPEED : float = 1.5;
+    // Time in seconds between worm attacks.
+    public var WORM_DELAY : float = 1.5;
+    // Offset between different worm attack times
+    public var WORM_DELAY_OFFSET : float = 0.5;
     // Distance in x-axis between runner and cardinal's end point that will
     // trigger the cardinal to attack
     public var CARDINAL_TRIGGER_DISTANCE : float = 4;

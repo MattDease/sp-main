@@ -46,6 +46,7 @@ ModelImporter:
     400038: RightUpLeg
     400040: Spine
     7400000: Jump
+    7400002: StartPose
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -81,6 +82,74 @@ ModelImporter:
       keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
       heightFromFeet: 1
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Hips
+        weight: 1
+      - path: Hips/LeftUpLeg
+        weight: 1
+      - path: Hips/LeftUpLeg/LeftLeg
+        weight: 1
+      - path: Hips/LeftUpLeg/LeftLeg/LeftFoot
+        weight: 1
+      - path: Hips/LeftUpLeg/LeftLeg/LeftFoot/LeftToe
+        weight: 1
+      - path: Hips/RightUpLeg
+        weight: 1
+      - path: Hips/RightUpLeg/RightLeg
+        weight: 1
+      - path: Hips/RightUpLeg/RightLeg/RightFoot
+        weight: 1
+      - path: Hips/RightUpLeg/RightLeg/RightFoot/RightToe
+        weight: 1
+      - path: Hips/Spine
+        weight: 1
+      - path: Hips/Spine/LeftArm
+        weight: 1
+      - path: Hips/Spine/LeftArm/LeftForeArm
+        weight: 1
+      - path: Hips/Spine/LeftArm/LeftForeArm/LeftHand
+        weight: 1
+      - path: Hips/Spine/LeftArm/LeftForeArm/LeftHand/LeftFingerBase
+        weight: 0
+      - path: Hips/Spine/Neck
+        weight: 1
+      - path: Hips/Spine/Neck/Head
+        weight: 1
+      - path: Hips/Spine/RightArm
+        weight: 1
+      - path: Hips/Spine/RightArm/RightForeArm
+        weight: 1
+      - path: Hips/Spine/RightArm/RightForeArm/RightHand
+        weight: 1
+      - path: Hips/Spine/RightArm/RightForeArm/RightHand/RightFingerBase
+        weight: 0
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: StartPose
+      takeName: Take 001
+      firstFrame: 145
+      lastFrame: 145.100006
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
