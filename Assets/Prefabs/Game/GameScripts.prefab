@@ -38,6 +38,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3f86fa1f66996f44b393e01538e4492, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startSegmentPrefab: {fileID: 100096, guid: 69a09460c704a934ba12f383ba755645, type: 2}
   segmentPrefabs:
   - {fileID: 100096, guid: 69a09460c704a934ba12f383ba755645, type: 2}
   - {fileID: 100090, guid: df1b6ae36bc03844798902cfa5eff844, type: 2}

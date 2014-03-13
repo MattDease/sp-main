@@ -6,6 +6,7 @@ import System.Collections.Generic;
 // - reimplement difficulty functionality
 
 // Set in editor
+public var startSegmentPrefab : GameObject;
 public var segmentPrefabs : List.<GameObject>;
 public var enemyPrefabs : List.<GameObject>;
 public var signPrefabs : List.<GameObject>;
@@ -25,7 +26,7 @@ private var levels : List.< List.< List.<GameObject> > > = new List.< List.< Lis
 private var waitingForSegment : boolean = false;
 private var levelsReady : int = 0;
 
-private var segmentOffset : float = 0.5;
+private var segmentOffset : float = 18;
 private var newSegmentThreshold : float = 50;
 
 private var lastSegmentEnd : List.<float> = new List.<float>();
@@ -64,7 +65,7 @@ function updateLevel(){
             continue;
         }
         if(lastSegmentEnd[team.getId()] - team.getLeader().getDistance() < newSegmentThreshold){
-            addSegment(team.getId());
+            addSegment(team.getId(), false);
         }
         if(team.getStraggler().getDistance() - firstSegmentEnd[team.getId()] > newSegmentThreshold){
             removeSegment(team.getId());
@@ -74,12 +75,13 @@ function updateLevel(){
 
 function addFirstSegment(teamId : int){
     lastSegmentEnd[teamId] = -segmentOffset;
-    addSegment(teamId);
+    addSegment(teamId, true);
+    addSegment(teamId, false);
 }
 
-function addSegment(teamId : int){
+function addSegment(teamId : int, isFirst : boolean){
     waitingForSegment = true;
-    var segment : GameObject = segmentPrefabs[Random.Range(0, segmentPrefabs.Count)];
+    var segment : GameObject = (isFirst ? startSegmentPrefab : segmentPrefabs[Random.Range(0, segmentPrefabs.Count)]);
     // TODO - Use difficulty to determine next segment.
     var go : GameObject = Network.Instantiate(segment, new Vector3(lastSegmentEnd[teamId], 0, 0), Quaternion.identity, 0);
     go.networkView.RPC('initSegment', RPCMode.All, teamId);
