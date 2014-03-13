@@ -15,7 +15,7 @@ RenderSettings:
   m_Fog: 1
   m_FogColor: {r: .739561737, g: .818617642, b: .823529422, a: 1}
   m_FogMode: 2
-  m_FogDensity: .0500000007
+  m_FogDensity: .0199999996
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientLight: {r: .200000003, g: .200000003, b: .200000003, a: 1}
@@ -115,6 +115,4 @@ MonoBehaviour:
   MenuScripts: {fileID: 100000, guid: 90b788d29f7dab64996863b377338d34, type: 2}
   GameScripts: {fileID: 100000, guid: 75fa353ed2374bb47991945f489737d9, type: 2}
   Gestures: {fileID: 100000, guid: 28c71c97df478c04fa37f95bd4c2e2b7, type: 2}
-  PlayerGestures: {fileID: 100000, guid: 9c31a863a119622489049720b2031165, type: 2}
-  GameCamera: {fileID: 100000, guid: 652a5ebd80f8a794c8a8db62e732b2bc, type: 2}
-  GameLight: {fileID: 100000, guid: af6adacc27caadf478c2a70d12d75417, type: 2}
+  GameLight: {fileID: 100000, guid: bea9d30cd2bfdef4790a8783a29a5886, type: 2}
