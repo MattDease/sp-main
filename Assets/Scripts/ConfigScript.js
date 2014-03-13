@@ -35,7 +35,7 @@ public static class Config{
     // trigger the cardinal to attack
     public var CARDINAL_TRIGGER_DISTANCE : float = 4;
     // Relative to the level segment, the commander's offset in the z-axis, + is away from the camera
-    public var COMMANDER_DEPTH_OFFSET : float = -0.5;
+    public var COMMANDER_DEPTH_OFFSET : float = -0.6;
     // Relative to the world origin, the opposing team's offset in the z-axis, + is away from the camera
     public var TEAM_DEPTH_OFFSET : float = 8;
     // Spacing in the z-axis between runners on the same team
