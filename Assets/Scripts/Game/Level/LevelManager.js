@@ -97,7 +97,7 @@ function removeSegment(teamId : int){
 }
 
 function onAddSegment(teamId : int, segment : GameObject, enemies : List.<Enemy>, coins : List.<Transform>){
-    var segmentWidth : float = segment.Find("model/main").GetComponent(MeshFilter).mesh.bounds.size.x;
+    var segmentWidth : float = segment.transform.Find("model/main").GetComponent(MeshFilter).mesh.bounds.size.x;
     var objects : List.<GameObject> = new List.<GameObject>();
     objects.Add(segment);
 
