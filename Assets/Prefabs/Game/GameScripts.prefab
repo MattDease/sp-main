@@ -46,6 +46,7 @@ MonoBehaviour:
   - {fileID: 100114, guid: 039b69369d4483445ab732b032da3ac0, type: 2}
   - {fileID: 100122, guid: 3c74f4906ce118c459257843722d2d20, type: 2}
   - {fileID: 100106, guid: 31331b17e6e2cdb4ea748a131c08222e, type: 2}
+  - {fileID: 100072, guid: 03a18237a5913d243b339a200a7708aa, type: 2}
   backgroundPrefabs:
   - {fileID: 100002, guid: 3603f915cd0360245a38a002cb3cfed2, type: 2}
   - {fileID: 100002, guid: 3603f915cd0360245a38a002cb3cfed2, type: 2}
