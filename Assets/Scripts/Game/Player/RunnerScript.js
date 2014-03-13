@@ -293,6 +293,7 @@ function checkKeyboardInput(){
 }
 
 function OnEnable(){
+    animator.SetBool("Idle", false);
     if(networkView.isMine){
         if(Config.USE_EGG){
             egg = team.getEgg();
