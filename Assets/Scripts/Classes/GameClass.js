@@ -64,6 +64,10 @@ public class Game {
         return players;
     }
 
+    public function getMode() : GameMode {
+        return mode;
+    }
+
     public function getTeam(i : int) : Team{
         return teams[i];
     }
@@ -75,6 +79,20 @@ public class Game {
     public function getLeadingTeam() : Team {
         if(mode == GameMode.Versus){
             if(teams[0].getDistance() > teams[1].getDistance()){
+                return teams[0];
+            }
+            else{
+                return teams[1];
+            }
+        }
+        else{
+            return teams[0];
+        }
+    }
+
+    public function getTrailingTeam() : Team {
+        if(mode == GameMode.Versus){
+            if(teams[0].getDistance() < teams[1].getDistance()){
                 return teams[0];
             }
             else{

@@ -116,6 +116,7 @@ function OnNetworkLoadedLevel(){
             for(var team : Team in game.getTeams()){
                 levelManager.addFirstSegment(team.getId());
             }
+            levelManager.addFirstPlanes();
         }
     }
     else{
