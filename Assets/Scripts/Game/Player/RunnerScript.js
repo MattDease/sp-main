@@ -16,6 +16,7 @@ private var platform : GameObject;
 private var egg : GameObject;
 private var eggScript : EggScript;
 
+private var targetSpeed : float = Config.RUN_SPEED;
 private var currentSpeed : float = Config.RUN_SPEED;
 private var runningPlane : Vector3;
 private var cameraOffset : Vector2 = Vector2.zero;
@@ -23,6 +24,7 @@ private var prevPlatformPos : Vector2 = Vector2.zero;
 private var isAttacking : boolean = false;
 private var isGrounded : boolean = true;
 private var isDoubleJump: boolean = false;
+private var lastSpeedChange : float = 0;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player = Util.GetPlayerById(networkView.viewID.owner.ToString()) as Runner;
@@ -99,6 +101,17 @@ function Update(){
     }
     if(animState.IsName("Base Layer.AttackRight")){
         animator.SetBool("Attack", false);
+    }
+    if(Time.time - lastSpeedChange <= Config.SPEED_TRANSITION_DURATION){
+        var percent : float = (Time.time - lastSpeedChange) / Config.SPEED_TRANSITION_DURATION;
+        if(targetSpeed == Config.WALK_SPEED){
+            animator.SetFloat("Speed", 0.2 + percent * 0.3);
+            currentSpeed = Config.RUN_SPEED - (percent * (Config.RUN_SPEED - Config.WALK_SPEED));
+        }
+        else if(targetSpeed == Config.RUN_SPEED){
+            animator.SetFloat("Speed", 0.5 - percent * 0.3);
+            currentSpeed = Config.WALK_SPEED + (percent * (Config.RUN_SPEED - Config.WALK_SPEED));
+        }
     }
     if(networkView.isMine && player.isAlive()){
         var position : Vector3 = player.getPosition();
@@ -197,14 +210,14 @@ function syncToss(){
 
 @RPC
 function startWalk(){
-    currentSpeed = Config.WALK_SPEED;
-    animator.SetFloat("Speed", 0.5);
+    targetSpeed = Config.WALK_SPEED;
+    lastSpeedChange = Time.time;
 }
 
 @RPC
 function stopWalk(){
-    currentSpeed = Config.RUN_SPEED;
-    animator.SetFloat("Speed", 0.2);
+    targetSpeed = Config.RUN_SPEED;
+    lastSpeedChange = Time.time;
 }
 
 function OnTriggerEnter(other : Collider){

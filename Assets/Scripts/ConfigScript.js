@@ -40,6 +40,8 @@ public static class Config{
     public var TEAM_DEPTH_OFFSET : float = 6;
     // Spacing in the z-axis between runners on the same team
     public var RUNNER_LANE_WIDTH : float = 0.6;
+    // Duration in seconds of transition between running and walking speeds;
+    public var SPEED_TRANSITION_DURATION : float = 0.3;
 
     //// NETWORKING
     // ID that all hosts will use to register their game with the master server.
