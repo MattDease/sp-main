@@ -79,16 +79,16 @@ function Update(){
                         }
                     }
                 }
-                else{
-                    var position : Vector3 = platform.transform.position;
-                    if(platform.CompareTag("moveableX")){
-                        position.x = player.getPosition().x + platformOffset.x;
-                    }
-                    else if(platform.CompareTag("moveableY")){
-                        position.y = player.getPosition().y + platformOffset.y;
-                    }
-                    platform.GetComponent(PlatformScript).notifyPosition(position);
+            }
+            if(platform){
+                var position : Vector3 = platform.transform.position;
+                if(platform.CompareTag("moveableX")){
+                    position.x = player.getPosition().x + platformOffset.x;
                 }
+                else if(platform.CompareTag("moveableY")){
+                    position.y = player.getPosition().y + platformOffset.y;
+                }
+                platform.GetComponent(PlatformScript).notifyPosition(position);
             }
         }
         checkKeyboardInput();
