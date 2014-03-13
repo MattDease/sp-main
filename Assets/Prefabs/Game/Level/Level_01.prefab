@@ -716,7 +716,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400094}
-  - 95: {fileID: 9500000}
   m_Layer: 9
   m_Name: model
   m_TagString: Untagged
@@ -1355,7 +1354,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100074}
-  m_Mesh: {fileID: 4300000, guid: f56a3b79bb8786b43b7b1c0e7363e8d7, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 2d911390fed320c4db836d99f2f887e8, type: 3}
 --- !u!64 &6400000
 MeshCollider:
   m_ObjectHideFlags: 1
@@ -1368,21 +1367,7 @@ MeshCollider:
   serializedVersion: 2
   m_SmoothSphereCollisions: 0
   m_Convex: 0
-  m_Mesh: {fileID: 4300000, guid: f56a3b79bb8786b43b7b1c0e7363e8d7, type: 3}
---- !u!95 &9500000
-Animator:
-  serializedVersion: 2
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100094}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: f56a3b79bb8786b43b7b1c0e7363e8d7, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_ApplyRootMotion: 1
-  m_AnimatePhysics: 0
-  m_HasTransformHierarchy: 1
+  m_Mesh: {fileID: 4300000, guid: 2d911390fed320c4db836d99f2f887e8, type: 3}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1395,13 +1380,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawns:
-  - {fileID: 400068}
-  - {fileID: 400066}
-  - {fileID: 400036}
-  - {fileID: 400034}
-  - {fileID: 400062}
-  - {fileID: 400060}
-  - {fileID: 400058}
   - {fileID: 400056}
   - {fileID: 400054}
   - {fileID: 400052}
@@ -1412,11 +1390,7 @@ MonoBehaviour:
   - {fileID: 400042}
   - {fileID: 400040}
   - {fileID: 400038}
-  - {fileID: 400072}
-  - {fileID: 400070}
-  - {fileID: 400032}
   - {fileID: 400018}
-  - {fileID: 400030}
   - {fileID: 400028}
   - {fileID: 400026}
   - {fileID: 400024}
@@ -1429,6 +1403,17 @@ MonoBehaviour:
   - {fileID: 400010}
   - {fileID: 400008}
   - {fileID: 400006}
+  - {fileID: 400068}
+  - {fileID: 400066}
+  - {fileID: 400036}
+  - {fileID: 400034}
+  - {fileID: 400062}
+  - {fileID: 400060}
+  - {fileID: 400058}
+  - {fileID: 400072}
+  - {fileID: 400070}
+  - {fileID: 400032}
+  - {fileID: 400030}
   tutorialPoints:
   - {fileID: 400004}
   - {fileID: 400002}
