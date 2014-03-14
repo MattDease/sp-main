@@ -1,4 +1,4 @@
-﻿#pragma strict
+#pragma strict
 
 private var playerName : String;
 private var timesPlayed : int = 0;

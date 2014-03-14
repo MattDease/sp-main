@@ -55,14 +55,30 @@ public class Game {
 
     public function setIsVersus(isVersus:boolean) {
         this.isVersus = isVersus;
-        teams[0].removeAllTeammates();
+
+        for(var team:Team in teams){
+            team.clearAll();
+        }
 
         if(isVersus){
             //Add another team
+
+            var changetoPlayer : Dictionary.<String,Player> = new Dictionary.<String,Player>();
+
             for(var player : Player in players.Values){
                 player.setTeam(100, null);
                 player.setCharacter(12);
+
+                if(player.GetType != Player) {
+                    changetoPlayer.Add(player.getId(), player);
+                }
             }
+
+            for(var player : Player in changetoPlayer.Values){
+                changeToPlayer(player.getId(), player.getName(), player.getTeamId(), player.getNetworkPlayer());
+            }
+
+
             teams.Add(new Team(1));
         } else {
             //Remove second team
@@ -70,6 +86,7 @@ public class Game {
                 player.setTeam(0, getTeam(0));
                 player.setCharacter(12);
             }
+
             teams.Remove(getTeam(1));
         }
     }
@@ -106,6 +123,8 @@ public class Game {
     }
 
     public function getTeam(i : int) : Team{
+        if(i == 100) return null;
+
         return teams[i];
     }
 
@@ -130,7 +149,7 @@ public class Game {
     // server-only function, check composition of team(s), assign new player's role,
     // and return [the team, the role].
     public function getNewPlayerTeamAndRole() : Array{
-        return [100, PlayerRole.Player];
+        return [isVersus ? 100 : 0, PlayerRole.Player];
     }
 
     public function addPlayer (name : String, teamId: int, networkPlayer:NetworkPlayer): Player {
@@ -142,6 +161,7 @@ public class Game {
 
     public function setTeam (player: Player, teamId:int, networkPlayer:NetworkPlayer) {
         if(teamId == 100){
+            players[player.getId()].setTeam(teamId, null);
             player.setTeam(teamId, null);
         } else{
             player.setTeam(teamId, teams[teamId]);
@@ -149,11 +169,12 @@ public class Game {
         }
     }
 
-    public function removeTeam (player: Player, teamId:int, networkPlayer:NetworkPlayer) {
+    public function removeTeam (player: Player, teamId:int,networkPlayer:NetworkPlayer) {
         player.setTeam(100, null);
-        teams[teamId].removeTeammate(player.getId());
-        player.setCharacter(11);
-       // changeToPlayer(player.getId(), player.getName(), teamId, Network.player);
+        Debug.Log(player.GetType());
+        teams[teamId].removeTeammate(player, "Game Class");
+        player.setCharacter(12);
+        //changeToPlayer(player.getId(), player.getName(), teamId, Network.player);
     }
 
     public function addRunner(name:String, teamId:int, networkPlayer:NetworkPlayer) : Runner {
@@ -177,7 +198,7 @@ public class Game {
         Network.RemoveRPCs(player.getNetworkPlayer());
         Network.DestroyPlayerObjects(player.getNetworkPlayer());
         Debug.Log("Player '" + player.getName() + "' disconnected.");
-        teams[player.getTeamId()].removeTeammate(id);
+        teams[player.getTeamId()].removeTeammate(player, "Remove");
         players.Remove(id);
         if(stateScript.getGameState() != GameState.Uninitialized){
             // Handle disconnecting players
@@ -188,37 +209,27 @@ public class Game {
         }
     }
 
-    public function changeToRunner(playerId : String, name:String, teamId:int, netPlayer :NetworkPlayer) : Runner {
+    public function changeToRunner(playerId : String, name:String, teamId:int, character: int, netPlayer :NetworkPlayer) : Runner {
         var runner : Runner = createRunner(name, teamId, netPlayer);
         players[playerId] = runner;
+        playerScript.setSelf(runner);
+        runner.setCharacter(character);
         return runner;
     }
 
-    public function changeToCommander(playerId : String, name:String, teamId:int, netPlayer :NetworkPlayer) : Commander{
+    public function changeToCommander(playerId : String, name:String, teamId:int, character: int,  netPlayer :NetworkPlayer) : Commander{
         var commander : Commander = createCommander(name, teamId, netPlayer);
         players[playerId] = commander;
+        playerScript.setSelf(commander);
+        commander.setCharacter(character);
         return commander;
     }
 
     public function changeToPlayer(playerId : String, name:String, teamId:int, netPlayer :NetworkPlayer) : Player{
         var player : Player = createPlayer(name, teamId, netPlayer);
         players[playerId] = player;
+        player.setCharacter(12);
         return player;
-    }
-
-    // Change player to the other role
-    public function switchPlayerRole(player : Player){
-        // createRunner/createCommander, set new value for id in player dictionary
-    }
-
-    // Move player to the other team
-    public function switchPlayerTeam(player : Player){
-
-    }
-
-    // Toggle between GameMode.Team and GameMode.Versus
-    public function switchMode(){
-
     }
 
     // Checks for any errors in the game setup

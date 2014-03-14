@@ -99,16 +99,21 @@ public class Team{
     }
 
     public function addTeammate(player : Player){
-
         if(player.GetType() == Runner){
             runners.Add(player.getId(), player as Runner);
             activeRunners.Add(player.getId(), player as Runner);
         }
+
         if(player.GetType() == Commander){
             commander = player as Commander;
         }
 
-        teammates.Add(player.getId(), player);
+        if(teammates.ContainsKey(player.getId())){
+            teammates[player.getId()] = player;
+        } else {
+            teammates.Add(player.getId(), player);
+        }
+
     }
 
     public function killTeammate(id : String){
@@ -118,7 +123,12 @@ public class Team{
         }
     }
 
-    public function removeTeammate(id : String){
+    public function removeTeammate(player : Player, from: String){
+
+        Debug.Log("FROM " + from + " " + player.GetType());
+
+        var id : String = player.getId();
+
         if(teammates[id].GetType() == Runner){
             runners.Remove(id);
             activeRunners.Remove(id);
@@ -129,9 +139,11 @@ public class Team{
         teammates.Remove(id);
     }
 
-    public function removeAllTeammates() {
+    public function clearAll() {
         selectedCharacters.Clear();
         teammates.Clear();
+        runners.Clear();
+        activeRunners.Clear();
     }
     public function getLeader() : Runner {
         var leader : Runner;
@@ -179,6 +191,18 @@ public class Team{
             return cachedDistance;
         }
     }
+
+    public function ToString() : String {
+        var str : String = "";
+        str += "Team[" + this.id + "] ";
+        str += "Teammate Count[" + this.teammates.Count + "] ";
+        str += "Runner Count[" + this.runners.Count + "] ";
+        str += "Active Runner Count[" + this.activeRunners.Count + "] ";
+        str += "Selected Char Count[" + this.selectedCharacters.Count + "] ";
+        return str;
+    }
+
+
 
     // TODO add team validity check methods and gameplay methods.
 }
