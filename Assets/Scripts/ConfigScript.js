@@ -24,7 +24,7 @@ public static class Config{
     // Walking speed in m/s of the runner.
     public var WALK_SPEED : float = 1.4;
     // Upward impulse speed in m/s.
-    public var JUMP_SPEED : float = 5.5;
+    public var JUMP_SPEED : float = 4;
     // Time in seconds of the runner crouch state.
     public var CROUCH_DURATION : float = 1;
     // Time in seconds of the runner attack state.
