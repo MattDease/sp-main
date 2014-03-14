@@ -50,7 +50,7 @@ MonoBehaviour:
   backgroundPrefabs:
   - {fileID: 100002, guid: 3603f915cd0360245a38a002cb3cfed2, type: 2}
   - {fileID: 100002, guid: 3603f915cd0360245a38a002cb3cfed2, type: 2}
-  - {fileID: 100002, guid: 3603f915cd0360245a38a002cb3cfed2, type: 2}
+  - {fileID: 100002, guid: 128f0212b97c8604eab1aaa90510146e, type: 2}
   enemyPrefabs:
   - {fileID: 100122, guid: 48a50ecdab9835b41b1e05028c318ded, type: 2}
   - {fileID: 100050, guid: 0e9afb92af6174ca88086c6f04108d50, type: 2}

@@ -38,7 +38,7 @@ private var firstSegmentEnd : List.<float> = new List.<float>();
 public var BACKGROUND_OFFSET : List.<Vector3> = new List.<Vector3>();
 BACKGROUND_OFFSET.Add(Vector3(30, -1, 5));
 BACKGROUND_OFFSET.Add(Vector3(60, 0, 10));
-BACKGROUND_OFFSET.Add(Vector3(90, 1, 15));
+BACKGROUND_OFFSET.Add(Vector3(90, -5, 25));
 
 function Start () {
     gameManager = GameObject.Find("/GameManager");
