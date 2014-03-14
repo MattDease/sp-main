@@ -63,7 +63,7 @@ function initRunner(teamId : int){
         player.gameObject.layer = LayerMask.NameToLayer("Remote Players");
 
         player.gameObject.transform.position.z += team.runnerCreationCount * Config.RUNNER_LANE_WIDTH;
-        if(teamId != me.getTeamId()){
+        if(teamId != me.getTeamId() || me.GetType() == Commander){
             player.gameObject.transform.position.z -= Config.RUNNER_LANE_WIDTH;
         }
         transform.position.z += (teamId == me.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
