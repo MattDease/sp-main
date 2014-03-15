@@ -8,6 +8,7 @@ public class Game {
 
     // TODO - set game mode when instantiating game
     private var mode : GameMode = GameMode.Team;
+    private var status : String = "All good!";
 
     // Game Manager & scripts
     private var gameManager : GameObject;
@@ -160,6 +161,7 @@ public class Game {
     }
 
     public function setTeam (player: Player, teamId:int, networkPlayer:NetworkPlayer) {
+
         if(teamId == 100){
             players[player.getId()].setTeam(teamId, null);
             player.setTeam(teamId, null);
@@ -171,7 +173,6 @@ public class Game {
 
     public function removeTeam (player: Player, teamId:int,networkPlayer:NetworkPlayer) {
         player.setTeam(100, null);
-        Debug.Log(player.GetType());
         teams[teamId].removeTeammate(player, "Game Class");
         player.setCharacter(12);
         //changeToPlayer(player.getId(), player.getName(), teamId, Network.player);
@@ -212,7 +213,6 @@ public class Game {
     public function changeToRunner(playerId : String, name:String, teamId:int, character: int, netPlayer :NetworkPlayer) : Runner {
         var runner : Runner = createRunner(name, teamId, netPlayer);
         players[playerId] = runner;
-        playerScript.setSelf(runner);
         runner.setCharacter(character);
         return runner;
     }
@@ -220,7 +220,6 @@ public class Game {
     public function changeToCommander(playerId : String, name:String, teamId:int, character: int,  netPlayer :NetworkPlayer) : Commander{
         var commander : Commander = createCommander(name, teamId, netPlayer);
         players[playerId] = commander;
-        playerScript.setSelf(commander);
         commander.setCharacter(character);
         return commander;
     }
@@ -237,6 +236,9 @@ public class Game {
 
         for(var team : Team in teams){
             if(team.isValid() != TeamStatus.Valid){
+
+                status = "Oh no! Team setup is wrong. Need 2 runners and 1 commander.";
+
                return false;
             }
         }
@@ -278,5 +280,14 @@ public class Game {
         }
 
         return new Commander(name, teamId, team, networkPlayer);
+    }
+
+    public function setGameStatus(status: String) {
+        this.status = status;
+    }
+
+    public function getGameStatus() : String {
+        return status;
+
     }
 }

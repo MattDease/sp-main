@@ -125,8 +125,6 @@ public class Team{
 
     public function removeTeammate(player : Player, from: String){
 
-        Debug.Log("FROM " + from + " " + player.GetType());
-
         var id : String = player.getId();
 
         if(teammates[id].GetType() == Runner){
