@@ -47,13 +47,14 @@ function onLevelReady(){
 @RPC
 function createCharacter(info : NetworkMessageInfo){
     var go : Transform;
-    if(playerScript.getSelf().GetType() == Runner){
+    var me : Player = playerScript.getSelf();
+    if(me.GetType() == Runner){
         go = Network.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, 0);
-        go.networkView.RPC("initRunner", RPCMode.All, playerScript.getSelf().getTeamId());
+        go.networkView.RPC("initRunner", RPCMode.All, me.getId(), me.getTeamId());
     }
     else{
         go = Network.Instantiate(commanderPrefab, Vector3(0, 0, Config.COMMANDER_DEPTH_OFFSET), Quaternion.identity, 0);
-        go.networkView.RPC("initCommander", RPCMode.All, playerScript.getSelf().getTeamId());
+        go.networkView.RPC("initCommander", RPCMode.All, me.getId(), me.getTeamId());
     }
     if(Network.isServer){
         // Server can't send server RPC

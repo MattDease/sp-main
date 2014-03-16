@@ -22,7 +22,12 @@ private var platform : GameObject;
 private var platformOffset : Vector2 = Vector2.zero;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
-    player = Util.GetPlayerById(networkView.viewID.owner.ToString()) as Commander;
+
+}
+
+@RPC
+function initCommander(playerId : String, teamId : int){
+    player = Util.GetPlayerById(playerId) as Commander;
     team = player.getTeam();
     model = gameObject.transform.Find("model").gameObject;
     animator = model.GetComponent(Animator);
@@ -41,10 +46,6 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 
         player.gameObject.rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
     }
-}
-
-@RPC
-function initCommander(teamId : int){
     transform.position.z += (teamId == player.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
 }
 

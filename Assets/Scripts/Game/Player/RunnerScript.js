@@ -27,7 +27,12 @@ private var isDoubleJump: boolean = false;
 private var lastSpeedChange : float = 0;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
-    player = Util.GetPlayerById(networkView.viewID.owner.ToString()) as Runner;
+
+}
+
+@RPC
+function initRunner(playerId : String, teamId : int){
+    player = Util.GetPlayerById(playerId) as Runner;
     model = gameObject.transform.Find("model").gameObject;
     animator = model.GetComponent(Animator);
     team = player.getTeam();
@@ -48,13 +53,6 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
         runningPlane = player.getPosition();
     }
     else{
-        Util.Toggle(gameObject, false);
-    }
-}
-
-@RPC
-function initRunner(teamId : int){
-    if(!networkView.isMine){
         var me : Player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
 
         team.runnerCreationCount++;
