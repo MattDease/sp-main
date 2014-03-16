@@ -156,7 +156,7 @@ function OnGUI() {
     if (showStatusBar) {
         GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), statusBarTexture);
         GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), tempString, "WhiteText");
-//gameSetupScript.game.getGameStatus()
+        //gameSetupScript.game.getGameStatus()
     }
 
     checkVersus();
@@ -277,7 +277,6 @@ function OnGUI() {
                         break;
                     }
 
-
                     if (showEmpty) {
                         GUI.Button(Rect(guiHost[1].offset.x + layoutOffset, guiHost[1].offset.y, Screen.width * 0.15, Screen.height * 0.20), playerTextures[currentTeamCount], "FullImage");
                     } else if (!showEmpty) {
@@ -314,7 +313,6 @@ function OnGUI() {
 
                 var leftLayoutCount = 0;
                 var rightLayoutCount = 0;
-
 
                 //Need to check to see if team is full, so if teamCount is full, show faded arrow
                 // if team is full, set teamOneFull - teamTwoFull to true...
@@ -596,7 +594,6 @@ function characterSelection() {
                 GameObject.Find("/GameManager").networkView.RPC("updateCharacter", RPCMode.AllBuffered, playerScript.getSelf().getId(), c, Network.player);
                 playerScript.getSelf().setCharacter(c);
 
-
                 //If not hosting and changed character - you aren't ready.
                 if (!isHosting && playerScript.getSelf().getReadyStatus()) {
                     playerScript.getSelf().updateReadyStatus(false);
@@ -657,9 +654,6 @@ function characterSelection() {
            if(!isCommanderAlreadySelected){
 
                 GameObject.Find("/GameManager").networkView.RPC("updateCharacter", RPCMode.AllBuffered, playerScript.getSelf().getId(), count, Network.player);
-                playerScript.getSelf().setCharacter(c);
-
-
                 //If not hosting and changed character - you aren't ready.
                 if (!isHosting && playerScript.getSelf().getReadyStatus()) {
                     playerScript.getSelf().updateReadyStatus(false);
@@ -720,14 +714,12 @@ function switchingTeams() {
     //Check to see if on a team already, if on team 1, arrow needs to pount down...
     if (playerScript.getSelf().getTeamId() == 0) {
         if (GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height * 0.05 - Screen.height * 0.1, guiVersus[4].textureWidth, guiVersus[4].textureHeight), arrowDownTexture, "FullImage")) {
-            gameSetupScript.game.getTeam(playerScript.getSelf().getTeamId()).removeSelectedCharacters(playerScript.getSelf().getCharacter());
             GameObject.Find("/GameManager").networkView.RPC("removeTeam", RPCMode.AllBuffered, playerScript.getSelf().getId(), 0, Network.player);
         }
 
     } else if (playerScript.getSelf().getTeamId() == 1) {
 
         if (GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height * 0.05 + Screen.height * 0.1, guiVersus[4].textureWidth, guiVersus[4].textureHeight), arrowTexture, "FullImage")) {
-            gameSetupScript.game.getTeam(playerScript.getSelf().getTeamId()).removeSelectedCharacters(playerScript.getSelf().getCharacter());
             GameObject.Find("/GameManager").networkView.RPC("removeTeam", RPCMode.AllBuffered, playerScript.getSelf().getId(), 1, Network.player);
         }
     } else {

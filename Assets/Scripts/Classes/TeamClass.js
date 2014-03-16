@@ -67,7 +67,10 @@ public class Team{
     }
 
     public function removeSelectedCharacters(selectedChar : int ) {
-        selectedCharacters.Remove(selectedChar);
+
+        Debug.Log("removing player" + selectedChar);
+
+        if(selectedChar != 12) selectedCharacters.Remove(selectedChar);
     }
 
     public function getSelectedCharacters() : List.<int> {
