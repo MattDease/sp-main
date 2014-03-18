@@ -12,7 +12,7 @@ private var model : GameObject;
 private var animator : Animator;
 private var team : Team;
 private var camContainer : GameObject;
-private var platform : GameObject;
+private var platform : GameObject = null;
 private var egg : GameObject;
 private var eggScript : EggScript;
 
@@ -73,10 +73,6 @@ function initRunner(playerId : String, teamId : int){
 // Do physics changes here
 function FixedUpdate(){
     if(networkView.isMine && player.isAlive()){
-        if(platform){
-            gameObject.transform.position += Vector2(platform.transform.position.x, platform.transform.position.y) - prevPlatformPos;
-            prevPlatformPos = platform.transform.position;
-        }
         player.gameObject.rigidbody.velocity.x = currentSpeed;
     }
 }
@@ -120,12 +116,18 @@ function Update(){
         }
         if(!platform){
             var hit : RaycastHit;
-            if(Physics.Raycast(gameObject.transform.position, Vector3.down, hit, 1)) {
+            var pos : Vector3 = gameObject.transform.position;
+            pos.y += 0.1;
+            if(Physics.Raycast(pos, Vector3.down, hit, 1)) {
                 if(hit.collider.gameObject.CompareTag("moveableX") || hit.collider.gameObject.CompareTag("moveableY")){
                     platform = hit.collider.gameObject;
                     prevPlatformPos = platform.transform.position;
                 }
             }
+        }
+        if(platform){
+            gameObject.transform.position += Vector2(platform.transform.position.x, platform.transform.position.y) - prevPlatformPos;
+            prevPlatformPos = platform.transform.position;
         }
         checkKeyboardInput();
     }
@@ -249,7 +251,7 @@ function OnCollisionExit(theCollision : Collision){
     if(networkView.isMine && theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")) {
         takeoff();
         networkView.RPC("takeoff", RPCMode.Others);
-        if(platform && theCollision.gameObject.CompareTag("moveableX")){
+        if(platform && (theCollision.gameObject.CompareTag("moveableX") || theCollision.gameObject.CompareTag("moveableY"))){
             platform = null;
         }
     }
