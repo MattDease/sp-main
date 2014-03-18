@@ -47,6 +47,9 @@ MonoBehaviour:
   - {fileID: 100122, guid: 3c74f4906ce118c459257843722d2d20, type: 2}
   - {fileID: 100106, guid: 31331b17e6e2cdb4ea748a131c08222e, type: 2}
   - {fileID: 100072, guid: 03a18237a5913d243b339a200a7708aa, type: 2}
+  - {fileID: 100092, guid: ed0e88e30f4302049ad96cea33c91fa2, type: 2}
+  - {fileID: 100116, guid: 47b43b3539328ec4abc657704dc359a0, type: 2}
+  - {fileID: 100084, guid: ab10031ff2c982d49adaed92b427366e, type: 2}
   backgroundPrefabs:
   - {fileID: 100002, guid: 3603f915cd0360245a38a002cb3cfed2, type: 2}
   - {fileID: 100002, guid: 3603f915cd0360245a38a002cb3cfed2, type: 2}
