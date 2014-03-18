@@ -22,7 +22,6 @@ private var runningPlane : Vector3;
 private var cameraOffset : Vector2 = Vector2.zero;
 private var prevPlatformPos : Vector2 = Vector2.zero;
 private var isAttacking : boolean = false;
-private var isGrounded : boolean = true;
 private var isDoubleJump: boolean = false;
 private var lastSpeedChange : float = 0;
 
@@ -66,6 +65,7 @@ function initRunner(playerId : String, teamId : int){
         }
         transform.position.z += (teamId == me.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
         depth = transform.position.z;
+        Util.Toggle(gameObject, false);
         Invoke("show", 0.3);
     }
 }
@@ -129,6 +129,16 @@ function Update(){
             gameObject.transform.position += Vector2(platform.transform.position.x, platform.transform.position.y) - prevPlatformPos;
             prevPlatformPos = platform.transform.position;
         }
+        var grounded : boolean = isGrounded();
+        if(grounded != animator.GetBool("IsGrounded")){
+            if(grounded){
+                networkView.RPC("land", RPCMode.All);
+            }
+            else{
+                networkView.RPC("takeoff", RPCMode.All);
+                platform = null;
+            }
+        }
         checkKeyboardInput();
     }
 }
@@ -148,13 +158,26 @@ function LateUpdate(){
     }
 }
 
+function isGrounded() : boolean {
+    var hit : RaycastHit;
+    var pos : Vector3 = gameObject.transform.position;
+    pos.y += 0.1;
+    if(Physics.Raycast(pos, Vector3.down, hit, 0.2)) {
+        if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground Segments")){
+            return true;
+        }
+    }
+    return false;
+}
+
 function show(){
     Util.Toggle(gameObject, true);
 }
 
 @RPC
 function jump(){
-    if(isGrounded || !isGrounded && !isDoubleJump) {
+    var grounded : boolean = isGrounded();
+    if(grounded || (!grounded && !isDoubleJump)) {
         var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
         if(animState.IsName("Base Layer.Locomotion")){
             animator.SetBool("Jump", true);
@@ -170,13 +193,11 @@ function jump(){
 
 @RPC
 function takeoff(){
-    isGrounded = false;
     animator.SetBool("IsGrounded", false);
 }
 
 @RPC
 function land(){
-    isGrounded = true;
     animator.SetBool("IsGrounded", true);
     isDoubleJump = false;
 }
@@ -240,21 +261,11 @@ function OnTriggerEnter(other : Collider){
 }
 
 function OnCollisionEnter(theCollision : Collision){
-    if(networkView.isMine && theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")){
-        land();
-        networkView.RPC("land", RPCMode.Others);
-    }
+
 }
 
-//consider when character is jumping .. it will exit collision.
 function OnCollisionExit(theCollision : Collision){
-    if(networkView.isMine && theCollision.gameObject.layer == LayerMask.NameToLayer("Ground Segments")) {
-        takeoff();
-        networkView.RPC("takeoff", RPCMode.Others);
-        if(platform && (theCollision.gameObject.CompareTag("moveableX") || theCollision.gameObject.CompareTag("moveableY"))){
-            platform = null;
-        }
-    }
+
 }
 
 private function getCameraOffset() : Vector2 {
