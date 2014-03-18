@@ -55,4 +55,7 @@ public static class Config{
     // Tests the type of the device's connection.
     public var TEST_CONNECTION : boolean = false;
 
+    //Sets team size limit
+    public var TEAM_SIZE : int = 10;
+
 }

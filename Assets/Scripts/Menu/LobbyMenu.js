@@ -1,4 +1,4 @@
-﻿#pragma strict
+#pragma strict
 #pragma downcast
 
 private var menuScript : Menu;
@@ -18,10 +18,12 @@ private var guiObject : GuiClasses [];
 private var guiStatusBar: GuiClasses;
 private var status;
 private var menuSkin : GUISkin;
+private var greenStyle :GUIStyle;
 private var backTexture : Texture2D;
 private var refreshTexture : Texture2D;
 private var createNewOverlayTexture : Texture2D;
 private var backgroundTexutre : Texture2D;
+private var whiteBarTexture : Texture2D;
 
 private var buttonText = 40;
 private var bodyText = 50;
@@ -39,7 +41,7 @@ function Start() {
     backTexture = Resources.Load("Textures/gui/back", Texture2D);
     refreshTexture = Resources.Load("Textures/gui/refresh", Texture2D);
 
-    guiObject = new GuiClasses[5];
+    guiObject = new GuiClasses[6];
     for (var y = 0; y < guiObject.length; y++) {
         guiObject[y] = new GuiClasses();
     }
@@ -65,10 +67,6 @@ function OnGUI() {
 
     var labelStyle: GUIStyle = GUI.skin.GetStyle("JoinGame");
     labelStyle.fontSize = menuScript.getScale() * buttonText;
-
-    if (GUI.Button(Rect(guiObject[1].offset.x + Screen.width * 0.01, guiObject[1].offset.y - Screen.height * 0.01, Screen.width * 0.08, Screen.height * 0.2), backTexture, "FullImage")) {
-        leaveFor(menus.main);
-    }
 
     //Refresh Button
     guiObject[0].textureWidth = 170;
@@ -134,7 +132,6 @@ function OnGUI() {
         var localStyle: GUIStyle = GUI.skin.GetStyle("PlainText");
         localStyle.fontSize = menuScript.getScale() * bodyText;
 
-
         guiObject[4].textureWidth = Screen.width / 1.5;
         guiObject[4].textureHeight = Screen.height / 1.5;
         guiObject[4].setLocation(Points.Center);
@@ -143,7 +140,16 @@ function OnGUI() {
         GUI.Label(Rect(0, 0, Screen.width, Screen.height), "No Games Being Hosted", "PlainText");
     }
 
+    greenStyle = GUI.skin.GetStyle("GreenButton");
+    greenStyle.fontSize = menuScript.getScale() * buttonText;
 
+    guiObject[5].textureWidth = Screen.width * 0.23;
+    guiObject[5].textureHeight = Screen.height * 0.12;
+    guiObject[5].setLocation(Points.BottomRight);
+
+    if(GUI.Button(Rect(guiObject[5].offset.x, Screen.height - Screen.height * 0.13, guiObject[5].textureWidth, guiObject[5].textureHeight), "NEW GAME", "GreenButton")){
+        leaveFor(menus.host);
+    }
 
 }
 

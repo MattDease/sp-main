@@ -63,8 +63,10 @@ public class Game {
 
         if(isVersus){
             //Add another team
-
             var changetoPlayer : Dictionary.<String,Player> = new Dictionary.<String,Player>();
+
+            playerScript.getSelf().setTeamId(100);
+            playerScript.getSelf().setCharacter(12);
 
             for(var player : Player in players.Values){
                 player.setTeam(100, null);
@@ -79,9 +81,11 @@ public class Game {
                 changeToPlayer(player.getId(), player.getName(), player.getTeamId(), player.getNetworkPlayer());
             }
 
-
             teams.Add(new Team(1));
         } else {
+              playerScript.getSelf().setTeamId(0);
+              playerScript.getSelf().setCharacter(12);
+
             //Remove second team
             for(var player : Player in players.Values){
                 player.setTeam(0, getTeam(0));

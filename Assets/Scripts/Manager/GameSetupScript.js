@@ -153,7 +153,7 @@ function OnDisconnectedFromServer(){
     playerScript.setSelf(null);
     game.destroy();
     game = null;
-    stateScript.setCurrentMenu(menus.main);
+    stateScript.setCurrentMenu(menus.lobby);
     Application.LoadLevel("scene-menu");
 }
 
@@ -214,28 +214,30 @@ function updateReadyStatus(id : String, isReady : boolean, info : NetworkMessage
 function updateCharacter(id : String, selectedChar : int, netPlayer : NetworkPlayer, info : NetworkMessageInfo){
     var player : Player = Util.GetPlayerById(id) as Player;
 
-    var selectedCharacters : List.<int> =player.getTeam().getSelectedCharacters();
-
-    if(selectedChar != 12) {
-        game.getTeam(player.getTeamId()).removeSelectedCharacters(player.getCharacter());
-        game.getTeam(player.getTeamId()).updateSelectedCharacters(selectedChar);
+    if(player.getTeamId() == 100) {
+        player.setCharacter(selectedChar);
     }
+    else {
+        if(selectedChar != 12) {
+            game.getTeam(player.getTeamId()).removeSelectedCharacters(player.getCharacter());
+            game.getTeam(player.getTeamId()).updateSelectedCharacters(selectedChar);
+        }
+        // var selectedCharacters : List.<int> = player.getTeam().getSelectedCharacters();
+        // var tmp : String = "";
+        // for(var i : int in selectedCharacters){
+        //    tmp += i + " -- ";
+        // }
+        //Debug.Log(tmp);
 
-    Debug.Log("--");
-    for(var i : int in selectedCharacters){
-        Debug.Log(i);
-    }
-    Debug.Log("--");
-
-    if(player.getCharacter() > 9 && selectedChar < 9 || player.getCharacter() == 12 && selectedChar < 9){
-        player.setCharacter(selectedChar);
-        networkView.RPC("changeRole", RPCMode.AllBuffered, id, player.getName(), PlayerRole.Runner.ToString(), player.getTeamId(), player.getCharacter(), netPlayer);
-    } else if(player.getCharacter() <= 8 && selectedChar > 8 || player.getCharacter() == 12 && selectedChar >= 9) {
-        player.setCharacter(selectedChar);
-        networkView.RPC("changeRole", RPCMode.AllBuffered, id, player.getName(),PlayerRole.Commander.ToString(), player.getTeamId(), player.getCharacter(), netPlayer);
-
-    } else {
-        player.setCharacter(selectedChar);
+        if(player.getCharacter() > 8 && selectedChar < 9 || player.getCharacter() == 12 && selectedChar < 9){
+            player.setCharacter(selectedChar);
+            networkView.RPC("changeRole", RPCMode.AllBuffered, id, player.getName(), PlayerRole.Runner.ToString(), player.getTeamId(), player.getCharacter(), netPlayer);
+        } else if(player.getCharacter() < 9 && selectedChar > 8 || player.getCharacter() == 12 && selectedChar >= 9) {
+            player.setCharacter(selectedChar);
+            networkView.RPC("changeRole", RPCMode.AllBuffered, id, player.getName(),PlayerRole.Commander.ToString(), player.getTeamId(), player.getCharacter(), netPlayer);
+        } else {
+            player.setCharacter(selectedChar);
+        }
     }
 }
 
@@ -261,13 +263,13 @@ function changeRole(id : String, name : String, newRole : String, teamId:int, ch
     var playerRole : PlayerRole = System.Enum.Parse(PlayerRole, newRole);
     var player : Player;
 
-
     if(playerRole == PlayerRole.Runner){
         player = game.changeToRunner(id, name, teamId, character, netPlayer);
-
     }
     else if(playerRole == PlayerRole.Commander){
         player = game.changeToCommander(id, name, teamId, character, netPlayer);
+    } else if(playerRole == PlayerRole.Player){
+        player = game.changeToPlayer(id, name, teamId, netPlayer);
     }
  }
 

@@ -23,7 +23,7 @@ function OnGUI (){
         leaveFor(menus.start);
     }
     if(GUILayout.Button("Main Menu")){
-        leaveFor(menus.main);
+        leaveFor(menus.lobby);
     }
     if(GUILayout.Button("Lobby Menu")){
         leaveFor(menus.lobby);

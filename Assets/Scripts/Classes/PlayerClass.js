@@ -30,6 +30,10 @@ public class Player{
         return this.teamId;
     }
 
+    public function setTeamId(teamId : int){
+        this.teamId = teamId;
+    }
+
     public function setTeam(teamId:int, team: Team) {
         this.teamId = teamId;
         this.team = team;

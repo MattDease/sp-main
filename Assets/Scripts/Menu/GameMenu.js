@@ -26,7 +26,6 @@ private var playerTexture : Texture2D;
 private var playerSelfTexture : Texture2D;
 private var commanderTexture : Texture2D;
 private var homeTexture : Texture2D;
-private var startTexture : Texture2D;
 private var backgroundTexutre : Texture2D;
 private var createNewOverlayTexture : Texture2D;
 private var backTexture : Texture2D;
@@ -36,6 +35,7 @@ private var arrowTexture : Texture2D;
 private var arrowDownTexture : Texture2D;
 private var arrowTextureDisabled : Texture2D;
 private var arrowDownTextureDisabled : Texture2D;
+private var whiteBarTexture : Texture2D;
 
 private var selectedPlayerIndex : int = 0;
 private var playerTextures :Texture[ ] = new Texture[13];
@@ -86,7 +86,6 @@ function Start() {
     backTexture = Resources.Load("Textures/gui/back", Texture2D);
     playerTexture = Resources.Load("Textures/gui/player", Texture2D);
     homeTexture = Resources.Load("Textures/gui/home", Texture2D);
-    startTexture = Resources.Load("Textures/gui/startBtn", Texture2D);
     backgroundTexutre = Resources.Load("Textures/gui/mainMenuBackground", Texture2D);
     createNewOverlayTexture = Resources.Load("Textures/gui/createNewOverlay", Texture2D);
     readyCheckMarkTexture = Resources.Load("Textures/gui/readyCheckMark", Texture2D);
@@ -95,6 +94,7 @@ function Start() {
     arrowDownTexture = Resources.Load("Textures/gui/arrowDown", Texture2D);
     arrowTextureDisabled = Resources.Load("Textures/gui/arrowFaded", Texture2D);
     arrowDownTextureDisabled = Resources.Load("Textures/gui/arrowDownFaded", Texture2D);
+    whiteBarTexture = Resources.Load("Textures/gui/whiteBar", Texture2D);
 
     guiHost = new GuiClasses[5];
     for (var x = 0; x < guiHost.length; x++) {
@@ -129,7 +129,6 @@ function Start() {
         }
         playerTextures[i] = playerTexture;
         playerSelfTextures[i] = playerSelfTexture;
-
     }
 
 }
@@ -152,7 +151,6 @@ function OnGUI() {
         tempString += player.ToString() + " - ";
     }
 
-
     if (showStatusBar) {
         GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), statusBarTexture);
         GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), tempString, "WhiteText");
@@ -174,12 +172,12 @@ function OnGUI() {
             gameSetupScript.game = null;
         }
 
-        leaveFor(menus.main);
+        leaveFor(menus.lobby);
     }
 
     /* ---------- CREATE NEW GAME SCREEN ---------- */
     if (isHosting && !Network.isServer) {
-        GUI.Label(new Rect(0, Screen.height / 2 - Screen.height / 2.5, Screen.width, 0), "NEW GAME", "Header");
+        //GUI.Label(new Rect(0, Screen.height / 2 - Screen.height / 2.5, Screen.width, 0), "NEW GAME", "Header");
 
         guiNewGame[0].textureWidth = Screen.width;
         guiNewGame[0].textureHeight = 100;
@@ -199,11 +197,16 @@ function OnGUI() {
 
         GUI.DrawTexture(new Rect(guiNewGame[3].offset.x, guiNewGame[3].offset.y, Screen.width / 1.5, Screen.height / 3), createNewOverlayTexture);
 
-        GUI.Label(Rect(guiNewGame[0].offset.x, guiNewGame[0].offset.y - Screen.height / 18, Screen.width, 100), "Game Name", "PlainText");
+        GUI.Label(Rect(guiNewGame[0].offset.x, guiNewGame[0].offset.y - Screen.height / 12, Screen.width, 100), "Game Name", "PlainText");
         gameName = GUI.TextField(Rect(guiNewGame[1].offset.x, guiNewGame[1].offset.y + Screen.height/22, Screen.width / 2.2, menuScript.getScale() * 100), gameName, 20);
 
-        if (GUI.Button(Rect(guiNewGame[2].offset.x, guiNewGame[2].offset.y + Screen.height / 4, Screen.width / 5.5, Screen.height / 10), "CREATE", "GreenButton")) {
-            netScript.startHost(3, gameName, onServerInitialize);
+        if(gameName) {
+            GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), whiteBarTexture);
+            GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), "Tap to Continue", "PlainText");
+        }
+
+        if (gameName && GUI.Button(Rect(0, 0, Screen.width, Screen.height), "", "FullImage")) {
+            netScript.startHost(Config.TEAM_SIZE, gameName, onServerInitialize);
             isStartingServer = true;
         }
     }
@@ -581,7 +584,6 @@ function characterSelection() {
             }
         }
 
-
         if(isAlreadySelected){
             tmpColor = GUI.color;
             GUI.color = new Color(1,1,1,0.5f);
@@ -652,8 +654,9 @@ function characterSelection() {
         if (GUI.Button(Rect(Screen.width * 0.75, guiObject[1].offset.y + h, Screen.width * 0.15, Screen.height * 0.20), commanderTexture, "FullImage")) {
 
            if(!isCommanderAlreadySelected){
-
                 GameObject.Find("/GameManager").networkView.RPC("updateCharacter", RPCMode.AllBuffered, playerScript.getSelf().getId(), count, Network.player);
+                playerScript.getSelf().setCharacter(count);
+
                 //If not hosting and changed character - you aren't ready.
                 if (!isHosting && playerScript.getSelf().getReadyStatus()) {
                     playerScript.getSelf().updateReadyStatus(false);
@@ -675,6 +678,7 @@ function characterSelection() {
         GUI.Label(Rect(Screen.width * 0.75, guiObject[1].offset.y + h + (Screen.height * 0.20 / 1.4), Screen.width * 0.15, Screen.height * 0.20), charactersNames[count], "WhiteText");
 
     }
+
 }
 function checkVersus() {
     isVersus = gameSetupScript.game.getIsVersus();
@@ -715,12 +719,13 @@ function switchingTeams() {
     if (playerScript.getSelf().getTeamId() == 0) {
         if (GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height * 0.05 - Screen.height * 0.1, guiVersus[4].textureWidth, guiVersus[4].textureHeight), arrowDownTexture, "FullImage")) {
             GameObject.Find("/GameManager").networkView.RPC("removeTeam", RPCMode.AllBuffered, playerScript.getSelf().getId(), 0, Network.player);
+            playerScript.getSelf().setTeamId(100);
         }
 
     } else if (playerScript.getSelf().getTeamId() == 1) {
-
         if (GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height * 0.05 + Screen.height * 0.1, guiVersus[4].textureWidth, guiVersus[4].textureHeight), arrowTexture, "FullImage")) {
             GameObject.Find("/GameManager").networkView.RPC("removeTeam", RPCMode.AllBuffered, playerScript.getSelf().getId(), 1, Network.player);
+            playerScript.getSelf().setTeamId(100);
         }
     } else {
         if (GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height * 0.05 - Screen.height * 0.1, guiVersus[4].textureWidth, guiVersus[4].textureHeight), (teamOneFull ? arrowTextureDisabled : arrowTexture), "FullImage")) {
@@ -734,7 +739,6 @@ function switchingTeams() {
             if (!teamTwoFull) {
                 gameSetupScript.game.setTeam(playerScript.getSelf(), 1, Network.player);
                 GameObject.Find("/GameManager").networkView.RPC("setTeam", RPCMode.AllBuffered, playerScript.getSelf().getId(), 1, Network.player);
-
             }
 
         }
