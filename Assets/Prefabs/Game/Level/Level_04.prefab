@@ -1624,14 +1624,14 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100096}
-  m_Mesh: {fileID: 4300002, guid: 42c239b945991694eabaf73e4b4a0454, type: 3}
+  m_Mesh: {fileID: 4300002, guid: 7dc13cc9e39672040a56522192d51a79, type: 3}
 --- !u!33 &3300002
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100098}
-  m_Mesh: {fileID: 4300000, guid: 42c239b945991694eabaf73e4b4a0454, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 7dc13cc9e39672040a56522192d51a79, type: 3}
 --- !u!64 &6400000
 MeshCollider:
   m_ObjectHideFlags: 1
@@ -1644,7 +1644,7 @@ MeshCollider:
   serializedVersion: 2
   m_SmoothSphereCollisions: 0
   m_Convex: 0
-  m_Mesh: {fileID: 4300000, guid: 42c239b945991694eabaf73e4b4a0454, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 7dc13cc9e39672040a56522192d51a79, type: 3}
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -1694,62 +1694,62 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawns:
+  - {fileID: 400034}
+  - {fileID: 400088}
+  - {fileID: 400012}
   - {fileID: 400070}
   - {fileID: 400068}
   - {fileID: 400066}
-  - {fileID: 400036}
-  - {fileID: 400082}
-  - {fileID: 400080}
-  - {fileID: 400078}
-  - {fileID: 400016}
-  - {fileID: 400022}
-  - {fileID: 400038}
-  - {fileID: 400032}
-  - {fileID: 400030}
-  - {fileID: 400020}
   - {fileID: 400058}
   - {fileID: 400056}
-  - {fileID: 400014}
-  - {fileID: 400024}
-  - {fileID: 400008}
-  - {fileID: 400086}
-  - {fileID: 400084}
-  - {fileID: 400034}
-  - {fileID: 400040}
-  - {fileID: 400046}
-  - {fileID: 400026}
   - {fileID: 400050}
-  - {fileID: 400048}
+  - {fileID: 400080}
+  - {fileID: 400078}
+  - {fileID: 400076}
+  - {fileID: 400026}
+  - {fileID: 400020}
   - {fileID: 400052}
   - {fileID: 400054}
+  - {fileID: 400090}
+  - {fileID: 400092}
+  - {fileID: 400018}
+  - {fileID: 400032}
+  - {fileID: 400024}
+  - {fileID: 400030}
+  - {fileID: 400042}
+  - {fileID: 400036}
+  - {fileID: 400040}
+  - {fileID: 400048}
+  - {fileID: 400016}
+  - {fileID: 400086}
+  - {fileID: 400084}
+  - {fileID: 400082}
+  - {fileID: 400022}
+  - {fileID: 400046}
+  - {fileID: 400074}
+  - {fileID: 400072}
+  - {fileID: 400008}
+  - {fileID: 400028}
+  - {fileID: 400038}
+  - {fileID: 400014}
+  - {fileID: 400010}
+  - {fileID: 400094}
+  - {fileID: 400044}
   - {fileID: 400064}
   - {fileID: 400062}
   - {fileID: 400060}
-  - {fileID: 400012}
-  - {fileID: 400010}
-  - {fileID: 400090}
-  - {fileID: 400092}
-  - {fileID: 400044}
-  - {fileID: 400018}
-  - {fileID: 400076}
-  - {fileID: 400074}
-  - {fileID: 400072}
-  - {fileID: 400042}
-  - {fileID: 400094}
-  - {fileID: 400028}
-  - {fileID: 400088}
   tutorialPoints:
+  - {fileID: 400006}
   - {fileID: 400004}
   - {fileID: 400002}
   - {fileID: 400000}
-  - {fileID: 400006}
   coins:
   - {fileID: 400106}
-  - {fileID: 400110}
   - {fileID: 400108}
-  - {fileID: 400104}
   - {fileID: 400102}
+  - {fileID: 400110}
   - {fileID: 400100}
+  - {fileID: 400104}
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1
