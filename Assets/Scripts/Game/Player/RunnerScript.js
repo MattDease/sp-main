@@ -19,6 +19,7 @@ private var eggScript : EggScript;
 private var targetSpeed : float = Config.RUN_SPEED;
 private var currentSpeed : float = Config.RUN_SPEED;
 private var runningPlane : Vector3;
+private var velocity : Vector3 = Vector3.zero;
 private var cameraOffset : Vector2 = Vector2.zero;
 private var prevPlatformPos : Vector2 = Vector2.zero;
 private var isAttacking : boolean = false;
@@ -153,7 +154,8 @@ function LateUpdate(){
             camContainer.transform.position = player.getPosition() + cameraOffset;
         }
         else if(team.getRunners(true).Count > 0){
-            camContainer.transform.position = team.getObserverCameraPosition();
+            var targetPosition : Vector3 = team.getObserverCameraPosition();
+            camContainer.transform.position = Vector3.SmoothDamp(camContainer.transform.position, targetPosition, velocity, 0.2);
         }
     }
 }
