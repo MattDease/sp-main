@@ -45,7 +45,7 @@ private var menuSkin : GUISkin;
 
 private var headerText = 60;
 private var bodyText = 50;
-private var buttonText = 40;
+private var buttonText = 35;
 
 private var player : Runner;
 
@@ -65,6 +65,7 @@ private var localStyle :GUIStyle;
 private var headerStyle :GUIStyle;
 private var greenStyle :GUIStyle;
 private var whiteText :GUIStyle;
+private var disabledStyle : GUIStyle;
 
 function Awake() {
     netScript = GetComponent(Net);
@@ -368,8 +369,9 @@ function OnGUI() {
                     if (teamOneShowEmpty) {
                         GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 - guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[teamOneCount], "FullImage");
                     } else if (!teamOneShowEmpty) {
+
                         if (Util.IsNetworkedPlayerMe(cPlayer)) {
-                            if (GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 - guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerSelfTextures[playerScript.getSelf().getCharacter()], "FullImage")) {
+                            if (GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 - guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerSelfTextures[cPlayer.getCharacter()], "FullImage")) {
                                 selectCharacter = true;
                             }
                         } else {
@@ -422,7 +424,7 @@ function OnGUI() {
                         GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 + guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[12], "FullImage");
                     } else if (!teamTwoShowEmpty) {
                         if (Util.IsNetworkedPlayerMe(cPlayer)) {
-                            if (GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 + guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerSelfTextures[playerScript.getSelf().getCharacter()], "FullImage")) {
+                            if (GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 + guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerSelfTextures[cPlayer.getCharacter()], "FullImage")) {
                                 selectCharacter = true;
                             }
                         } else {
@@ -480,22 +482,29 @@ function OnGUI() {
             }
 
             guiHost[2].textureWidth = Screen.width * 0.17;
-            guiHost[2].textureHeight = Screen.height * 0.12;
+            guiHost[2].textureHeight = Screen.height * 0.14;
             guiHost[2].setLocation(Points.BottomRight);
 
             if (isHosting) {
-                if (GUI.Button(Rect(guiHost[2].offset.x, Screen.height - Screen.height * 0.13 - (100 * menuScript.getScale()), Screen.width * 0.17, Screen.height * 0.12), "START", "GreenButton")) {
-                    gameSetupScript.enterGame();
+                if(gameSetupScript.game.isValid()){
+                    if (GUI.Button(Rect(guiHost[2].offset.x, Screen.height - Screen.height * 0.13 - (100 * menuScript.getScale()), guiHost[2].textureWidth, guiHost[2].textureHeight), "START", "GreenButton")) {
+                        gameSetupScript.enterGame();
+                    }
+                } else {
+                    GUI.Button(Rect(guiHost[2].offset.x, Screen.height - Screen.height * 0.13 - (100 * menuScript.getScale()), guiHost[2].textureWidth, guiHost[2].textureHeight), "START", "DisabledButton");
                 }
 
             } else {
-                if (GUI.Button(Rect(guiHost[2].offset.x, Screen.height - Screen.height * 0.13 - (100 * menuScript.getScale()), Screen.width * 0.17, Screen.height * 0.12), (playerScript.getSelf().getReadyStatus() ? "EDIT" : "READY"), "GreenButton")) {
 
-                    if (playerScript.getSelf().getReadyStatus()) playerScript.getSelf().updateReadyStatus(false);
-                    else playerScript.getSelf().updateReadyStatus(true);
+                if(playerScript.getSelf().getTeamId() != 100) {
+                    if (GUI.Button(Rect(guiHost[2].offset.x, Screen.height - Screen.height * 0.13 - (100 * menuScript.getScale()), guiHost[2].textureWidth, guiHost[2].textureHeight), (playerScript.getSelf().getReadyStatus() ? "EDIT" : "READY"), "GreenButton")) {
+                        if (playerScript.getSelf().getReadyStatus()) playerScript.getSelf().updateReadyStatus(false);
+                        else playerScript.getSelf().updateReadyStatus(true);
+                        GameObject.Find("/GameManager").networkView.RPC("updateReadyStatus", RPCMode.AllBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
 
-                    GameObject.Find("/GameManager").networkView.RPC("updateReadyStatus", RPCMode.AllBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
-
+                    }
+                } else {
+                    GUI.Button(Rect(guiHost[2].offset.x, Screen.height - Screen.height * 0.13 - (100 * menuScript.getScale()), guiHost[2].textureWidth, guiHost[2].textureHeight), (playerScript.getSelf().getReadyStatus() ? "EDIT" : "READY"), "DisabledButton");
                 }
             }
         }
@@ -707,6 +716,9 @@ function setUpStyles(){
 
     greenStyle = GUI.skin.GetStyle("GreenButton");
     greenStyle.fontSize = menuScript.getScale() * buttonText;
+
+    disabledStyle = GUI.skin.GetStyle("DisabledButton");
+    disabledStyle.fontSize = menuScript.getScale() * buttonText;
 
     whiteText = GUI.skin.GetStyle("WhiteText");
     whiteText.fontSize = menuScript.getScale() * buttonText;

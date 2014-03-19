@@ -25,7 +25,7 @@ private var createNewOverlayTexture : Texture2D;
 private var backgroundTexutre : Texture2D;
 private var whiteBarTexture : Texture2D;
 
-private var buttonText = 40;
+private var buttonText = 35;
 private var bodyText = 50;
 
 
@@ -143,8 +143,8 @@ function OnGUI() {
     greenStyle = GUI.skin.GetStyle("GreenButton");
     greenStyle.fontSize = menuScript.getScale() * buttonText;
 
-    guiObject[5].textureWidth = Screen.width * 0.23;
-    guiObject[5].textureHeight = Screen.height * 0.12;
+    guiObject[5].textureWidth = Screen.width * 0.17;
+    guiObject[5].textureHeight = Screen.height * 0.14;
     guiObject[5].setLocation(Points.BottomRight);
 
     if(GUI.Button(Rect(guiObject[5].offset.x, Screen.height - Screen.height * 0.13, guiObject[5].textureWidth, guiObject[5].textureHeight), "NEW GAME", "GreenButton")){
@@ -155,7 +155,7 @@ function OnGUI() {
 
 function joinGame(element : HostData, placementX : float, placementY : float){
 
-    var name: String = element.gameName + "\n\n " + element.connectedPlayers + " / " + element.playerLimit;
+    var name: String = element.gameName;
 
     if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(placementX, placementY, (Screen.width * 1.3) * 0.2, Screen.width * 0.2), name, "JoinGame")) {
         netScript.connect(element, onConnect);
