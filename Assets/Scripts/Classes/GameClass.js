@@ -249,7 +249,6 @@ public class Game {
             return true;
         }
         for(var team : Team in teams){
-            Debug.Log(team.isValid());
             if(team.isValid() != TeamStatus.Valid){
                 setGameStatus("Oh no! Team setup is wrong. Need 2 runners and 1 commander.");
                return false;
