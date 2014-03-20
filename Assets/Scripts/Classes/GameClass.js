@@ -220,6 +220,7 @@ public class Game {
         var runner : Runner = createRunner(name, teamId, netPlayer);
         players[playerId] = runner;
         teams[teamId].getTeammates()[playerId] = runner;
+        teams[teamId].addRunner(runner);
         runner.setCharacter(character);
         return runner;
     }
@@ -228,6 +229,7 @@ public class Game {
         var commander : Commander = createCommander(name, teamId, netPlayer);
         players[playerId] = commander;
         teams[teamId].getTeammates()[playerId] = commander;
+        teams[teamId].addCommander(commander);
         commander.setCharacter(character);
         return commander;
     }
@@ -242,7 +244,12 @@ public class Game {
     // Checks for any errors in the game setup
     public function isValid() : boolean {
 
+        if(Config.VALIDATION_SKIP) {
+            setGameStatus("All good! :)");
+            return true;
+        }
         for(var team : Team in teams){
+            Debug.Log(team.isValid());
             if(team.isValid() != TeamStatus.Valid){
                 setGameStatus("Oh no! Team setup is wrong. Need 2 runners and 1 commander.");
                return false;

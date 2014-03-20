@@ -128,6 +128,16 @@ public class Team{
 
     }
 
+    public function addRunner(player : Player){
+        if(player.GetType() == Runner){
+            runners.Add(player.getId(), player);
+            activeRunners.Add(player.getId(), player);
+        }
+    }
+
+    public function addCommander (player: Player){
+        commander = player;
+    }
     public function killTeammate(id : String){
         activeRunners.Remove(id);
         if(activeRunners.Count == 0){
