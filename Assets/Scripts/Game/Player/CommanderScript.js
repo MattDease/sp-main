@@ -38,6 +38,7 @@ function initCommander(playerId : String, teamId : int){
 
     if(networkView.isMine){
         camContainer = Instantiate(cameraPrefab, Vector3.zero,  Quaternion.identity);
+        Camera.main.transparencySortMode = TransparencySortMode.Orthographic;
 
         var playerPosition : Vector3 = gameObject.transform.position;
         var viewport : Vector3 = Camera.main.WorldToViewportPoint(playerPosition);

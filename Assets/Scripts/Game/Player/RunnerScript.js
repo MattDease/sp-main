@@ -48,6 +48,7 @@ function initRunner(playerId : String, teamId : int){
         var viewport : Vector3 = Camera.main.WorldToViewportPoint(gameObject.transform.position);
         viewport.x += Config.CAMERA_LEAD;
         Camera.main.transform.localPosition += Camera.main.ViewportToWorldPoint(viewport);
+        Camera.main.transparencySortMode = TransparencySortMode.Orthographic;
 
         player.gameObject.rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
 
