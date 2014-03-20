@@ -67,10 +67,12 @@ public class Game {
 
             playerScript.getSelf().setTeamId(100);
             playerScript.getSelf().setCharacter(12);
+            playerScript.getSelf().updateReadyStatus(false);
 
             for(var player : Player in players.Values){
                 player.setTeam(100, null);
                 player.setCharacter(12);
+                player.updateReadyStatus(false);
 
                 if(player.GetType != Player) {
                     changetoPlayer.Add(player.getId(), player);
@@ -90,6 +92,7 @@ public class Game {
             for(var player : Player in players.Values){
                 player.setTeam(0, getTeam(0));
                 player.setCharacter(12);
+                player.updateReadyStatus(false);
             }
 
             teams.Remove(getTeam(1));
@@ -179,7 +182,6 @@ public class Game {
         player.setTeam(100, null);
         teams[teamId].removeTeammate(player, "Game Class");
         player.setCharacter(12);
-        //changeToPlayer(player.getId(), player.getName(), teamId, Network.player);
     }
 
     public function addRunner(name:String, teamId:int, networkPlayer:NetworkPlayer) : Runner {
@@ -240,13 +242,15 @@ public class Game {
 
         for(var team : Team in teams){
             if(team.isValid() != TeamStatus.Valid){
-
-                status = "Oh no! Team setup is wrong. Need 2 runners and 1 commander.";
-
+                setGameStatus("Oh no! Team setup is wrong. Need 2 runners and 1 commander.");
+               return false;
+            } else if(!team.isReady) {
+                //If all memvers in team are not ready, we can't start game.
+               setGameStatus("All team members must be ready");
                return false;
             }
         }
-
+        setGameStatus("All good! :)");
         return true;
     }
 
@@ -287,7 +291,11 @@ public class Game {
     }
 
     public function setGameStatus(status: String) {
-        this.status = status;
+
+        if(status != this.status){
+            this.status = status;
+            GameObject.Find("/GameManager").networkView.RPC("updateGameStatus", RPCMode.OthersBuffered, status);
+        }
     }
 
     public function getGameStatus() : String {

@@ -149,6 +149,11 @@ function startHost(numPlayers : int, name : String, callback : Function){
     }
 }
 
+function killGame() {
+    Network.Disconnect();
+    MasterServer.UnregisterHost();
+}
+
 function OnServerInitialized(){
     MasterServer.RegisterHost(Config.GAME_ID, name, natCapable.ToString());
 }
@@ -331,3 +336,16 @@ function canConnect(type1: ConnectionTesterStatus, type2: ConnectionTesterStatus
         return false;
     return true;
 }
+
+
+function OnDisconnectedFromServer(info : NetworkDisconnection) {
+        if (Network.isServer) {
+            Debug.Log("Local server connection disconnected");
+        }
+        else {
+            if (info == NetworkDisconnection.LostConnection)
+                Debug.Log("Lost connection to the server");
+            else
+                Debug.Log("Successfully diconnected from the server");
+        }
+    }

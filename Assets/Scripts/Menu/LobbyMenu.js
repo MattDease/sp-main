@@ -156,7 +156,6 @@ function OnGUI() {
 function joinGame(element : HostData, placementX : float, placementY : float){
 
     var name: String = element.gameName;
-
     if (Network.peerType == NetworkPeerType.Disconnected && GUI.Button(Rect(placementX, placementY, (Screen.width * 1.3) * 0.2, Screen.width * 0.2), name, "JoinGame")) {
         netScript.connect(element, onConnect);
         connectionErrorMsg = "";

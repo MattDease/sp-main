@@ -264,12 +264,14 @@ function changeRole(id : String, name : String, newRole : String, teamId:int, ch
     }
  }
 
-// Server only
-function OnPlayerDisconnected(netPlayer: NetworkPlayer){
-    networkView.RPC("removePlayer", RPCMode.AllBuffered, netPlayer);
-}
 
 @RPC
 function removePlayer(netPlayer:NetworkPlayer){
     game.removePlayer(netPlayer.ToString());
+}
+
+
+@RPC
+function updateGameStatus(status : String){
+    game.setGameStatus(status);
 }

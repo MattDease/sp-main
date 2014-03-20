@@ -38,6 +38,16 @@ public class Team{
         return runners.Count > 0 ? TeamStatus.Valid : TeamStatus.TEMP_NO;
     }
 
+    public function isReady() : boolean {
+
+        for(var player : Player in teammates.Values){
+            if(!player.getReadyStatus())
+                return false;
+        }
+
+        return true;
+    }
+
     public function getId() : int {
         return this.id;
     }

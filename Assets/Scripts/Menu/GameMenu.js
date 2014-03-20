@@ -148,14 +148,9 @@ function OnGUI() {
     var tempString = "";
     playerList = gameSetupScript.game.getPlayers();
 
-    for(var player :Player in playerList.Values){
-        tempString += player.ToString() + " - ";
-    }
-
     if (showStatusBar) {
         GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), statusBarTexture);
-        GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), tempString, "WhiteText");
-        //gameSetupScript.game.getGameStatus()
+        GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), gameSetupScript.game.getGameStatus(), "WhiteText");
     }
 
     checkVersus();
@@ -167,10 +162,11 @@ function OnGUI() {
     if (GUI.Button(Rect(Screen.width - Screen.width * 0.09, guiObject[1].offset.y - Screen.height * 0.01, Screen.width * 0.08, Screen.height * 0.2), homeTexture, "FullImage")) {
         selectCharacter = false;
 
-        if (isHosting && Network.isServer || Network.isClient) {
-            //Remove Player from game
-            GameObject.Find("/GameManager").networkView.RPC("removePlayer", RPCMode.AllBuffered, Network.player);
-            gameSetupScript.game = null;
+        if (isHosting && Network.isServer){
+           netScript.killGame();
+        } else if(Network.isClient) {
+            //remove player
+           GameObject.Find("/GameManager").networkView.RPC("removePlayer", RPCMode.AllBuffered, Network.player);
         }
 
         leaveFor(menus.lobby);
@@ -229,7 +225,6 @@ function OnGUI() {
         playerList = gameSetupScript.game.getPlayers();
 
         teamList = gameSetupScript.game.getTeams();
-
 
         for (var n = 0; n < 2; n++) {
             guiObject[n].textureWidth = Screen.width * 0.06;
@@ -538,6 +533,7 @@ function enter(isNew: boolean) {
 function leaveFor(newMenu: menus) {
     showMenu = false;
     menuScript.stateScript.setCurrentMenu(newMenu);
+    Network.Disconnect();
     menuScript.open();
 }
 
@@ -550,7 +546,6 @@ function characterSelection() {
 
     //Get Selected Characters
     selectedCharacters = playerScript.getSelf().getTeam().getSelectedCharacters();
-
 
     if (GUI.Button(Rect(guiObject[0].offset.x + Screen.width * 0.01, guiObject[0].offset.y - Screen.height * 0.01, Screen.width * 0.08, Screen.height * 0.2), backTexture, "FullImage")) {
         selectCharacter = false;
