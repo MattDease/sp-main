@@ -3,12 +3,14 @@
 private var game : Game;
 private var player : Player;
 private var alive : boolean;
+private var animator : Animator;
 private var teamId : int;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     var gameManager : GameObject = GameObject.Find("/GameManager");
     game = gameManager.GetComponent(GameSetupScript).game;
     player = gameManager.GetComponent(PlayerScript).getSelf();
+    animator = transform.Find("skin").gameObject.GetComponent(Animator);
     alive = true;
 }
 
@@ -39,13 +41,18 @@ function notifyKill(){
 
 @RPC
 function kill(){
-    syncKill();
-    networkView.RPC("syncKill", RPCMode.OthersBuffered);
+    networkView.RPC("syncKill", RPCMode.All);
 }
 
 @RPC
 function syncKill(){
     alive = false;
-    Util.Toggle(gameObject, false);
+    animator.SetBool("death", true);
     game.getTeam(teamId).collectCoin();
+    var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+    Invoke("hide", animState.length);
+}
+
+function hide(){
+    Util.Toggle(gameObject, false);
 }
