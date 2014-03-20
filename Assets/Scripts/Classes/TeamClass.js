@@ -130,8 +130,8 @@ public class Team{
 
     public function addRunner(player : Player){
         if(player.GetType() == Runner){
-            runners.Add(player.getId(), player);
-            activeRunners.Add(player.getId(), player);
+            runners[player.getId()] = player as Runner;
+            activeRunners[player.getId()] = player as Runner;
         }
     }
 
@@ -141,7 +141,7 @@ public class Team{
     }
 
     public function addCommander (player: Player){
-        commander = player;
+        commander = player as Commander;
     }
     public function killTeammate(id : String){
         activeRunners.Remove(id);
@@ -170,6 +170,7 @@ public class Team{
         runners.Clear();
         activeRunners.Clear();
     }
+
     public function getLeader() : Runner {
         var leader : Runner;
         for(var player : Player in teammates.Values){
