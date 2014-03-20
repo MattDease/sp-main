@@ -61,7 +61,7 @@ public class Game {
             team.clearAll();
         }
 
-        if(gameMode == GameMode.Versus){
+        if(mode == GameMode.Versus){
             //Add another team
             var changetoPlayer : Dictionary.<String,Player> = new Dictionary.<String,Player>();
 
@@ -245,20 +245,25 @@ public class Game {
     // Checks for any errors in the game setup
     public function isValid() : boolean {
 
+        var teamValid : boolean = true;
         if(Config.VALIDATION_SKIP) {
-            setGameStatus("All good! :)");
-            return true;
-        }
-        for(var team : Team in teams){
-            if(team.isValid() != TeamStatus.Valid){
-                setGameStatus("Oh no! Team setup is wrong. Need 2 runners and 1 commander.");
-               return false;
-            } else if(!team.isReady) {
-                //If all memvers in team are not ready, we can't start game.
-               setGameStatus("All team members must be ready");
-               return false;
+            teamValid = true;
+        } else {
+
+            for(var team : Team in teams){
+                if(team.isValid() != TeamStatus.Valid){
+                    setGameStatus("Oh no! Team setup is wrong. Need 2 runners and 1 commander.");
+                    teamValid = false;
+                } else if(!team.isReady()) {
+                    //If all memvers in team are not ready, we can't start game.
+                   setGameStatus("All team members must be ready");
+                   teamValid = false;
+                }
             }
         }
+
+        if(!teamValid) return false;
+
         setGameStatus("All good! :)");
         return true;
     }
