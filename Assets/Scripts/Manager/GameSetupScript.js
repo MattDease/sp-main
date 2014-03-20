@@ -252,6 +252,7 @@ function removeTeam(id : String, teamId: int, netPlayer : NetworkPlayer) {
 
 @RPC
 function changeRole(id : String, name : String, newRole : String, teamId:int, character:int, netPlayer: NetworkPlayer){
+    var oldPlayer : Player = Util.GetPlayerById(id) as Player;
     var playerRole : PlayerRole = System.Enum.Parse(PlayerRole, newRole);
     var player : Player;
 
@@ -261,6 +262,10 @@ function changeRole(id : String, name : String, newRole : String, teamId:int, ch
         player = game.changeToCommander(id, name, teamId, character, netPlayer);
     } else if(playerRole == PlayerRole.Player){
         player = game.changeToPlayer(id, name, teamId, netPlayer);
+    }
+
+    if (Util.IsNetworkedPlayerMe(oldPlayer)) {
+        playerScript.setSelf(player);
     }
  }
 

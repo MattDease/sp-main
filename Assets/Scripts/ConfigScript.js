@@ -57,5 +57,7 @@ public static class Config{
 
     //Sets team size limit
     public var TEAM_SIZE : int = 10;
+    //Sets versus to automatically change when teamsize is greater than 5
+    public var VERSUS_ENABLED : boolean = false;
 
 }

@@ -219,6 +219,7 @@ public class Game {
     public function changeToRunner(playerId : String, name:String, teamId:int, character: int, netPlayer :NetworkPlayer) : Runner {
         var runner : Runner = createRunner(name, teamId, netPlayer);
         players[playerId] = runner;
+        teams[teamId].getTeammates()[playerId] = runner;
         runner.setCharacter(character);
         return runner;
     }
@@ -226,6 +227,7 @@ public class Game {
     public function changeToCommander(playerId : String, name:String, teamId:int, character: int,  netPlayer :NetworkPlayer) : Commander{
         var commander : Commander = createCommander(name, teamId, netPlayer);
         players[playerId] = commander;
+        teams[teamId].getTeammates()[playerId] = commander;
         commander.setCharacter(character);
         return commander;
     }

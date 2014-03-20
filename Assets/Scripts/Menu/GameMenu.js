@@ -145,15 +145,11 @@ function OnGUI() {
 
     GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), backgroundTexutre);
 
-    var tempString = "";
-    playerList = gameSetupScript.game.getPlayers();
-
     if (showStatusBar) {
         GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), statusBarTexture);
         GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), gameSetupScript.game.getGameStatus(), "WhiteText");
     }
 
-    checkVersus();
     setUpStyles();
 
     //Home Btn
@@ -224,6 +220,8 @@ function OnGUI() {
         showStatusBar = true;
         playerList = gameSetupScript.game.getPlayers();
 
+        var teamCount: int = playerList.Count;
+        checkVersus(teamCount);
         teamList = gameSetupScript.game.getTeams();
 
         for (var n = 0; n < 2; n++) {
@@ -238,7 +236,6 @@ function OnGUI() {
             guiHost[1].setLocation(Points.Center);
 
             var currentTeamCount: int = 0;
-            var teamCount: int = playerList.Count;
             var showEmpty: boolean = false;
             var playerCount = 0;
             var layoutOffset = 0;
@@ -418,7 +415,7 @@ function OnGUI() {
                     if (teamTwoShowEmpty) {
                         GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 + guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[12], "FullImage");
                     } else if (!teamTwoShowEmpty) {
-                        if (Util.IsNetworkedPlayerMe(cPlayer)) {
+                     if (Util.IsNetworkedPlayerMe(cPlayer)) {
                             if (GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 + guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerSelfTextures[cPlayer.getCharacter()], "FullImage")) {
                                 selectCharacter = true;
                             }
@@ -684,17 +681,15 @@ function characterSelection() {
     }
 
 }
-function checkVersus() {
+function checkVersus(teamCount : int) {
     isVersus = gameSetupScript.game.getIsVersus();
 
-    //if (teamCount > Config.MAX_TEAM_COUNT && !isVersus || Input.GetKey('v')) {
-    if (Input.GetKey('v') && !isVersus) {
+    if (Config.VERSUS_ENABLED && teamCount > Config.MAX_TEAM_COUNT && !isVersus || !Config.VERSUS_ENABLED && Input.GetKey('v') && !isVersus) {
         gameSetupScript.game.setIsVersus(true);
         GameObject.Find("/GameManager").networkView.RPC("setVersusMode", RPCMode.AllBuffered, true);
         isVersus = gameSetupScript.game.getIsVersus();
     }
-    //else if(teamCount < Config.MAX_TEAM_COUNT && isVersus || Input.GetKey('t')){
-    else if(Input.GetKey('t') && isVersus){
+    else if(Config.VERSUS_ENABLED && teamCount < Config.MAX_TEAM_COUNT && isVersus || !Config.VERSUS_ENABLED && Input.GetKey('t') && isVersus){
         gameSetupScript.game.setIsVersus(false);
         GameObject.Find("/GameManager").networkView.RPC("setVersusMode", RPCMode.AllBuffered, false);
         isVersus = gameSetupScript.game.getIsVersus();

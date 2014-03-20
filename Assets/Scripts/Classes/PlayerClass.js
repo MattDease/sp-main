@@ -74,6 +74,7 @@ public class Player{
         str += "TEAMID[" + this.teamId + "] ";
         str += "TYPE[" + this.GetType() + "] ";
         str += "CHARACTER[" + this.selectedCharacter + "] ";
+        str+= "READY[" +this.isReady+"]";
         return str;
     }
 }
