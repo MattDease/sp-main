@@ -14,7 +14,7 @@ private var gameName : String;
 private var playerLimit : int = 4;
 private var selectCharacter : boolean = false;
 private var showStatusBar : boolean = false;
-private var isVersus : boolean = false;
+private var isVersus : GameMode = GameMode.Team;
 
 
 private var guiHost : GuiClasses[];
@@ -241,7 +241,7 @@ function OnGUI() {
             var layoutOffset = 0;
             var cPlayer: Player;
 
-            if (!isVersus) {
+            if (isVersus == GameMode.Team) {
                 for (var d = 0; d < Config.MAX_TEAM_COUNT; d++) {
 
                     currentTeamCount = d;
@@ -685,13 +685,13 @@ function checkVersus(teamCount : int) {
     isVersus = gameSetupScript.game.getIsVersus();
 
     if (Config.VERSUS_ENABLED && teamCount > Config.MAX_TEAM_COUNT && !isVersus || !Config.VERSUS_ENABLED && Input.GetKey('v') && !isVersus) {
-        gameSetupScript.game.setIsVersus(true);
-        GameObject.Find("/GameManager").networkView.RPC("setVersusMode", RPCMode.AllBuffered, true);
+        gameSetupScript.game.setIsVersus(GameMode.Versus);
+        GameObject.Find("/GameManager").networkView.RPC("setVersusMode", RPCMode.AllBuffered, GameMode.Versus.ToString());
         isVersus = gameSetupScript.game.getIsVersus();
     }
     else if(Config.VERSUS_ENABLED && teamCount < Config.MAX_TEAM_COUNT && isVersus || !Config.VERSUS_ENABLED && Input.GetKey('t') && isVersus){
-        gameSetupScript.game.setIsVersus(false);
-        GameObject.Find("/GameManager").networkView.RPC("setVersusMode", RPCMode.AllBuffered, false);
+        gameSetupScript.game.setIsVersus(GameMode.Team);
+        GameObject.Find("/GameManager").networkView.RPC("setVersusMode", RPCMode.AllBuffered, GameMode.Team.ToString());
         isVersus = gameSetupScript.game.getIsVersus();
     }
 }

@@ -175,8 +175,9 @@ function registerPlayer(name : String, netPlayer : NetworkPlayer){
 }
 
 @RPC
-function setVersusMode(isVersus : boolean){
-    game.setIsVersus(isVersus);
+function setVersusMode(mode : String){
+    var gameMode : GameMode = System.Enum.Parse(GameMode, mode);
+    game.setIsVersus(gameMode);
 }
 
 @RPC
@@ -227,6 +228,11 @@ function updateCharacter(id : String, selectedChar : int, netPlayer : NetworkPla
             player.setCharacter(selectedChar);
             changeRole(id, player.getName(), PlayerRole.Runner.ToString(), player.getTeamId(), player.getCharacter(), netPlayer);
         } else if(player.getCharacter() < 9 && selectedChar > 8 || player.getCharacter() == 12 && selectedChar >= 9) {
+
+            if(player.getCharacter() != 12) {
+                player.getTeam().removeRunner(player.getId());
+            }
+
             player.setCharacter(selectedChar);
             changeRole(id, player.getName(), PlayerRole.Commander.ToString(), player.getTeamId(), player.getCharacter(), netPlayer);
         } else {
@@ -253,6 +259,7 @@ function removeTeam(id : String, teamId: int, netPlayer : NetworkPlayer) {
 @RPC
 function changeRole(id : String, name : String, newRole : String, teamId:int, character:int, netPlayer: NetworkPlayer){
     var oldPlayer : Player = Util.GetPlayerById(id) as Player;
+
     var playerRole : PlayerRole = System.Enum.Parse(PlayerRole, newRole);
     var player : Player;
 

@@ -135,6 +135,11 @@ public class Team{
         }
     }
 
+    public function removeRunner(id : String) {
+            runners.Remove(id);
+            activeRunners.Remove(id);
+    }
+
     public function addCommander (player: Player){
         commander = player;
     }

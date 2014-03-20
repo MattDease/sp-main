@@ -50,18 +50,18 @@ public class Game {
         return stateScript.getGameState();
     }
 
-    public function getIsVersus(): boolean {
-        return isVersus;
+    public function getIsVersus(): GameMode {
+        return mode;
     }
 
-    public function setIsVersus(isVersus:boolean) {
-        this.isVersus = isVersus;
+    public function setIsVersus(gameMode : GameMode) {
+        mode = gameMode;
 
         for(var team:Team in teams){
             team.clearAll();
         }
 
-        if(isVersus){
+        if(gameMode == GameMode.Versus){
             //Add another team
             var changetoPlayer : Dictionary.<String,Player> = new Dictionary.<String,Player>();
 
@@ -85,6 +85,7 @@ public class Game {
 
             teams.Add(new Team(1));
         } else {
+              this.mode = GameMode.Team;
               playerScript.getSelf().setTeamId(0);
               playerScript.getSelf().setCharacter(12);
 
