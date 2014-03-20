@@ -54,9 +54,6 @@ function Update(){
     // TODO - remove animator check when debug enemies are removed
     if(animator){
         var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if(animState.IsName("Base Layer.Death") && !animator.IsInTransition(0)){
-            Util.Toggle(gameObject, false);
-        }
         if(animState.IsName("Base Layer.Attack") && !animator.IsInTransition(0)){
             if(type != EnemyType.Cardinal){
                 animator.SetBool("attack", false);
@@ -134,14 +131,15 @@ function rotate(degrees : float){
 
 @RPC
 function kill(){
-    syncKill();
-    networkView.RPC("syncKill", RPCMode.OthersBuffered);
+    networkView.RPC("syncKill", RPCMode.All);
 }
 
 @RPC
 function syncKill(){
     alive = false;
     animator.SetBool("death", true);
+    var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+    Invoke("hide", animState.length);
 }
 
 function notifyAttack(){
@@ -157,11 +155,14 @@ function notifyAttack(){
 
 @RPC
 function attack(){
-    syncAttack();
-    networkView.RPC("syncAttack", RPCMode.Others);
+    networkView.RPC("syncAttack", RPCMode.All);
 }
 
 @RPC
 function syncAttack(){
     animator.SetBool("attack", true);
+}
+
+function hide(){
+    Util.Toggle(gameObject, false);
 }
