@@ -11,6 +11,7 @@ private var player : Runner;
 private var model : GameObject;
 private var animator : Animator;
 private var team : Team;
+private var gameManager : GameObject;
 private var camContainer : GameObject;
 private var platform : GameObject = null;
 private var egg : GameObject;
@@ -27,7 +28,7 @@ private var isDoubleJump: boolean = false;
 private var lastSpeedChange : float = 0;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
-
+    gameManager = GameObject.Find("/GameManager");
 }
 
 @RPC
@@ -53,7 +54,7 @@ function initRunner(playerId : String, teamId : int){
         runningPlane = player.getPosition();
     }
     else{
-        var me : Player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
+        var me : Player = gameManager.GetComponent(PlayerScript).getSelf();
 
         team.runnerCreationCount++;
 
@@ -111,8 +112,7 @@ function Update(){
     if(networkView.isMine && player.isAlive()){
         var position : Vector3 = player.getPosition();
         if(Camera.main.WorldToViewportPoint(position).x < 0 || position.y < -1){
-            GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
-            player.kill();
+            killMe();
             return;
         }
         if(!platform){
@@ -140,6 +140,7 @@ function Update(){
                 platform = null;
             }
         }
+        checkCrush();
         checkKeyboardInput();
     }
 }
@@ -172,8 +173,23 @@ function isGrounded() : boolean {
     return false;
 }
 
+function checkCrush() {
+    var hits : RaycastHit[] = Physics.RaycastAll (transform.position, Vector3.up, transform.collider.bounds.size.y * 0.8);
+    for (var i = 0; i < hits.Length; i++){
+        var hit : RaycastHit = hits[i];
+        var go : GameObject = hit.collider.gameObject;
+        if(go.CompareTag("moveableY") && go.transform.GetComponent(PlatformScript).gravity){
+            killMe();
+        }
+    }
+}
+
 function show(){
     Util.Toggle(gameObject, true);
+}
+
+function killMe(){
+    gameManager.networkView.RPC("killRunner", RPCMode.All, player.getId());
 }
 
 @RPC
@@ -252,8 +268,7 @@ function OnTriggerEnter(other : Collider){
             enemyScript.notifyKill();
         }
         else if(networkView.isMine && enemyScript.isAlive()){
-            GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
-            player.kill();
+            killMe();
             enemyScript.notifyAttack();
         }
     }
@@ -328,8 +343,7 @@ function checkKeyboardInput(){
                 networkView.RPC("grab", RPCMode.Others);
             }
             if(Input.GetKeyUp(KeyCode.K)){
-                GameObject.Find("/GameManager").networkView.RPC("killRunner", RPCMode.OthersBuffered, player.getId());
-                player.kill();
+                killMe();
             }
         }
     }
