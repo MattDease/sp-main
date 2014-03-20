@@ -234,8 +234,7 @@ function toss(forward : boolean){
     if(eggScript.isHoldingEgg(player.getId())){
         var target = team.getClosestRunner(player, forward);
         if(target){
-            syncToss();
-            networkView.RPC("syncToss", RPCMode.Others);
+            networkView.RPC("syncToss", RPCMode.All);
             egg.networkView.RPC("startThrow", RPCMode.All, target.getId());
         }
     }
@@ -314,20 +313,16 @@ private function getCameraOffset() : Vector2 {
 function checkKeyboardInput(){
     if(networkView.isMine){
         if(Input.GetKeyDown(KeyCode.W)){
-            jump();
-            networkView.RPC("jump", RPCMode.Others);
+            networkView.RPC("jump", RPCMode.All);
         }
         if(Input.GetKeyDown(KeyCode.A)){
-            startWalk();
-            networkView.RPC("startWalk", RPCMode.Others);
+            networkView.RPC("startWalk", RPCMode.All);
         }
         if(Input.GetKeyUp(KeyCode.A)){
-            stopWalk();
-            networkView.RPC("stopWalk", RPCMode.Others);
+            networkView.RPC("stopWalk", RPCMode.All);
         }
         if(Input.GetKeyUp(KeyCode.D)){
-            attack();
-            networkView.RPC("attack", RPCMode.Others);
+            networkView.RPC("attack", RPCMode.All);
         }
         if(Config.USE_EGG){
             if(Input.GetKeyUp(KeyCode.R)){
@@ -339,8 +334,7 @@ function checkKeyboardInput(){
         }
         if(Config.DEBUG){
             if(Input.GetKeyUp(KeyCode.C)){
-                grab();
-                networkView.RPC("grab", RPCMode.Others);
+                networkView.RPC("grab", RPCMode.All);
             }
             if(Input.GetKeyUp(KeyCode.K)){
                 killMe();
@@ -384,8 +378,7 @@ function OnSwipe(sw:SwipeInfo){
     // TODO - rewrite
     //Figure out what direction we are swiping
     if(sw.direction.x >= 0) {
-        jump();
-        networkView.RPC("jump", RPCMode.Others);
+        networkView.RPC("jump", RPCMode.All);
     }
 
     if(Config.USE_EGG){
@@ -401,17 +394,14 @@ function OnLongTap(tap:Tap){
 }
 
 function OnTap(tap:Tap){
-    attack();
-    networkView.RPC("attack", RPCMode.Others);
+    networkView.RPC("attack", RPCMode.All);
 
 }
 
 function OnTouch(pos:Vector2){
-    startWalk();
-    networkView.RPC("startWalk", RPCMode.Others);
+    networkView.RPC("startWalk", RPCMode.All);
 
 }
 function OnRelease(pos:Vector2){
-    stopWalk();
-    networkView.RPC("startWalk", RPCMode.Others);
+    networkView.RPC("stopWalk", RPCMode.All);
 }
