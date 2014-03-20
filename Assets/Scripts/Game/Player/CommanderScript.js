@@ -16,6 +16,7 @@ private var plane : Plane = new Plane(Vector3(0, 1, Config.COMMANDER_DEPTH_OFFSE
                                       Vector3(1, 1, Config.COMMANDER_DEPTH_OFFSET),
                                       Vector3(1, 0, Config.COMMANDER_DEPTH_OFFSET));
 private var targetPosition : Vector3;
+private var targetRotation : Quaternion;
 private var velocity : Vector3 = Vector3.zero;
 private var offsetX : float = 0;
 private var platform : GameObject;
@@ -63,7 +64,16 @@ function Update(){
     }
     if(networkView.isMine){
         if(touched){
-            gameObject.transform.position = Vector3.SmoothDamp(player.getPosition(), targetPosition, velocity, 0.07);
+            var currentPosition : Vector3 = player.getPosition();
+            gameObject.transform.position = Vector3.SmoothDamp(currentPosition, targetPosition, velocity, 0.07);
+            var angleZ : float = Mathf.Atan2(targetPosition.y - currentPosition.y, targetPosition.x - currentPosition.x) * Mathf.Rad2Deg;
+            var angleY : float = 0;
+            if(angleZ < -90 || angleZ > 90){
+                angleZ += (angleZ > 0 ? -180 : 180);
+                angleZ *= -1;
+                angleY = 180;
+            }
+            targetRotation = Quaternion.Euler(0, angleY, angleZ);
 
             var hit : RaycastHit;
             if (Physics.Raycast(gameObject.transform.position, Vector3.forward, hit, 4)){
@@ -92,6 +102,9 @@ function Update(){
                 platform.GetComponent(PlatformScript).notifyPosition(position);
             }
         }
+        else{
+            targetRotation = Quaternion.identity;
+        }
         checkKeyboardInput();
     }
 }
@@ -100,10 +113,11 @@ function LateUpdate(){
     if(networkView.isMine && team.isAlive()){
         var currentTeamPosition : Vector3 = team.getObserverCameraPosition();
         if(!touched){
-            gameObject.transform.position.x = currentTeamPosition.x + offsetX;
+            transform.position.x = currentTeamPosition.x + offsetX;
         }
         camContainer.transform.position.x = currentTeamPosition.x;
         camContainer.transform.position.y = currentTeamPosition.y/2;
+        model.transform.rotation = Quaternion.Slerp(model.transform.rotation, targetRotation, Time.deltaTime * 10);
     }
 }
 
