@@ -94,7 +94,12 @@ public class Runner extends Player{
     }
 
     public function getDistance() : float {
-        return this.gameObject.transform.position.x;
+        if(this.gameObject){
+            return this.gameObject.transform.position.x;
+        }
+        else{
+            return 0;
+        }
     }
 
     public function isAlive() : boolean {

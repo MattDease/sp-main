@@ -4,11 +4,9 @@ public var spawns : List.<Transform>;
 public var tutorialPoints : List.<Transform>;
 public var coins : List.<Transform>;
 
-private var enemies : List.<Enemy> = new List.<Enemy>();
 private var player : Player;
 
-// TODO - use real difficulty.
-private var diff : int = 0;
+private var topDistance : float = 900;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
@@ -20,10 +18,18 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
         var signIndex : int = int.Parse(locator.name.Split("_"[0])[1]);
         Instantiate(signs[signIndex], locator.position, Quaternion.identity);
     }
+}
 
+@RPC
+function initSegment(teamId : int){
+    transform.position.z = teamId == player.getTeamId() ? 0 : Config.TEAM_DEPTH_OFFSET;
     if(Network.isServer){
+        var enemies : List.<Enemy> = new List.<Enemy>();
         var points : Dictionary.<int, Transform> = new Dictionary.<int, Transform>();
         var prefabs : Dictionary.<int, int> = new Dictionary.<int, int>();
+
+        var distance : float = GameObject.Find("/GameManager").GetComponent(GameSetupScript).game.getTeam(teamId).getDistance();
+        var diff : int = Mathf.Floor(Mathf.Clamp(4 * (distance/topDistance), 0, 3));
 
         for(var i : int = 0; i < spawns.Count; i++){
             var point : Transform = spawns[i];
@@ -41,15 +47,6 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
         for(var key : int in prefabs.Keys){
             enemies.Add(new Enemy(points[key*2], points[key*2+1], prefabs[key]));
         }
-
-
-    }
-}
-
-@RPC
-function initSegment(teamId : int){
-    transform.position.z = teamId == player.getTeamId() ? 0 : Config.TEAM_DEPTH_OFFSET;
-    if(Network.isServer){
         GameObject.Find("GameScripts").GetComponent(LevelManager).onAddSegment(teamId, gameObject, enemies, coins);
     }
 }

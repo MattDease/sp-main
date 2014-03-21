@@ -41,6 +41,9 @@ BACKGROUND_OFFSET.Add(Vector3(60, -5, 15));
 BACKGROUND_OFFSET.Add(Vector3(60, -1, 17));
 BACKGROUND_OFFSET.Add(Vector3(90, -5, 25));
 
+private var windowSize : int = 4;
+private var topDistance : float = 300;
+
 function Start () {
     gameManager = GameObject.Find("/GameManager");
     difficultyScript = gameManager.GetComponent(DifficultyScript);
@@ -99,8 +102,18 @@ function addFirstSegment(teamId : int){
 
 function addSegment(teamId : int, isFirst : boolean){
     waitingForSegment = true;
-    var segment : GameObject = (isFirst ? startSegmentPrefab : segmentPrefabs[Random.Range(0, segmentPrefabs.Count)]);
-    // TODO - Use difficulty to determine next segment.
+    var segment : GameObject;
+    if(isFirst){
+        segment = startSegmentPrefab;
+    }
+    else{
+        var distance : float = game.getTeam(teamId).getDistance();
+        var maxIndex : int = Mathf.Floor(Mathf.Clamp(segmentPrefabs.Count * (distance/topDistance) + windowSize, 0, segmentPrefabs.Count));
+        var segmentIndex : int = Random.Range(0, maxIndex);
+
+        segment = segmentPrefabs[segmentIndex];
+    }
+
     var go : GameObject = Network.Instantiate(segment, new Vector3(lastSegmentEnd[teamId], 0, 0), Quaternion.identity, 0);
     go.networkView.RPC('initSegment', RPCMode.All, teamId);
 }
