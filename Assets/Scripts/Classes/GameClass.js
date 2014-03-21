@@ -17,8 +17,6 @@ public class Game {
     private var gameSetupScript : GameSetupScript;
     private var difficultyScript : DifficultyScript;
 
-    private var isVersus : boolean = false;
-
     public function Game(){
         gameManager = GameObject.Find("/GameManager");
         if(gameManager != null){
@@ -158,7 +156,7 @@ public class Game {
     // server-only function, check composition of team(s), assign new player's role,
     // and return [the team, the role].
     public function getNewPlayerTeamAndRole() : Array{
-        return [isVersus ? 100 : 0, PlayerRole.Player];
+        return [mode == GameMode.Versus ? 100 : 0, PlayerRole.Player];
     }
 
     public function addPlayer (name : String, teamId: int, networkPlayer:NetworkPlayer): Player {
@@ -246,23 +244,28 @@ public class Game {
     public function isValid() : boolean {
 
         var teamValid : boolean = true;
+        var tempStatus : String = "";
+
         if(Config.VALIDATION_SKIP) {
             teamValid = true;
         } else {
 
             for(var team : Team in teams){
                 if(team.isValid() != TeamStatus.Valid){
-                    setGameStatus("Oh no! Team setup is wrong. Need 2 runners and 1 commander.");
+                    tempStatus = "Oh no! Team setup is wrong. Need 2 runners and 1 commander.";
                     teamValid = false;
                 } else if(!team.isReady()) {
                     //If all memvers in team are not ready, we can't start game.
-                   setGameStatus("All team members must be ready");
+                   tempStatus = "All team members must be ready";
                    teamValid = false;
                 }
             }
         }
 
-        if(!teamValid) return false;
+        if(!teamValid) {
+            setGameStatus(tempStatus);
+            return false;
+        }
 
         setGameStatus("All good! :)");
         return true;
