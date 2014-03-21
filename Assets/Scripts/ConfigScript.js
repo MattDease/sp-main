@@ -7,7 +7,7 @@ public static class Config{
     // General debug mode of the game.
     public var DEBUG : boolean = true;
     // General debug mode of the game.
-    public var MENU_DEBUG : boolean = true;
+    public var MENU_DEBUG : boolean = false;
     // Enable/Disable the egg in the game.
     public var USE_EGG : boolean = false;
 
@@ -56,7 +56,7 @@ public static class Config{
     public var TEST_CONNECTION : boolean = false;
 
     //Sets team size limit
-    public var TEAM_SIZE : int = 10;
+    public var TEAM_SIZE : int = 11;
     //Sets versus to automatically change when teamsize is greater than 5
     public var VERSUS_ENABLED : boolean = false;
     //Skips validation of team
