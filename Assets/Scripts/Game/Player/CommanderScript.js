@@ -44,9 +44,9 @@ function initCommander(playerId : String, teamId : int){
         var viewport : Vector3 = Camera.main.WorldToViewportPoint(playerPosition);
         viewport.x = 0.5;
         viewport.y = 0.8;
-        player.gameObject.transform.position = Camera.main.ViewportToWorldPoint(viewport);
+        transform.position = Camera.main.ViewportToWorldPoint(viewport);
 
-        player.gameObject.rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+        rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
     }
     transform.position.z += (teamId == player.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
 }
@@ -66,7 +66,7 @@ function Update(){
     if(networkView.isMine){
         if(touched){
             var currentPosition : Vector3 = player.getPosition();
-            gameObject.transform.position = Vector3.SmoothDamp(currentPosition, targetPosition, velocity, 0.07);
+            transform.position = Vector3.SmoothDamp(currentPosition, targetPosition, velocity, 0.07);
             var angleZ : float = Mathf.Atan2(targetPosition.y - currentPosition.y, targetPosition.x - currentPosition.x) * Mathf.Rad2Deg;
             var angleY : float = 0;
             if(angleZ < -90 || angleZ > 90){
@@ -77,17 +77,17 @@ function Update(){
             targetRotation = Quaternion.Euler(0, angleY, angleZ);
 
             var hit : RaycastHit;
-            if (Physics.Raycast(gameObject.transform.position, Vector3.forward, hit, 4)){
+            if (Physics.Raycast(transform.position, Vector3.forward, hit, 4)){
                 if(hit.collider.gameObject.CompareTag("enemy")){
                     hit.collider.gameObject.GetComponent(EnemyScript).notifyKill();
                     attack();
                     networkView.RPC("attack", RPCMode.Others);
                 }
                 if(!platform){
-                    if(Vector3.Distance(gameObject.transform.position, targetPosition) < 0.3){
+                    if(Vector3.Distance(transform.position, targetPosition) < 0.3){
                         if(hit.collider.gameObject.CompareTag("moveableX") || hit.collider.gameObject.CompareTag("moveableY")){
                             platform = hit.collider.gameObject;
-                            platformOffset = platform.transform.position - gameObject.transform.position;
+                            platformOffset = platform.transform.position - transform.position;
                         }
                     }
                 }
@@ -131,7 +131,7 @@ function OnCollisionExit(theCollision : Collision){
 }
 
 function setOffset(){
-    offsetX = gameObject.transform.position.x - team.getObserverCameraPosition().x;
+    offsetX = transform.position.x - team.getObserverCameraPosition().x;
 }
 
 @RPC
@@ -146,8 +146,7 @@ function checkKeyboardInput(){
     if(networkView.isMine){
         if(Config.DEBUG){
             if(Input.GetKeyDown(KeyCode.A)){
-                attack();
-                networkView.RPC("attack", RPCMode.Others);
+                networkView.RPC("attack", RPCMode.All);
             }
         }
     }

@@ -200,12 +200,5 @@ function removePlane(index : int){
 }
 
 function onAddPlane(index : int, plane : GameObject){
-    // if(backgrounds.Count > 0){
-        backgrounds[index].Add(plane);
-    // }
-    // else{
-    //     var list : List.<GameObject> = new List.<GameObject>();
-    //     list.Add(plane);
-    //     backgrounds.Add(list);
-    // }
+    backgrounds[index].Add(plane);
 }

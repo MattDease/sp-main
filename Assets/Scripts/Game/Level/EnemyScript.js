@@ -25,7 +25,7 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player = gameManager.GetComponent(PlayerScript).getSelf();
     game = gameManager.GetComponent(GameSetupScript).game;
 
-    model = gameObject.transform.Find("model").gameObject;
+    model = transform.Find("model").gameObject;
     animator = model.GetComponent(Animator);
 }
 
@@ -51,19 +51,16 @@ function init(pt1 : Vector3, pt2 : Vector3, typeCount : int){
 }
 
 function Update(){
-    // TODO - remove animator check when debug enemies are removed
-    if(animator){
-        var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if(animState.IsName("Base Layer.Attack") && !animator.IsInTransition(0)){
-            if(type != EnemyType.Cardinal){
-                animator.SetBool("attack", false);
-            }
+    var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+    if(animState.IsName("Base Layer.Attack") && !animator.IsInTransition(0)){
+        if(type != EnemyType.Cardinal){
+            animator.SetBool("attack", false);
         }
-        if(animState.IsName("Base Layer.Idle") && !animator.IsInTransition(0)){
-            if(type == EnemyType.Worm && !idle){
-                idle = true;
-                lastWormAttack = Time.time;
-            }
+    }
+    if(animState.IsName("Base Layer.Idle") && !animator.IsInTransition(0)){
+        if(type == EnemyType.Worm && !idle){
+            idle = true;
+            lastWormAttack = Time.time;
         }
     }
 

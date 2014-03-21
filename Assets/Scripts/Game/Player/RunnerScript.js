@@ -50,7 +50,7 @@ function initRunner(playerId : String, teamId : int){
         Camera.main.transform.localPosition += Camera.main.ViewportToWorldPoint(viewport);
         Camera.main.transparencySortMode = TransparencySortMode.Orthographic;
 
-        player.gameObject.rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+        rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
 
         runningPlane = player.getPosition();
     }
@@ -60,11 +60,11 @@ function initRunner(playerId : String, teamId : int){
         team.runnerCreationCount++;
 
         // Change layer so collisions with local player is ignored
-        player.gameObject.layer = LayerMask.NameToLayer("Remote Players");
+        gameObject.layer = LayerMask.NameToLayer("Remote Players");
 
-        player.gameObject.transform.position.z += team.runnerCreationCount * Config.RUNNER_LANE_WIDTH;
+        transform.position.z += team.runnerCreationCount * Config.RUNNER_LANE_WIDTH;
         if(teamId != me.getTeamId() || me.GetType() == Commander){
-            player.gameObject.transform.position.z -= Config.RUNNER_LANE_WIDTH;
+            transform.position.z -= Config.RUNNER_LANE_WIDTH;
         }
         transform.position.z += (teamId == me.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
         depth = transform.position.z;
@@ -76,7 +76,7 @@ function initRunner(playerId : String, teamId : int){
 // Do physics changes here
 function FixedUpdate(){
     if(networkView.isMine && player.isAlive()){
-        player.gameObject.rigidbody.velocity.x = currentSpeed;
+        rigidbody.velocity.x = currentSpeed;
     }
 }
 
@@ -207,12 +207,12 @@ function jump(){
         var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
         if(animState.IsName("Base Layer.Locomotion")){
             animator.SetBool("Jump", true);
-            player.gameObject.rigidbody.velocity.y = Config.JUMP_SPEED;
+            rigidbody.velocity.y = Config.JUMP_SPEED;
         }
         else if(animState.IsName("Base Layer.Jump")){
             animator.SetBool("IsDoubleJump", true);
             isDoubleJump = true;
-            player.gameObject.rigidbody.velocity.y = Config.JUMP_SPEED;
+            rigidbody.velocity.y = Config.JUMP_SPEED;
         }
     }
 }
