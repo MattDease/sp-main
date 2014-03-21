@@ -42,9 +42,9 @@ MonoBehaviour:
   segmentPrefabs:
   - {fileID: 100096, guid: 69a09460c704a934ba12f383ba755645, type: 2}
   - {fileID: 100114, guid: 039b69369d4483445ab732b032da3ac0, type: 2}
-  - {fileID: 100092, guid: ed0e88e30f4302049ad96cea33c91fa2, type: 2}
-  - {fileID: 100116, guid: 47b43b3539328ec4abc657704dc359a0, type: 2}
   - {fileID: 100122, guid: 3c74f4906ce118c459257843722d2d20, type: 2}
+  - {fileID: 100116, guid: 47b43b3539328ec4abc657704dc359a0, type: 2}
+  - {fileID: 100092, guid: ed0e88e30f4302049ad96cea33c91fa2, type: 2}
   - {fileID: 100106, guid: 31331b17e6e2cdb4ea748a131c08222e, type: 2}
   - {fileID: 100090, guid: df1b6ae36bc03844798902cfa5eff844, type: 2}
   - {fileID: 100120, guid: f68300db5391c0b4eb64c36e5a9a2527, type: 2}
