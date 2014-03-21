@@ -516,6 +516,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400068}
+  - 96: {fileID: 9600000}
+  m_Layer: 0
+  m_Name: Trails
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -523,10 +539,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.80601478, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400066}
+  - {fileID: 400068}
   m_Father: {fileID: 0}
 --- !u!4 &400002
 Transform:
@@ -874,7 +891,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100060}
-  m_LocalRotation: {x: -.0163276307, y: .70691824, z: .0163276307, w: .70691824}
+  m_LocalRotation: {x: -.0163276326, y: .706918299, z: .0163276326, w: .706918299}
   m_LocalPosition: {x: -.154490948, y: 1.30104261e-17, z: 2.46519033e-32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -916,12 +933,23 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100066}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -.454857379}
+  m_LocalPosition: {x: -.100140691, y: .0266418457, z: -.454857379}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400064}
   - {fileID: 400062}
   - {fileID: 400002}
+  m_Father: {fileID: 400000}
+--- !u!4 &400068
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -.0424482822, y: .00463647768, z: -.449999988}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
   m_Father: {fileID: 400000}
 --- !u!54 &5400000
 Rigidbody:
@@ -952,6 +980,50 @@ Animator:
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 0
   m_HasTransformHierarchy: 1
+--- !u!96 &9600000
+TrailRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100068}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
+  m_Time: .400000006
+  m_StartWidth: .400000006
+  m_EndWidth: .0500000007
+  m_Colors:
+    m_Color[0]:
+      serializedVersion: 2
+      rgba: 3976110430
+    m_Color[1]:
+      serializedVersion: 2
+      rgba: 2919211614
+    m_Color[2]:
+      serializedVersion: 2
+      rgba: 1979621726
+    m_Color[3]:
+      serializedVersion: 2
+      rgba: 1123917918
+    m_Color[4]:
+      serializedVersion: 2
+      rgba: 16555870
+  m_MinVertexDistance: .100000001
+  m_Autodestruct: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1

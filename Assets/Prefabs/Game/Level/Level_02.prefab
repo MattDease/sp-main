@@ -505,10 +505,10 @@ GameObject:
   - 4: {fileID: 400066}
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
+  - 65: {fileID: 6500000}
+  - 114: {fileID: 11400002}
   - 114: {fileID: 11400000}
-  - 64: {fileID: 6400000}
-  - 114: {fileID: 11400004}
-  - 148: {fileID: 14800002}
+  - 148: {fileID: 14800000}
   m_Layer: 9
   m_Name: leaf
   m_TagString: moveableY
@@ -526,7 +526,7 @@ GameObject:
   - 4: {fileID: 400068}
   - 33: {fileID: 3300002}
   - 23: {fileID: 2300002}
-  - 64: {fileID: 6400002}
+  - 64: {fileID: 6400000}
   m_Layer: 9
   m_Name: main
   m_TagString: Untagged
@@ -677,7 +677,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400088}
-  - 95: {fileID: 9500000}
   m_Layer: 9
   m_Name: model
   m_TagString: Untagged
@@ -693,8 +692,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400090}
-  - 148: {fileID: 14800000}
-  - 114: {fileID: 11400002}
+  - 148: {fileID: 14800002}
+  - 114: {fileID: 11400004}
   m_Layer: 9
   m_Name: Level_02
   m_TagString: Untagged
@@ -1301,16 +1300,29 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100066}
-  m_Mesh: {fileID: 4300002, guid: 2cb4ba103db6ab8499535bf9b9ff0cd3, type: 3}
+  m_Mesh: {fileID: 4300002, guid: a2a7bdac2fac28d468338afd226616e3, type: 3}
 --- !u!33 &3300002
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100068}
-  m_Mesh: {fileID: 4300000, guid: 2cb4ba103db6ab8499535bf9b9ff0cd3, type: 3}
+  m_Mesh: {fileID: 4300000, guid: a2a7bdac2fac28d468338afd226616e3, type: 3}
 --- !u!64 &6400000
 MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100068}
+  m_Material: {fileID: 13400000, guid: 952d9fb057406ab418b7f6ed5b5e6c51, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_SmoothSphereCollisions: 0
+  m_Convex: 0
+  m_Mesh: {fileID: 4300000, guid: a2a7bdac2fac28d468338afd226616e3, type: 3}
+--- !u!65 &6500000
+BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -1319,37 +1331,20 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_SmoothSphereCollisions: 0
-  m_Convex: 0
-  m_Mesh: {fileID: 4300002, guid: 2cb4ba103db6ab8499535bf9b9ff0cd3, type: 3}
---- !u!64 &6400002
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100068}
-  m_Material: {fileID: 13400000, guid: 952d9fb057406ab418b7f6ed5b5e6c51, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_SmoothSphereCollisions: 0
-  m_Convex: 0
-  m_Mesh: {fileID: 4300000, guid: 2cb4ba103db6ab8499535bf9b9ff0cd3, type: 3}
---- !u!95 &9500000
-Animator:
-  serializedVersion: 2
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100088}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 2cb4ba103db6ab8499535bf9b9ff0cd3, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_ApplyRootMotion: 1
-  m_AnimatePhysics: 0
-  m_HasTransformHierarchy: 1
+  m_Size: {x: 2, y: 8, z: 2}
+  m_Center: {x: .899999976, y: 3.75, z: 1}
 --- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dc84029ef135b44a8d8dcde66d5ef36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1361,9 +1356,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   min: {x: 0, y: 0}
-  max: {x: 0, y: 5}
+  max: {x: 0, y: 4}
   gravity: 1
---- !u!114 &11400002
+--- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1375,6 +1370,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawns:
+  - {fileID: 400048}
+  - {fileID: 400044}
   - {fileID: 400042}
   - {fileID: 400040}
   - {fileID: 400038}
@@ -1384,6 +1381,7 @@ MonoBehaviour:
   - {fileID: 400030}
   - {fileID: 400028}
   - {fileID: 400026}
+  - {fileID: 400064}
   - {fileID: 400062}
   - {fileID: 400012}
   - {fileID: 400024}
@@ -1393,7 +1391,6 @@ MonoBehaviour:
   - {fileID: 400016}
   - {fileID: 400014}
   - {fileID: 400046}
-  - {fileID: 400044}
   - {fileID: 400010}
   - {fileID: 400060}
   - {fileID: 400058}
@@ -1401,44 +1398,31 @@ MonoBehaviour:
   - {fileID: 400054}
   - {fileID: 400052}
   - {fileID: 400050}
-  - {fileID: 400048}
-  - {fileID: 400064}
   tutorialPoints:
-  - {fileID: 400006}
-  - {fileID: 400004}
-  - {fileID: 400008}
   - {fileID: 400002}
   - {fileID: 400000}
+  - {fileID: 400008}
+  - {fileID: 400006}
+  - {fileID: 400004}
   coins:
+  - {fileID: 400086}
   - {fileID: 400084}
   - {fileID: 400082}
   - {fileID: 400080}
-  - {fileID: 400072}
-  - {fileID: 400070}
-  - {fileID: 400086}
   - {fileID: 400078}
   - {fileID: 400076}
   - {fileID: 400074}
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100066}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4dc84029ef135b44a8d8dcde66d5ef36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  - {fileID: 400072}
+  - {fileID: 400070}
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100090}
+  m_GameObject: {fileID: 100066}
   m_Enabled: 1
-  m_StateSynchronization: 0
-  m_Observed: {fileID: 0}
+  m_StateSynchronization: 1
+  m_Observed: {fileID: 11400000}
   m_ViewID:
     m_ID: 0
     m_Type: 0
@@ -1447,10 +1431,10 @@ NetworkView:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100066}
+  m_GameObject: {fileID: 100090}
   m_Enabled: 1
-  m_StateSynchronization: 1
-  m_Observed: {fileID: 11400004}
+  m_StateSynchronization: 0
+  m_Observed: {fileID: 0}
   m_ViewID:
     m_ID: 0
     m_Type: 0

@@ -3,8 +3,9 @@
 import System.Linq;
 import System.Collections.Generic;
 
-// TODO implement this
 public class Team{
+    public var runnerCreationCount : int = 0;
+
     private var teammates : Dictionary.<String,Player> = new Dictionary.<String,Player>();
     private var commander : Commander;
     private var runners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
@@ -14,6 +15,8 @@ public class Team{
 
     private var id : int;
     private var alive : boolean = true;
+
+    private var coinCount : int = 0;
 
     private var cachedDistance : float = 0;
 
@@ -27,6 +30,10 @@ public class Team{
 
     public function kill() {
         alive = false;
+    }
+
+    public function collectCoin() {
+        coinCount++;
     }
 
     public function isAlive() : boolean {
@@ -89,7 +96,7 @@ public class Team{
     public function getRandomRunner() : Runner {
         var index : int = Random.Range(0, runners.Keys.Count);
         var key : String = runners.Keys.ToArray()[index];
-        return runners['0'];
+        return runners[key];
     }
 
     public function getClosestRunner(player : Player, forward : boolean) : Runner {
@@ -218,6 +225,14 @@ public class Team{
         }
     }
 
+    public function getCoinCount() : int {
+        return this.coinCount;
+    }
+
+    public function getPoints() : float {
+        return this.getDistance() + this.getCoinCount();
+    }
+
     public function ToString() : String {
         var str : String = "";
         str += "Team[" + this.id + "] ";
@@ -227,8 +242,6 @@ public class Team{
         str += "Selected Char Count[" + this.selectedCharacters.Count + "] ";
         return str;
     }
-
-
 
     // TODO add team validity check methods and gameplay methods.
 }

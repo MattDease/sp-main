@@ -11,10 +11,6 @@ private var temp_speed : float = 4;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     game = GameObject.Find("/GameManager").GetComponent(GameSetupScript).game;
-    // FIXME - Support multiple teams
-    team = game.getTeam(0);
-    team.setEgg(gameObject);
-
 }
 
 function FixedUpdate(){
@@ -45,18 +41,28 @@ function Update(){
             transform.position = holder.getPosition();
         }
     }
-    else if(inTransit){
-        // set local z position
-        var progressPercent : float = Vector3.Distance(holder.getPosition(), transform.position) / Vector3.Distance(holder.getPosition(), target.getPosition());
-        transform.position.z = Mathf.Lerp(holder.getPosition().z, target.getPosition().z, progressPercent);
+    else {
+         // set local z position
+        if(inTransit){
+            var progressPercent : float = Vector3.Distance(holder.getPosition(), transform.position) / Vector3.Distance(holder.getPosition(), target.getPosition());
+            transform.position.z = Mathf.Lerp(holder.getPosition().z, target.getPosition().z, progressPercent);
+        }
+        else{
+            transform.position.z = holder.getPosition().z;
+        }
     }
 }
 
 @RPC
 function setHolder(holderId : String){
+    if(!this.team){
+        this.team = Util.GetPlayerById(holderId).getTeam();
+        this.team.setEgg(gameObject);
+    }
     this.holder = Util.GetPlayerById(holderId) as Runner;
     this.holder.controller.grab();
     transform.position = this.holder.getPosition();
+    transform.position.z = this.holder.gameObject.GetComponent(RunnerScript).depth;
     inTransit = false;
     GetComponent(EggSyncScript).enabled = true;
 }

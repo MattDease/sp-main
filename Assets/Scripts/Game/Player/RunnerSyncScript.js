@@ -5,6 +5,11 @@ private var syncDelay : float = 0;
 private var syncTime : float = 0;
 private var syncStartPosition : Vector3 = Vector3.zero;
 private var syncEndPosition : Vector3 = Vector3.zero;
+private var runnerScript : RunnerScript;
+
+function Start(){
+    runnerScript = GetComponent(RunnerScript);
+}
 
 function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo) {
     var posX : float = 0;
@@ -29,8 +34,11 @@ function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo) {
 
         rigidbody.velocity = velocity;
 
-        syncStartPosition = transform.position;
-        syncEndPosition = Vector3(posX, posY, transform.position.z) + velocity * syncDelay;
+        if(runnerScript){
+            syncStartPosition = transform.position;
+            syncEndPosition = Vector3(posX, posY, runnerScript.depth) + velocity * syncDelay;
+            syncEndPosition.z = runnerScript.depth;
+        }
     }
 }
 

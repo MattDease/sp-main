@@ -46,11 +46,15 @@ function onLevelReady(){
 
 @RPC
 function createCharacter(info : NetworkMessageInfo){
-    if(playerScript.getSelf().GetType() == Runner){
-        Network.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, 0);
+    var go : Transform;
+    var me : Player = playerScript.getSelf();
+    if(me.GetType() == Runner){
+        go = Network.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, 0);
+        go.networkView.RPC("initRunner", RPCMode.All, me.getId(), me.getTeamId());
     }
     else{
-        Network.Instantiate(commanderPrefab, Vector3(0, 0, Config.COMMANDER_DEPTH_OFFSET), Quaternion.identity, 0);
+        go = Network.Instantiate(commanderPrefab, Vector3(0, 0, Config.COMMANDER_DEPTH_OFFSET), Quaternion.identity, 0);
+        go.networkView.RPC("initCommander", RPCMode.All, me.getId(), me.getTeamId());
     }
     if(Network.isServer){
         // Server can't send server RPC
@@ -69,9 +73,11 @@ function playerReady(){
     if(readyPlayerCount == players.Count){
         if(Config.USE_EGG){
             // TODO support multiple teams
-            var holder = game.getTeam(0).getRandomRunner();
-            var egg : Transform = Network.Instantiate(eggPrefab, holder.getPosition(), Quaternion.identity, 0);
-            egg.networkView.RPC("setHolder", RPCMode.All, holder.getId());
+            for(var team : Team in game.getTeams()){
+                var holder = team.getRandomRunner();
+                var egg : Transform = Network.Instantiate(eggPrefab, holder.getPosition(), Quaternion.identity, 0);
+                egg.networkView.RPC("setHolder", RPCMode.All, holder.getId());
+            }
         }
         networkView.RPC("startCountDown", RPCMode.All);
     }
@@ -106,8 +112,12 @@ function startGame(){
 function OnNetworkLoadedLevel(){
     if(game.isValid()){
         levelManager = GameObject.Find("GameScripts").GetComponent(LevelManager);
+
         if(Network.isServer){
-            levelManager.addFirstSegment();
+            for(var team : Team in game.getTeams()){
+                levelManager.addFirstSegment(team.getId());
+            }
+            levelManager.addFirstPlanes();
         }
     }
     else{

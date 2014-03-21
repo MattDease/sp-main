@@ -38,14 +38,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3f86fa1f66996f44b393e01538e4492, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startSegmentPrefab: {fileID: 100004, guid: a7a7e7770ca5d4948b0365e708166e5f, type: 2}
   segmentPrefabs:
   - {fileID: 100096, guid: 69a09460c704a934ba12f383ba755645, type: 2}
   - {fileID: 100090, guid: df1b6ae36bc03844798902cfa5eff844, type: 2}
+  - {fileID: 100120, guid: f68300db5391c0b4eb64c36e5a9a2527, type: 2}
+  - {fileID: 100114, guid: 039b69369d4483445ab732b032da3ac0, type: 2}
+  - {fileID: 100122, guid: 3c74f4906ce118c459257843722d2d20, type: 2}
+  - {fileID: 100106, guid: 31331b17e6e2cdb4ea748a131c08222e, type: 2}
+  - {fileID: 100072, guid: 03a18237a5913d243b339a200a7708aa, type: 2}
+  - {fileID: 100092, guid: ed0e88e30f4302049ad96cea33c91fa2, type: 2}
+  - {fileID: 100116, guid: 47b43b3539328ec4abc657704dc359a0, type: 2}
+  - {fileID: 100084, guid: ab10031ff2c982d49adaed92b427366e, type: 2}
+  backgroundPrefabs:
+  - {fileID: 100002, guid: 3603f915cd0360245a38a002cb3cfed2, type: 2}
+  - {fileID: 100002, guid: 2a3e04e703df56a47b944cffae858bb8, type: 2}
+  - {fileID: 100002, guid: 3603f915cd0360245a38a002cb3cfed2, type: 2}
+  - {fileID: 100002, guid: 128f0212b97c8604eab1aaa90510146e, type: 2}
   enemyPrefabs:
   - {fileID: 100122, guid: 48a50ecdab9835b41b1e05028c318ded, type: 2}
-  - {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
-  - {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
-  - {fileID: 100002, guid: a51b94ee55df33f4a85b3a56de4aa342, type: 2}
+  - {fileID: 100050, guid: 0e9afb92af6174ca88086c6f04108d50, type: 2}
+  - {fileID: 100060, guid: 0e688b9c9134b42198de52c0039169c5, type: 2}
+  - {fileID: 100050, guid: 672a78af5fdf94da7b4c74114aeb88f0, type: 2}
   signPrefabs:
   - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
   - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
@@ -54,7 +68,8 @@ MonoBehaviour:
   - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
   - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
   - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
-  coinPrefab: {fileID: 100002, guid: 9f8f307fe1ce8894dbd94b1820f83dbd, type: 2}
+  coinPrefab: {fileID: 100002, guid: 9888c3c205ba0414f8a102625e8062fc, type: 2}
+  BACKGROUND_OFFSET: []
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

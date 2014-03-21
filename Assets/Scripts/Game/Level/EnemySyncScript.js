@@ -12,21 +12,25 @@ function Start(){
 }
 
 function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo) {
-    var position : Vector3 = Vector3.zero;
+    var posX : float = 0;
+    var posY : float = 0;
     if (stream.isWriting) {
-        position = transform.position;
+        posX = transform.position.x;
+        posY = transform.position.y;
 
-        stream.Serialize(position);
+        stream.Serialize(posX);
+        stream.Serialize(posY);
     }
     else {
-        stream.Serialize(position);
+        stream.Serialize(posX);
+        stream.Serialize(posY);
 
         syncTime = 0;
         syncDelay = Time.time - lastSynchronizationTime;
         lastSynchronizationTime = Time.time;
 
         syncStartPosition = transform.position;
-        syncEndPosition = position;
+        syncEndPosition = Vector3(posX, posY, transform.position.z);
     }
 }
 

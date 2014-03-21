@@ -26,20 +26,32 @@ public static class Config{
     // Walking speed in m/s of the runner.
     public var WALK_SPEED : float = 1.4;
     // Upward impulse speed in m/s.
-    public var JUMP_SPEED : float = 5.5;
-    // Enemy speed in m/s.
-    public var ENEMY_SPEED : float = 0.3;
+    public var JUMP_SPEED : float = 4;
     // Time in seconds of the runner crouch state.
     public var CROUCH_DURATION : float = 1;
 
     public var MAX_TEAM_COUNT : int = 5;
     // Time in seconds of the runner attack state.
     public var ATTACK_DURATION : float = 1;
+    // Wasp and beetle enemy speed in m/s.
+    public var WASP_BEETLE_SPEED : float = 0.3;
+    // Cardinal enemy speed in m/s.
+    public var CARDINAL_SPEED : float = 1.5;
+    // Time in seconds between worm attacks.
+    public var WORM_DELAY : float = 1.5;
+    // Offset between different worm attack times
+    public var WORM_DELAY_OFFSET : float = 0.5;
     // Distance in x-axis between runner and cardinal's end point that will
     // trigger the cardinal to attack
     public var CARDINAL_TRIGGER_DISTANCE : float = 4;
     // Relative to the level segment, the commander's offset in the z-axis, + is away from the camera
-    public var COMMANDER_DEPTH_OFFSET : float = -0.5;
+    public var COMMANDER_DEPTH_OFFSET : float = -0.6;
+    // Relative to the world origin, the opposing team's offset in the z-axis, + is away from the camera
+    public var TEAM_DEPTH_OFFSET : float = 6;
+    // Spacing in the z-axis between runners on the same team
+    public var RUNNER_LANE_WIDTH : float = 0.6;
+    // Duration in seconds of transition between running and walking speeds;
+    public var SPEED_TRANSITION_DURATION : float = 0.3;
 
     //// NETWORKING
     // ID that all hosts will use to register their game with the master server.

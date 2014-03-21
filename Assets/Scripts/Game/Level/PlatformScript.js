@@ -10,7 +10,7 @@ private var lastPositionTime : float = 0;
 private var gravitySpeed : float = 3;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
-    initialPosition = gameObject.transform.position;
+    initialPosition = transform.position;
 }
 
 function Update(){
@@ -42,7 +42,7 @@ function notifyPosition(position : Vector3){
             position.y = initialPosition.y + max.y;
         }
     }
-    if(position != gameObject.transform.position){
+    if(position != transform.position){
         syncPosition(position);
     }
 }
@@ -58,5 +58,5 @@ function syncPosition(position : Vector3){
 
 @RPC
 function setPosition(position : Vector3){
-    gameObject.transform.position = position;
+    transform.position = position;
 }

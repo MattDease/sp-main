@@ -16,13 +16,19 @@ private var plane : Plane = new Plane(Vector3(0, 1, Config.COMMANDER_DEPTH_OFFSE
                                       Vector3(1, 1, Config.COMMANDER_DEPTH_OFFSET),
                                       Vector3(1, 0, Config.COMMANDER_DEPTH_OFFSET));
 private var targetPosition : Vector3;
+private var targetRotation : Quaternion;
 private var velocity : Vector3 = Vector3.zero;
 private var offsetX : float = 0;
 private var platform : GameObject;
 private var platformOffset : Vector2 = Vector2.zero;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
-    player = Util.GetPlayerById(networkView.viewID.owner.ToString()) as Commander;
+
+}
+
+@RPC
+function initCommander(playerId : String, teamId : int){
+    player = Util.GetPlayerById(playerId) as Commander;
     team = player.getTeam();
     model = gameObject.transform.Find("model").gameObject;
     animator = model.GetComponent(Animator);
@@ -32,15 +38,17 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 
     if(networkView.isMine){
         camContainer = Instantiate(cameraPrefab, Vector3.zero,  Quaternion.identity);
+        Camera.main.transparencySortMode = TransparencySortMode.Orthographic;
 
         var playerPosition : Vector3 = gameObject.transform.position;
         var viewport : Vector3 = Camera.main.WorldToViewportPoint(playerPosition);
         viewport.x = 0.5;
         viewport.y = 0.8;
-        player.gameObject.transform.position = Camera.main.ViewportToWorldPoint(viewport);
+        transform.position = Camera.main.ViewportToWorldPoint(viewport);
 
-        player.gameObject.rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+        rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
     }
+    transform.position.z += (teamId == player.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
 }
 
 // Do physics changes here
@@ -57,34 +65,46 @@ function Update(){
     }
     if(networkView.isMine){
         if(touched){
-            gameObject.transform.position = Vector3.SmoothDamp(player.getPosition(), targetPosition, velocity, 0.07);
+            var currentPosition : Vector3 = player.getPosition();
+            transform.position = Vector3.SmoothDamp(currentPosition, targetPosition, velocity, 0.07);
+            var angleZ : float = Mathf.Atan2(targetPosition.y - currentPosition.y, targetPosition.x - currentPosition.x) * Mathf.Rad2Deg;
+            var angleY : float = 0;
+            if(angleZ < -90 || angleZ > 90){
+                angleZ += (angleZ > 0 ? -180 : 180);
+                angleZ *= -1;
+                angleY = 180;
+            }
+            targetRotation = Quaternion.Euler(0, angleY, angleZ);
 
             var hit : RaycastHit;
-            if (Physics.Raycast(gameObject.transform.position, Vector3.forward, hit)){
+            if (Physics.Raycast(transform.position, Vector3.forward, hit, 4)){
                 if(hit.collider.gameObject.CompareTag("enemy")){
                     hit.collider.gameObject.GetComponent(EnemyScript).notifyKill();
                     attack();
                     networkView.RPC("attack", RPCMode.Others);
                 }
                 if(!platform){
-                    if(Vector3.Distance(gameObject.transform.position, targetPosition) < 0.3){
+                    if(Vector3.Distance(transform.position, targetPosition) < 0.3){
                         if(hit.collider.gameObject.CompareTag("moveableX") || hit.collider.gameObject.CompareTag("moveableY")){
                             platform = hit.collider.gameObject;
-                            platformOffset = platform.transform.position - gameObject.transform.position;
+                            platformOffset = platform.transform.position - transform.position;
                         }
                     }
                 }
-                else{
-                    var position : Vector3 = platform.transform.position;
-                    if(platform.CompareTag("moveableX")){
-                        position.x = player.getPosition().x + platformOffset.x;
-                    }
-                    else if(platform.CompareTag("moveableY")){
-                        position.y = player.getPosition().y + platformOffset.y;
-                    }
-                    platform.GetComponent(PlatformScript).notifyPosition(position);
-                }
             }
+            if(platform){
+                var position : Vector3 = platform.transform.position;
+                if(platform.CompareTag("moveableX")){
+                    position.x = player.getPosition().x + platformOffset.x;
+                }
+                else if(platform.CompareTag("moveableY")){
+                    position.y = player.getPosition().y + platformOffset.y;
+                }
+                platform.GetComponent(PlatformScript).notifyPosition(position);
+            }
+        }
+        else{
+            targetRotation = Quaternion.identity;
         }
         checkKeyboardInput();
     }
@@ -94,10 +114,11 @@ function LateUpdate(){
     if(networkView.isMine && team.isAlive()){
         var currentTeamPosition : Vector3 = team.getObserverCameraPosition();
         if(!touched){
-            gameObject.transform.position.x = currentTeamPosition.x + offsetX;
+            transform.position.x = currentTeamPosition.x + offsetX;
         }
         camContainer.transform.position.x = currentTeamPosition.x;
         camContainer.transform.position.y = currentTeamPosition.y/2;
+        model.transform.rotation = Quaternion.Slerp(model.transform.rotation, targetRotation, Time.deltaTime * 10);
     }
 }
 
@@ -110,7 +131,7 @@ function OnCollisionExit(theCollision : Collision){
 }
 
 function setOffset(){
-    offsetX = gameObject.transform.position.x - team.getObserverCameraPosition().x;
+    offsetX = transform.position.x - team.getObserverCameraPosition().x;
 }
 
 @RPC
@@ -125,8 +146,7 @@ function checkKeyboardInput(){
     if(networkView.isMine){
         if(Config.DEBUG){
             if(Input.GetKeyDown(KeyCode.A)){
-                attack();
-                networkView.RPC("attack", RPCMode.Others);
+                networkView.RPC("attack", RPCMode.All);
             }
         }
     }
