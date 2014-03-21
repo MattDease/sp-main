@@ -116,20 +116,28 @@ function Update(){
             killMe();
             return;
         }
-        if(!platform){
-            var hit : RaycastHit;
-            var pos : Vector3 = gameObject.transform.position;
-            pos.y += 0.1;
-            if(Physics.Raycast(pos, Vector3.down, hit, 1)) {
-                if(hit.collider.gameObject.CompareTag("moveableX") || hit.collider.gameObject.CompareTag("moveableY")){
-                    platform = hit.collider.gameObject;
+        if(platform){
+            transform.position += Vector2(platform.transform.position.x, platform.transform.position.y) - prevPlatformPos;
+            prevPlatformPos = platform.transform.position;
+        }
+        var pos : Vector3 = gameObject.transform.position;
+        pos.y += 1;
+        var hits : RaycastHit[] = Physics.RaycastAll(pos, Vector3.down, 1.1);
+        for (var i = 0; i < hits.Length; i++){
+            var hit : RaycastHit = hits[i];
+            var go : GameObject = hit.collider.gameObject;
+            if(go.CompareTag("moveableX") || go.CompareTag("moveableY")){
+                if(!platform){
+                    platform = go;
                     prevPlatformPos = platform.transform.position;
                 }
             }
+            else if(platform && go.layer == LayerMask.NameToLayer("Ground Segments")){
+                platform = null;
+            }
         }
-        if(platform){
-            gameObject.transform.position += Vector2(platform.transform.position.x, platform.transform.position.y) - prevPlatformPos;
-            prevPlatformPos = platform.transform.position;
+        if(platform && hits.Length == 0){
+            platform = null;
         }
         var grounded : boolean = isGrounded();
         if(grounded != animator.GetBool("IsGrounded")){
@@ -138,7 +146,6 @@ function Update(){
             }
             else{
                 networkView.RPC("takeoff", RPCMode.All);
-                platform = null;
             }
         }
         checkCrush();
@@ -166,7 +173,7 @@ function isGrounded() : boolean {
     var hit : RaycastHit;
     var pos : Vector3 = gameObject.transform.position;
     pos.y += 0.1;
-    if(Physics.Raycast(pos, Vector3.down, hit, 0.2)) {
+    if(Physics.Raycast(pos, Vector3.down, hit, 0.15)) {
         if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground Segments")){
             return true;
         }
