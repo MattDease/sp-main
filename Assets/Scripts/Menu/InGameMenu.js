@@ -30,10 +30,8 @@ function OnDebugGUI(){
     GUILayout.Label("Debug Menu");
 
     if(GUILayout.Button("Leave Game")){
-        Network.Disconnect();
-        playerScript.incrementTimesPlayed();
-        stateScript.setCurrentMenu(menus.highscore);
-        Application.LoadLevel("scene-menu");
+        gameSetupScript.leaveGame();
+        return;
     }
 
     var gameState = stateScript.getGameState();

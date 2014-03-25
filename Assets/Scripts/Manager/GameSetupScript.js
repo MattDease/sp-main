@@ -21,6 +21,7 @@ private var levelManager : LevelManager;
 private var readyPlayerCount : int = 0;
 private var startTime : double;
 private var lastLevelPrefix : int = 0;
+private var isLeaving : boolean = false;
 
 function Start(){
     playerScript = GetComponent(PlayerScript);
@@ -157,13 +158,30 @@ function loadLevel(level : String, levelPrefix : int){
     }
 }
 
-function OnDisconnectedFromServer(){
+function leaveGame(){
+    isLeaving = true;
+    readyPlayerCount = 0;
+    Network.RemoveRPCsInGroup(0);
+    Network.Disconnect();
     playerScript.incrementTimesPlayed();
     playerScript.setSelf(null);
+    stateScript.setGameState(GameState.Uninitialized);
+    stateScript.setCurrentMenu(menus.lobby);
     game.destroy();
     game = null;
-    stateScript.setCurrentMenu(menus.lobby);
+    isLeaving = false;
     Application.LoadLevel("scene-menu");
+}
+
+function OnDisconnectedFromServer(info : NetworkDisconnection){
+    if(!isLeaving){
+        leaveGame();
+    }
+}
+
+// Server only
+function OnPlayerDisconnected(netPlayer : NetworkPlayer){
+    networkView.RPC("removePlayer", RPCMode.All, netPlayer);
 }
 
 function registerPlayerProxy(name : String){

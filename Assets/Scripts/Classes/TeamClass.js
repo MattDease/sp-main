@@ -164,6 +164,9 @@ public class Team{
         if(teammates[id].GetType() == Runner){
             runners.Remove(id);
             activeRunners.Remove(id);
+            if(activeRunners.Count == 0){
+                this.kill();
+            }
         }
         if(teammates[id].GetType() == Commander){
             commander = null;
