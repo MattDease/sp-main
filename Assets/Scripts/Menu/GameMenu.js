@@ -162,7 +162,7 @@ function OnGUI() {
            netScript.killGame();
         } else if(Network.isClient) {
             //remove player
-           GameObject.Find("/GameManager").networkView.RPC("removePlayer", RPCMode.AllBuffered, Network.player);
+           gameManager.networkView.RPC("removePlayer", RPCMode.All, Network.player);
         }
 
         leaveFor(menus.lobby);
@@ -492,7 +492,7 @@ function OnGUI() {
                     if (GUI.Button(Rect(guiHost[2].offset.x, Screen.height - Screen.height * 0.13 - (100 * menuScript.getScale()), guiHost[2].textureWidth, guiHost[2].textureHeight), (playerScript.getSelf().getReadyStatus() ? "EDIT" : "READY"), "GreenButton")) {
                         if (playerScript.getSelf().getReadyStatus()) playerScript.getSelf().updateReadyStatus(false);
                         else playerScript.getSelf().updateReadyStatus(true);
-                        GameObject.Find("/GameManager").networkView.RPC("updateReadyStatus", RPCMode.AllBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
+                        gameManager.networkView.RPC("updateReadyStatus", RPCMode.All, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
 
                     }
                 } else {
@@ -594,18 +594,18 @@ function characterSelection() {
 
             if (!isAlreadySelected) {
 
-                GameObject.Find("/GameManager").networkView.RPC("updateCharacter", RPCMode.AllBuffered, playerScript.getSelf().getId(), c, Network.player);
+                gameManager.networkView.RPC("updateCharacter", RPCMode.All, playerScript.getSelf().getId(), c, Network.player);
                 playerScript.getSelf().setCharacter(c);
 
                 //If not hosting and changed character - you aren't ready.
                 if (!isHosting && playerScript.getSelf().getReadyStatus()) {
                     playerScript.getSelf().updateReadyStatus(false);
-                    GameObject.Find("/GameManager").networkView.RPC("updateReadyStatus", RPCMode.AllBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
+                    gameManager.networkView.RPC("updateReadyStatus", RPCMode.All, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
                 }
                 //But if you are hosting and select a character you are ready.
                 if(isHosting){
                     playerScript.getSelf().updateReadyStatus(true);
-                    GameObject.Find("/GameManager").networkView.RPC("updateReadyStatus", RPCMode.AllBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
+                    gameManager.networkView.RPC("updateReadyStatus", RPCMode.All, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
                 }
 
                 selectCharacter = false;
@@ -655,18 +655,18 @@ function characterSelection() {
         if (GUI.Button(Rect(Screen.width * 0.75, guiObject[1].offset.y + h, Screen.width * 0.15, Screen.height * 0.20), commanderTexture, "FullImage")) {
 
            if(!isCommanderAlreadySelected){
-                GameObject.Find("/GameManager").networkView.RPC("updateCharacter", RPCMode.AllBuffered, playerScript.getSelf().getId(), count, Network.player);
+                gameManager.networkView.RPC("updateCharacter", RPCMode.All, playerScript.getSelf().getId(), count, Network.player);
                 playerScript.getSelf().setCharacter(count);
 
                 //If not hosting and changed character - you aren't ready.
                 if (!isHosting && playerScript.getSelf().getReadyStatus()) {
                     playerScript.getSelf().updateReadyStatus(false);
-                    GameObject.Find("/GameManager").networkView.RPC("updateReadyStatus", RPCMode.AllBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
+                    gameManager.networkView.RPC("updateReadyStatus", RPCMode.All, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
                 }
                 //But if you are hosting and select a character you are ready.
                 if(isHosting){
                     playerScript.getSelf().updateReadyStatus(true);
-                    GameObject.Find("/GameManager").networkView.RPC("updateReadyStatus", RPCMode.AllBuffered, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
+                    gameManager.networkView.RPC("updateReadyStatus", RPCMode.All, playerScript.getSelf().getId(), playerScript.getSelf().getReadyStatus());
                 }
 
                 selectCharacter = false;
@@ -686,12 +686,12 @@ function checkVersus(teamCount : int) {
 
     if (Config.VERSUS_ENABLED && teamCount > Config.MAX_TEAM_COUNT && !isVersus || !Config.VERSUS_ENABLED && Input.GetKey('v') && !isVersus) {
         gameSetupScript.game.setIsVersus(GameMode.Versus);
-        GameObject.Find("/GameManager").networkView.RPC("setVersusMode", RPCMode.AllBuffered, GameMode.Versus.ToString());
+        gameManager.networkView.RPC("setVersusMode", RPCMode.All, GameMode.Versus.ToString());
         isVersus = gameSetupScript.game.getIsVersus();
     }
     else if(Config.VERSUS_ENABLED && teamCount < Config.MAX_TEAM_COUNT && isVersus || !Config.VERSUS_ENABLED && Input.GetKey('t') && isVersus){
         gameSetupScript.game.setIsVersus(GameMode.Team);
-        GameObject.Find("/GameManager").networkView.RPC("setVersusMode", RPCMode.AllBuffered, GameMode.Team.ToString());
+        gameManager.networkView.RPC("setVersusMode", RPCMode.All, GameMode.Team.ToString());
         isVersus = gameSetupScript.game.getIsVersus();
     }
 }
@@ -720,27 +720,27 @@ function switchingTeams() {
     //Check to see if on a team already, if on team 1, arrow needs to pount down...
     if (playerScript.getSelf().getTeamId() == 0) {
         if (GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height * 0.05 - Screen.height * 0.1, guiVersus[4].textureWidth, guiVersus[4].textureHeight), arrowDownTexture, "FullImage")) {
-            GameObject.Find("/GameManager").networkView.RPC("removeTeam", RPCMode.AllBuffered, playerScript.getSelf().getId(), 0, Network.player);
+            gameManager.networkView.RPC("removeTeam", RPCMode.All, playerScript.getSelf().getId(), 0, Network.player);
             playerScript.getSelf().setTeamId(100);
         }
 
     } else if (playerScript.getSelf().getTeamId() == 1) {
         if (GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height * 0.05 + Screen.height * 0.1, guiVersus[4].textureWidth, guiVersus[4].textureHeight), arrowTexture, "FullImage")) {
-            GameObject.Find("/GameManager").networkView.RPC("removeTeam", RPCMode.AllBuffered, playerScript.getSelf().getId(), 1, Network.player);
+            gameManager.networkView.RPC("removeTeam", RPCMode.All, playerScript.getSelf().getId(), 1, Network.player);
             playerScript.getSelf().setTeamId(100);
         }
     } else {
         if (GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height * 0.05 - Screen.height * 0.1, guiVersus[4].textureWidth, guiVersus[4].textureHeight), (teamOneFull ? arrowTextureDisabled : arrowTexture), "FullImage")) {
             if (!teamOneFull) {
                 gameSetupScript.game.setTeam(playerScript.getSelf(), 0, Network.player);
-                GameObject.Find("/GameManager").networkView.RPC("setTeam", RPCMode.AllBuffered, playerScript.getSelf().getId(), 0, Network.player);
+                gameManager.networkView.RPC("setTeam", RPCMode.All, playerScript.getSelf().getId(), 0, Network.player);
             }
         }
 
         if (GUI.Button(Rect(guiVersus[4].offset.x, guiVersus[4].offset.y - Screen.height * 0.05 + Screen.height * 0.1, guiVersus[4].textureWidth, guiVersus[4].textureHeight), (teamTwoFull ? arrowDownTextureDisabled : arrowDownTexture), "FullImage")) {
             if (!teamTwoFull) {
                 gameSetupScript.game.setTeam(playerScript.getSelf(), 1, Network.player);
-                GameObject.Find("/GameManager").networkView.RPC("setTeam", RPCMode.AllBuffered, playerScript.getSelf().getId(), 1, Network.player);
+                gameManager.networkView.RPC("setTeam", RPCMode.All, playerScript.getSelf().getId(), 1, Network.player);
             }
 
         }
