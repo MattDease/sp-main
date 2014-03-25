@@ -477,8 +477,10 @@ function OnGUI() {
             guiHost[2].textureHeight = Screen.height * 0.14;
             guiHost[2].setLocation(Points.BottomRight);
 
+            // note - isValid call updates game status message
+            var isValid : boolean = gameSetupScript.game.isValid();
             if (isHosting) {
-                if(gameSetupScript.game.isValid()){
+                if(isValid){
                     if (GUI.Button(Rect(guiHost[2].offset.x, Screen.height - Screen.height * 0.13 - (100 * menuScript.getScale()), guiHost[2].textureWidth, guiHost[2].textureHeight), "START", "GreenButton")) {
                         gameSetupScript.enterGame();
                     }
@@ -685,13 +687,11 @@ function checkVersus(teamCount : int) {
     isVersus = gameSetupScript.game.getIsVersus();
 
     if (Config.VERSUS_ENABLED && teamCount > Config.MAX_TEAM_COUNT && !isVersus || !Config.VERSUS_ENABLED && Input.GetKey('v') && !isVersus) {
-        gameSetupScript.game.setIsVersus(GameMode.Versus);
-        gameManager.networkView.RPC("setVersusMode", RPCMode.All, GameMode.Versus.ToString());
+        gameManager.networkView.RPC("setVersusMode", RPCMode.AllBuffered, GameMode.Versus.ToString());
         isVersus = gameSetupScript.game.getIsVersus();
     }
     else if(Config.VERSUS_ENABLED && teamCount < Config.MAX_TEAM_COUNT && isVersus || !Config.VERSUS_ENABLED && Input.GetKey('t') && isVersus){
-        gameSetupScript.game.setIsVersus(GameMode.Team);
-        gameManager.networkView.RPC("setVersusMode", RPCMode.All, GameMode.Team.ToString());
+        gameManager.networkView.RPC("setVersusMode", RPCMode.AllBuffered, GameMode.Team.ToString());
         isVersus = gameSetupScript.game.getIsVersus();
     }
 }

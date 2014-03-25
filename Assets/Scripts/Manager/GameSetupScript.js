@@ -176,7 +176,7 @@ function leaveGame(){
 }
 
 function OnDisconnectedFromServer(info : NetworkDisconnection){
-    if(!isLeaving){
+    if(!isLeaving && Application.loadedLevelName == "scene-game"){
         leaveGame();
     }
 }
@@ -203,7 +203,9 @@ function OnPlayerConnected(netPlayer : NetworkPlayer){
 
 // Server only
 function OnPlayerDisconnected(netPlayer : NetworkPlayer){
-    networkView.RPC("removePlayer", RPCMode.All, netPlayer);
+    if(Application.loadedLevelName == "scene-game"){
+        networkView.RPC("removePlayer", RPCMode.All, netPlayer);
+    }
 }
 
 function registerPlayerProxy(name : String){
@@ -338,10 +340,4 @@ function changeRole(id : String, name : String, newRole : String, teamId:int, ch
 @RPC
 function removePlayer(netPlayer:NetworkPlayer){
     game.removePlayer(netPlayer.ToString());
-}
-
-
-@RPC
-function updateGameStatus(status : String){
-    game.setGameStatus(status);
 }

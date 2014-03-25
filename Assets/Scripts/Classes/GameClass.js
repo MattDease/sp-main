@@ -330,11 +330,7 @@ public class Game {
     }
 
     public function setGameStatus(status: String) {
-
-        if(status != this.status){
-            this.status = status;
-            GameObject.Find("/GameManager").networkView.RPC("updateGameStatus", RPCMode.OthersBuffered, status);
-        }
+        this.status = status;
     }
 
     public function getGameStatus() : String {
