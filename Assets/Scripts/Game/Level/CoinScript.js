@@ -7,15 +7,17 @@ private var animator : Animator;
 private var teamId : int;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
+
+}
+
+@RPC
+function initCoin(teamId : int, hostTeam : boolean){
     var gameManager : GameObject = GameObject.Find("/GameManager");
     game = gameManager.GetComponent(GameSetupScript).game;
     player = gameManager.GetComponent(PlayerScript).getSelf();
     animator = transform.Find("skin").gameObject.GetComponent(Animator);
     alive = true;
-}
 
-@RPC
-function initCoin(teamId : int, hostTeam : boolean){
     if(!hostTeam){
         transform.position.z -= Config.TEAM_DEPTH_OFFSET;
     }
