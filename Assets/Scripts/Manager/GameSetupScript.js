@@ -179,6 +179,11 @@ function OnDisconnectedFromServer(info : NetworkDisconnection){
     }
 }
 
+// Server only
+function OnPlayerDisconnected(netPlayer : NetworkPlayer){
+    networkView.RPC("removePlayer", RPCMode.All, netPlayer);
+}
+
 function registerPlayerProxy(name : String){
     if(Network.isServer){
         // Server can't sent server RPC
