@@ -888,7 +888,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.3726492, y: 2.08108282, z: .5}
+  m_LocalPosition: {x: 7.97735023, y: 1.30829573, z: .5}
   m_LocalScale: {x: .39986679, y: .39986679, z: .39986679}
   m_Children: []
   m_Father: {fileID: 400112}
@@ -1750,8 +1750,6 @@ MonoBehaviour:
   - {fileID: 400108}
   - {fileID: 400110}
   - {fileID: 400106}
-  egg: {fileID: 0}
-  eggScript: {fileID: 0}
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1
