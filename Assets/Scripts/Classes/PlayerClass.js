@@ -10,6 +10,8 @@ public class Player{
     public var script : MonoBehaviour;
     private var selectedCharacter : int = 12;
     private var isReady : boolean = false;
+    private var tutorialSigns : List.<String> = new List.<String>();
+
     public function Player(name:String, teamId:int, team:Team, networkPlayer:NetworkPlayer){
         this.name = name;
         this.teamId = teamId;
@@ -65,6 +67,21 @@ public class Player{
 
     public function getReadyStatus() : boolean {
         return this.isReady;
+    }
+
+     public function addTutorialSign(sign : String ) {
+        tutorialSigns.Add(sign);
+    }
+
+    public function getSignWith(sign : String) : boolean {
+        var count : int = 0;
+
+        for (var tutSign: String in tutorialSigns) {
+            if(tutSign == sign) ++count;
+        }
+
+        if(count >= Config.MAX_SIGN_COUNT) return true;
+        return false;
     }
 
     public function ToString() : String {

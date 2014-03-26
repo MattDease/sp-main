@@ -10,6 +10,8 @@ public static class Config{
     public var MENU_DEBUG : boolean = false;
     // Enable/Disable the egg in the game.
     public var USE_EGG : boolean = false;
+    //Enable/Disable the tutorial signs in the game
+    public var USE_SIGNS : boolean = true;
 
     //// GAMEPLAY
     // Once all players are ready, the delay in seconds before the game starts.
@@ -73,5 +75,8 @@ public static class Config{
     public var VERSUS_ENABLED : boolean = false;
     //Skips validation of team
     public var VALIDATION_SKIP : boolean = false;
-
+    //Distance between Player and Tutorial Sign required to show sign
+    public var TUTORIAL_SIGN_DISTANCE : int = 10;
+    //How many times you see a tutorial sign
+    public var MAX_SIGN_COUNT : int = 3;
 }
