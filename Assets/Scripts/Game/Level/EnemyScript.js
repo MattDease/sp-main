@@ -35,7 +35,7 @@ function initEnemy(teamId : int, hostTeam : boolean){
         transform.position.z -= Config.TEAM_DEPTH_OFFSET;
     }
     this.teamId = teamId;
-    transform.position.z += (teamId == player.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
+    transform.position.z += (teamId == player.getTeamId()) ? Config.TEAM_DEPTH_OFFSET : 0;
 }
 
 function init(pt1 : Vector3, pt2 : Vector3, typeCount : int){
