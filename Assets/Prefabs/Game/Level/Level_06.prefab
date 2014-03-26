@@ -822,7 +822,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 0, z: .5}
+  m_LocalPosition: {x: 5.93985176, y: -.125692368, z: .5}
   m_LocalScale: {x: .156355172, y: .156355172, z: .156355172}
   m_Children: []
   m_Father: {fileID: 400104}
@@ -833,7 +833,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 0, z: .5}
+  m_LocalPosition: {x: 5.93985176, y: -.392933846, z: .5}
   m_LocalScale: {x: .156355172, y: .156355172, z: .156355172}
   m_Children: []
   m_Father: {fileID: 400104}
@@ -844,7 +844,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.42172098, y: 1.61019385, z: .5}
+  m_LocalPosition: {x: 2.42172098, y: 1.71668673, z: .5}
   m_LocalScale: {x: .156355172, y: .156355172, z: .156355172}
   m_Children: []
   m_Father: {fileID: 400104}
@@ -1568,6 +1568,8 @@ MonoBehaviour:
   - {fileID: 400088}
   - {fileID: 400086}
   - {fileID: 400102}
+  egg: {fileID: 0}
+  eggScript: {fileID: 0}
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1
