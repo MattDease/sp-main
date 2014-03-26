@@ -5,7 +5,7 @@ public static class Config{
 
     //// GENERAL
     // General debug mode of the game.
-    public var DEBUG : boolean = true;
+    public var DEBUG : boolean = false;
     // General debug mode of the game.
     public var MENU_DEBUG : boolean = false;
     // Enable/Disable the egg in the game.
