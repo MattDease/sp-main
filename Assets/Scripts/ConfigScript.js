@@ -10,6 +10,8 @@ public static class Config{
     public var MENU_DEBUG : boolean = false;
     // Enable/Disable the egg in the game.
     public var USE_EGG : boolean = false;
+    //Enable/Disable the tutorial signs in the game
+    public var USE_SIGNS : boolean = true;
 
     //// GAMEPLAY
     // Once all players are ready, the delay in seconds before the game starts.
@@ -60,7 +62,9 @@ public static class Config{
     public var GAME_PORT : int = 25002;
     // Master server ip to use in-case DNS lookup fails
     // Note DNS lookup is disabled due to Unity Pro requirement on Android.
-    public var MASTER_SERVER_IP : String = "172.19.12.112";
+    public var MASTER_SERVER_IP : String = "192.168.11.11";
+    // Backup master server IP
+    public var MASTER_SERVER_IP_SECONDARY : String = "172.19.12.112";
     // Master server hostname used for DNS lookup
     public var MASTER_SERVER_HOSTNAME : String = "scrambled.no-ip.biz";
     // Enable if connection test server is available.
@@ -73,5 +77,8 @@ public static class Config{
     public var VERSUS_ENABLED : boolean = false;
     //Skips validation of team
     public var VALIDATION_SKIP : boolean = false;
-
+    //Distance between Player and Tutorial Sign required to show sign
+    public var TUTORIAL_SIGN_DISTANCE : int = 10;
+    //How many times you see a tutorial sign
+    public var MAX_SIGN_COUNT : int = 3;
 }

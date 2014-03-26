@@ -21,6 +21,7 @@ private var levelManager : LevelManager;
 private var readyPlayerCount : int = 0;
 private var startTime : double;
 private var lastLevelPrefix : int = 0;
+private var isLeaving : boolean = false;
 
 function Start(){
     playerScript = GetComponent(PlayerScript);
@@ -35,7 +36,7 @@ function Update(){
 
 function enterGame(){
     Network.RemoveRPCsInGroup(0);
-    networkView.RPC("loadLevel", RPCMode.AllBuffered, "scene-game", lastLevelPrefix + 1);
+    networkView.RPC("loadLevel", RPCMode.All, "scene-game", lastLevelPrefix + 1);
 }
 
 function onLevelReady(){
@@ -157,13 +158,54 @@ function loadLevel(level : String, levelPrefix : int){
     }
 }
 
-function OnDisconnectedFromServer(){
+function leaveGame(){
+    isLeaving = true;
+    readyPlayerCount = 0;
+    if(Network.isServer){
+        Network.RemoveRPCsInGroup(0);
+    }
+    Network.Disconnect();
     playerScript.incrementTimesPlayed();
     playerScript.setSelf(null);
+    stateScript.setGameState(GameState.Uninitialized);
+    stateScript.setCurrentMenu(menus.lobby);
     game.destroy();
     game = null;
-    stateScript.setCurrentMenu(menus.lobby);
+    isLeaving = false;
     Application.LoadLevel("scene-menu");
+}
+
+function OnDisconnectedFromServer(info : NetworkDisconnection){
+    if(!isLeaving && Application.loadedLevelName == "scene-game"){
+        leaveGame();
+    }
+}
+
+// Server only
+function OnPlayerConnected(netPlayer : NetworkPlayer){
+    for(var player : Player in game.getPlayers().Values){
+        var role : PlayerRole;
+        switch(player.GetType()){
+            case Runner :
+            role = PlayerRole.Runner;
+            break;
+            case Commander :
+            role = PlayerRole.Commander;
+            break;
+            case Player :
+            role = PlayerRole.Player;
+            break;
+        }
+        networkView.RPC("addFullPlayer", netPlayer, player.getName(), player.getTeamId(), role.ToString(),
+                        player.getNetworkPlayer(), player.getCharacter(), player.getReadyStatus());
+    }
+}
+
+// Server only
+function OnPlayerDisconnected(netPlayer : NetworkPlayer){
+    if(Application.loadedLevelName == "scene-game"){
+        networkView.RPC("removePlayer", RPCMode.All, netPlayer);
+    }
 }
 
 function registerPlayerProxy(name : String){
@@ -180,7 +222,7 @@ function registerPlayerProxy(name : String){
 @RPC
 function registerPlayer(name : String, netPlayer : NetworkPlayer){
     var newPlayerInfo : Array = game.getNewPlayerTeamAndRole();
-    networkView.RPC("addPlayer", RPCMode.AllBuffered, name, newPlayerInfo[0], newPlayerInfo[1].ToString(), netPlayer);
+    networkView.RPC("addPlayer", RPCMode.All, name, newPlayerInfo[0], newPlayerInfo[1].ToString(), netPlayer);
 }
 
 @RPC
@@ -190,7 +232,7 @@ function setVersusMode(mode : String){
 }
 
 @RPC
-function addPlayer(name : String, teamId : int, role : String, netPlayer : NetworkPlayer, info : NetworkMessageInfo){
+function addPlayer(name : String, teamId : int, role : String, netPlayer : NetworkPlayer) : Player {
     var playerRole : PlayerRole = System.Enum.Parse(PlayerRole, role);
     var newPlayer : Player;
 
@@ -206,6 +248,15 @@ function addPlayer(name : String, teamId : int, role : String, netPlayer : Netwo
     if(Util.IsNetworkedPlayerMe(newPlayer)){
         playerScript.setSelf(newPlayer);
     }
+
+    return newPlayer;
+}
+
+@RPC
+function addFullPlayer(name : String, teamId : int, role : String, netPlayer : NetworkPlayer, character : int, ready : boolean){
+    var player : Player = addPlayer(name, teamId, role, netPlayer);
+    player.setCharacter(character);
+    player.updateReadyStatus(ready);
 }
 
 @RPC
@@ -289,10 +340,4 @@ function changeRole(id : String, name : String, newRole : String, teamId:int, ch
 @RPC
 function removePlayer(netPlayer:NetworkPlayer){
     game.removePlayer(netPlayer.ToString());
-}
-
-
-@RPC
-function updateGameStatus(status : String){
-    game.setGameStatus(status);
 }

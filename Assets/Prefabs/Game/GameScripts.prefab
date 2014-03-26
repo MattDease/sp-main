@@ -61,13 +61,13 @@ MonoBehaviour:
   - {fileID: 100060, guid: 0e688b9c9134b42198de52c0039169c5, type: 2}
   - {fileID: 100050, guid: 672a78af5fdf94da7b4c74114aeb88f0, type: 2}
   signPrefabs:
-  - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
-  - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
-  - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
-  - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
-  - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
-  - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
-  - {fileID: 100000, guid: 35e9a8db9735fcc41959b50f20e33428, type: 2}
+  - {fileID: 100004, guid: 1cff2fe1b4e5b4cf4a2ebfeb64687013, type: 2}
+  - {fileID: 100008, guid: 8b4fcc3620c5748059e2e0b51b933463, type: 2}
+  - {fileID: 100004, guid: 7ffe7eb1f78634017922125b4da04a4a, type: 2}
+  - {fileID: 100000, guid: 512d33287a5644175b5417d5919c5fe5, type: 2}
+  - {fileID: 100004, guid: 245c0e3de39b44437bdd0b428e37d081, type: 2}
+  - {fileID: 100008, guid: 324f38a2c8f8a40bd988cd917c8068c1, type: 2}
+  - {fileID: 100008, guid: 329c38c8747bb4d6aabed655b87f15ae, type: 2}
   coinPrefab: {fileID: 100002, guid: 9888c3c205ba0414f8a102625e8062fc, type: 2}
   BACKGROUND_OFFSET: []
 --- !u!1001 &100100000

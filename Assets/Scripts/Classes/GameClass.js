@@ -219,15 +219,19 @@ public class Game {
 
     public function removePlayer(id : String){
         var player = players[id];
+        var teamId : int = player.getTeamId();
         Network.RemoveRPCs(player.getNetworkPlayer());
         Network.DestroyPlayerObjects(player.getNetworkPlayer());
         Debug.Log("Player '" + player.getName() + "' disconnected.");
-        teams[player.getTeamId()].removeTeammate(player, "Remove");
+        teams[teamId].removeTeammate(player, "Remove");
         players.Remove(id);
         if(stateScript.getGameState() != GameState.Uninitialized){
             // Handle disconnecting players
             // TODO - handle disconnecting players more elegantly
             if(!this.isValid()){
+                this.end();
+            }
+            else if(!teams[teamId].isAlive()){
                 this.end();
             }
         }
@@ -326,11 +330,7 @@ public class Game {
     }
 
     public function setGameStatus(status: String) {
-
-        if(status != this.status){
-            this.status = status;
-            GameObject.Find("/GameManager").networkView.RPC("updateGameStatus", RPCMode.OthersBuffered, status);
-        }
+        this.status = status;
     }
 
     public function getGameStatus() : String {

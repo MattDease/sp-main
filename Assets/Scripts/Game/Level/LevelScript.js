@@ -5,18 +5,32 @@ public var tutorialPoints : List.<Transform>;
 public var coins : List.<Transform>;
 
 private var player : Player;
+private var signType : SignType = SignType.Runner;
 
 private var topDistance : float = 900;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
 
-    // TODO - only show signs appropriate for player role
-    var signs : List.<GameObject> = GameObject.Find("/GameScripts").GetComponent(LevelManager).signPrefabs;
-    for(var k : int = 0; k < tutorialPoints.Count; k++){
-        var locator : Transform = tutorialPoints[k];
-        var signIndex : int = int.Parse(locator.name.Split("_"[0])[1]);
-        Instantiate(signs[signIndex], locator.position, Quaternion.identity);
+    if(player.GetType() == Commander) {
+        signType = SignType.Commander;
+    }
+    else {
+        signType = SignType.Runner;
+    }
+
+    if(Config.USE_SIGNS){
+        var signs : List.<GameObject> = GameObject.Find("/GameScripts").GetComponent(LevelManager).signPrefabs;
+        for(var k : int = 0; k < tutorialPoints.Count; k++){
+            var locator : Transform = tutorialPoints[k];
+            var signIndex : int = int.Parse(locator.name.Split("_"[0])[1]);
+
+            if(signType == SignType.Commander && (signIndex == 1 || signIndex == 5 || signIndex == 6)){
+                Instantiate(signs[signIndex], locator.position, Quaternion.identity);
+            } else if(player.GetType() == Runner && (signIndex == 0 || signIndex == 2 || signIndex == 3 )){
+                Instantiate(signs[signIndex], locator.position, Quaternion.identity);
+            }
+        }
     }
 }
 
