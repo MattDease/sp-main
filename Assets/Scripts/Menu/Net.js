@@ -156,6 +156,10 @@ function killGame() {
     MasterServer.UnregisterHost();
 }
 
+function hideGame(){
+    MasterServer.RegisterHost(Config.GAME_ID, gameName, natCapable.ToString() + "|hidden");
+}
+
 function OnServerInitialized(){
     MasterServer.RegisterHost(Config.GAME_ID, gameName, natCapable.ToString());
 }
@@ -299,13 +303,27 @@ function OnMasterServerEvent(event: MasterServerEvent){
 }
 
 function OnFailedToConnectToMasterServer(info : NetworkConnectionError){
-    Debug.Log("Can't connect to master server: " + info);
-    // TODO handle this case nicely. for now, everything breaks if master server is inaccessible
+    if(MasterServer.ipAddress != Config.MASTER_SERVER_IP_SECONDARY){
+        // Fallback to secondary master server IP
+        Debug.Log("Can't connect to primary master server: " + info);
+        Debug.Log("Falling back to secondary master server at  " + Config.MASTER_SERVER_IP_SECONDARY);
+        MasterServer.ipAddress = Config.MASTER_SERVER_IP_SECONDARY;
+        Network.natFacilitatorIP = Config.MASTER_SERVER_IP_SECONDARY;
+        Network.connectionTesterIP = Config.MASTER_SERVER_IP_SECONDARY;
+    }
+    else{
+        // Connection to secondary master server failed.
+        Debug.Log("Can't connect to secondary master server: " + info);
+    }
 }
 
 function sortAndFilterHostList(sourceData : HostData[]){
     hostList.Clear();
     for(var host : HostData in sourceData){
+        var parts : String[] = host.comment.Split("|"[0]);
+        if(parts.Length > 1 && parts[1] == "hidden"){
+            continue;
+        }
         hostList.Add(host);
     }
     hostList.Sort(function(a:HostData, b:HostData){
