@@ -156,6 +156,10 @@ function killGame() {
     MasterServer.UnregisterHost();
 }
 
+function hideGame(){
+    MasterServer.RegisterHost(Config.GAME_ID, gameName, natCapable.ToString() + "|hidden");
+}
+
 function OnServerInitialized(){
     MasterServer.RegisterHost(Config.GAME_ID, gameName, natCapable.ToString());
 }
@@ -316,6 +320,10 @@ function OnFailedToConnectToMasterServer(info : NetworkConnectionError){
 function sortAndFilterHostList(sourceData : HostData[]){
     hostList.Clear();
     for(var host : HostData in sourceData){
+        var parts : String[] = host.comment.Split("|"[0]);
+        if(parts.Length > 1 && parts[1] == "hidden"){
+            continue;
+        }
         hostList.Add(host);
     }
     hostList.Sort(function(a:HostData, b:HostData){
