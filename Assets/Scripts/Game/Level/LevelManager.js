@@ -14,7 +14,7 @@ public var signPrefabs : List.<GameObject>;
 public var coinPrefab : GameObject;
 
 private var gameManager : GameObject;
-private var difficultyScript : DifficultyScript;
+private var difficultyManager : DifficultyManager;
 private var playerScript : PlayerScript;
 private var stateScript : StateScript;
 private var gameSetupScript : GameSetupScript;
@@ -35,6 +35,10 @@ private var newSegmentThreshold : float = 50;
 private var lastSegmentEnd : List.<float> = new List.<float>();
 private var firstSegmentEnd : List.<float> = new List.<float>();
 
+private var currentLevel : int = 0;
+private var previousLevel : int = 0;
+
+
 public var BACKGROUND_OFFSET : List.<Vector3> = new List.<Vector3>();
 BACKGROUND_OFFSET.Add(Vector3(30, -1, 5));
 BACKGROUND_OFFSET.Add(Vector3(60, -5, 15));
@@ -43,7 +47,7 @@ BACKGROUND_OFFSET.Add(Vector3(90, -5, 25));
 
 function Start () {
     gameManager = GameObject.Find("/GameManager");
-    difficultyScript = gameManager.GetComponent(DifficultyScript);
+    difficultyManager = gameManager.GetComponent(DifficultyManager);
     playerScript = gameManager.GetComponent(PlayerScript);
     stateScript = gameManager.GetComponent(StateScript);
     gameSetupScript = gameManager.GetComponent(GameSetupScript);
@@ -99,8 +103,21 @@ function addFirstSegment(teamId : int){
 
 function addSegment(teamId : int, isFirst : boolean){
     waitingForSegment = true;
-    var segment : GameObject = (isFirst ? startSegmentPrefab : segmentPrefabs[Random.Range(0, segmentPrefabs.Count)]);
-    // TODO - Use difficulty to determine next segment.
+    var segment : GameObject;
+
+    if(isFirst){
+        segment = startSegmentPrefab;
+    }
+    else {
+        difficultyManager.setSegmentCount(difficultyManager.getSegmentCount() + 1);
+        var segmentIndex : int = difficultyManager.getSegment();
+
+        previousLevel = currentLevel;
+        currentLevel = segmentIndex;
+
+        segment = segmentPrefabs[segmentIndex - 1];
+    }
+
     var go : GameObject = Network.Instantiate(segment, new Vector3(lastSegmentEnd[teamId], 0, 0), Quaternion.identity, 0);
     go.networkView.RPC('initSegment', RPCMode.All, teamId);
 }
@@ -203,4 +220,11 @@ function removePlane(index : int){
 
 function onAddPlane(index : int, plane : GameObject){
     backgrounds[index].Add(plane);
+}
+
+function getCurrentLevel() {
+    return currentLevel;
+}
+function getPreviousLevel() {
+    return previousLevel;
 }

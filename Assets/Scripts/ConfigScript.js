@@ -5,7 +5,7 @@ public static class Config{
 
     //// GENERAL
     // General debug mode of the game.
-    public var DEBUG : boolean = true;
+    public var DEBUG : boolean = false;
     // General debug mode of the game.
     public var MENU_DEBUG : boolean = false;
     // Enable/Disable the egg in the game.
@@ -81,4 +81,10 @@ public static class Config{
     public var TUTORIAL_SIGN_DISTANCE : int = 10;
     //How many times you see a tutorial sign
     public var MAX_SIGN_COUNT : int = 3;
+
+    //Procedural Level - threshold to change difficulty
+    public var EASY_DIFF_THRESHOLD : int = 5;
+    public var MEDIUM_DIFF_THRESHOLD : int = 10;
+    public var HARD_DIFF_THRESHOLD : int = 15;
+    public var EXPERT_DIFF_THRESHOLD : int = 20;
 }

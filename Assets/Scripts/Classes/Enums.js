@@ -53,14 +53,13 @@ public enum SignType {
     Commander
 };
 
-// TODO enable/rethink when level generation is refactored
-// public enum GameDifficulty {
-//     Tutorial,
-//     Easy,
-//     Medium,
-//     Hard,
-//     Expert
-// };
+public enum GameDifficulty {
+    Tutorial,
+    Easy,
+    Medium,
+    Hard,
+    Expert
+};
 
 // public enum LevelDifficulty {
 //     Easy,
