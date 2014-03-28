@@ -54,6 +54,8 @@ public static class Config{
     public var TEAM_DEPTH_OFFSET : float = 6;
     // Spacing in the z-axis between runners on the same team
     public var RUNNER_LANE_WIDTH : float = 0.6;
+    // Depth at which runners are killed.
+    public var RUNNER_DEATH_DEPTH : float = -3;
     // Duration in seconds of transition between running and walking speeds;
     public var SPEED_TRANSITION_DURATION : float = 0.3;
 

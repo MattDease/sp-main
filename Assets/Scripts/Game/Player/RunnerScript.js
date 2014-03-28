@@ -117,7 +117,7 @@ function Update(){
     }
     if(networkView.isMine && player.isAlive()){
         var position : Vector3 = player.getPosition();
-        if(Camera.main.WorldToViewportPoint(position).x < 0 || position.y < -1){
+        if(Camera.main.WorldToViewportPoint(position).x < 0 || position.y < Config.RUNNER_DEATH_DEPTH){
             killMe();
             return;
         }
@@ -155,6 +155,15 @@ function Update(){
         }
         checkCrush();
         checkKeyboardInput();
+    }
+
+    if(!player.isAlive() && rigidbody.velocity.y < 0){
+        var deadHit : RaycastHit;
+        if(Physics.Raycast(transform.position, Vector3.down, deadHit, 0.1)) {
+            if(deadHit.collider.gameObject.layer == LayerMask.NameToLayer("Ground Segments")){
+                Util.Toggle(gameObject, false);
+            }
+        }
     }
 }
 
@@ -202,7 +211,23 @@ function show(){
 }
 
 function killMe(){
-    gameManager.networkView.RPC("killRunner", RPCMode.All, player.getId());
+    networkView.RPC("kill", RPCMode.All, player.getId());
+}
+
+@RPC
+function kill(id : String, info : NetworkMessageInfo){
+    if(transform.position.y < Config.RUNNER_DEATH_DEPTH){
+        Util.Toggle(gameObject, false);
+    }
+    else{
+        rigidbody.velocity = Vector3(-1.5, 3, 0);
+        rigidbody.angularVelocity = Vector3(0, 0, 5);
+        gameObject.layer = LayerMask.NameToLayer("Dead");
+        rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+    }
+
+    var runner : Runner = Util.GetPlayerById(id) as Runner;
+    runner.kill();
 }
 
 @RPC
@@ -269,16 +294,16 @@ function syncWalk(){
 function startWalk(){
     if(targetSpeed == Config.RUN_SPEED){
         lastSpeedChange = Time.time;
+        targetSpeed = Config.WALK_SPEED;
     }
-    targetSpeed = Config.WALK_SPEED;
 }
 
 @RPC
 function stopWalk(){
     if(targetSpeed == Config.WALK_SPEED){
         lastSpeedChange = Time.time;
+        targetSpeed = Config.RUN_SPEED;
     }
-    targetSpeed = Config.RUN_SPEED;
 }
 
 function OnTriggerEnter(other : Collider){
