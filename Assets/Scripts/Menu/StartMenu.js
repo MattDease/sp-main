@@ -6,7 +6,7 @@ private var menuScript : Menu;
 private var playerScript : PlayerScript;
 
 private var showMenu : boolean = false;
-
+private var showNameChange : boolean = false;
 private var playerName : String;
 private var newName : String = "";
 private var backgroundTexutre : Texture2D;
@@ -20,6 +20,8 @@ private var bodyText = 60;
 private var guiLogin : GuiClasses[];
 private var guiName: GuiClasses [];
 
+private var greenStyle :GUIStyle;
+
 
 function Start() {
     menuScript = Menu.script;
@@ -32,7 +34,7 @@ function Start() {
     createNewOverlayTexture = Resources.Load("Textures/gui/createNewOverlay", Texture2D);
     menuSkin = Resources.Load("MenuSkin", GUISkin);
 
-    guiLogin = new GuiClasses[3];
+    guiLogin = new GuiClasses[5];
     for (var x = 0; x < guiLogin.length; x++) {
         guiLogin[x] = new GuiClasses();
     }
@@ -48,6 +50,8 @@ function OnGUI() {
         return;
     }
     GUI.skin = menuSkin;
+    greenStyle = GUI.skin.GetStyle("GreenButton");
+    greenStyle.fontSize = menuScript.getScale() * 35;
 
     GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), backgroundTexutre);
 
@@ -56,13 +60,21 @@ function OnGUI() {
 
     GUI.skin.textField.fontSize = menuScript.getScale() * bodyText;
 
-    if (playerName) {
+    if (playerName && !showNameChange) {
             guiLogin[2].textureWidth = 1500 * menuScript.getScale();
             guiLogin[2].textureHeight = 1001 * menuScript.getScale();
             guiLogin[2].setLocation(Points.Center);
             GUI.DrawTexture(new Rect(guiLogin[2].offset.x, guiLogin[2].offset.y - Screen.height/16, guiLogin[2].textureWidth,  guiLogin[2].textureHeight), logoTexture);
             GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), whiteBarTexture);
             GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), "Welcome back, " + playerName, "PlainText");
+
+            guiLogin[4].textureWidth = Screen.width * 0.20;
+            guiLogin[4].textureHeight = Screen.height * 0.14;
+            guiLogin[4].setLocation(Points.BottomRight);
+
+            if (GUI.Button(Rect(guiLogin[4].offset.x, Screen.height - Screen.height * 0.13 - (100 * menuScript.getScale()), guiLogin[4].textureWidth, guiLogin[4].textureHeight), "CHANGE NAME", "GreenButton")) {
+                showNameChange = true;
+            }
 
         if (GUI.Button(Rect(0, 0, Screen.width, Screen.height), "", "FullImage")) {
             leaveFor(menus.lobby);
@@ -102,7 +114,7 @@ function OnGUI() {
         GUI.DrawTexture(new Rect(guiName[3].offset.x, guiName[3].offset.y + guiName[3].offset.y/2, Screen.width / 1.5, Screen.height / 3), createNewOverlayTexture);
 
         GUI.Label(Rect(guiName[0].offset.x, guiName[0].offset.y - Screen.height / 12 + guiName[3].offset.y/2, Screen.width, 100), "Enter your name", "PlainText");
-        newName = GUI.TextField(Rect(guiName[1].offset.x, guiName[1].offset.y + Screen.height/22 + guiName[3].offset.y/2, Screen.width / 2.2, menuScript.getScale() * 100), newName, 20);
+        newName = GUI.TextField(Rect(guiName[1].offset.x, guiName[1].offset.y + Screen.height/22 + guiName[3].offset.y/2, Screen.width / 2.2, menuScript.getScale() * 100), playerName, 20);
 
         if(newName) {
             GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), whiteBarTexture);
