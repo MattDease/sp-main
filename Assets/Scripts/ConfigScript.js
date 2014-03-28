@@ -46,6 +46,8 @@ public static class Config{
     // Distance in x-axis between runner and cardinal's end point that will
     // trigger the cardinal to attack
     public var CARDINAL_TRIGGER_DISTANCE : float = 4;
+    // Approximately the time it will take the commander to reach the touch target
+    public var COMMANDER_SMOOTH_TIME : float = 0.0;
     // Relative to the level segment, the commander's offset in the z-axis, + is away from the camera
     public var COMMANDER_DEPTH_OFFSET : float = -0.6;
     // Relative to the world origin, the opposing team's offset in the z-axis, + is away from the camera
