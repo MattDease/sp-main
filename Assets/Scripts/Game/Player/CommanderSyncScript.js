@@ -8,9 +8,11 @@ private var syncEndPosition : Vector3 = Vector3.zero;
 private var syncStartRotation : Quaternion = Quaternion.identity;
 private var syncEndRotation : Quaternion = Quaternion.identity;
 private var model : GameObject;
+private var commanderScript : CommanderScript;
 
 function Start() {
     model = gameObject.transform.Find("model").gameObject;
+    commanderScript = GetComponent(CommanderScript);
 }
 
 function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo) {
@@ -40,10 +42,12 @@ function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo) {
         syncDelay = Time.time - lastSynchronizationTime;
         lastSynchronizationTime = Time.time;
 
-        syncStartPosition = transform.position;
-        syncEndPosition = Vector3(posX, posY, transform.position.z);
-        syncStartRotation = model.transform.rotation;
-        syncEndRotation = rotation;
+        if(commanderScript){
+            syncStartPosition = transform.position;
+            syncEndPosition = Vector3(posX, posY, commanderScript.depth);
+            syncStartRotation = model.transform.rotation;
+            syncEndRotation = rotation;
+        }
     }
 }
 

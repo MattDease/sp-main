@@ -5,6 +5,8 @@ import System.Collections.Generic;
 // Set in editor
 public var cameraPrefab : GameObject;
 
+public var depth : float = 0;
+
 private var player : Commander;
 private var model : GameObject;
 private var animator : Animator;
@@ -48,8 +50,11 @@ function initCommander(playerId : String, teamId : int){
 
         rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
     }
-    var me : Player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
-    transform.position.z += (teamId == me.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
+    else{
+        var me : Player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
+        transform.position.z = Config.COMMANDER_DEPTH_OFFSET + (teamId == me.getTeamId() ? 0 : Config.TEAM_DEPTH_OFFSET);
+        depth = transform.position.z;
+    }
 }
 
 // Do physics changes here
