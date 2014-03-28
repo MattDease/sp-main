@@ -1,5 +1,5 @@
 ﻿#pragma strict
-private var gameDifficulty : GameDifficulty;
+public var gameDifficulty : GameDifficulty;
 private var nextDif : GameDifficulty;
 private var segmentCount : int = 0 ;
 private var easyLevels : int[] = [1,4,5,9];
@@ -8,6 +8,12 @@ private var hardLevels : int[] = [2,7,10];
 private var playedEasy : List.<int> = new List.<int>();
 private var playedMedium : List.<int> = new List.<int>();
 private var playedHard : List.<int> = new List.<int>();
+
+private var easyTemp : List.<Difficulty> = new List.<Difficulty>();
+private var mediumTemp : List.<Difficulty> = new List.<Difficulty>();
+private var hardTemp : List.<Difficulty> = new List.<Difficulty>();
+private var expertTemp : List.<Difficulty> = new List.<Difficulty>();
+
 private var levelManager : LevelManager;
 
 function Start () {
@@ -85,41 +91,50 @@ function getIndex(current : int , previous: int) : int{
             nextDif = GameDifficulty.Easy;
         break;
         case GameDifficulty.Easy:
-            for(i = 0; i < easy.length; i++){
-                if(previousDiff.ToString() == easy[i]["previous"].ToString() && currentDiff.ToString() == easy[i]["current"].ToString()){
-                    tempDiffs.Add(easy[i]["next"]);
+            for(var diff : Difficulty in easyTemp){
+                if(previousDiff == diff.previous && currentDiff == diff.current){
+                    tempDiffs.Add(diff.next);
                 }
+
             }
         break;
         case GameDifficulty.Medium:
-            for(i = 0; i < medium.length; i++){
-                if(previousDiff.ToString() == medium[i]["previous"].ToString() && currentDiff.ToString() == medium[i]["current"].ToString())
-                    tempDiffs.Add(medium[i]["next"]);
+             for(var diff : Difficulty in mediumTemp){
+                if(previousDiff == diff.previous && currentDiff == diff.current){
+                    tempDiffs.Add(diff.next);
+                }
+
             }
         break;
         case GameDifficulty.Hard:
-          for(i = 0; i < hard.length; i++){
-                if(previousDiff.ToString() == hard[i]["previous"].ToString() && currentDiff.ToString() == hard[i]["current"].ToString())
-                    tempDiffs.Add(hard[i]["next"]);
+          for(var diff : Difficulty in hardTemp){
+                if(previousDiff == diff.previous && currentDiff == diff.current){
+                    tempDiffs.Add(diff.next);
+                }
+
             }
         break;
         case GameDifficulty.Expert:
-          for(i = 0; i < expert.length; i++){
-                if(previousDiff.ToString() == expert[i]["previous"].ToString() && currentDiff.ToString() == expert[i]["current"].ToString())
-                    tempDiffs.Add(expert[i]["next"]);
+         for(var diff : Difficulty in expertTemp){
+                if(previousDiff == diff.previous && currentDiff == diff.current){
+                    tempDiffs.Add(diff.next);
+                }
+
             }
         break;
     }
 
-    tempRand = Random.Range(0, tempDiffs.Count);
-    nextDif = tempDiffs[tempRand];
+    if(getDifficulty() != GameDifficulty.Tutorial){
+        tempRand = Random.Range(0, tempDiffs.Count);
+        nextDif = tempDiffs[tempRand];
+    }
     //Check to see what levels have already been played, if all the levels have been played, we clear the list so we can do over and over again!
     checkCount(nextDif);
 
     //Randomly pick a level based on the next difficulty - but only if we haven't played it yet!
     if(nextDif == GameDifficulty.Easy){
         do{
-            rand = Random.Range(0, easyLevels.length);
+            rand = Random.Range(0, easyTemp.length);
         } while (playedEasy.Contains(easyLevels[rand]));
 
         nextLevel = easyLevels[rand];
@@ -180,48 +195,40 @@ function inArray(value : int, array : int[]) : boolean{
     determine what level we should load next. Its great fun!
 */
 
-var easy  = [
-    { "current": GameDifficulty.Easy, "previous": GameDifficulty.Easy, "next":GameDifficulty.Easy },
-    { "current": GameDifficulty.Easy, "previous": GameDifficulty.Easy, "next":GameDifficulty.Easy },
-    { "current": GameDifficulty.Easy, "previous": GameDifficulty.Easy, "next":GameDifficulty.Medium},
-    { "current": GameDifficulty.Easy, "previous": GameDifficulty.Medium, "next":GameDifficulty.Easy },
-    { "current": GameDifficulty.Medium, "previous": GameDifficulty.Easy, "next":GameDifficulty.Medium },
-    { "current": GameDifficulty.Medium, "previous": GameDifficulty.Easy, "next":GameDifficulty.Easy }
-];
+easyTemp.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Easy, GameDifficulty.Easy));
+easyTemp.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Easy, GameDifficulty.Easy));
+easyTemp.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Easy, GameDifficulty.Medium));
+easyTemp.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Medium, GameDifficulty.Easy));
+easyTemp.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Easy, GameDifficulty.Medium));
+easyTemp.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Easy, GameDifficulty.Easy));
 
- var medium = [
-    { "current": GameDifficulty.Easy, "previous": GameDifficulty.Medium, "next":GameDifficulty.Hard },
-    { "current": GameDifficulty.Easy, "previous": GameDifficulty.Easy, "next":GameDifficulty.Hard },
-    { "current": GameDifficulty.Easy, "previous": GameDifficulty.Easy, "next":GameDifficulty.Medium },
-    { "current": GameDifficulty.Medium, "previous": GameDifficulty.Medium, "next":GameDifficulty.Easy },
-    { "current": GameDifficulty.Medium, "previous": GameDifficulty.Easy, "next":GameDifficulty.Easy },
-    { "current": GameDifficulty.Medium, "previous": GameDifficulty.Hard, "next":GameDifficulty.Easy },
-    { "current": GameDifficulty.Medium, "previous": GameDifficulty.Medium, "next":GameDifficulty.Medium },
-    { "current": GameDifficulty.Hard, "previous": GameDifficulty.Easy, "next":GameDifficulty.Easy },
-    { "current": GameDifficulty.Hard, "previous": GameDifficulty.Medium, "next":GameDifficulty.Medium },
-    { "current": GameDifficulty.Hard, "previous": GameDifficulty.Medium, "next":GameDifficulty.Easy }
-];
+mediumTemp.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Medium, GameDifficulty.Hard));
+mediumTemp.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Easy, GameDifficulty.Medium));
+mediumTemp.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Easy, GameDifficulty.Hard));
+mediumTemp.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Medium, GameDifficulty.Easy));
+mediumTemp.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Easy, GameDifficulty.Easy));
+mediumTemp.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Hard, GameDifficulty.Easy));
+mediumTemp.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Medium, GameDifficulty.Medium));
+mediumTemp.Add(new Difficulty(GameDifficulty.Hard, GameDifficulty.Easy, GameDifficulty.Easy));
+mediumTemp.Add(new Difficulty(GameDifficulty.Hard, GameDifficulty.Medium, GameDifficulty.Medium));
+mediumTemp.Add(new Difficulty(GameDifficulty.Hard, GameDifficulty.Medium, GameDifficulty.Easy));
 
- var hard = [
-    { "current": GameDifficulty.Easy, "previous": GameDifficulty.Easy, "next":GameDifficulty.Hard },
-    { "current": GameDifficulty.Easy, "previous": GameDifficulty.Medium, "next":GameDifficulty.Hard },
-    { "current": GameDifficulty.Medium, "previous": GameDifficulty.Easy, "next":GameDifficulty.Hard },
-    { "current": GameDifficulty.Medium, "previous": GameDifficulty.Hard, "next":GameDifficulty.Easy },
-    { "current": GameDifficulty.Medium, "previous": GameDifficulty.Medium, "next":GameDifficulty.Medium },
-    { "current": GameDifficulty.Medium, "previous": GameDifficulty.Medium, "next":GameDifficulty.Easy },
-    { "current": GameDifficulty.Hard, "previous": GameDifficulty.Medium, "next":GameDifficulty.Easy },
-    { "current": GameDifficulty.Hard, "previous": GameDifficulty.Medium, "next":GameDifficulty.Medium },
-    { "current": GameDifficulty.Hard, "previous": GameDifficulty.Easy, "next":GameDifficulty.Hard }
-];
+hardTemp.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Easy, GameDifficulty.Hard));
+hardTemp.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Medium, GameDifficulty.Hard));
+hardTemp.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Easy, GameDifficulty.Hard));
+hardTemp.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Hard, GameDifficulty.Easy));
+hardTemp.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Medium, GameDifficulty.Medium));
+hardTemp.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Medium, GameDifficulty.Easy));
+hardTemp.Add(new Difficulty(GameDifficulty.Hard, GameDifficulty.Medium, GameDifficulty.Easy));
+hardTemp.Add(new Difficulty(GameDifficulty.Hard, GameDifficulty.Medium, GameDifficulty.Medium));
+hardTemp.Add(new Difficulty(GameDifficulty.Hard, GameDifficulty.Easy, GameDifficulty.Hard));
 
-var expert = [
-    { "current": GameDifficulty.Hard, "previous": GameDifficulty.Easy, "next":GameDifficulty.Hard },
-    { "current": GameDifficulty.Hard, "previous": GameDifficulty.Medium, "next":GameDifficulty.Hard },
-    { "current": GameDifficulty.Hard, "previous": GameDifficulty.Hard, "next":GameDifficulty.Medium },
-    { "current": GameDifficulty.Medium, "previous": GameDifficulty.Easy, "next":GameDifficulty.Hard },
-    { "current": GameDifficulty.Medium, "previous": GameDifficulty.Hard, "next":GameDifficulty.Hard },
-    { "current": GameDifficulty.Medium, "previous": GameDifficulty.Hard, "next":GameDifficulty.Easy },
-    { "current": GameDifficulty.Easy, "previous": GameDifficulty.Hard, "next":GameDifficulty.Easy },
-    { "current": GameDifficulty.Easy, "previous": GameDifficulty.Medium, "next":GameDifficulty.Hard }
+expertTemp.Add(new Difficulty(GameDifficulty.Hard, GameDifficulty.Easy, GameDifficulty.Hard));
+expertTemp.Add(new Difficulty(GameDifficulty.Hard, GameDifficulty.Medium, GameDifficulty.Hard));
+expertTemp.Add(new Difficulty(GameDifficulty.Hard, GameDifficulty.Hard, GameDifficulty.Medium));
+expertTemp.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Easy, GameDifficulty.Hard));
+expertTemp.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Hard, GameDifficulty.Hard));
+expertTemp.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Hard, GameDifficulty.Easy));
+expertTemp.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Hard, GameDifficulty.Easy));
+expertTemp.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Medium, GameDifficulty.Hard));
 
-];
