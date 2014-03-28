@@ -8,11 +8,32 @@ private var enemies : List.<Enemy> = new List.<Enemy>();
 private var player : Player;
 private var signType : SignType = SignType.Runner;
 
-// TODO - use real difficulty.
-private var diff : int = 0;
+private var difficultyManager : DifficultyManager;
+
+public var diff : int = 0;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
+    difficultyManager = GameObject.Find("/GameManager").GetComponent(DifficultyManager);
+
+    switch(difficultyManager.getDifficulty()){
+        case GameDifficulty.Tutorial:
+            diff = 0;
+        break;
+        case GameDifficulty.Easy:
+            diff = 0;
+        break;
+        case GameDifficulty.Medium:
+            diff = 1;
+        break;
+        case GameDifficulty.Hard:
+             diff = 2;
+        break;
+        case GameDifficulty.Expert:
+            diff = 3;
+        break;
+    }
+
 
     if(player.GetType() == Commander) {
         signType = SignType.Commander;
@@ -43,7 +64,6 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
             var point : Transform = spawns[i];
             // parts array contains [garbage, pairId, enemyType, start/end, difficulty]
             var parts : String[] = point.name.Split("_"[0]);
-
             if(int.Parse(parts[4]) <= diff){
                 var pair : int = int.Parse(parts[1]);
                 points.Add(pair * 2 + int.Parse(parts[3]), point);
@@ -53,7 +73,7 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
             }
         }
         for(var key : int in prefabs.Keys){
-        //    enemies.Add(new Enemy(points[key*2], points[key*2+1], prefabs[key]));
+            enemies.Add(new Enemy(points[key*2], points[key*2+1], prefabs[key]));
         }
 
 
