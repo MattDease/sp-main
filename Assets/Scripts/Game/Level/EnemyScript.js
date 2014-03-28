@@ -149,6 +149,7 @@ function syncKill(){
     animator.SetBool("death", true);
     gameObject.layer = LayerMask.NameToLayer("Dead");
     if(type == EnemyType.Worm){
+        yield;
         var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
         Invoke("hide", animState.length);
     }
