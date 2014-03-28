@@ -64,7 +64,19 @@ function Update(){
         }
     }
 
-    if(!networkView.isMine || !isAlive() || game.getState() != GameState.Playing || !game.getTeam(teamId).isAlive()){
+    if(!networkView.isMine || game.getState() != GameState.Playing || !game.getTeam(teamId).isAlive()){
+        return;
+    }
+
+    if(!isAlive()){
+        if(rigidbody.velocity.y < 0){
+            var hit : RaycastHit;
+            if(Physics.Raycast(transform.position, Vector3.down, hit, 0.2)) {
+                if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground Segments")){
+                    Util.Toggle(gameObject, false);
+                }
+            }
+        }
         return;
     }
 
@@ -135,8 +147,17 @@ function kill(){
 function syncKill(){
     alive = false;
     animator.SetBool("death", true);
-    var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-    Invoke("hide", animState.length);
+    gameObject.layer = LayerMask.NameToLayer("Dead");
+    if(type == EnemyType.Worm){
+        var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        Invoke("hide", animState.length);
+    }
+    else{
+        rigidbody.isKinematic = false;
+        rigidbody.useGravity = true;
+        rigidbody.velocity = Vector3(5, 3, 0);
+        rigidbody.angularVelocity = Vector3(0, 0, -4);
+    }
 }
 
 function notifyAttack(){
