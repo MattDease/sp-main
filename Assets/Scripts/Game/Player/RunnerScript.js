@@ -25,6 +25,7 @@ private var cameraOffset : Vector2 = Vector2.zero;
 private var prevPlatformPos : Vector2 = Vector2.zero;
 private var isAttacking : boolean = false;
 private var isDoubleJump: boolean = false;
+private var touched : boolean = false;
 private var lastSpeedChange : float = 0;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
@@ -96,9 +97,6 @@ function Update(){
             animator.SetBool("HasDoubleJumped", true);
         }
     }
-    if(animState.IsName("Base Layer.AttackRight")){
-        animator.SetBool("Attack", false);
-    }
     if(Time.time - lastSpeedChange <= Config.SPEED_TRANSITION_DURATION){
         var percent : float = (Time.time - lastSpeedChange) / Config.SPEED_TRANSITION_DURATION;
         if(targetSpeed == Config.WALK_SPEED){
@@ -110,9 +108,16 @@ function Update(){
             currentSpeed = Config.WALK_SPEED + (percent * (Config.RUN_SPEED - Config.WALK_SPEED));
         }
     }
+    if(animState.IsName("Base Layer.AttackRight") || transState.IsUserName("startAttack")){
+        animator.SetBool("Attack", false);
+        currentSpeed = targetSpeed + Config.ATTACK_BOOST;
+    }
+    if(transState.IsUserName("stopAttack")){
+        currentSpeed = targetSpeed;
+    }
     if(networkView.isMine && player.isAlive()){
         var position : Vector3 = player.getPosition();
-        if(Camera.main.WorldToViewportPoint(position).x < 0 || position.y < -1){
+        if(Camera.main.WorldToViewportPoint(position).x < 0 || position.y < Config.RUNNER_DEATH_DEPTH){
             killMe();
             return;
         }
@@ -150,6 +155,15 @@ function Update(){
         }
         checkCrush();
         checkKeyboardInput();
+    }
+
+    if(!player.isAlive() && rigidbody.velocity.y < 0){
+        var deadHit : RaycastHit;
+        if(Physics.Raycast(transform.position, Vector3.down, deadHit, 0.1)) {
+            if(deadHit.collider.gameObject.layer == LayerMask.NameToLayer("Ground Segments")){
+                Util.Toggle(gameObject, false);
+            }
+        }
     }
 }
 
@@ -197,7 +211,23 @@ function show(){
 }
 
 function killMe(){
-    gameManager.networkView.RPC("killRunner", RPCMode.All, player.getId());
+    networkView.RPC("kill", RPCMode.All, player.getId());
+}
+
+@RPC
+function kill(id : String, info : NetworkMessageInfo){
+    if(transform.position.y < Config.RUNNER_DEATH_DEPTH){
+        Util.Toggle(gameObject, false);
+    }
+    else{
+        rigidbody.velocity = Vector3(-1.5, 3, 0);
+        rigidbody.angularVelocity = Vector3(0, 0, 5);
+        gameObject.layer = LayerMask.NameToLayer("Dead");
+        rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+    }
+
+    var runner : Runner = Util.GetPlayerById(id) as Runner;
+    runner.kill();
 }
 
 @RPC
@@ -254,16 +284,26 @@ function syncToss(){
     animator.SetBool("Toss", true);
 }
 
+function syncWalk(){
+    if(touched){
+        networkView.RPC("startWalk", RPCMode.All);
+    }
+}
+
 @RPC
 function startWalk(){
-    targetSpeed = Config.WALK_SPEED;
-    lastSpeedChange = Time.time;
+    if(targetSpeed == Config.RUN_SPEED){
+        lastSpeedChange = Time.time;
+        targetSpeed = Config.WALK_SPEED;
+    }
 }
 
 @RPC
 function stopWalk(){
-    targetSpeed = Config.RUN_SPEED;
-    lastSpeedChange = Time.time;
+    if(targetSpeed == Config.WALK_SPEED){
+        lastSpeedChange = Time.time;
+        targetSpeed = Config.RUN_SPEED;
+    }
 }
 
 function OnTriggerEnter(other : Collider){
@@ -406,9 +446,11 @@ function OnTap(tap: Vector2){
 }
 
 function OnTouch(pos:Vector2){
-    networkView.RPC("startWalk", RPCMode.All);
-
+    touched = true;
+    Invoke("syncWalk", 0.2);
 }
+
 function OnRelease(pos:Vector2){
+    touched = false;
     networkView.RPC("stopWalk", RPCMode.All);
 }

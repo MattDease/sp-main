@@ -29,12 +29,12 @@ public static class Config{
     public var WALK_SPEED : float = 1.4;
     // Upward impulse speed in m/s.
     public var JUMP_SPEED : float = 4;
+    // Speed boost in m/s of the runner when atacking.
+    public var ATTACK_BOOST : float = 1.2;
     // Time in seconds of the runner crouch state.
     public var CROUCH_DURATION : float = 1;
-
+    // Maximum number of players in a team.
     public var MAX_TEAM_COUNT : int = 5;
-    // Time in seconds of the runner attack state.
-    public var ATTACK_DURATION : float = 1;
     // Wasp and beetle enemy speed in m/s.
     public var WASP_BEETLE_SPEED : float = 0.3;
     // Cardinal enemy speed in m/s.
@@ -46,12 +46,16 @@ public static class Config{
     // Distance in x-axis between runner and cardinal's end point that will
     // trigger the cardinal to attack
     public var CARDINAL_TRIGGER_DISTANCE : float = 4;
+    // Approximately the time it will take the commander to reach the touch target
+    public var COMMANDER_SMOOTH_TIME : float = 0.0;
     // Relative to the level segment, the commander's offset in the z-axis, + is away from the camera
     public var COMMANDER_DEPTH_OFFSET : float = -0.6;
     // Relative to the world origin, the opposing team's offset in the z-axis, + is away from the camera
     public var TEAM_DEPTH_OFFSET : float = 6;
     // Spacing in the z-axis between runners on the same team
     public var RUNNER_LANE_WIDTH : float = 0.6;
+    // Depth at which runners are killed.
+    public var RUNNER_DEATH_DEPTH : float = -3;
     // Duration in seconds of transition between running and walking speeds;
     public var SPEED_TRANSITION_DURATION : float = 0.3;
 

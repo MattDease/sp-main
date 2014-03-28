@@ -48,7 +48,8 @@ function initCommander(playerId : String, teamId : int){
 
         rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
     }
-    transform.position.z += (teamId == player.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
+    var me : Player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
+    transform.position.z += (teamId == me.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
 }
 
 // Do physics changes here
@@ -66,7 +67,7 @@ function Update(){
     if(networkView.isMine){
         if(touched){
             var currentPosition : Vector3 = player.getPosition();
-            transform.position = Vector3.SmoothDamp(currentPosition, targetPosition, velocity, 0.07);
+            transform.position = Vector3.SmoothDamp(currentPosition, targetPosition, velocity, Config.COMMANDER_SMOOTH_TIME);
             var angleZ : float = Mathf.Atan2(targetPosition.y - currentPosition.y, targetPosition.x - currentPosition.x) * Mathf.Rad2Deg;
             var angleY : float = 0;
             if(angleZ < -90 || angleZ > 90){

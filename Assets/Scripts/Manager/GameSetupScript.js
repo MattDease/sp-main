@@ -260,12 +260,6 @@ function addFullPlayer(name : String, teamId : int, role : String, netPlayer : N
 }
 
 @RPC
-function killRunner(id : String, info : NetworkMessageInfo){
-    var runner : Runner = Util.GetPlayerById(id) as Runner;
-    runner.kill();
-}
-
-@RPC
 function updateReadyStatus(id : String, isReady : boolean){
     var player : Player = Util.GetPlayerById(id);
     player.updateReadyStatus(isReady);
