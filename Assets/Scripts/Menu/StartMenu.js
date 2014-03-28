@@ -114,7 +114,7 @@ function OnGUI() {
         GUI.DrawTexture(new Rect(guiName[3].offset.x, guiName[3].offset.y + guiName[3].offset.y/2, Screen.width / 1.5, Screen.height / 3), createNewOverlayTexture);
 
         GUI.Label(Rect(guiName[0].offset.x, guiName[0].offset.y - Screen.height / 12 + guiName[3].offset.y/2, Screen.width, 100), "Enter your name", "PlainText");
-        newName = GUI.TextField(Rect(guiName[1].offset.x, guiName[1].offset.y + Screen.height/22 + guiName[3].offset.y/2, Screen.width / 2.2, menuScript.getScale() * 100), playerName, 20);
+        newName = GUI.TextField(Rect(guiName[1].offset.x, guiName[1].offset.y + Screen.height/22 + guiName[3].offset.y/2, Screen.width / 2.2, menuScript.getScale() * 100), newName, 20);
 
         if(newName) {
             GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), whiteBarTexture);

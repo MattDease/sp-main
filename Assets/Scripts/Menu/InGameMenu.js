@@ -5,12 +5,30 @@ private var playerScript : PlayerScript;
 private var stateScript : StateScript;
 private var gameSetupScript : GameSetupScript;
 
+private var goTexture : Texture2D;
+private var countdown1 : Texture2D;
+private var countdown2 : Texture2D;
+private var countdown3 : Texture2D;
+
+private var guiInGame: GuiClasses [];
+guiInGame = new GuiClasses[1];
+for (var z = 0; z < guiInGame.length; z++) {
+    guiInGame[z] = new GuiClasses();
+}
+
+
 function Start(){
     gameManager = GameObject.Find("/GameManager");
 
     playerScript = gameManager.GetComponent(PlayerScript);
     stateScript = gameManager.GetComponent(StateScript);
     gameSetupScript = gameManager.GetComponent(GameSetupScript);
+
+    goTexture = Resources.Load("Textures/gui/go", Texture2D);
+    countdown1 = Resources.Load("Textures/gui/count_1", Texture2D);
+    countdown2 = Resources.Load("Textures/gui/count_2", Texture2D);
+    countdown3 = Resources.Load("Textures/gui/count_3", Texture2D);
+
 }
 
 function OnGUI(){
@@ -18,7 +36,28 @@ function OnGUI(){
         OnDebugGUI();
     }
     // TODO - Add good UI
+    //Countdown
+    guiInGame[0].textureWidth = Screen.width / 1.5;
+    guiInGame[0].textureHeight = Screen.height / 1;
+    guiInGame[0].setLocation(Points.Center);
 
+    var gameState = stateScript.getGameState();
+    if(gameState == GameState.Loading){
+        switch(gameSetupScript.getCountDown()){
+            case 0:
+                GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), goTexture);
+            break;
+            case 1:
+                GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown1);
+            break;
+            case 2:
+                GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown2);
+            break;
+            case 3:
+                GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown3);
+            break;
+        }
+    }
 }
 
 function OnDebugGUI(){
