@@ -58,5 +58,6 @@ function syncPosition(position : Vector3){
 
 @RPC
 function setPosition(position : Vector3){
-    transform.position = position;
+    transform.position.x = position.x;
+    transform.position.y = position.y;
 }

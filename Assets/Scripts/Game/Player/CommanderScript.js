@@ -48,7 +48,7 @@ function initCommander(playerId : String, teamId : int){
 
         rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
     }
-    var me : Player = gameManager.GetComponent(PlayerScript).getSelf();
+    var me : Player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
     transform.position.z += (teamId == me.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
 }
 
