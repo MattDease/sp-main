@@ -1,14 +1,17 @@
 ﻿#pragma strict
-public var gameDifficulty : GameDifficulty;
+private var gameDifficulty : GameDifficulty;
 private var nextDif : GameDifficulty;
 private var segmentCount : int = 0 ;
+
+//Levels that are easy, medium and hard
 private var easyLevels : int[] = [1,4,5,9];
 private var mediumLevels : int[] = [6,8,3];
 private var hardLevels : int[] = [2,7,10];
+//Levels that have arleady been played
 private var playedEasy : List.<int> = new List.<int>();
 private var playedMedium : List.<int> = new List.<int>();
 private var playedHard : List.<int> = new List.<int>();
-
+//Level prediction difficulty
 private var easy : List.<Difficulty> = new List.<Difficulty>();
 private var medium : List.<Difficulty> = new List.<Difficulty>();
 private var hard : List.<Difficulty> = new List.<Difficulty>();

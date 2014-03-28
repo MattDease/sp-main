@@ -15,7 +15,6 @@ public class Game {
     private var playerScript : PlayerScript;
     private var stateScript : StateScript;
     private var gameSetupScript : GameSetupScript;
-    private var difficultyScript : DifficultyScript;
 
     public function Game(){
         gameManager = GameObject.Find("/GameManager");
@@ -23,7 +22,6 @@ public class Game {
             playerScript = gameManager.GetComponent(PlayerScript);
             stateScript = gameManager.GetComponent(StateScript);
             gameSetupScript = gameManager.GetComponent(GameSetupScript);
-            difficultyScript = gameManager.GetComponent(DifficultyScript);
         }
 
         teams.Add(new Team(0));
