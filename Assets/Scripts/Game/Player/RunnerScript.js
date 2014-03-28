@@ -25,6 +25,7 @@ private var cameraOffset : Vector2 = Vector2.zero;
 private var prevPlatformPos : Vector2 = Vector2.zero;
 private var isAttacking : boolean = false;
 private var isDoubleJump: boolean = false;
+private var touched : boolean = false;
 private var lastSpeedChange : float = 0;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
@@ -96,9 +97,6 @@ function Update(){
             animator.SetBool("HasDoubleJumped", true);
         }
     }
-    if(animState.IsName("Base Layer.AttackRight")){
-        animator.SetBool("Attack", false);
-    }
     if(Time.time - lastSpeedChange <= Config.SPEED_TRANSITION_DURATION){
         var percent : float = (Time.time - lastSpeedChange) / Config.SPEED_TRANSITION_DURATION;
         if(targetSpeed == Config.WALK_SPEED){
@@ -109,6 +107,13 @@ function Update(){
             animator.SetFloat("Speed", 0.5 - percent * 0.3);
             currentSpeed = Config.WALK_SPEED + (percent * (Config.RUN_SPEED - Config.WALK_SPEED));
         }
+    }
+    if(animState.IsName("Base Layer.AttackRight") || transState.IsUserName("startAttack")){
+        animator.SetBool("Attack", false);
+        currentSpeed = targetSpeed + Config.ATTACK_BOOST;
+    }
+    if(transState.IsUserName("stopAttack")){
+        currentSpeed = targetSpeed;
     }
     if(networkView.isMine && player.isAlive()){
         var position : Vector3 = player.getPosition();
@@ -254,16 +259,26 @@ function syncToss(){
     animator.SetBool("Toss", true);
 }
 
+function syncWalk(){
+    if(touched){
+        networkView.RPC("startWalk", RPCMode.All);
+    }
+}
+
 @RPC
 function startWalk(){
+    if(targetSpeed == Config.RUN_SPEED){
+        lastSpeedChange = Time.time;
+    }
     targetSpeed = Config.WALK_SPEED;
-    lastSpeedChange = Time.time;
 }
 
 @RPC
 function stopWalk(){
+    if(targetSpeed == Config.WALK_SPEED){
+        lastSpeedChange = Time.time;
+    }
     targetSpeed = Config.RUN_SPEED;
-    lastSpeedChange = Time.time;
 }
 
 function OnTriggerEnter(other : Collider){
@@ -406,9 +421,11 @@ function OnTap(tap: Vector2){
 }
 
 function OnTouch(pos:Vector2){
-    networkView.RPC("startWalk", RPCMode.All);
-
+    touched = true;
+    Invoke("syncWalk", 0.2);
 }
+
 function OnRelease(pos:Vector2){
+    touched = false;
     networkView.RPC("stopWalk", RPCMode.All);
 }
