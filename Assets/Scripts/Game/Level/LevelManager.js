@@ -47,7 +47,7 @@ BACKGROUND_OFFSET.Add(Vector3(90, -5, 25));
 
 function Start () {
     gameManager = GameObject.Find("/GameManager");
-    difficultyManager = gameManager.GetComponent(DifficultyManager);
+    difficultyManager = GetComponent(DifficultyManager);
     playerScript = gameManager.GetComponent(PlayerScript);
     stateScript = gameManager.GetComponent(StateScript);
     gameSetupScript = gameManager.GetComponent(GameSetupScript);
