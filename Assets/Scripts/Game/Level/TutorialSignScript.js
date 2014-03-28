@@ -51,4 +51,7 @@ function FixedUpdate() {
             Destroy(sign);
         }
     }
+    else {
+        Destroy(sign);
+    }
 }
