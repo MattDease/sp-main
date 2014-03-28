@@ -5,6 +5,7 @@ private var playerScript : PlayerScript;
 private var stateScript : StateScript;
 private var gameSetupScript : GameSetupScript;
 
+private var countdownActive : boolean = false;
 private var goTexture : Texture2D;
 private var countdown1 : Texture2D;
 private var countdown2 : Texture2D;
@@ -45,10 +46,13 @@ function OnGUI(){
     if(gameState == GameState.Loading){
         switch(gameSetupScript.getCountDown()){
             case 0:
-                GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), goTexture);
+               if(countdownActive) {
+                    GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), goTexture);
+                }
             break;
             case 1:
-                GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown1);
+                    countdownActive = true;
+                    GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown1);
             break;
             case 2:
                 GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown2);
