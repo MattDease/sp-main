@@ -64,15 +64,16 @@ function OnGUI() {
             guiLogin[2].textureWidth = 1500 * menuScript.getScale();
             guiLogin[2].textureHeight = 1001 * menuScript.getScale();
             guiLogin[2].setLocation(Points.Center);
+
             GUI.DrawTexture(new Rect(guiLogin[2].offset.x, guiLogin[2].offset.y - Screen.height/16, guiLogin[2].textureWidth,  guiLogin[2].textureHeight), logoTexture);
             GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), whiteBarTexture);
             GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), "Welcome back, " + playerName, "PlainText");
 
             guiLogin[4].textureWidth = Screen.width * 0.20;
             guiLogin[4].textureHeight = Screen.height * 0.14;
-            guiLogin[4].setLocation(Points.BottomRight);
+            guiLogin[4].setLocation(Points.TopRight);
 
-            if (GUI.Button(Rect(guiLogin[4].offset.x, Screen.height - Screen.height * 0.13 - (100 * menuScript.getScale()), guiLogin[4].textureWidth, guiLogin[4].textureHeight), "CHANGE NAME", "GreenButton")) {
+            if (GUI.Button(Rect(guiLogin[4].offset.x, guiLogin[4].offset.y - Screen.height * 0.01, guiLogin[4].textureWidth, guiLogin[4].textureHeight), "CHANGE NAME", "GreenButton")) {
                 showNameChange = true;
             }
 
