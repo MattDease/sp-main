@@ -191,7 +191,7 @@ function OnGUI() {
         GUI.DrawTexture(new Rect(guiNewGame[3].offset.x, guiNewGame[3].offset.y, Screen.width / 1.5, Screen.height / 3), createNewOverlayTexture);
 
         GUI.Label(Rect(guiNewGame[0].offset.x, guiNewGame[0].offset.y - Screen.height / 12, Screen.width, 100), "Game Name", "PlainText");
-        gameName = GUI.TextField(Rect(guiNewGame[1].offset.x, guiNewGame[1].offset.y + Screen.height/22, Screen.width / 2.2, menuScript.getScale() * 100), gameName, 20);
+        gameName = GUI.TextField(Rect(guiNewGame[1].offset.x, guiNewGame[1].offset.y + Screen.height/22, Screen.width / 2.2, menuScript.getScale() * 100), gameName, 15);
 
         if(gameName) {
             GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), whiteBarTexture);
