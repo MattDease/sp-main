@@ -17,6 +17,7 @@ private var playerScript : PlayerScript;
 private var stateScript : StateScript;
 // Game Scripts
 private var levelManager : LevelManager;
+private var gameMenu : GameMenu;
 
 private var readyPlayerCount : int = 0;
 private var startTime : double;
@@ -229,6 +230,8 @@ function registerPlayer(name : String, netPlayer : NetworkPlayer){
 function setVersusMode(mode : String){
     var gameMode : GameMode = System.Enum.Parse(GameMode, mode);
     game.setIsVersus(gameMode);
+    gameMenu = GameObject.Find("/MenuScripts").GetComponent(GameMenu);
+    gameMenu.selectCharacter = false;
 }
 
 @RPC

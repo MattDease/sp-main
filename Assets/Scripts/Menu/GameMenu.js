@@ -12,7 +12,7 @@ private var isHosting : boolean = false;
 private var isStartingServer : boolean = false;
 private var gameName : String;
 private var playerLimit : int = 4;
-private var selectCharacter : boolean = false;
+public var selectCharacter : boolean = false;
 private var showStatusBar : boolean = false;
 private var isVersus : GameMode = GameMode.Team;
 
@@ -690,10 +690,12 @@ function checkVersus(teamCount : int) {
     if (Config.VERSUS_ENABLED && teamCount > Config.MAX_TEAM_COUNT && !isVersus || !Config.VERSUS_ENABLED && Input.GetKey('v') && !isVersus) {
         gameManager.networkView.RPC("setVersusMode", RPCMode.AllBuffered, GameMode.Versus.ToString());
         isVersus = gameSetupScript.game.getIsVersus();
+        selectCharacter = false;
     }
     else if(Config.VERSUS_ENABLED && teamCount < Config.MAX_TEAM_COUNT && isVersus || !Config.VERSUS_ENABLED && Input.GetKey('t') && isVersus){
         gameManager.networkView.RPC("setVersusMode", RPCMode.AllBuffered, GameMode.Team.ToString());
         isVersus = gameSetupScript.game.getIsVersus();
+        selectCharacter = false;
     }
 }
 function setUpStyles(){
