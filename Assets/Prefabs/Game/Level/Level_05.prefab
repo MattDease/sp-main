@@ -951,7 +951,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.22999573, y: 2.37052917, z: .5}
+  m_LocalPosition: {x: 6.84741974, y: 2.98991108, z: .5}
   m_LocalScale: {x: .147689998, y: .147689998, z: .147689998}
   m_Children: []
   m_Father: {fileID: 400120}
@@ -1893,6 +1893,7 @@ MonoBehaviour:
   - {fileID: 400006}
   - {fileID: 400004}
   - {fileID: 400002}
+  - {fileID: 400000}
   coins:
   - {fileID: 400112}
   - {fileID: 400110}
