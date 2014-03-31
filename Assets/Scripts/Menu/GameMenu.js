@@ -328,6 +328,14 @@ function OnGUI() {
                 var leftLayoutCount = 0;
                 var rightLayoutCount = 0;
 
+
+                guiOverlays[2].textureWidth = Screen.width /1.5;
+                guiOverlays[2].textureHeight = Screen.height / 4;
+                guiOverlays[2].setLocation(Points.Center);
+
+                GUI.DrawTexture(new Rect(guiOverlays[2].offset.x, guiOverlays[2].offset.y - Screen.height * 0.073 - guiOverlays[2].offset.y / 1.4, guiOverlays[2].textureWidth, guiOverlays[2].textureHeight), teamOneOverlay);
+                GUI.DrawTexture(new Rect(guiOverlays[2].offset.x, guiOverlays[2].offset.y - Screen.height * 0.03 + guiOverlays[2].offset.y / 1.4, guiOverlays[2].textureWidth, guiOverlays[2].textureHeight), teamTwoOverlay);
+
                 //Need to check to see if team is full, so if teamCount is full, show faded arrow
                 // if team is full, set teamOneFull - teamTwoFull to true...
                 if (teamList[0].getTeammates().Count == 5) teamOneFull = true;
@@ -388,7 +396,7 @@ function OnGUI() {
                             GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 - guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[cPlayer.getCharacter()], "FullImage");
                         }
 
-                        GUI.Label(Rect(guiVersus[3].offset.x + layoutOffset - 5, guiHost[3].offset.y + Screen.height * 0.2 - 5, Screen.width * 0.15, Screen.height * 0.20), cPlayer.getName(), "WhiteText");
+                        GUI.Label(Rect(guiVersus[3].offset.x + layoutOffset - 10, guiHost[3].offset.y + Screen.height * 0.2 - 5, Screen.width * 0.15, Screen.height * 0.20), cPlayer.getName(), "WhiteText");
 
                         if (cPlayer.getReadyStatus()) {
                             GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset + guiHost[1].textureWidth / 2, guiVersus[3].offset.y - Screen.height * 0.05 - guiVersus[3].offset.y / 1.28, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
@@ -441,7 +449,7 @@ function OnGUI() {
                             GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 + guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[cPlayer.getCharacter()], "FullImage");
                         }
 
-                        GUI.Label(Rect(guiVersus[3].offset.x + layoutOffset - 5, guiHost[3].offset.y + (2 * guiVersus[3].offset.y / 1.4) + Screen.height * 0.2 - 5, Screen.width * 0.15, Screen.height * 0.20), cPlayer.getName(), "WhiteText");
+                        GUI.Label(Rect(guiVersus[3].offset.x + layoutOffset - 10, guiHost[3].offset.y + (2 * guiVersus[3].offset.y / 1.4) + Screen.height * 0.2 - 5, Screen.width * 0.15, Screen.height * 0.20), cPlayer.getName(), "WhiteText");
 
                         if (cPlayer.getReadyStatus()) {
                             GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset + guiHost[1].textureWidth / 2, guiVersus[3].offset.y + (2 * guiVersus[3].offset.y / 1.4) - Screen.height * 0.05 - guiVersus[3].offset.y / 1.28, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
