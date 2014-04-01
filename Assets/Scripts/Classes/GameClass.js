@@ -291,6 +291,17 @@ public class Game {
         return true;
     }
 
+    public function canRestart() : boolean {
+        var threshold : int = Mathf.Round(players.Count * Config.RESTART_PERCENT);
+        var votes : int = 0;
+        for(var player : Player in players.Values){
+            if(player.getRestartVote()){
+                votes++;
+            }
+        }
+        return votes >= threshold;
+    }
+
     // player is leaving game
     public function destroy(){
 

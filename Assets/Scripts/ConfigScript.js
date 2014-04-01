@@ -16,6 +16,9 @@ public static class Config{
     //// GAMEPLAY
     // Once all players are ready, the delay in seconds before the game starts.
     public var START_DELAY : float = 3;
+    // Percentage of players that must vote to restart the game before
+    // the game can be restarted by the host.
+    public var RESTART_PERCENT : float = 0.75;
     // Distance ahead of the user-controlled runner that the camera is aimed.
     // Defined as a percentage of the viewport.
     public var CAMERA_LEAD : float = 0.25;
