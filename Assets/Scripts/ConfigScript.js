@@ -61,6 +61,7 @@ public static class Config{
     public var RUNNER_DEATH_DEPTH : float = -3;
     // Duration in seconds of transition between running and walking speeds;
     public var SPEED_TRANSITION_DURATION : float = 0.3;
+    public var TEAM_COLOR : Color[] = [new Color(0, 150/255, 1, 0.5), new Color(1, 0, 0, 0.5)];
 
     //// NETWORKING
     // ID that all hosts will use to register their game with the master server.
