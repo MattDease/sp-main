@@ -19,6 +19,7 @@ private var stateScript : StateScript;
 private var levelManager : LevelManager;
 
 private var readyPlayerCount : int = 0;
+private var restartReadyCount : int = 0;
 private var startTime : double;
 private var lastLevelPrefix : int = 0;
 private var isLeaving : boolean = false;
@@ -155,6 +156,47 @@ function loadLevel(level : String, levelPrefix : int){
 
     for (var go : GameObject in FindObjectsOfType(GameObject)){
         go.SendMessage("OnNetworkLoadedLevel", SendMessageOptions.DontRequireReceiver);
+    }
+}
+
+@RPC
+function resetGame(){
+    readyPlayerCount = 0;
+    game.reset();
+    if(Network.isServer){
+        readyToRestart(playerScript.getSelf().getId());
+    }
+    else{
+        networkView.RPC("readyToRestart", RPCMode.Server, playerScript.getSelf().getId());
+    }
+}
+
+function restartGame(){
+    networkView.RPC("resetGame", RPCMode.All);
+}
+
+// Server only
+function returnToMenu(){
+    MasterServer.RegisterHost(Config.GAME_ID, game.getName(), ConnectionTesterStatus.Undetermined.ToString());
+    networkView.RPC("goToMenu", RPCMode.All);
+}
+
+@RPC
+function goToMenu(){
+    readyPlayerCount = 0;
+    game.reset();
+    stateScript.setCurrentMenu(Network.isServer ? menus.host : menus.game);
+    Network.RemoveRPCsInGroup(0);
+    Application.LoadLevel("scene-menu");
+}
+
+// Server only
+@RPC
+function readyToRestart(id : String){
+    restartReadyCount++;
+    if(restartReadyCount >= game.getPlayers().Count){
+        restartReadyCount = 0;
+        enterGame();
     }
 }
 
@@ -330,6 +372,11 @@ function changeRole(id : String, name : String, newRole : String, teamId:int, ch
     }
  }
 
+@RPC
+function voteForRestart(id : String, vote : boolean){
+    var player : Player = Util.GetPlayerById(id);
+    player.setRestartVote(vote);
+}
 
 @RPC
 function removePlayer(netPlayer:NetworkPlayer){

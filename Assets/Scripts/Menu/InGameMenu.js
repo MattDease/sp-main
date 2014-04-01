@@ -5,6 +5,9 @@ private var playerScript : PlayerScript;
 private var stateScript : StateScript;
 private var gameSetupScript : GameSetupScript;
 
+private var game : Game;
+private var self : Player;
+
 private var countdownActive : boolean = false;
 private var goTexture : Texture2D;
 private var countdown1 : Texture2D;
@@ -24,6 +27,9 @@ function Start(){
     playerScript = gameManager.GetComponent(PlayerScript);
     stateScript = gameManager.GetComponent(StateScript);
     gameSetupScript = gameManager.GetComponent(GameSetupScript);
+
+    game = gameSetupScript.game;
+    self = playerScript.getSelf();
 
     goTexture = Resources.Load("Textures/gui/go", Texture2D);
     countdown1 = Resources.Load("Textures/gui/count_1", Texture2D);
@@ -67,6 +73,8 @@ function OnGUI(){
 function OnDebugGUI(){
     GUILayout.BeginArea(Rect (Screen.width - 10 - 200, 10, 200, Screen.height - 10*2));
     GUILayout.BeginVertical(GUILayout.MaxHeight(Screen.height - 10*2));
+    GUI.backgroundColor = Color.white;
+    GUI.contentColor = Color.black;
 
     GUILayout.Label("Debug Menu");
 
@@ -88,7 +96,7 @@ function OnDebugGUI(){
             GUILayout.Label("Game Starts In: " + gameSetupScript.getCountDown());
             break;
         case GameState.Playing :
-            var teams : List.<Team> = gameSetupScript.game.getTeams();
+            var teams : List.<Team> = game.getTeams();
             for(var team : Team in teams){
                 GUILayout.Space(10);
                 GUILayout.Label("Team " + team.getId() + " - Distance: " + team.getDistance() + " - Coins: " + team.getCoinCount() + (!team.isAlive() ? " - dead" : ""));
@@ -98,11 +106,35 @@ function OnDebugGUI(){
             }
             break;
         case GameState.Ended :
-            var winner : Team = gameSetupScript.game.getLeadingTeam();
-            GUILayout.Space(10);
-            GUILayout.Label("Team " + winner.getId() + " Won - Distance: " + winner.getDistance());
-            if(gameSetupScript.game.isValid() && GUILayout.Button("Restart Game")){
-                // TODO - implement
+            var winner : Team = game.getLeadingTeam();
+            for(var team : Team in game.getTeams()){
+                GUILayout.Space(10);
+                if(game.getMode() == GameMode.Versus && winner.getId() == team.getId()){
+                    GUILayout.Label("You are winner!");
+                }
+                GUILayout.Label("Points : " + team.getPoints());
+                GUILayout.Label("Dist : " + team.getDistance() + " Coin : " + team.getCoinCount());
+                for(var player : Player in team.getTeammates().Values){
+                    GUILayout.Label(player.getName() + " - " + player.getRestartVote());
+                }
+            }
+            if(!self.getRestartVote()){
+                if(game.isValid() && GUILayout.Button("Vote for Restart")){
+                    gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
+                }
+            }
+            else if(Network.isServer && game.canRestart()){
+                if(GUILayout.Button("Restart Game")){
+                    gameSetupScript.restartGame();
+                }
+            }
+            if(Network.isServer){
+                if(GUILayout.Button("Return to Game Menu")){
+                    gameSetupScript.returnToMenu();
+                }
+            }
+            if(GUILayout.Button("Leave")){
+                gameSetupScript.leaveGame();
             }
             break;
         case GameState.Error :

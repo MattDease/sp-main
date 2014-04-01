@@ -162,6 +162,7 @@ function Update(){
         if(Physics.Raycast(transform.position, Vector3.down, deadHit, 0.1)) {
             if(deadHit.collider.gameObject.layer == LayerMask.NameToLayer("Ground Segments")){
                 Util.Toggle(gameObject, false);
+                rigidbody.useGravity = false;
             }
         }
     }
@@ -216,7 +217,7 @@ function killMe(){
 
 @RPC
 function kill(id : String, info : NetworkMessageInfo){
-    if(transform.position.y < Config.RUNNER_DEATH_DEPTH){
+    if(transform.position.y < Config.RUNNER_DEATH_DEPTH || player.getTeam().getRunners(true).Count <= 1){
         Util.Toggle(gameObject, false);
     }
     else{

@@ -1372,6 +1372,7 @@ MonoBehaviour:
   - {fileID: 400072}
   - {fileID: 400070}
   - {fileID: 400080}
+  diff: 0
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1
@@ -1379,7 +1380,7 @@ NetworkView:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100066}
   m_Enabled: 1
-  m_StateSynchronization: 1
+  m_StateSynchronization: 2
   m_Observed: {fileID: 11400000}
   m_ViewID:
     m_ID: 0

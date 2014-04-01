@@ -10,6 +10,7 @@ public class Player{
     public var script : MonoBehaviour;
     private var selectedCharacter : int = 12;
     private var isReady : boolean = false;
+    private var wantsRestart : boolean = false;
     private var tutorialSigns : List.<String> = new List.<String>();
 
     public function Player(name:String, teamId:int, team:Team, networkPlayer:NetworkPlayer){
@@ -18,6 +19,11 @@ public class Player{
         this.team = team;
         this.networkPlayer = networkPlayer;
         this.id = networkPlayer.ToString();
+    }
+
+    public function reset(){
+        wantsRestart = false;
+        tutorialSigns = new List.<String>();
     }
 
     public function getName() : String {
@@ -69,6 +75,14 @@ public class Player{
         return this.isReady;
     }
 
+    public function setRestartVote(vote : boolean) {
+        this.wantsRestart = vote;
+    }
+
+    public function getRestartVote() : boolean {
+        return this.wantsRestart;
+    }
+
      public function addTutorialSign(sign : String ) {
         tutorialSigns.Add(sign);
     }
@@ -108,6 +122,7 @@ public class Runner extends Player{
     public function reset() {
         Util.Toggle(this.gameObject, false);
         this.alive = true;
+        super();
     }
 
     public function getDistance() : float {
@@ -133,5 +148,9 @@ public class Commander extends Player{
 
     public function Commander(name:String, teamId:int, team:Team, networkPlayer:NetworkPlayer){
         super(name, teamId, team, networkPlayer);
+    }
+
+    public function reset(){
+        super();
     }
 }

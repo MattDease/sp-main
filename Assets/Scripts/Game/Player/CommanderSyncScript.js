@@ -9,14 +9,16 @@ private var syncStartRotation : Quaternion = Quaternion.identity;
 private var syncEndRotation : Quaternion = Quaternion.identity;
 private var model : GameObject;
 private var commanderScript : CommanderScript;
+private var game : Game;
 
 function Start() {
     model = gameObject.transform.Find("model").gameObject;
     commanderScript = GetComponent(CommanderScript);
+    game = GameObject.Find("/GameManager").GetComponent(GameSetupScript).game;
 }
 
 function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo) {
-    if(!model){
+    if(!model || (game && game.getState() == GameState.Ended)){
         return;
     }
 
