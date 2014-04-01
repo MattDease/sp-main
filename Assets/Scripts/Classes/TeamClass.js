@@ -85,6 +85,10 @@ public class Team{
         return commander;
     }
 
+   public function clearCommander()  {
+        commander = null;
+    }
+
     public function getRunners(aliveOnly : boolean) : Dictionary.<String,Runner> {
         return aliveOnly ? activeRunners : runners;
     }
@@ -189,6 +193,7 @@ public class Team{
         teammates.Clear();
         runners.Clear();
         activeRunners.Clear();
+        clearCommander();
     }
 
     public function getLeader() : Runner {

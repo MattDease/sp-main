@@ -77,7 +77,7 @@ function initSegment(teamId : int){
             }
         }
         for(var key : int in prefabs.Keys){
-            enemies.Add(new Enemy(points[key*2], points[key*2+1], prefabs[key]));
+           // enemies.Add(new Enemy(points[key*2], points[key*2+1], prefabs[key]));
         }
 
         GameObject.Find("GameScripts").GetComponent(LevelManager).onAddSegment(teamId, gameObject, enemies, coins);

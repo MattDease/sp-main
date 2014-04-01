@@ -217,7 +217,7 @@ medium.Add(new Difficulty(GameDifficulty.Hard, GameDifficulty.Medium, GameDiffic
 medium.Add(new Difficulty(GameDifficulty.Hard, GameDifficulty.Medium, GameDifficulty.Easy));
 
 hard.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Easy, GameDifficulty.Hard));
-hard.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Medium, GameDifficulty.Hard));
+hard.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Medium, GameDifficulty.Easy));
 hard.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Easy, GameDifficulty.Hard));
 hard.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Hard, GameDifficulty.Easy));
 hard.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Medium, GameDifficulty.Medium));
@@ -230,7 +230,7 @@ expert.Add(new Difficulty(GameDifficulty.Hard, GameDifficulty.Easy, GameDifficul
 expert.Add(new Difficulty(GameDifficulty.Hard, GameDifficulty.Medium, GameDifficulty.Hard));
 expert.Add(new Difficulty(GameDifficulty.Hard, GameDifficulty.Hard, GameDifficulty.Medium));
 expert.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Easy, GameDifficulty.Hard));
-expert.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Hard, GameDifficulty.Hard));
+expert.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Hard, GameDifficulty.Easy));
 expert.Add(new Difficulty(GameDifficulty.Medium, GameDifficulty.Hard, GameDifficulty.Easy));
 expert.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Hard, GameDifficulty.Easy));
 expert.Add(new Difficulty(GameDifficulty.Easy, GameDifficulty.Medium, GameDifficulty.Hard));

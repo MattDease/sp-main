@@ -17,6 +17,7 @@ private var playerScript : PlayerScript;
 private var stateScript : StateScript;
 // Game Scripts
 private var levelManager : LevelManager;
+private var gameMenu : GameMenu;
 
 private var readyPlayerCount : int = 0;
 private var restartReadyCount : int = 0;
@@ -271,6 +272,8 @@ function registerPlayer(name : String, netPlayer : NetworkPlayer){
 function setVersusMode(mode : String){
     var gameMode : GameMode = System.Enum.Parse(GameMode, mode);
     game.setIsVersus(gameMode);
+    gameMenu = GameObject.Find("/MenuScripts").GetComponent(GameMenu);
+    gameMenu.selectCharacter = false;
 }
 
 @RPC
@@ -321,6 +324,7 @@ function updateCharacter(id : String, selectedChar : int, netPlayer : NetworkPla
         }
 
         if(player.getCharacter() > 8 && selectedChar < 9 || player.getCharacter() == 12 && selectedChar < 9){
+            if(selectedChar != 12) player.getTeam().clearCommander();
             player.setCharacter(selectedChar);
             changeRole(id, player.getName(), PlayerRole.Runner.ToString(), player.getTeamId(), player.getCharacter(), netPlayer);
         } else if(player.getCharacter() < 9 && selectedChar > 8 || player.getCharacter() == 12 && selectedChar >= 9) {
@@ -328,7 +332,6 @@ function updateCharacter(id : String, selectedChar : int, netPlayer : NetworkPla
             if(player.getCharacter() != 12) {
                 player.getTeam().removeRunner(player.getId());
             }
-
             player.setCharacter(selectedChar);
             changeRole(id, player.getName(), PlayerRole.Commander.ToString(), player.getTeamId(), player.getCharacter(), netPlayer);
         } else {
