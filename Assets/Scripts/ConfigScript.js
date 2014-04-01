@@ -66,7 +66,7 @@ public static class Config{
     public var GAME_PORT : int = 25002;
     // Master server ip to use in-case DNS lookup fails
     // Note DNS lookup is disabled due to Unity Pro requirement on Android.
-    public var MASTER_SERVER_IP : String = "127.0.0.1";
+    public var MASTER_SERVER_IP : String = "192.168.11.11";
     // Backup master server IP
     public var MASTER_SERVER_IP_SECONDARY : String = "172.19.12.112";
     // Master server hostname used for DNS lookup
