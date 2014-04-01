@@ -17,14 +17,10 @@ Material:
         first:
           name: _MainTex
         second:
-          m_Texture: {fileID: 2800000, guid: 9273fa6dba63f7e4087c92d6cf75933b, type: 3}
+          m_Texture: {fileID: 2800000, guid: db96345b9a3c8d143a845e6da233cf9b, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
-    m_Floats:
-      data:
-        first:
-          name: _Cutoff
-        second: .5
+    m_Floats: {}
     m_Colors:
       data:
         first:
