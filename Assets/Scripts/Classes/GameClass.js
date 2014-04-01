@@ -35,6 +35,13 @@ public class Game {
         }
     }
 
+    public function reset(){
+        stateScript.setGameState(GameState.Uninitialized);
+        for(var team : Team in teams){
+            team.reset();
+        }
+    }
+
     public function end(){
         stateScript.setGameState(GameState.Ended);
         for(var player : Player in players.Values){

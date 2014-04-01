@@ -21,6 +21,11 @@ public class Player{
         this.id = networkPlayer.ToString();
     }
 
+    public function reset(){
+        wantsRestart = false;
+        tutorialSigns = new List.<String>();
+    }
+
     public function getName() : String {
         return this.name;
     }
@@ -117,6 +122,7 @@ public class Runner extends Player{
     public function reset() {
         Util.Toggle(this.gameObject, false);
         this.alive = true;
+        super();
     }
 
     public function getDistance() : float {
@@ -142,5 +148,9 @@ public class Commander extends Player{
 
     public function Commander(name:String, teamId:int, team:Team, networkPlayer:NetworkPlayer){
         super(name, teamId, team, networkPlayer);
+    }
+
+    public function reset(){
+        super();
     }
 }

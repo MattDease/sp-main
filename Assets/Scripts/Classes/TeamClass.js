@@ -25,7 +25,17 @@ public class Team{
     }
 
     public function reset() {
+        coinCount = 0;
+        cachedDistance = 0;
+        runnerCreationCount = 0;
         alive = true;
+        for(var runner : Runner in runners.Values){
+            runner.reset();
+            activeRunners[runner.getId()] = runner;
+        }
+        if(commander){
+            commander.reset();
+        }
     }
 
     public function kill() {

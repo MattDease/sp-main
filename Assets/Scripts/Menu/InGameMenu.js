@@ -125,7 +125,7 @@ function OnDebugGUI(){
             }
             else if(Network.isServer && game.canRestart()){
                 if(GUILayout.Button("Restart Game")){
-                    // TODO implement
+                    gameSetupScript.restartGame();
                 }
             }
             if(Network.isServer){
