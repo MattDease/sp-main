@@ -176,6 +176,20 @@ function restartGame(){
 }
 
 // Server only
+function returnToMenu(){
+    MasterServer.RegisterHost(Config.GAME_ID, game.getName(), ConnectionTesterStatus.Undetermined.ToString());
+    networkView.RPC("goToMenu", RPCMode.All);
+}
+
+@RPC
+function goToMenu(){
+    readyPlayerCount = 0;
+    game.reset();
+    stateScript.setCurrentMenu(Network.isServer ? menus.host : menus.game);
+    Application.LoadLevel("scene-menu");
+}
+
+// Server only
 @RPC
 function readyToRestart(id : String){
     restartReadyCount++;

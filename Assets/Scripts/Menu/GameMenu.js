@@ -78,7 +78,12 @@ function Start() {
     playerScript = gameManager.GetComponent(PlayerScript);
     gameSetupScript = gameManager.GetComponent(GameSetupScript);
 
-    gameName = playerScript.getName() + "'s Game";
+    if(gameSetupScript && gameSetupScript.game != null && gameSetupScript.game.getName() != ""){
+        gameName = gameSetupScript.game.getName();
+    }
+    else{
+        gameName = playerScript.getName() + "'s Game";
+    }
 
     //persist game manager object between scenes
     DontDestroyOnLoad(gameManager);
@@ -482,7 +487,7 @@ function OnGUI() {
             if (isHosting) {
                 if(isValid){
                     if (GUI.Button(Rect(guiHost[2].offset.x, Screen.height - Screen.height * 0.13 - (100 * menuScript.getScale()), guiHost[2].textureWidth, guiHost[2].textureHeight), "START", "GreenButton")) {
-                        netScript.hideGame();
+                        netScript.hideGame(gameName);
                         gameSetupScript.enterGame();
                     }
                 } else {
@@ -514,6 +519,7 @@ function OnGUI() {
 
 function onServerInitialize(success: boolean) {
     if (success) {
+        gameSetupScript.game.setName(gameName);
         isStartingServer = false;
         gameSetupScript.registerPlayerProxy(playerScript.getName());
     }
@@ -523,7 +529,9 @@ function enter(isNew: boolean) {
     showMenu = true;
     isHosting = isNew;
 
-    gameSetupScript.game = new Game();
+    if(gameSetupScript && gameSetupScript.game != null){
+        gameSetupScript.game = new Game();
+    }
 
     if (Network.isClient) {
         gameSetupScript.registerPlayerProxy(playerScript.getName());

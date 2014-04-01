@@ -130,7 +130,7 @@ function OnDebugGUI(){
             }
             if(Network.isServer){
                 if(GUILayout.Button("Return to Game Menu")){
-                    // TODO implement
+                    gameSetupScript.returnToMenu();
                 }
             }
             if(GUILayout.Button("Leave")){

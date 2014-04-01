@@ -6,9 +6,9 @@ public class Game {
     private var teams : List.<Team> = new List.<Team>();
     private var players : Dictionary.<String,Player> = new Dictionary.<String,Player>();
 
-    // TODO - set game mode when instantiating game
     private var mode : GameMode = GameMode.Team;
     private var status : String = "All good!";
+    private var name : String = "";
 
     // Game Manager & scripts
     private var gameManager : GameObject;
@@ -47,6 +47,14 @@ public class Game {
         for(var player : Player in players.Values){
             player.script.enabled = false;
         }
+    }
+
+    public function setName(name : String){
+        this.name = name;
+    }
+
+    public function getName() : String {
+        return name;
     }
 
     public function getState(){

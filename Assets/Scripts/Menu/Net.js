@@ -156,8 +156,8 @@ function killGame() {
     MasterServer.UnregisterHost();
 }
 
-function hideGame(){
-    MasterServer.RegisterHost(Config.GAME_ID, gameName, natCapable.ToString() + "|hidden");
+function hideGame(name : String){
+    MasterServer.RegisterHost(Config.GAME_ID, name, natCapable.ToString() + "|hidden");
 }
 
 function OnServerInitialized(){
@@ -359,13 +359,17 @@ function canConnect(type1: ConnectionTesterStatus, type2: ConnectionTesterStatus
 
 
 function OnDisconnectedFromServer(info : NetworkDisconnection) {
-        if (Network.isServer) {
-            Debug.Log("Local server connection disconnected");
-        }
-        else {
-            if (info == NetworkDisconnection.LostConnection)
-                Debug.Log("Lost connection to the server");
-            else
-                Debug.Log("Successfully diconnected from the server");
-        }
+    if (Network.isServer) {
+        Debug.Log("Local server connection disconnected");
     }
+    else {
+        if (info == NetworkDisconnection.LostConnection){
+            Debug.Log("Lost connection to the server");
+        }
+        else{
+            Debug.Log("Successfully diconnected from the server");
+        }
+        Menu.script.stateScript.setCurrentMenu(menus.lobby);
+        Menu.script.open();
+    }
+}
