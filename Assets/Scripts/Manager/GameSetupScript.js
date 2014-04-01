@@ -330,6 +330,11 @@ function changeRole(id : String, name : String, newRole : String, teamId:int, ch
     }
  }
 
+@RPC
+function voteForRestart(id : String, vote : boolean){
+    var player : Player = Util.GetPlayerById(id);
+    player.setRestartVote(vote);
+}
 
 @RPC
 function removePlayer(netPlayer:NetworkPlayer){

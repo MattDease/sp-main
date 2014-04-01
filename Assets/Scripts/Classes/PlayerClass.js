@@ -10,6 +10,7 @@ public class Player{
     public var script : MonoBehaviour;
     private var selectedCharacter : int = 12;
     private var isReady : boolean = false;
+    private var wantsRestart : boolean = false;
     private var tutorialSigns : List.<String> = new List.<String>();
 
     public function Player(name:String, teamId:int, team:Team, networkPlayer:NetworkPlayer){
@@ -67,6 +68,14 @@ public class Player{
 
     public function getReadyStatus() : boolean {
         return this.isReady;
+    }
+
+    public function setRestartVote(vote : boolean) {
+        this.wantsRestart = vote;
+    }
+
+    public function getRestartVote() : boolean {
+        return this.wantsRestart;
     }
 
      public function addTutorialSign(sign : String ) {
