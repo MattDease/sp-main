@@ -30,7 +30,7 @@ private var waitingForSegment : boolean = false;
 private var levelsReady : int = 0;
 
 private var segmentOffset : float = 18;
-private var newSegmentThreshold : float = 50;
+private var newSegmentThreshold : float = 25;
 
 private var lastSegmentEnd : List.<float> = new List.<float>();
 private var firstSegmentEnd : List.<float> = new List.<float>();

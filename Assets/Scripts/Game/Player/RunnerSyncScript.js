@@ -6,12 +6,17 @@ private var syncTime : float = 0;
 private var syncStartPosition : Vector3 = Vector3.zero;
 private var syncEndPosition : Vector3 = Vector3.zero;
 private var runnerScript : RunnerScript;
+private var game : Game;
 
 function Start(){
     runnerScript = GetComponent(RunnerScript);
+    game = GameObject.Find("/GameManager").GetComponent(GameSetupScript).game;
 }
 
 function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo) {
+    if(game && game.getState() == GameState.Ended){
+        return;
+    }
     var posX : float = 0;
     var posY : float = 0;
     var velocity : Vector3 = Vector3.zero;

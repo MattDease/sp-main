@@ -186,6 +186,7 @@ function goToMenu(){
     readyPlayerCount = 0;
     game.reset();
     stateScript.setCurrentMenu(Network.isServer ? menus.host : menus.game);
+    Network.RemoveRPCsInGroup(0);
     Application.LoadLevel("scene-menu");
 }
 
