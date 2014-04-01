@@ -86,13 +86,13 @@ function playerReady(){
 @RPC
 function startCountDown(info : NetworkMessageInfo){
     var delay : double = Config.START_DELAY - (Network.time - info.timestamp);
-    startTime = Time.realtimeSinceStartup + delay;
+    startTime = Time.time + delay;
     Invoke("startGame", delay);
 }
 
 function getCountDown() : int {
     if(startTime){
-        var delay : double = startTime - Time.realtimeSinceStartup;
+        var delay : double = startTime - Time.time;
         if(delay < 0){
             return 0;
         }
