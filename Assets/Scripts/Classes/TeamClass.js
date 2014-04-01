@@ -183,6 +183,7 @@ public class Team{
         teammates.Clear();
         runners.Clear();
         activeRunners.Clear();
+        clearCommander();
     }
 
     public function getLeader() : Runner {
