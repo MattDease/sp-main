@@ -49,6 +49,7 @@ function kill(){
 @RPC
 function syncKill(){
     alive = false;
+    transform.GetComponent(AudioSource).Play();
     animator.SetBool("death", true);
     game.getTeam(teamId).collectCoin();
     var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
