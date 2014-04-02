@@ -47,6 +47,9 @@ public class Game {
         for(var player : Player in players.Values){
             player.script.enabled = false;
             Util.Toggle(player.gameObject, false);
+            if(player.gameObject.rigidbody){
+                player.gameObject.rigidbody.useGravity = false;
+            }
         }
         var enemies : GameObject[] = GameObject.FindGameObjectsWithTag("enemy");
         for(var enemy : GameObject in enemies){
