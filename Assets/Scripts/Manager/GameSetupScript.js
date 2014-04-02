@@ -245,9 +245,7 @@ function OnPlayerConnected(netPlayer : NetworkPlayer){
 
 // Server only
 function OnPlayerDisconnected(netPlayer : NetworkPlayer){
-    if(Application.loadedLevelName == "scene-game"){
-        networkView.RPC("removePlayer", RPCMode.All, netPlayer);
-    }
+    networkView.RPC("removePlayer", RPCMode.All, netPlayer);
 }
 
 function registerPlayerProxy(name : String){
