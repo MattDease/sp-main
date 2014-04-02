@@ -29,6 +29,7 @@ public class Game {
     }
 
     public function start(){
+        GameObject.Find("/Music").transform.GetComponent(AudioSource).Play();
         stateScript.setGameState(GameState.Playing);
         for(var player : Player in players.Values){
             player.script.enabled = true;
@@ -43,6 +44,7 @@ public class Game {
     }
 
     public function end(){
+        GameObject.Find("/Music").transform.GetComponent(AudioSource).Stop();
         stateScript.setGameState(GameState.Ended);
         for(var player : Player in players.Values){
             player.script.enabled = false;

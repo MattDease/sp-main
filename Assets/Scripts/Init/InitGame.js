@@ -4,6 +4,7 @@ public var MenuScripts : GameObject;
 public var GameScripts : GameObject;
 public var Gestures : GameObject;
 public var GameLight : GameObject;
+public var Music : GameObject;
 
 function Awake () {
     var light : GameObject = Instantiate(GameLight);
@@ -14,4 +15,6 @@ function Awake () {
     menuScripts.name = "MenuScripts";
     var gameScripts : GameObject = Instantiate(GameScripts);
     gameScripts.name = "GameScripts";
+    var music : GameObject = Instantiate(Music);
+    music.name = "Music";
 }
