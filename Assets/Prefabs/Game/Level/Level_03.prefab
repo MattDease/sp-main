@@ -2003,8 +2003,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66959bc8773017248bf9fa146ba4f513, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  min: {x: 0, y: 0}
-  max: {x: 0, y: 2}
+  min: {x: 0, y: -2}
+  max: {x: 0, y: 0}
   gravity: 0
 --- !u!114 &11400008
 MonoBehaviour:
@@ -2031,8 +2031,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66959bc8773017248bf9fa146ba4f513, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  min: {x: 0, y: 0}
-  max: {x: 0, y: 2}
+  min: {x: 0, y: -2}
+  max: {x: 0, y: 0}
   gravity: 0
 --- !u!114 &11400012
 MonoBehaviour:
