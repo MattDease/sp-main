@@ -223,13 +223,14 @@ function killMe(){
 function kill(id : String, info : NetworkMessageInfo){
     if(transform.position.y < Config.RUNNER_DEATH_DEPTH || player.getTeam().getRunners(true).Count <= 1){
         Util.Toggle(gameObject, false);
+        rigidbody.velocity = Vector3.zero;
     }
     else{
         rigidbody.velocity = Vector3(-1.5, 3, 0);
         rigidbody.angularVelocity = Vector3(0, 0, 5);
-        gameObject.layer = LayerMask.NameToLayer("Dead");
         rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
     }
+    gameObject.layer = LayerMask.NameToLayer("Dead");
 
     var runner : Runner = Util.GetPlayerById(id) as Runner;
     runner.kill();
