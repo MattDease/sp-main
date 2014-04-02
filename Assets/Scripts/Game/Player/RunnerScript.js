@@ -53,6 +53,8 @@ function initRunner(playerId : String, teamId : int){
 
         rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
 
+        GetComponentInChildren(Projector).material.color = Config.TEAM_COLOR[player.getTeamId()];
+
         runningPlane = player.getPosition();
     }
     else{
@@ -62,6 +64,8 @@ function initRunner(playerId : String, teamId : int){
 
         // Change layer so collisions with local player is ignored
         gameObject.layer = LayerMask.NameToLayer("Remote Players");
+
+        GetComponentInChildren(Projector).enabled = false;
 
         transform.position.z += team.runnerCreationCount * Config.RUNNER_LANE_WIDTH;
         if(teamId != me.getTeamId() || me.GetType() == Commander){
