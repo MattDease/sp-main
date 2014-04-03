@@ -666,7 +666,7 @@ function characterSelection() {
 
         if (isAlreadySelected) {
             GUI.color = tmpColor;
-            GUI.Button(Rect(guiObject[1].offset.x + offsetWidth + guiObject[0].textureWidth / 2 + 10, (guiObject[1].offset.y + offsetHeight) + (Screen.height * 0.20 / 1.4) - guiObject[0].textureHeight / 1.1, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
+            GUI.Button(Rect(guiObject[1].offset.x + offsetWidth + guiObject[0].textureWidth / 2 + 10, (guiObject[1].offset.y + offsetHeight) + (Screen.height * 0.16 / 1.4) - guiObject[0].textureHeight / 1.1, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
         }
 
         GUI.Label(Rect(guiObject[1].offset.x + offsetWidth - (Screen.width * 0.01), (guiObject[1].offset.y + offsetHeight) + (Screen.height * 0.15 / 1.4), Screen.width * 0.15, Screen.height * 0.20), charactersNames[c], "BlackText");

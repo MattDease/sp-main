@@ -131,6 +131,47 @@ function OnGUI(){
 
             if(game.getMode() == GameMode.Versus && winner.getId() == team.getId()){
                 //GUILayout.Label("You are winner!");
+
+            if(Network.isServer){
+                if(!self.getRestartVote()){
+                    if (game.isValid() && GUI.Button(Rect(guiInGame[1].offset.x, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "PLAY AGAIN?", "GreenButton")) {
+                        gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
+                    }
+                }else if(Network.isServer && game.canRestart()){
+                     if (GUI.Button(Rect(guiInGame[1].offset.x, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "RESTART", "GreenButton")) {
+                        gameSetupScript.restartGame();
+                    }
+                }
+
+                if (GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17), Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "GAME SETUP", "GreenButton")) {
+                    gameSetupScript.returnToMenu();
+                }
+
+                if (GUI.Button(Rect(guiInGame[1].offset.x - 2*(Screen.width * 0.17), Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "LEAVE", "RedButton")) {
+                    gameSetupScript.leaveGame();
+                }
+                voteStr = restartCount + "/" + self.getTeam().getTeammates().Count +" players said yes";
+                GUI.Label(new Rect(guiInGame[1].offset.x - 3.5*(Screen.width * 0.17), Screen.height - Screen.height * 0.16, 1.5*guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
+
+            } else {
+                if(!self.getRestartVote()){
+                    if (GUI.Button(Rect(guiInGame[1].offset.x, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "YES", "GreenButton")) {
+                        gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
+                    }
+                } else {
+                     GUI.Button(Rect(guiInGame[1].offset.x, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "YES", "DisabledButton");
+                }
+
+                if (GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17), Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "LEAVE", "RedButton")) {
+                    gameSetupScript.leaveGame();
+                }
+
+                voteStr = restartCount + "/" + self.getTeam().getTeammates().Count +" players said yes";
+                GUI.Label(new Rect(guiInGame[1].offset.x - 2*(Screen.width * 0.17), Screen.height - Screen.height * 0.18, guiInGame[1].textureWidth, guiInGame[1].textureHeight), (self.getRestartVote() ? "You voted!" : "Restart?"), "RestartHeader");
+                GUI.Label(new Rect(guiInGame[1].offset.x - 2.5*(Screen.width * 0.17), Screen.height - Screen.height * 0.12, 1.5*guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
+            }
+
+
             }
 
             if(game.getMode() == GameMode.Team){
@@ -156,8 +197,6 @@ function OnGUI(){
                 GUI.Label(new Rect(guiInGame[2].offset.x + guiInGame[2].offset.x * 1.15, guiInGame[2].offset.y + (10 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), team.getPoints() + "", "ScoreBoldText");
 
                 GUI.Button(new Rect((guiInGame[2].offset.x + guiInGame[2].offset.x * 1.15) - guiInGame[4].textureWidth/3, guiInGame[2].offset.y - (55 * getScale()), guiInGame[4].textureWidth, guiInGame[4].textureHeight), coinTexture, "FullImage");
-
-            }
 
             for(var player : Player in team.getTeammates().Values){
                 if(player.getRestartVote()) ++restartCount;
@@ -225,9 +264,7 @@ function OnGUI(){
                         break;
                     }
 
-
                     ++teamCountWithoutMVP;
-
 
                     if(teamShowEmpty){
                         GUI.Button(Rect(guiInGame[3].offset.x/1.5 + layoutOffset, guiInGame[3].offset.y, guiInGame[3].textureWidth, guiInGame[3].textureHeight), playerTextures[12], "FullImage");
@@ -280,8 +317,9 @@ function OnGUI(){
             }
 
             voteStr = restartCount + "/" + self.getTeam().getTeammates().Count +" players said yes";
-            GUI.Label(new Rect(guiInGame[1].offset.x - 2*(Screen.width * 0.17), Screen.height - Screen.height * 0.18, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "Restart?", "RestartHeader");
+            GUI.Label(new Rect(guiInGame[1].offset.x - 2.6*(Screen.width * 0.17), Screen.height - Screen.height * 0.18, guiInGame[1].textureWidth *1.5, guiInGame[1].textureHeight),  (self.getRestartVote() ? "You voted!" : "Restart?"), "RestartHeader");
             GUI.Label(new Rect(guiInGame[1].offset.x - 2.5*(Screen.width * 0.17), Screen.height - Screen.height * 0.12, 1.5*guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
+        }
         }
         }
     }
