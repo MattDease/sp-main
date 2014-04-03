@@ -9,14 +9,16 @@ private var showMenu : boolean = false;
 private var showNameChange : boolean = false;
 private var playerName : String;
 private var newName : String = "";
-private var backgroundTexutre : Texture2D;
+private var backgroundTexture : Texture2D;
 private var startBtnTexture : Texture2D;
 private var logoTexture: Texture2D;
 private var whiteBarTexture : Texture2D;
 private var createNewOverlayTexture : Texture2D;
 
 private var headerText = 270;
-private var bodyText = 60;
+private var bodyText = 50;
+private var buttonText = 35;
+
 private var guiLogin : GuiClasses[];
 private var guiName: GuiClasses [];
 
@@ -27,10 +29,10 @@ function Start() {
     menuScript = Menu.script;
     playerScript = menuScript.playerScript;
     playerName = playerScript.getName();
-    backgroundTexutre = Resources.Load("Textures/gui/background", Texture2D);
+    backgroundTexture = Resources.Load("Textures/gui/background", Texture2D);
     startBtnTexture = Resources.Load("Textures/gui/startBtn", Texture2D);
     logoTexture = Resources.Load("Textures/gui/logo", Texture2D);
-    whiteBarTexture = Resources.Load("Textures/gui/whiteBar", Texture2D);
+    whiteBarTexture = Resources.Load("Textures/gui/statusBar", Texture2D);
     createNewOverlayTexture = Resources.Load("Textures/gui/createNewOverlay", Texture2D);
     menuSkin = Resources.Load("MenuSkin", GUISkin);
 
@@ -53,10 +55,16 @@ function OnGUI() {
     greenStyle = GUI.skin.GetStyle("GreenButton");
     greenStyle.fontSize = menuScript.getScale() * 35;
 
-    GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), backgroundTexutre);
+    GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), backgroundTexture);
 
     var localStyle: GUIStyle = GUI.skin.GetStyle("PlainText");
     localStyle.fontSize = menuScript.getScale() * bodyText;
+
+    var localBoldStyle: GUIStyle = GUI.skin.GetStyle("PlainBoldText");
+    localBoldStyle.fontSize = menuScript.getScale() * bodyText;
+
+    var whiteText: GUIStyle = GUI.skin.GetStyle("WhiteText");
+    whiteText.fontSize = menuScript.getScale() * buttonText;
 
     GUI.skin.textField.fontSize = menuScript.getScale() * bodyText;
 
@@ -67,7 +75,8 @@ function OnGUI() {
 
             GUI.DrawTexture(new Rect(guiLogin[2].offset.x, guiLogin[2].offset.y - Screen.height/16, guiLogin[2].textureWidth,  guiLogin[2].textureHeight), logoTexture);
             GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), whiteBarTexture);
-            GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), "Welcome back, " + playerName, "PlainText");
+            GUI.Label(new Rect(0,  Screen.height - 255  * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), "Welcome back, " + playerName, "PlainBoldText");
+            GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), "Tap to Continue", "WhiteText");
 
             guiLogin[4].textureWidth = Screen.width * 0.20;
             guiLogin[4].textureHeight = Screen.height * 0.14;
@@ -119,7 +128,7 @@ function OnGUI() {
 
         if(newName) {
             GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), whiteBarTexture);
-            GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), "Tap to Continue", "PlainText");
+            GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), "Tap to Continue", "WhiteText");
         }
 
         if (newName && GUI.Button(Rect(0, 0, Screen.width, Screen.height), "", "FullImage")) {
