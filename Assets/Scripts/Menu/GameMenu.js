@@ -72,8 +72,8 @@ private var headerStyle :GUIStyle;
 private var greenStyle :GUIStyle;
 private var whiteText :GUIStyle;
 private var blackText :GUIStyle;
-
 private var disabledStyle : GUIStyle;
+
 
 function Awake() {
     netScript = GetComponent(Net);
@@ -217,8 +217,8 @@ function OnGUI() {
         gameName = GUI.TextField(Rect(guiNewGame[1].offset.x, guiNewGame[1].offset.y + Screen.height/22, Screen.width / 2.2, menuScript.getScale() * 100), gameName, 15);
 
         if(gameName) {
-            GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), whiteBarTexture);
-            GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), "Tap to Continue", "PlainText");
+            GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), statusBarTexture);
+            GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), "Tap to Continue", "WhiteText");
         }
 
         if (gameName && GUI.Button(Rect(0, 0, Screen.width, Screen.height), "", "FullImage")) {
