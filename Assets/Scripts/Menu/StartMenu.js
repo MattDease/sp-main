@@ -78,6 +78,7 @@ function OnGUI() {
             }
 
         if (GUI.Button(Rect(0, 0, Screen.width, Screen.height), "", "FullImage")) {
+            Util.playTap();
             leaveFor(menus.lobby);
         }
     } else {

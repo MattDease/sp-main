@@ -29,4 +29,8 @@ public static class Util{
         }
     }
 
+    public function playTap() {
+        gameManager.GetComponent(AudioSource).Play();
+    }
+
 }
