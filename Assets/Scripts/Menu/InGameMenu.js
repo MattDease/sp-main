@@ -56,6 +56,9 @@ private var playerSelfTexture : Texture2D;
 private var playerTextures :Texture[ ] = new Texture[13];
 private var playerSelfTextures :Texture[ ] = new Texture[13];
 
+private var mvp: Runner;
+
+
 private var guiInGame: GuiClasses [];
 guiInGame = new GuiClasses[9];
 for (var z = 0; z < guiInGame.length; z++) {
@@ -180,7 +183,8 @@ if (game.getMode() == GameMode.Team) {
          guiInGame[3].setLocation(Points.Center);
 
          //MVP
-         var mvp: Runner = team.getMVP();
+         if(!mvp) team.getMVP();
+
          if (mvp) {
              if (self == mvp) {
                  GUI.Button(new Rect(guiInGame[3].offset.x + ((-3) * guiInGame[3].textureWidth), guiInGame[3].offset.y - (guiInGame[3].textureHeight * 1.7), guiInGame[3].textureWidth, guiInGame[3].textureHeight), playerSelfTextures[self.getCharacter()], "FullImage");
