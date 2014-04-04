@@ -14,14 +14,10 @@ private var forEgg : boolean = false;
 function Start () {
     player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
     sign = this.gameObject;
-}
-
-function Update () {
-
-}
-
-function FixedUpdate() {
     anim = GetComponent(Animator);
+}
+
+function Update() {
     currentState = anim.GetCurrentAnimatorStateInfo(0);
 
     if(!player.getSignWith(sign.name)) {
@@ -42,6 +38,7 @@ function FixedUpdate() {
         if(distance < Config.TUTORIAL_SIGN_DISTANCE && !isAnimating && !hasEgg || distance < Config.TUTORIAL_SIGN_DISTANCE && !isAnimating && hasEgg && forEgg ){
             player.addTutorialSign(sign.name);
             anim.SetBool("Shown", true);
+            GetComponent(AudioSource).Play();
             isAnimating = true;
         }
 
