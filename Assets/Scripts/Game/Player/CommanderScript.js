@@ -142,6 +142,7 @@ function setOffset(){
 
 @RPC
 function attack(){
+    GetComponent(AudioSource).Play();
     animator.SetBool("attack", true);
 }
 
