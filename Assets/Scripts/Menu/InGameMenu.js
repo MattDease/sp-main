@@ -21,7 +21,7 @@ private var purpleScoreTexture : Texture2D;
 private var blueScoreTexture : Texture2D;
 private var purpleOverlayTexture : Texture2D;
 private var blueOverlayTexture : Texture2D;
-
+private var inGameOverlay : Texture2D;
 
 private var menuSkin : GUISkin;
 private var localStyle :GUIStyle;
@@ -40,6 +40,7 @@ private var disabledStyle : GUIStyle;
 private var mvpTextStyle : GUIStyle;
 private var localWhiteStyle : GUIStyle;
 private var ingameBoldWhiteStyle : GUIStyle;
+private var ingameBoldWhiteStyle_R : GUIStyle;
 private var scoreBoldWhiteTextStyle : GUIStyle;
 private var scoreWhiteTextStyle : GUIStyle;
 
@@ -60,7 +61,7 @@ private var mvp: Runner;
 
 
 private var guiInGame: GuiClasses [];
-guiInGame = new GuiClasses[9];
+guiInGame = new GuiClasses[11];
 for (var z = 0; z < guiInGame.length; z++) {
     guiInGame[z] = new GuiClasses();
 }
@@ -87,6 +88,7 @@ function Start(){
     blueScoreTexture = Resources.Load("Textures/gui/blueScoreOverlay", Texture2D);
     purpleOverlayTexture = Resources.Load("Textures/gui/purpleTeamOverlay", Texture2D);
     blueOverlayTexture = Resources.Load("Textures/gui/blueTeamOVerlay", Texture2D);
+    inGameOverlay = Resources.Load("Textures/gui/inGameBar", Texture2D);
 
     menuSkin = Resources.Load("MenuSkin", GUISkin);
 
@@ -116,6 +118,26 @@ function OnGUI(){
     guiInGame[0].setLocation(Points.Center);
 
     var gameState = stateScript.getGameState();
+
+    if(gameState == gameState.Playing){
+
+        guiInGame[9].textureWidth = 500 * getScale();
+        guiInGame[9].textureHeight = 100 * getScale();
+        guiInGame[9].setLocation(Points.TopRight);
+
+        guiInGame[10].textureWidth = 70 * getScale();
+        guiInGame[10].textureHeight = 70 * getScale();
+        guiInGame[10].setLocation(Points.TopRight);
+
+        var myTeam : Team = self.getTeam();
+
+        GUI.DrawTexture(new Rect(guiInGame[9].offset.x - guiInGame[9].textureHeight/2, guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), inGameOverlay);
+        GUI.DrawTexture(new Rect(guiInGame[10].offset.x - guiInGame[9].textureHeight/2 - guiInGame[9].textureHeight/2 - (Screen.width * 0.05), guiInGame[10].offset.y + guiInGame[9].textureHeight/2 + guiInGame[10].textureHeight/4, guiInGame[10].textureWidth, guiInGame[10].textureHeight), coinTexture);
+
+        GUI.Label(new Rect(guiInGame[10].offset.x - guiInGame[9].textureHeight/2 - guiInGame[9].textureHeight/2, guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), "X " + myTeam.getCoinCount(), "InGameBoldWhiteText");
+        GUI.Label(new Rect(guiInGame[10].offset.x - guiInGame[9].textureHeight/2 - guiInGame[9].textureHeight/2 -(Screen.width * 0.38), guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), myTeam.getDistance() + " m", "InGameBoldWhiteText_R");
+
+    }
 
     if(gameState == GameState.Loading){
         switch(gameSetupScript.getCountDown()){
@@ -148,7 +170,7 @@ function OnGUI(){
       var d: int = 0;
       var layoutOffset = 0;
 
-if (game.getMode() == GameMode.Team) {
+    if (game.getMode() == GameMode.Team) {
 
      for (var team: Team in game.getTeams()) {
 
@@ -183,7 +205,7 @@ if (game.getMode() == GameMode.Team) {
          guiInGame[3].setLocation(Points.Center);
 
          //MVP
-         if(!mvp) team.getMVP();
+         if(!mvp) mvp = team.getMVP();
 
          if (mvp) {
              if (self == mvp) {
@@ -578,6 +600,9 @@ function setUpStyles(){
 
     ingameBoldWhiteStyle = GUI.skin.GetStyle("InGameBoldWhiteText");
     ingameBoldWhiteStyle.fontSize = getScale() * xsmallText;
+
+    ingameBoldWhiteStyle_R = GUI.skin.GetStyle("InGameBoldWhiteText_R");
+    ingameBoldWhiteStyle_R.fontSize = getScale() * xsmallText;
 
     headerStyle = GUI.skin.GetStyle("Header");
     headerStyle.fontSize = getScale() * headerText;
