@@ -85,7 +85,7 @@ public static class Config{
     //Sets versus to automatically change when teamsize is greater than 5
     public var VERSUS_ENABLED : boolean = false;
     //Skips validation of team
-    public var VALIDATION_SKIP : boolean = false;
+    public var VALIDATION_SKIP : boolean = true;
     //Distance between Player and Tutorial Sign required to show sign
     public var TUTORIAL_SIGN_DISTANCE : int = 10;
     //How many times you see a tutorial sign
