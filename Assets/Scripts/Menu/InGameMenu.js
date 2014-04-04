@@ -38,6 +38,10 @@ private var scoreTextStyle : GUIStyle;
 private var scoreBoldTextStyle : GUIStyle;
 private var disabledStyle : GUIStyle;
 private var mvpTextStyle : GUIStyle;
+private var localWhiteStyle : GUIStyle;
+private var ingameBoldWhiteStyle : GUIStyle;
+private var scoreBoldWhiteTextStyle : GUIStyle;
+private var scoreWhiteTextStyle : GUIStyle;
 
 private var headerText = 70;
 private var bodyText = 50;
@@ -234,7 +238,12 @@ if (game.getMode() == GameMode.Team) {
                  if (teamShowEmpty) {
                      GUI.Button(Rect(guiInGame[3].offset.x / 1.5 + layoutOffset, guiInGame[3].offset.y, guiInGame[3].textureWidth, guiInGame[3].textureHeight), playerTextures[12], "FullImage");
                  } else {
-                     GUI.Button(Rect(guiInGame[3].offset.x / 1.5 + layoutOffset, guiInGame[3].offset.y, guiInGame[3].textureWidth, guiInGame[3].textureHeight), playerTextures[tempPlayer.getCharacter()], "FullImage");
+                     if (self == tempPlayer) {
+                         GUI.Button(Rect(guiInGame[3].offset.x / 1.5 + layoutOffset, guiInGame[3].offset.y, guiInGame[3].textureWidth, guiInGame[3].textureHeight), playerSelfTextures[tempPlayer.getCharacter()], "FullImage");
+                     } else {
+                        GUI.Button(Rect(guiInGame[3].offset.x / 1.5 + layoutOffset, guiInGame[3].offset.y, guiInGame[3].textureWidth, guiInGame[3].textureHeight), playerTextures[tempPlayer.getCharacter()], "FullImage");
+                    }
+
                      GUI.Label(Rect(guiInGame[3].offset.x / 1.5 + layoutOffset, guiInGame[3].offset.y + (Screen.height * 0.11), guiInGame[3].textureWidth, guiInGame[3].textureHeight), tempPlayer.getName(), "WhiteText");
 
                      if (tempPlayer.getRestartVote()) {
@@ -255,7 +264,9 @@ if (game.getMode() == GameMode.Team) {
                      if (GUI.Button(Rect(guiInGame[1].offset.x, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "RESTART", "GreenButton")) {
                          gameSetupScript.restartGame();
                      }
-                 }
+                 }  else if (Network.isServer && !game.canRestart()) {
+                     GUI.Button(Rect(guiInGame[1].offset.x, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "RESTART", "DisabledButton");
+                }
 
                  if (GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17), Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "GAME SETUP", "GreenButton")) {
                      gameSetupScript.returnToMenu();
@@ -300,28 +311,28 @@ if (game.getMode() == GameMode.Team) {
           }
 
           guiInGame[5].textureWidth = Screen.width / 9;
-          guiInGame[5].textureHeight = Screen.height / 1.15;
+          guiInGame[5].textureHeight = Screen.height / 1.1;
           guiInGame[5].setLocation(Points.TopLeft);
 
           guiInGame[6].textureWidth = Screen.width / 9;
-          guiInGame[6].textureHeight = Screen.height / 1.15;
+          guiInGame[6].textureHeight = Screen.height / 1.1;
           guiInGame[6].setLocation(Points.TopRight);
 
           guiInGame[7].textureWidth = Screen.width / 1.6;
           guiInGame[7].textureHeight = Screen.height / 4;
           guiInGame[7].setLocation(Points.Center);
 
-          guiInGame[8].textureWidth = Screen.width * 0.115;
-          guiInGame[8].textureHeight = Screen.height * 0.154;
+          guiInGame[8].textureWidth = Screen.width * 0.095;
+          guiInGame[8].textureHeight = Screen.height * 0.128;
           guiInGame[8].setLocation(Points.Center);
 
           if (team.getId() == 0) {
               GUI.DrawTexture(new Rect(guiInGame[7].offset.x, guiInGame[7].offset.y - guiInGame[7].offset.y / 2, guiInGame[7].textureWidth, guiInGame[7].textureHeight), purpleScoreTexture);
-              GUI.DrawTexture(new Rect(guiInGame[5].offset.x + (Screen.width * 0.032), guiInGame[5].offset.y + (Screen.width * 0.04), guiInGame[5].textureWidth, guiInGame[5].textureHeight), purpleOverlayTexture);
+              GUI.DrawTexture(new Rect(guiInGame[5].offset.x + (Screen.width * 0.029), guiInGame[5].offset.y + (Screen.height * 0.042), guiInGame[5].textureWidth, guiInGame[5].textureHeight), purpleOverlayTexture);
 
-              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x / 8, guiInGame[7].offset.y - (205 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), "Distance", "InGameText");
-              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x / 8, guiInGame[7].offset.y - (145 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), "Coins", "InGameText");
-              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x / 8, guiInGame[7].offset.y - (60 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), "Total Score", "ScoreText");
+              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x / 8, guiInGame[7].offset.y - (205 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), "Distance", "InGameWhiteText");
+              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x / 8, guiInGame[7].offset.y - (145 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), "Coins", "InGameWhiteText");
+              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x / 8, guiInGame[7].offset.y - (60 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), "Total Score", "ScoreWhiteText");
 
               cointText = "X " + team.getCoinCount();
 
@@ -329,18 +340,18 @@ if (game.getMode() == GameMode.Team) {
               guiInGame[4].textureHeight = Screen.height * 0.07;
               guiInGame[4].setLocation(Points.Center);
 
-              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, guiInGame[7].offset.y - (205 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), team.getDistance()+" m", "InGameBoldText");
-              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, guiInGame[7].offset.y - (145 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), cointText, "InGameBoldText");
-              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, guiInGame[7].offset.y - (60 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), team.getPoints()+ "", "ScoreBoldText");
+              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, guiInGame[7].offset.y - (205 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), team.getDistance()+" m", "InGameBoldWhiteText");
+              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, guiInGame[7].offset.y - (145 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), cointText, "InGameBoldWhiteText");
+              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, guiInGame[7].offset.y - (60 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), team.getPoints()+ "", "ScoreBoldWhiteText");
 
               GUI.Button(new Rect((guiInGame[7].offset.x + guiInGame[7].offset.x * 1.15) - guiInGame[7].textureWidth / 3, guiInGame[7].offset.y - (55 * getScale()), guiInGame[4].textureWidth, guiInGame[4].textureHeight), coinTexture, "FullImage");
           } else if (team.getId() == 1) {
               GUI.DrawTexture(new Rect(guiInGame[7].offset.x, guiInGame[7].offset.y + guiInGame[7].offset.y / 2 - guiInGame[7].offset.y / 6, guiInGame[7].textureWidth, guiInGame[7].textureHeight), blueScoreTexture);
-              GUI.DrawTexture(new Rect(guiInGame[6].offset.x - (Screen.width * 0.032), guiInGame[6].offset.y + (Screen.width * 0.05), guiInGame[6].textureWidth, guiInGame[6].textureHeight), blueOverlayTexture);
+              GUI.DrawTexture(new Rect(guiInGame[6].offset.x - (Screen.width * 0.035), guiInGame[6].offset.y + (Screen.height * 0.042), guiInGame[6].textureWidth, guiInGame[6].textureHeight), blueOverlayTexture);
 
-              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x / 8, 1.83 * guiInGame[7].offset.y - (205 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), "Distance", "InGameText");
-              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x / 8, 1.83 * guiInGame[7].offset.y - (145 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), "Coins", "InGameText");
-              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x / 8, 1.83 * guiInGame[7].offset.y - (60 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), "Total Score", "ScoreText");
+              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x / 8, 1.83 * guiInGame[7].offset.y - (205 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), "Distance", "InGameWhiteText");
+              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x / 8, 1.83 * guiInGame[7].offset.y - (145 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), "Coins", "InGameWhiteText");
+              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x / 8, 1.83 * guiInGame[7].offset.y - (60 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), "Total Score", "ScoreWhiteText");
 
               cointText = "X " + team.getCoinCount();
 
@@ -348,9 +359,9 @@ if (game.getMode() == GameMode.Team) {
               guiInGame[4].textureHeight = Screen.height * 0.07;
               guiInGame[4].setLocation(Points.Center);
 
-              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, 1.83 * guiInGame[7].offset.y - (205 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), team.getDistance() + " m", "InGameBoldText");
-              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, 1.83 * guiInGame[7].offset.y - (145 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), cointText, "InGameBoldText");
-              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, 1.83 * guiInGame[7].offset.y - (60 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), team.getPoints() + "", "ScoreBoldText");
+              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, 1.83 * guiInGame[7].offset.y - (205 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), team.getDistance() + " m", "InGameBoldWhiteText");
+              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, 1.83 * guiInGame[7].offset.y - (145 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), cointText, "InGameBoldWhiteText");
+              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, 1.83 * guiInGame[7].offset.y - (60 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), team.getPoints() + "", "ScoreBoldWhiteText");
 
               GUI.Button(new Rect((guiInGame[7].offset.x + guiInGame[7].offset.x * 1.15) - guiInGame[7].textureWidth / 3, 1.83 * guiInGame[7].offset.y - (55 * getScale()), guiInGame[4].textureWidth, guiInGame[4].textureHeight), coinTexture, "FullImage");
 
@@ -374,44 +385,39 @@ if (game.getMode() == GameMode.Team) {
 
               switch (d) {
               case 0:
-                  layoutOffset = (-2) * guiInGame[8].textureHeight - guiInGame[8].textureHeight / 4;
+                  layoutOffset = (-2) * guiInGame[8].textureHeight - guiInGame[8].textureHeight / 1.25;
                   break;
               case 1:
-                  layoutOffset = (-1) * guiInGame[8].textureHeight - guiInGame[8].textureHeight / 8;
+                  layoutOffset = (-1) * guiInGame[8].textureHeight - guiInGame[8].textureHeight / 2.5;
                   break;
               case 2:
                   layoutOffset = 0;
                   break;
               case 3:
-                  layoutOffset = (1) * guiInGame[8].textureHeight + guiInGame[8].textureHeight / 8;
+                  layoutOffset = (1) * guiInGame[8].textureHeight + guiInGame[8].textureHeight / 2.5;
                   break;
               case 4:
-                  layoutOffset = (2) * guiInGame[8].textureHeight + guiInGame[8].textureHeight / 4;
+                  layoutOffset = (2) * guiInGame[8].textureHeight + guiInGame[8].textureHeight / 1.25;
                   break;
               }
 
               if (team.getId() == 0) {
-
                 if (vsShowEmpty) {
-                  GUI.Button(Rect(guiInGame[5].offset.x + (Screen.width * 0.035), guiInGame[8].offset.y + layoutOffset + (Screen.height * 0.01), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerTextures[12], "FullImage");
+                    GUI.Button(Rect(guiInGame[5].offset.x + (Screen.width * 0.035), guiInGame[8].offset.y + layoutOffset - (Screen.height * 0.02), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerTextures[12], "FullImage");
                  } else {
-                    GUI.Button(Rect(guiInGame[5].offset.x + (Screen.width * 0.035), guiInGame[8].offset.y + layoutOffset + (Screen.height * 0.01), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerTextures[vsPlayer.getCharacter()], "FullImage");
-                    GUI.Label(Rect(guiInGame[5].offset.x + (Screen.width * 0.035), guiInGame[8].offset.y + layoutOffset + (Screen.height * 0.01), guiInGame[3].textureWidth, guiInGame[3].textureHeight), vsPlayer.getName(), "WhiteText");
+                    GUI.Button(Rect(guiInGame[5].offset.x + (Screen.width * 0.035), guiInGame[8].offset.y + layoutOffset - (Screen.height * 0.02), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerTextures[vsPlayer.getCharacter()], "FullImage");
+                    GUI.Label(Rect(guiInGame[5].offset.x + (Screen.width * 0.035), guiInGame[8].offset.y + layoutOffset + (Screen.height * 0.065), guiInGame[8].textureWidth, guiInGame[8].textureHeight), vsPlayer.getName(), "WhiteText");
 
                      if (vsPlayer.getRestartVote()) {
                          GUI.Button(Rect(guiInGame[3].offset.x / 1.5 + layoutOffset + guiInGame[3].textureWidth / 2 + (Screen.width * 0.01), guiInGame[3].offset.y - (Screen.height * 0.02), getScale() * 101.5, getScale() * 78.5), readyCheckMarkTexture, "FullImage");
                      }
-
                  }
-
-
               } else {
-
                  if (vsShowEmpty) {
-                    GUI.Button(Rect(guiInGame[6].offset.x - (Screen.width * 0.029), guiInGame[8].offset.y + layoutOffset + (Screen.height * 0.01), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerTextures[12], "FullImage");
+                    GUI.Button(Rect(guiInGame[6].offset.x - (Screen.width * 0.029), guiInGame[8].offset.y + layoutOffset - (Screen.height * 0.02), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerTextures[12], "FullImage");
                  } else {
-                    GUI.Button(Rect(guiInGame[6].offset.x - (Screen.width * 0.029), guiInGame[8].offset.y + layoutOffset + (Screen.height * 0.01), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerTextures[vsPlayer.getCharacter()], "FullImage");
-                    GUI.Label(Rect(guiInGame[5].offset.x + (Screen.width * 0.035), guiInGame[8].offset.y + layoutOffset + (Screen.height * 0.01), guiInGame[3].textureWidth, guiInGame[3].textureHeight), vsPlayer.getName(), "WhiteText");
+                    GUI.Button(Rect(guiInGame[6].offset.x - (Screen.width * 0.029), guiInGame[8].offset.y + layoutOffset - (Screen.height * 0.02), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerTextures[vsPlayer.getCharacter()], "FullImage");
+                    GUI.Label(Rect(guiInGame[6].offset.x - (Screen.width * 0.029), guiInGame[8].offset.y + layoutOffset + (Screen.height * 0.065), guiInGame[8].textureWidth, guiInGame[8].textureHeight), vsPlayer.getName(), "WhiteText");
 
                      if (vsPlayer.getRestartVote()) {
                          GUI.Button(Rect(guiInGame[3].offset.x / 1.5 + layoutOffset + guiInGame[3].textureWidth / 2 + (Screen.width * 0.01), guiInGame[3].offset.y - (Screen.height * 0.02), getScale() * 101.5, getScale() * 78.5), readyCheckMarkTexture, "FullImage");
@@ -563,6 +569,12 @@ function setUpStyles(){
     ingameBoldStyle = GUI.skin.GetStyle("InGameBoldText");
     ingameBoldStyle.fontSize = getScale() * xsmallText;
 
+    localWhiteStyle = GUI.skin.GetStyle("InGameWhiteText");
+    localWhiteStyle.fontSize = getScale() * xsmallText;
+
+    ingameBoldWhiteStyle = GUI.skin.GetStyle("InGameBoldWhiteText");
+    ingameBoldWhiteStyle.fontSize = getScale() * xsmallText;
+
     headerStyle = GUI.skin.GetStyle("Header");
     headerStyle.fontSize = getScale() * headerText;
 
@@ -595,6 +607,12 @@ function setUpStyles(){
 
     scoreBoldTextStyle = GUI.skin.GetStyle("ScoreBoldText");
     scoreBoldTextStyle.fontSize = getScale() * scoreText;
+
+    scoreWhiteTextStyle = GUI.skin.GetStyle("ScoreWhiteText");
+    scoreWhiteTextStyle.fontSize = getScale() * scoreText;
+
+    scoreBoldWhiteTextStyle = GUI.skin.GetStyle("ScoreBoldWhiteText");
+    scoreBoldWhiteTextStyle.fontSize = getScale() * scoreText;
 
     mvpTextStyle = GUI.skin.GetStyle("MVPHeader");
     mvpTextStyle.fontSize = getScale() * 55;
