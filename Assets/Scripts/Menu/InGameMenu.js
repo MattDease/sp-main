@@ -174,19 +174,28 @@ function OnGUI(){
             }
         }
 
-        //Only display arrow once if there are charactres off screen, its offset should be average of the players
-        var arrowOffset : int = 200 * getScale();
-        GUI.DrawTexture(new Rect(guiInGame[12].offset.x + guiInGame[12].textureWidth/2, guiInGame[12].offset.y + arrowOffset, guiInGame[12].textureWidth, guiInGame[12].textureHeight), sideArrow);
-
+        var offscreenCount : int = 0;
+        var offsetTotal : float = 0;
         //Show cards for each player off screen
-        var playerOffset : int = 200 * getScale();
         for(var player : Player in self.getTeam().getTeammates().Values){
-            GUI.Button(new Rect(guiInGame[13].offset.x + guiInGame[13].textureWidth , guiInGame[13].offset.y + playerOffset, guiInGame[13].textureWidth, guiInGame[13].textureHeight), miniPlayerTextures[player.getCharacter()], "FullImage");
+            if(player.getId() == self.getId()){
+                continue;
+            }
+            var pos : Vector3 = player.getPosition();
+            pos.y += 0.5;
+            var screenPosition : Vector3 = Camera.main.WorldToScreenPoint(pos);
+            if(screenPosition.x < 0){
+                var playerOffset : float = Screen.height - screenPosition.y;
+                GUI.Button(new Rect(guiInGame[13].offset.x + guiInGame[13].textureWidth , playerOffset, guiInGame[13].textureWidth, guiInGame[13].textureHeight), miniPlayerTextures[player.getCharacter()], "FullImage");
+                offsetTotal += screenPosition.y;
+                offscreenCount++;
+            }
         }
-
-
-
-
+        //Only display arrow once if there are charactres off screen, its offset should be average of the players
+        if(offscreenCount > 0){
+            var arrowOffset : float = Screen.height - (offsetTotal/offscreenCount);
+            GUI.DrawTexture(new Rect(guiInGame[12].offset.x + guiInGame[12].textureWidth/2, arrowOffset, guiInGame[12].textureWidth, guiInGame[12].textureHeight), sideArrow);
+        }
     }
 
     if(gameState == GameState.Loading){
