@@ -16,6 +16,7 @@ private var camContainer : GameObject;
 private var platform : GameObject = null;
 private var egg : GameObject;
 private var eggScript : EggScript;
+private var soundScript : RunnerSoundScript;
 
 private var targetSpeed : float = Config.RUN_SPEED;
 private var currentSpeed : float = Config.RUN_SPEED;
@@ -34,6 +35,8 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 
 @RPC
 function initRunner(playerId : String, teamId : int){
+    soundScript = GetComponentInChildren(RunnerSoundScript);
+
     player = Util.GetPlayerById(playerId) as Runner;
     model = gameObject.transform.Find("model").gameObject;
     animator = model.GetComponent(Animator);
@@ -113,6 +116,9 @@ function Update(){
         }
     }
     if(animState.IsName("Base Layer.AttackRight") || transState.IsUserName("startAttack")){
+        if(animator.GetBool("Attack")){
+            soundScript.playAttack();
+        }
         animator.SetBool("Attack", false);
         currentSpeed = targetSpeed + Config.ATTACK_BOOST;
     }
@@ -230,6 +236,7 @@ function kill(id : String, info : NetworkMessageInfo){
         rigidbody.angularVelocity = Vector3(0, 0, 5);
         rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
     }
+    soundScript.playDeath();
     gameObject.layer = LayerMask.NameToLayer("Dead");
 
     var runner : Runner = Util.GetPlayerById(id) as Runner;
@@ -244,12 +251,13 @@ function jump(){
         if(animState.IsName("Base Layer.Locomotion")){
             animator.SetBool("Jump", true);
             rigidbody.velocity.y = Config.JUMP_SPEED;
+            soundScript.playJump();
         }
         else if(animState.IsName("Base Layer.Jump")){
             animator.SetBool("IsDoubleJump", true);
             isDoubleJump = true;
             rigidbody.velocity.y = Config.JUMP_SPEED;
-        }
+            soundScript.playJump();        }
     }
 }
 
@@ -271,6 +279,7 @@ function attack(){
 
 @RPC
 function grab(){
+    soundScript.playCatch();
     animator.SetTrigger("Catch");
 }
 
@@ -286,6 +295,7 @@ function toss(forward : boolean){
 
 @RPC
 function syncToss(){
+    soundScript.playThrow();
     animator.SetBool("Catch", false);
     animator.SetBool("Toss", true);
 }
