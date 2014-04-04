@@ -23,6 +23,10 @@ private var purpleOverlayTexture : Texture2D;
 private var blueOverlayTexture : Texture2D;
 private var inGameOverlay : Texture2D;
 
+private var purpleEgg : Texture2D;
+private var blueEgg : Texture2D;
+private var sideArrow : Texture2D;
+
 private var menuSkin : GUISkin;
 private var localStyle :GUIStyle;
 private var ingameBoldStyle : GUIStyle;
@@ -54,14 +58,17 @@ private var xsmallText = 35;
 
 private var playerTexture : Texture2D;
 private var playerSelfTexture : Texture2D;
-private var playerTextures :Texture[ ] = new Texture[13];
-private var playerSelfTextures :Texture[ ] = new Texture[13];
+private var playerMiniTexture : Texture2D;
+private var playerTextures :Texture[] = new Texture[13];
+private var playerSelfTextures :Texture[] = new Texture[13];
+private var miniPlayerTextures :Texture[] = new Texture[13];
+
 
 private var mvp: Runner;
 
 
 private var guiInGame: GuiClasses [];
-guiInGame = new GuiClasses[11];
+guiInGame = new GuiClasses[14];
 for (var z = 0; z < guiInGame.length; z++) {
     guiInGame[z] = new GuiClasses();
 }
@@ -89,6 +96,8 @@ function Start(){
     purpleOverlayTexture = Resources.Load("Textures/gui/purpleTeamOverlay", Texture2D);
     blueOverlayTexture = Resources.Load("Textures/gui/blueTeamOVerlay", Texture2D);
     inGameOverlay = Resources.Load("Textures/gui/inGameBar", Texture2D);
+    purpleEgg = Resources.Load("Textures/gui/eggPurple", Texture2D);
+    sideArrow = Resources.Load("Textures/gui/side_arrow", Texture2D);
 
     menuSkin = Resources.Load("MenuSkin", GUISkin);
 
@@ -96,15 +105,22 @@ function Start(){
         if (i < 9) {
             playerTexture = Resources.Load("Textures/gui/player" + i, Texture2D);
             playerSelfTexture = Resources.Load("Textures/gui/player" + i + "_self", Texture2D);
+            playerMiniTexture = Resources.Load("Textures/gui/player" + i + "_mini", Texture2D);
         } else if (i < 12) {
             playerTexture = Resources.Load("Textures/gui/commander" + i, Texture2D);
             playerSelfTexture = Resources.Load("Textures/gui/commander" + i + "_self", Texture2D);
+            playerMiniTexture = Resources.Load("Textures/gui/commander" + i, Texture2D);
+
         } else {
             playerTexture = Resources.Load("Textures/gui/player_empty", Texture2D);
             playerSelfTexture = Resources.Load("Textures/gui/player_empty_self", Texture2D);
+            playerMiniTexture = Resources.Load("Textures/gui/player_empty", Texture2D);
+
         }
         playerTextures[i] = playerTexture;
         playerSelfTextures[i] = playerSelfTexture;
+        miniPlayerTextures[i] = playerMiniTexture;
+
     }
 
 }
@@ -121,7 +137,7 @@ function OnGUI(){
 
     if(gameState == gameState.Playing){
 
-        guiInGame[9].textureWidth = 500 * getScale();
+        guiInGame[9].textureWidth = 540 * getScale();
         guiInGame[9].textureHeight = 100 * getScale();
         guiInGame[9].setLocation(Points.TopRight);
 
@@ -133,9 +149,43 @@ function OnGUI(){
 
         GUI.DrawTexture(new Rect(guiInGame[9].offset.x - guiInGame[9].textureHeight/2, guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), inGameOverlay);
         GUI.DrawTexture(new Rect(guiInGame[10].offset.x - guiInGame[9].textureHeight/2 - guiInGame[9].textureHeight/2 - (Screen.width * 0.05), guiInGame[10].offset.y + guiInGame[9].textureHeight/2 + guiInGame[10].textureHeight/4, guiInGame[10].textureWidth, guiInGame[10].textureHeight), coinTexture);
-
         GUI.Label(new Rect(guiInGame[10].offset.x - guiInGame[9].textureHeight/2 - guiInGame[9].textureHeight/2, guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), "X " + myTeam.getCoinCount(), "InGameBoldWhiteText");
         GUI.Label(new Rect(guiInGame[10].offset.x - guiInGame[9].textureHeight/2 - guiInGame[9].textureHeight/2 -(Screen.width * 0.38), guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), myTeam.getDistance() + " m", "InGameBoldWhiteText_R");
+
+       //PROGRESS BAR && OFF SCREEN PLAYER CARDS
+
+        guiInGame[11].textureWidth = 70 * getScale();
+        guiInGame[11].textureHeight = 80 * getScale();
+        guiInGame[11].setLocation(Points.BottomLeft);
+
+        guiInGame[12].textureWidth = 44 * getScale();
+        guiInGame[12].textureHeight = 80 * getScale();
+        guiInGame[12].setLocation(Points.TopLeft);
+
+        guiInGame[13].textureWidth = 80 * getScale();
+        guiInGame[13].textureHeight = 80 * getScale();
+        guiInGame[13].setLocation(Points.TopLeft);
+
+        // TO DO: Change offset, playerOffset and arrowOffset accordingly
+         if (game.getMode() == GameMode.Versus) {
+            for (var team: Team in game.getTeams()) {
+                var offset : int =  200 * team.getId() * getScale(); //get offset using fun math stuff!
+                GUI.DrawTexture(new Rect(guiInGame[11].offset.x + offset, guiInGame[11].offset.y, guiInGame[11].textureWidth, guiInGame[11].textureHeight), (team.getId() == 0 ? purpleEgg : blueEgg));
+            }
+        }
+
+        //Only display arrow once if there are charactres off screen, its offset should be average of the players
+        var arrowOffset : int = 200 * getScale();
+        GUI.DrawTexture(new Rect(guiInGame[12].offset.x + guiInGame[12].textureWidth/2, guiInGame[12].offset.y + arrowOffset, guiInGame[12].textureWidth, guiInGame[12].textureHeight), sideArrow);
+
+        //Show cards for each player off screen
+        var playerOffset : int = 200 * getScale();
+        for(var player : Player in self.getTeam().getTeammates().Values){
+            GUI.Button(new Rect(guiInGame[13].offset.x + guiInGame[13].textureWidth , guiInGame[13].offset.y + playerOffset, guiInGame[13].textureWidth, guiInGame[13].textureHeight), miniPlayerTextures[player.getCharacter()], "FullImage");
+        }
+
+
+
 
     }
 
@@ -649,8 +699,7 @@ function setUpStyles(){
     GUI.skin.textField.fontSize = getScale() * bodyText;
 }
 
-function getScale () : float
-{
+function getScale () : float{
     return Screen.height / optimizedHeight;
 }
 
