@@ -27,11 +27,12 @@ public enum GameMode {
 
 // Team validity status
 public enum TeamStatus {
-    // Team is valid
     Valid,
-    // Team is not valid
-    // TODO - add values for the various ways a team could be invalid
-    TEMP_NO
+    NoCommander,
+    NeedsRunner,
+    ManyCommanders,
+    NotReady,
+    NoCharacter
 }
 
 public enum PlayerRole {

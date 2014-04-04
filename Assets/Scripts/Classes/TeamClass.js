@@ -7,7 +7,7 @@ public class Team{
     public var runnerCreationCount : int = 0;
 
     private var teammates : Dictionary.<String,Player> = new Dictionary.<String,Player>();
-    private var commander : Commander;
+    private var commander : Commander = null;
     private var runners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
     private var activeRunners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
     private var selectedCharacters : List.<int> = new List.<int>();
@@ -22,6 +22,10 @@ public class Team{
 
     public function Team(id : int){
         this.id = id;
+    }
+
+    public function getName() : String {
+        return Config.TEAM_NAME[this.id];
     }
 
     public function reset() {
@@ -51,8 +55,37 @@ public class Team{
     }
 
     public function isValid() : TeamStatus {
-        // TODO - replace with a more comprehensive implementation
-        return runners.Count > 0 ? TeamStatus.Valid : TeamStatus.TEMP_NO;
+        if(Config.VALIDATION_SKIP){
+            return TeamStatus.Valid;
+        }
+
+        if(commander == null){
+            return TeamStatus.NoCommander;
+        }
+        if(runners.Count < 2){
+            return TeamStatus.NeedsRunner;
+        }
+        var readyCount : int = 0;
+        var commanderCount : int = 0;
+        for(var player : Player in teammates.Values){
+            if(player.GetType() == Player){
+                return TeamStatus.NoCharacter;
+            }
+            if(player.GetType() == Commander){
+                commanderCount++;
+            }
+            if(player.getReadyStatus()){
+                readyCount++;
+            }
+        }
+        if(commanderCount > 1){
+            return TeamStatus.ManyCommanders;
+        }
+        if(readyCount < teammates.Count){
+            return TeamStatus.NotReady;
+        }
+
+        return TeamStatus.Valid;
     }
 
     public function isReady() : boolean {

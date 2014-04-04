@@ -289,28 +289,40 @@ public class Game {
         var teamValid : boolean = true;
         var tempStatus : String = "";
 
-        if(Config.VALIDATION_SKIP) {
-            teamValid = true;
-        } else {
-
-            for(var team : Team in teams){
-                if(team.isValid() != TeamStatus.Valid){
-                    tempStatus = "Oh no! Team setup is wrong. Need 2 runners and 1 commander.";
-                    teamValid = false;
-                } else if(!team.isReady()) {
-                    //If all memvers in team are not ready, we can't start game.
-                   tempStatus = "All team members must be ready";
-                   teamValid = false;
+        for(var team : Team in teams){
+            var status : TeamStatus = team.isValid();
+            switch(status){
+                case TeamStatus.NoCommander :
+                setGameStatus(getStatusPrefix(team) + " needs a commander.");
+                break;
+                case TeamStatus.NeedsRunner :
+                setGameStatus(getStatusPrefix(team) + " needs a two runners.");
+                break;
+                case TeamStatus.ManyCommanders :
+                setGameStatus(getStatusPrefix(team) + " can only have one commander.");
+                break;
+                case TeamStatus.NotReady :
+                for(var player : Player in team.getTeammates().Values){
+                    if(!player.getReadyStatus()){
+                        setGameStatus(player.getName() + " is not ready.");
+                        break;
+                    }
                 }
+                break;
+                case TeamStatus.NoCharacter :
+                for(var player : Player in team.getTeammates().Values){
+                    if(player.GetType() == Player){
+                        setGameStatus(player.getName() + " has not selected a character.");
+                        break;
+                    }
+                }
+                break;
+            }
+            if(status != TeamStatus.Valid){
+                return false;
             }
         }
-
-        if(!teamValid) {
-            setGameStatus(tempStatus);
-            return false;
-        }
-
-        setGameStatus("All good! :)");
+        setGameStatus("Everyone is ready to start.");
         return true;
     }
 
@@ -359,6 +371,17 @@ public class Game {
         }
 
         return new Commander(name, teamId, team, networkPlayer);
+    }
+
+    private function getStatusPrefix(team : Team) : String {
+        var prefix : String;
+        if(mode == GameMode.Team){
+            prefix = "Your team";
+        }
+        else{
+            prefix = "Team " + team.getName();
+        }
+        return prefix;
     }
 
     public function setGameStatus(status: String) {
