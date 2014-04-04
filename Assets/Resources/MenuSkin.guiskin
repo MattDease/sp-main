@@ -295,7 +295,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 0}
-    m_FontSize: 17
+    m_FontSize: 22
     m_FontStyle: 0
     m_Alignment: 3
     m_WordWrap: 0
@@ -1297,7 +1297,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: fead603e66f6646dc990de8bef04c3c5, type: 3}
-    m_FontSize: 10
+    m_FontSize: 15
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 0
@@ -1355,7 +1355,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: fead603e66f6646dc990de8bef04c3c5, type: 3}
-    m_FontSize: 10
+    m_FontSize: 13
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 0
@@ -1587,7 +1587,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: 0c40687b12b2047759d33c731e61bc97, type: 3}
-    m_FontSize: 12
+    m_FontSize: 15
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 1
@@ -1645,7 +1645,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: 0c40687b12b2047759d33c731e61bc97, type: 3}
-    m_FontSize: 17
+    m_FontSize: 22
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 1
@@ -1703,7 +1703,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: 0c40687b12b2047759d33c731e61bc97, type: 3}
-    m_FontSize: 12
+    m_FontSize: 15
     m_FontStyle: 0
     m_Alignment: 3
     m_WordWrap: 1
@@ -1761,7 +1761,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: fead603e66f6646dc990de8bef04c3c5, type: 3}
-    m_FontSize: 12
+    m_FontSize: 15
     m_FontStyle: 0
     m_Alignment: 5
     m_WordWrap: 1
@@ -1819,7 +1819,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: fead603e66f6646dc990de8bef04c3c5, type: 3}
-    m_FontSize: 17
+    m_FontSize: 22
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 1
@@ -1877,7 +1877,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: fead603e66f6646dc990de8bef04c3c5, type: 3}
-    m_FontSize: 13
+    m_FontSize: 18
     m_FontStyle: 0
     m_Alignment: 3
     m_WordWrap: 1
@@ -1935,7 +1935,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: fead603e66f6646dc990de8bef04c3c5, type: 3}
-    m_FontSize: 13
+    m_FontSize: 18
     m_FontStyle: 0
     m_Alignment: 5
     m_WordWrap: 1
@@ -1993,7 +1993,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: fead603e66f6646dc990de8bef04c3c5, type: 3}
-    m_FontSize: 13
+    m_FontSize: 18
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 1
@@ -2008,10 +2008,10 @@ MonoBehaviour:
   - m_Name: Header
     m_Normal:
       m_Background: {fileID: 0}
-      m_TextColor: {r: .301960796, g: .301960796, b: .301960796, a: 1}
+      m_TextColor: {r: 1, g: 1, b: 1, a: 1}
     m_Hover:
       m_Background: {fileID: 0}
-      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+      m_TextColor: {r: 1, g: 1, b: 1, a: 1}
     m_Active:
       m_Background: {fileID: 0}
       m_TextColor: {r: 0, g: 0, b: 0, a: 1}
@@ -2051,7 +2051,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: 55050354259354b118fb2461766c0983, type: 3}
-    m_FontSize: 20
+    m_FontSize: 31
     m_FontStyle: 1
     m_Alignment: 4
     m_WordWrap: 1
@@ -2109,9 +2109,9 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: 55050354259354b118fb2461766c0983, type: 3}
-    m_FontSize: 24
+    m_FontSize: 31
     m_FontStyle: 1
-    m_Alignment: 4
+    m_Alignment: 5
     m_WordWrap: 1
     m_RichText: 1
     m_TextClipping: 0
@@ -2167,7 +2167,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: 55050354259354b118fb2461766c0983, type: 3}
-    m_FontSize: 19
+    m_FontSize: 24
     m_FontStyle: 1
     m_Alignment: 3
     m_WordWrap: 1
@@ -2283,7 +2283,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: 0c40687b12b2047759d33c731e61bc97, type: 3}
-    m_FontSize: 10
+    m_FontSize: 15
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 1
@@ -2341,7 +2341,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: 0c40687b12b2047759d33c731e61bc97, type: 3}
-    m_FontSize: 10
+    m_FontSize: 13
     m_FontStyle: 0
     m_Alignment: 3
     m_WordWrap: 1
@@ -2399,7 +2399,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: 0c40687b12b2047759d33c731e61bc97, type: 3}
-    m_FontSize: 10
+    m_FontSize: 13
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 1
@@ -2515,7 +2515,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: fead603e66f6646dc990de8bef04c3c5, type: 3}
-    m_FontSize: 10
+    m_FontSize: 13
     m_FontStyle: 1
     m_Alignment: 4
     m_WordWrap: 1
