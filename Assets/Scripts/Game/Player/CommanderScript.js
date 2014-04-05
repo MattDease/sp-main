@@ -42,6 +42,10 @@ function initCommander(playerId : String, teamId : int){
         camContainer = Instantiate(cameraPrefab, Vector3.zero,  Quaternion.identity);
         Camera.main.transparencySortMode = TransparencySortMode.Orthographic;
 
+        if(Config.MUTE_SOUND){
+            GetComponentInChildren(AudioListener).volume = 0;
+        }
+
         var playerPosition : Vector3 = gameObject.transform.position;
         var viewport : Vector3 = Camera.main.WorldToViewportPoint(playerPosition);
         viewport.x = 0.5;

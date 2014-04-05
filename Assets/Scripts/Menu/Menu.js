@@ -30,6 +30,11 @@ function Awake(){
 function Start(){
     playerScript = gameManager.GetComponent(PlayerScript);
     stateScript = gameManager.GetComponent(StateScript);
+
+    if(Config.MUTE_SOUND){
+        GetComponentInChildren(AudioListener).volume = 0;
+    }
+
     open();
 }
 

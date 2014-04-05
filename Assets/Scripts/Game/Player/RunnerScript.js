@@ -54,6 +54,10 @@ function initRunner(playerId : String, teamId : int){
         Camera.main.transform.localPosition += Camera.main.ViewportToWorldPoint(viewport);
         Camera.main.transparencySortMode = TransparencySortMode.Orthographic;
 
+        if(Config.MUTE_SOUND){
+            GetComponentInChildren(AudioListener).volume = 0;
+        }
+
         rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
 
         GetComponentInChildren(Projector).material.color = Config.TEAM_COLOR[player.getTeamId()];
