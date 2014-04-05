@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 557ad2874b4d44284afd65bdb3414494
 ModelImporter:
-  serializedVersion: 15
+  serializedVersion: 16
   fileIDToRecycleName:
     100000: curve1
     100002: dirt
@@ -60,6 +60,7 @@ ModelImporter:
     7400000: Idle
     7400002: Attack
     7400004: Death
+    7400006: Warning
     9500000: //RootNode
     13700000: worm
   materials:
@@ -305,6 +306,82 @@ ModelImporter:
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Warning
+      takeName: Take 001
+      firstFrame: 4
+      lastFrame: 4.0999999
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: curve1
+        weight: 1
+      - path: curve1/nurbsCircle4
+        weight: 1
+      - path: curve1/nurbsCircle4/nurbsCircle3
+        weight: 1
+      - path: curve1/nurbsCircle4/nurbsCircle3/nurbsCircle1
+        weight: 1
+      - path: curve1/nurbsCircle4/nurbsCircle3/nurbsCircle1/nurbsCircle2
+        weight: 1
+      - path: curve1/nurbsCircle4/nurbsCircle3/nurbsCircle1/nurbsCircle2/nurbsCircle5
+        weight: 1
+      - path: curve1/nurbsCircle4/nurbsCircle3/nurbsCircle1/nurbsCircle2/nurbsCircle5/nurbsCircle6
+        weight: 1
+      - path: curve1/nurbsCircle4/nurbsCircle3/nurbsCircle1/nurbsCircle2/nurbsCircle5/nurbsCircle6/nurbsCircle7
+        weight: 1
+      - path: curve1/nurbsCircle4/nurbsCircle3/nurbsCircle1/nurbsCircle2/nurbsCircle5/nurbsCircle8
+        weight: 1
+      - path: curve1/nurbsCircle4/nurbsCircle3/nurbsCircle1/nurbsCircle2/nurbsCircle5/nurbsCircle8/nurbsCircle9
+        weight: 1
+      - path: dirt
+        weight: 1
+      - path: joint1
+        weight: 1
+      - path: joint1/joint2
+        weight: 1
+      - path: joint1/joint2/joint3
+        weight: 1
+      - path: joint1/joint2/joint3/joint4
+        weight: 1
+      - path: joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: joint1/joint2/joint3/joint4/joint5/joint6/joint7
+        weight: 1
+      - path: joint1/joint2/joint3/joint4/joint5/joint6/joint7/joint8
+        weight: 1
+      - path: joint1/joint2/joint3/joint4/joint5/joint6/joint7/joint8/joint9
+        weight: 1
+      - path: joint1/joint2/joint3/joint4/joint5/joint6/joint10
+        weight: 1
+      - path: joint1/joint2/joint3/joint4/joint5/joint6/joint10/joint11
+        weight: 1
+      - path: joint1/joint2/joint3/joint4/joint5/joint6/joint10/joint11/joint12
+        weight: 1
+      - path: worm
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -341,4 +418,5 @@ ModelImporter:
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
+  additionalBone: 0
   userData: 

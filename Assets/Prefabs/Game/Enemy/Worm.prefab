@@ -397,7 +397,7 @@ GameObject:
   - 82: {fileID: 8200000}
   m_Layer: 0
   m_Name: Worm
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -610,7 +610,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100034}
-  m_LocalRotation: {x: 0, y: .0326297134, z: -0, w: .999467492}
+  m_LocalRotation: {x: 0, y: .0326297171, z: -0, w: .999467552}
   m_LocalPosition: {x: -3.55271368e-15, y: 3.56189001e-15, z: -6.06785393}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -634,7 +634,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100038}
-  m_LocalRotation: {x: .622720063, y: .121156044, z: .118352309, w: .763893723}
+  m_LocalRotation: {x: .622720122, y: .121156052, z: .118352316, w: .763893783}
   m_LocalPosition: {x: -2.63632192e-08, y: 5.37180471, z: -1.44328993e-15}
   m_LocalScale: {x: .220079288, y: .220079288, z: .966584802}
   m_Children:
@@ -657,7 +657,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100042}
-  m_LocalRotation: {x: -.457869172, y: .538846672, z: -.457869232, w: .538846731}
+  m_LocalRotation: {x: -.457869202, y: .538846731, z: -.457869262, w: .538846791}
   m_LocalPosition: {x: -.0879289806, y: -1.87438595, z: 1.47761219e-12}
   m_LocalScale: {x: .99999994, y: 1, z: 1}
   m_Children:

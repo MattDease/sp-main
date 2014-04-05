@@ -348,7 +348,7 @@ function OnTriggerEnter(other : Collider){
         if(animState.IsName("Base Layer.AttackRight") || transState.IsUserName("startAttack") || transState.IsUserName("stopAttack")){
             enemyScript.notifyKill();
         }
-        else if(networkView.isMine && enemyScript.isAlive()){
+        else if(networkView.isMine && enemyScript.isAlive() && enemyScript.isAttacking()){
             killMe();
             enemyScript.notifyAttack();
         }
