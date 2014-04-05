@@ -89,9 +89,11 @@ function Update(){
             var hit : RaycastHit;
             if (Physics.Raycast(transform.position, Vector3.forward, hit, 4)){
                 if(hit.collider.gameObject.CompareTag("enemy")){
-                    hit.collider.gameObject.GetComponent(EnemyScript).notifyKill();
-                    attack();
-                    networkView.RPC("attack", RPCMode.Others);
+                    var enemyScript : EnemyScript = hit.collider.gameObject.GetComponent(EnemyScript);
+                    if(enemyScript.isAttacking()){
+                        enemyScript.notifyKill();
+                        networkView.RPC("attack", RPCMode.All);
+                    }
                 }
                 if(!platform){
                     if(Vector3.Distance(transform.position, targetPosition) < 0.3){

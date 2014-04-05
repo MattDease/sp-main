@@ -198,7 +198,7 @@ function LateUpdate(){
             if(team.getRunners(true).Count > 0){
                 targetPosition = team.getObserverCameraPosition();
             }
-            else{
+            else if(game.getMode() == GameMode.Versus){
                 var opposingTeam : Team = game.getTeam(team.getId() == 0 ? 1 : 0);
                 if(opposingTeam.getRunners(true).Count > 0){
                     targetPosition = opposingTeam.getObserverCameraPosition();
@@ -348,7 +348,7 @@ function OnTriggerEnter(other : Collider){
         if(animState.IsName("Base Layer.AttackRight") || transState.IsUserName("startAttack") || transState.IsUserName("stopAttack")){
             enemyScript.notifyKill();
         }
-        else if(networkView.isMine && enemyScript.isAlive()){
+        else if(networkView.isMine && enemyScript.isAlive() && enemyScript.isAttacking()){
             killMe();
             enemyScript.notifyAttack();
         }

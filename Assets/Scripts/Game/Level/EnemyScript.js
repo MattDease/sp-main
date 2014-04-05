@@ -57,6 +57,9 @@ function Update(){
     if(animState.IsName("Base Layer.Attack") && !animator.IsInTransition(0)){
         if(type != EnemyType.Cardinal){
             animator.SetBool("attack", false);
+            if(type == EnemyType.Worm){
+                animator.SetBool("warn", false);
+            }
         }
     }
     if(animState.IsName("Base Layer.Idle") && !animator.IsInTransition(0)){
@@ -104,6 +107,9 @@ function Update(){
         }
     }
     else if(type == EnemyType.Worm){
+        if(Time.time - lastWormAttack > Config.WORM_DELAY/2){
+            networkView.RPC("warn", RPCMode.All);
+        }
         if(Time.time - lastWormAttack > Config.WORM_DELAY && idle){
             idle = false;
             notifyAttack();
@@ -122,6 +128,17 @@ function Update(){
 
 function isAlive(){
     return alive;
+}
+
+function isAttacking(){
+    if(type == EnemyType.Worm){
+        var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        var transState : AnimatorTransitionInfo = animator.GetAnimatorTransitionInfo(0);
+        return animState.IsName("Base Layer.Attack") || transState.IsUserName("startAttack") || transState.IsUserName("stopAttack");
+    }
+    else{
+        return true;
+    }
 }
 
 function notifyKill(){
@@ -184,6 +201,11 @@ function attack(){
 function syncAttack(){
     attackSound.Play();
     animator.SetBool("attack", true);
+}
+
+@RPC
+function warn(){
+    animator.SetBool("warn", true);
 }
 
 function hide(){
