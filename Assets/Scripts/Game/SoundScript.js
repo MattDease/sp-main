@@ -5,7 +5,9 @@ public var gameStart : AudioSource;
 public var gameEnd : AudioSource;
 
 function playCountdown(){
-    countdown.Play();
+    if(countdown){
+        countdown.Play();
+    }
 }
 
 function playGameStart(){

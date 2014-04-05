@@ -555,6 +555,17 @@ function enter(isNew: boolean) {
         gameSetupScript.game = new Game();
     }
 
+    if (Network.isClient) {
+        gameSetupScript.registerPlayerProxy(playerScript.getName());
+    }
+
+    // Redifine scripts when returning here from in-game
+    if(!playerScript){
+        gameManager = GameObject.Find("/GameManager");
+        playerScript = gameManager.GetComponent(PlayerScript);
+        gameSetupScript = gameManager.GetComponent(GameSetupScript);
+    }
+
     if(isHosting){
         if(gameSetupScript && gameSetupScript.game != null && gameSetupScript.game.getName() != ""){
             gameName = gameSetupScript.game.getName();
@@ -562,10 +573,6 @@ function enter(isNew: boolean) {
         else{
             gameName = playerScript.getName() + "'s Game";
         }
-    }
-
-    if (Network.isClient) {
-        gameSetupScript.registerPlayerProxy(playerScript.getName());
     }
 }
 
