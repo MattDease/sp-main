@@ -12,6 +12,8 @@ public static class Config{
     public var USE_EGG : boolean = false;
     //Enable/Disable the tutorial signs in the game
     public var USE_SIGNS : boolean = true;
+    // Enable/Disable all sounds and music
+    public var MUTE_SOUND : boolean = false;
 
     //// GAMEPLAY
     // Once all players are ready, the delay in seconds before the game starts.

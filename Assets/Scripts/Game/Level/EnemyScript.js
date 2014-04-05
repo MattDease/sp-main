@@ -1,6 +1,8 @@
 ﻿#pragma strict
 
 public var type : EnemyType;
+public var attackSound : AudioSource;
+public var deathSound : AudioSource;
 
 private var game : Game;
 private var model : GameObject;
@@ -146,6 +148,7 @@ function kill(){
 @RPC
 function syncKill(){
     alive = false;
+    deathSound.Play();
     animator.SetBool("death", true);
     gameObject.layer = LayerMask.NameToLayer("Dead");
     if(type == EnemyType.Worm){
@@ -179,6 +182,7 @@ function attack(){
 
 @RPC
 function syncAttack(){
+    attackSound.Play();
     animator.SetBool("attack", true);
 }
 

@@ -116,3 +116,4 @@ MonoBehaviour:
   GameScripts: {fileID: 100000, guid: 75fa353ed2374bb47991945f489737d9, type: 2}
   Gestures: {fileID: 100000, guid: 28c71c97df478c04fa37f95bd4c2e2b7, type: 2}
   GameLight: {fileID: 100000, guid: bea9d30cd2bfdef4790a8783a29a5886, type: 2}
+  Music: {fileID: 100000, guid: 37306f590366398479c6b5d6f708d65e, type: 2}

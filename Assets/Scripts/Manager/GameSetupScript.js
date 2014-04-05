@@ -17,6 +17,7 @@ private var playerScript : PlayerScript;
 private var stateScript : StateScript;
 // Game Scripts
 private var levelManager : LevelManager;
+private var soundScript : SoundScript;
 private var gameMenu : GameMenu;
 
 private var readyPlayerCount : int = 0;
@@ -24,6 +25,7 @@ private var restartReadyCount : int = 0;
 private var startTime : double;
 private var lastLevelPrefix : int = 0;
 private var isLeaving : boolean = false;
+private var prevSecondsLeft : int = -1;
 
 function Start(){
     playerScript = GetComponent(PlayerScript);
@@ -93,27 +95,32 @@ function startCountDown(info : NetworkMessageInfo){
 }
 
 function getCountDown() : int {
+    var secondsLeft = -1;
     if(startTime){
         var delay : double = startTime - Time.time;
         if(delay < 0){
-            return 0;
+            secondsLeft = 0;
         }
         else{
-            return Mathf.Ceil(delay);
+            secondsLeft = Mathf.Ceil(delay);
         }
     }
-    else{
-        return -1;
+    if(secondsLeft != prevSecondsLeft){
+        soundScript.playCountdown();
     }
+    prevSecondsLeft = secondsLeft;
+    return secondsLeft;
 }
 
 function startGame(){
+    soundScript.playGameStart();
     game.start();
 }
 
 function OnNetworkLoadedLevel(){
     if(game.isValid()){
         levelManager = GameObject.Find("GameScripts").GetComponent(LevelManager);
+        soundScript = GameObject.Find("GameScripts").GetComponent(SoundScript);
 
         if(Network.isServer){
             for(var team : Team in game.getTeams()){
@@ -163,6 +170,7 @@ function loadLevel(level : String, levelPrefix : int){
 @RPC
 function resetGame(){
     readyPlayerCount = 0;
+    prevSecondsLeft = -1;
     game.reset();
     if(Network.isServer){
         readyToRestart(playerScript.getSelf().getId());
