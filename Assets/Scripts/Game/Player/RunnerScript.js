@@ -198,7 +198,7 @@ function LateUpdate(){
             if(team.getRunners(true).Count > 0){
                 targetPosition = team.getObserverCameraPosition();
             }
-            else{
+            else if(game.getMode() == GameMode.Versus){
                 var opposingTeam : Team = game.getTeam(team.getId() == 0 ? 1 : 0);
                 if(opposingTeam.getRunners(true).Count > 0){
                     targetPosition = opposingTeam.getObserverCameraPosition();
