@@ -83,6 +83,7 @@ function OnGUI() {
             guiLogin[4].setLocation(Points.TopRight);
 
             if (GUI.Button(Rect(guiLogin[4].offset.x, guiLogin[4].offset.y - Screen.height * 0.01, guiLogin[4].textureWidth, guiLogin[4].textureHeight), "CHANGE NAME", "GreenButton")) {
+                Util.playTap();
                 showNameChange = true;
             }
 
@@ -135,6 +136,7 @@ function OnGUI() {
         if (newName && GUI.Button(Rect(0, 0, Screen.width, Screen.height), "", "FullImage")) {
             playerName = newName;
             playerScript.setName(newName);
+            Util.playTap();
             leaveFor(menus.lobby);
         }
     }

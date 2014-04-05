@@ -74,6 +74,7 @@ function OnGUI() {
     guiObject[0].setLocation(Points.Center);
 
     if (GUI.Button(Rect(Screen.width - Screen.width * 0.09, guiObject[1].offset.y + Screen.height * 0.02, guiObject[1].textureWidth,  guiObject[1].textureHeight), "", "RefreshButton")) {
+        Util.playTap();
         netScript.FetchHostList(true);
     }
 
@@ -148,6 +149,7 @@ function OnGUI() {
     guiObject[5].setLocation(Points.BottomRight);
 
     if(GUI.Button(Rect(guiObject[5].offset.x, Screen.height - Screen.height * 0.13, guiObject[5].textureWidth, guiObject[5].textureHeight), "NEW GAME", "GreenButton")){
+        Util.playTap();
         leaveFor(menus.host);
     }
 
@@ -160,6 +162,7 @@ function joinGame(element : HostData, placementX : float, placementY : float){
         netScript.connect(element, onConnect);
         connectionErrorMsg = "";
         isConnecting = true;
+        Util.playTap();
     }
 
 }

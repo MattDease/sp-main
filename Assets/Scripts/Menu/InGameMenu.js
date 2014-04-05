@@ -367,10 +367,12 @@ function OnGUI(){
              if (Network.isServer) {
                  if (!self.getRestartVote()) {
                      if (game.isValid() && GUI.Button(Rect(guiInGame[1].offset.x, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "PLAY AGAIN?", "GreenButton")) {
+                         Util.playTap();
                          gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
                      }
                  } else if (Network.isServer && game.canRestart()) {
                      if (GUI.Button(Rect(guiInGame[1].offset.x, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "RESTART", "GreenButton")) {
+                         Util.playTap();
                          gameSetupScript.restartGame();
                      }
                  }  else if (Network.isServer && !game.canRestart()) {
@@ -378,10 +380,12 @@ function OnGUI(){
                 }
 
                  if (GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17), Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "GAME SETUP", "GreenButton")) {
+                    Util.playTap();
                      gameSetupScript.returnToMenu();
                  }
 
                  if (GUI.Button(Rect(guiInGame[1].offset.x - 2 * (Screen.width * 0.17), Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "QUIT", "RedButton")) {
+                     Util.playTap();
                      gameSetupScript.leaveGame();
                  }
                  voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players voted to play again!";
@@ -390,6 +394,7 @@ function OnGUI(){
              } else {
                  if (!self.getRestartVote()) {
                      if (GUI.Button(Rect(guiInGame[1].offset.x, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "YES", "GreenButton")) {
+                         Util.playTap();
                          gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
                      }
                  } else {
@@ -397,6 +402,7 @@ function OnGUI(){
                  }
 
                  if (GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17), Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "QUIT", "RedButton")) {
+                     Util.playTap();
                      gameSetupScript.leaveGame();
                  }
 
@@ -540,10 +546,12 @@ function OnGUI(){
       if (Network.isServer) {
           if (!self.getRestartVote()) {
               if (game.isValid() && GUI.Button(Rect(guiInGame[1].offset.x - Screen.width / 4, Screen.height - Screen.height * 0.2, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "PLAY AGAIN?", "GreenButton")) {
+                  Util.playTap();
                   gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
               }
           } else if (Network.isServer && game.canRestart()) {
               if (GUI.Button(Rect(guiInGame[1].offset.x - Screen.width / 4, Screen.height - Screen.height * 0.2, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "RESTART", "GreenButton")) {
+                  Util.playTap();
                   gameSetupScript.restartGame();
               }
           }
@@ -552,10 +560,12 @@ function OnGUI(){
           }
 
           if (GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17) - Screen.width / 4, Screen.height - Screen.height * 0.2, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "GAME SETUP", "GreenButton")) {
+               Util.playTap();
               gameSetupScript.returnToMenu();
           }
 
           if (GUI.Button(Rect(guiInGame[1].offset.x - 2 * (Screen.width * 0.17) - Screen.width / 4, Screen.height - Screen.height * 0.2, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "QUIT", "RedButton")) {
+              Util.playTap();
               gameSetupScript.leaveGame();
           }
           voteStr = restartCount + "/" + allMembers + " players voted to play again";
@@ -564,6 +574,7 @@ function OnGUI(){
       } else {
           if (!self.getRestartVote()) {
               if (GUI.Button(Rect(guiInGame[1].offset.x - Screen.width / 5, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "YES", "GreenButton")) {
+                  Util.playTap();
                   gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
               }
           } else {
@@ -571,6 +582,7 @@ function OnGUI(){
           }
 
           if (GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17) - Screen.width / 5, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "QUIT", "RedButton")) {
+            Util.playTap();
               gameSetupScript.leaveGame();
           }
 
@@ -638,20 +650,24 @@ function OnDebugGUI(){
             }
             if(!self.getRestartVote()){
                 if(game.isValid() && GUILayout.Button("Vote for Restart")){
+                    Util.playTap();
                     gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
                 }
             }
             else if(Network.isServer && game.canRestart()){
                 if(GUILayout.Button("Restart Game")){
+                    Util.playTap();
                     gameSetupScript.restartGame();
                 }
             }
             if(Network.isServer){
                 if(GUILayout.Button("Return to Game Menu")){
                     gameSetupScript.returnToMenu();
+                    Util.playTap();
                 }
             }
             if(GUILayout.Button("Leave")){
+                Util.playTap();
                 gameSetupScript.leaveGame();
             }
             break;
