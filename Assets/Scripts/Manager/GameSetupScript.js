@@ -113,6 +113,7 @@ function getCountDown() : int {
 }
 
 function startGame(){
+    soundScript.playGameStart();
     game.start();
 }
 
