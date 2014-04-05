@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: f7ea9dc7709e6774288983bcfc79e937
+guid: f5b6d618bd84cf24891d8893dce3f80c
 ModelImporter:
-  serializedVersion: 15
+  serializedVersion: 16
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: grass
+    4300000: bg3
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -60,4 +60,5 @@ ModelImporter:
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 0
+  additionalBone: 0
   userData: 

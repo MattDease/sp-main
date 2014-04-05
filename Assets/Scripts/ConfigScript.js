@@ -63,7 +63,8 @@ public static class Config{
     public var RUNNER_DEATH_DEPTH : float = -3;
     // Duration in seconds of transition between running and walking speeds;
     public var SPEED_TRANSITION_DURATION : float = 0.3;
-    public var TEAM_COLOR : Color[] = [new Color(0, 150/255, 1, 0.5), new Color(1, 0, 0, 0.5)];
+    public var TEAM_NAME : String[] = ["Purple", "Blue"];
+    public var TEAM_COLOR : Color[] = [new Color(188/255, 19/255, 1, 0.5), new Color(0, 0, 1, 0.5)];
 
     //// NETWORKING
     // ID that all hosts will use to register their game with the master server.
@@ -86,7 +87,7 @@ public static class Config{
     //Sets versus to automatically change when teamsize is greater than 5
     public var VERSUS_ENABLED : boolean = false;
     //Skips validation of team
-    public var VALIDATION_SKIP : boolean = false;
+    public var VALIDATION_SKIP : boolean = true;
     //Distance between Player and Tutorial Sign required to show sign
     public var TUTORIAL_SIGN_DISTANCE : int = 10;
     //How many times you see a tutorial sign

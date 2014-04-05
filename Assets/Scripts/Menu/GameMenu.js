@@ -86,13 +86,6 @@ function Start() {
     playerScript = gameManager.GetComponent(PlayerScript);
     gameSetupScript = gameManager.GetComponent(GameSetupScript);
 
-    if(gameSetupScript && gameSetupScript.game != null && gameSetupScript.game.getName() != ""){
-        gameName = gameSetupScript.game.getName();
-    }
-    else{
-        gameName = playerScript.getName() + "'s Game";
-    }
-
     //persist game manager object between scenes
     DontDestroyOnLoad(gameManager);
 
@@ -557,6 +550,15 @@ function enter(isNew: boolean) {
 
     if(gameSetupScript && gameSetupScript.game != null){
         gameSetupScript.game = new Game();
+    }
+
+    if(isHosting){
+        if(gameSetupScript && gameSetupScript.game != null && gameSetupScript.game.getName() != ""){
+            gameName = gameSetupScript.game.getName();
+        }
+        else{
+            gameName = playerScript.getName() + "'s Game";
+        }
     }
 
     if (Network.isClient) {
