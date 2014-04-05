@@ -72,8 +72,8 @@ private var headerStyle :GUIStyle;
 private var greenStyle :GUIStyle;
 private var whiteText :GUIStyle;
 private var blackText :GUIStyle;
-
 private var disabledStyle : GUIStyle;
+
 
 function Awake() {
     netScript = GetComponent(Net);
@@ -169,9 +169,12 @@ function OnGUI() {
     setUpStyles();
 
     //Home Btn
-    guiObject[1].setLocation(Points.TopRight);
+      //Back Button
+    guiObject[1].textureWidth = Screen.width * 0.08;
+    guiObject[1].textureHeight = Screen.height * 0.15;
+    guiObject[1].setLocation(Points.TopLeft);
 
-    if (GUI.Button(Rect(Screen.width - Screen.width * 0.09, guiObject[1].offset.y - Screen.height * 0.01, Screen.width * 0.08, Screen.height * 0.2), homeTexture, "FullImage")) {
+    if (GUI.Button(Rect(Screen.width - Screen.width * 0.09, guiObject[1].offset.y + Screen.height * 0.02, guiObject[1].textureWidth,  guiObject[1].textureHeight), "", "HomeButton")) {
         selectCharacter = false;
 
         if (isHosting && Network.isServer){
@@ -210,8 +213,8 @@ function OnGUI() {
         gameName = GUI.TextField(Rect(guiNewGame[1].offset.x, guiNewGame[1].offset.y + Screen.height/22, Screen.width / 2.2, menuScript.getScale() * 100), gameName, 15);
 
         if(gameName) {
-            GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), whiteBarTexture);
-            GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), "Tap to Continue", "PlainText");
+            GUI.DrawTexture(new Rect(0, Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), statusBarTexture);
+            GUI.Label(new Rect(0,  Screen.height - 100 * menuScript.getScale(), Screen.width, 100 * menuScript.getScale()), "Tap to Continue", "WhiteText");
         }
 
         if (gameName && GUI.Button(Rect(0, 0, Screen.width, Screen.height), "", "FullImage")) {
@@ -598,7 +601,9 @@ function characterSelection() {
     //Get Selected Characters
     selectedCharacters = playerScript.getSelf().getTeam().getSelectedCharacters();
 
-    if (GUI.Button(Rect(guiObject[0].offset.x + Screen.width * 0.01, guiObject[0].offset.y - Screen.height * 0.01, Screen.width * 0.08, Screen.height * 0.2), backTexture, "FullImage")) {
+
+
+    if (GUI.Button(Rect(guiObject[0].offset.x + Screen.width * 0.01, guiObject[0].offset.y + Screen.height * 0.02, guiObject[1].textureWidth,  guiObject[1].textureHeight), "", "BackButton")) {
         selectCharacter = false;
     }
     //Characters gui
@@ -668,7 +673,7 @@ function characterSelection() {
 
         if (isAlreadySelected) {
             GUI.color = tmpColor;
-            GUI.Button(Rect(guiObject[1].offset.x + offsetWidth + guiObject[0].textureWidth / 2 + 10, (guiObject[1].offset.y + offsetHeight) + (Screen.height * 0.20 / 1.4) - guiObject[0].textureHeight / 1.1, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
+            GUI.Button(Rect(guiObject[1].offset.x + offsetWidth + guiObject[0].textureWidth / 2 + 10, (guiObject[1].offset.y + offsetHeight) + (Screen.height * 0.16 / 1.4) - guiObject[0].textureHeight / 1.1, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
         }
 
         GUI.Label(Rect(guiObject[1].offset.x + offsetWidth - (Screen.width * 0.01), (guiObject[1].offset.y + offsetHeight) + (Screen.height * 0.15 / 1.4), Screen.width * 0.15, Screen.height * 0.20), charactersNames[c], "BlackText");

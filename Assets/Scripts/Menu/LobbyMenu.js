@@ -62,7 +62,7 @@ function OnGUI() {
 
     //Back Button
     guiObject[1].textureWidth = Screen.width * 0.08;
-    guiObject[1].textureHeight = Screen.height * 0.2;
+    guiObject[1].textureHeight = Screen.height * 0.15;
     guiObject[1].setLocation(Points.TopLeft);
 
     var labelStyle: GUIStyle = GUI.skin.GetStyle("JoinGame");
@@ -73,7 +73,7 @@ function OnGUI() {
     guiObject[0].textureHeight = 20;
     guiObject[0].setLocation(Points.Center);
 
-    if (GUI.Button(Rect(Screen.width - Screen.width * 0.09, guiObject[1].offset.y - Screen.height * 0.01, Screen.width * 0.08, Screen.height * 0.2), refreshTexture, "FullImage")) {
+    if (GUI.Button(Rect(Screen.width - Screen.width * 0.09, guiObject[1].offset.y + Screen.height * 0.02, guiObject[1].textureWidth,  guiObject[1].textureHeight), "", "RefreshButton")) {
         netScript.FetchHostList(true);
     }
 

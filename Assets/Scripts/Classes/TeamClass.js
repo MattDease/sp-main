@@ -245,6 +245,22 @@ public class Team{
         return leader;
     }
 
+    public function getMVP() : Runner {
+
+        var leader : Runner;
+        for(var player : Player in teammates.Values){
+            if(player.GetType() == Runner){
+                var runner : Runner = player as Runner;
+                if(!leader || runner.getDistance() > leader.getDistance()){
+                    leader = runner;
+                }
+            }
+        }
+
+        return leader;
+
+    }
+
     public function getStraggler() : Runner {
         var straggler : Runner;
         for(var player : Player in teammates.Values){
