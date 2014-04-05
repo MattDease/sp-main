@@ -73,6 +73,7 @@ private var greenStyle :GUIStyle;
 private var whiteText :GUIStyle;
 private var blackText :GUIStyle;
 private var disabledStyle : GUIStyle;
+private var blackBoldText : GUIStyle;
 
 
 function Awake() {
@@ -595,8 +596,8 @@ function characterSelection() {
     GUI.DrawTexture(new Rect(guiOverlays[0].offset.x + (Screen.width * 0.42), guiOverlays[1].offset.y, guiOverlays[1].textureWidth, guiOverlays[1].textureHeight), commnaderSelectionTexture);
 
 
-    GUI.Label(new Rect(guiOverlays[0].offset.x - (Screen.width * 0.12), 0, guiOverlays[0].textureWidth, menuScript.getScale() * 245), "RUNNERS", "BlackText");
-    GUI.Label(new Rect(guiOverlays[0].offset.x + (Screen.width * 0.42), 0, guiOverlays[1].textureWidth, menuScript.getScale() * 245), "COMMANDERS", "BlackText");
+    GUI.Label(new Rect(guiOverlays[0].offset.x - (Screen.width * 0.12), 0, guiOverlays[0].textureWidth, menuScript.getScale() * 245), "RUNNERS", "BlackBoldText");
+    GUI.Label(new Rect(guiOverlays[0].offset.x + (Screen.width * 0.42), 0, guiOverlays[1].textureWidth, menuScript.getScale() * 245), "COMMANDERS", "BlackBoldText");
 
     //Get Selected Characters
     selectedCharacters = playerScript.getSelf().getTeam().getSelectedCharacters();
@@ -676,7 +677,7 @@ function characterSelection() {
             GUI.Button(Rect(guiObject[1].offset.x + offsetWidth + guiObject[0].textureWidth / 2 + 10, (guiObject[1].offset.y + offsetHeight) + (Screen.height * 0.16 / 1.4) - guiObject[0].textureHeight / 1.1, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
         }
 
-        GUI.Label(Rect(guiObject[1].offset.x + offsetWidth - (Screen.width * 0.01), (guiObject[1].offset.y + offsetHeight) + (Screen.height * 0.15 / 1.4), Screen.width * 0.15, Screen.height * 0.20), charactersNames[c], "BlackText");
+        GUI.Label(Rect(guiObject[1].offset.x + offsetWidth - (Screen.width * 0.01), (guiObject[1].offset.y + offsetHeight) + (Screen.height * 0.13 / 1.4), Screen.width * 0.15, Screen.height * 0.20), charactersNames[c], "BlackText");
 
     }
 
@@ -745,7 +746,7 @@ function characterSelection() {
             GUI.color = tmpColor;
             GUI.Button(Rect(Screen.width * 0.71 + guiObject[0].textureWidth / 2 + 10, guiObject[1].offset.y + h  - (Screen.height * 0.20 / 5), menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
         }
-        GUI.Label(Rect(Screen.width * 0.7, guiObject[1].offset.y + h + (Screen.height * 0.15 / 1.4), Screen.width * 0.15, Screen.height * 0.20), charactersNames[count], "BlackText");
+        GUI.Label(Rect(Screen.width * 0.7, guiObject[1].offset.y + h + (Screen.height * 0.13 / 1.4), Screen.width * 0.15, Screen.height * 0.20), charactersNames[count], "BlackText");
 
     }
 
@@ -784,6 +785,9 @@ function setUpStyles(){
 
     blackText = GUI.skin.GetStyle("BlackText");
     blackText.fontSize = menuScript.getScale() * buttonText;
+
+    blackBoldText = GUI.skin.GetStyle("BlackBoldText");
+    blackBoldText.fontSize = menuScript.getScale() * buttonText;
 
     GUI.skin.textField.fontSize = menuScript.getScale() * bodyText;
 }
