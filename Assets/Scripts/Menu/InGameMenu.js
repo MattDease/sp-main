@@ -384,7 +384,7 @@ function OnGUI(){
                  if (GUI.Button(Rect(guiInGame[1].offset.x - 2 * (Screen.width * 0.17), Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "LEAVE", "RedButton")) {
                      gameSetupScript.leaveGame();
                  }
-                 voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players said yes";
+                 voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players want to play again!";
                  GUI.Label(new Rect(guiInGame[1].offset.x - 3.5 * (Screen.width * 0.17), Screen.height - Screen.height * 0.16, 1.5 * guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
 
              } else {
@@ -400,7 +400,7 @@ function OnGUI(){
                      gameSetupScript.leaveGame();
                  }
 
-                 voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players said yes";
+                 voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players want to play again!";
                  GUI.Label(new Rect(guiInGame[1].offset.x - 2.6 * (Screen.width * 0.17), Screen.height - Screen.height * 0.18, guiInGame[1].textureWidth * 1.5, guiInGame[1].textureHeight), (self.getRestartVote() ? "You voted!" : "Restart?"), "RestartHeader");
                  GUI.Label(new Rect(guiInGame[1].offset.x - 2.5 * (Screen.width * 0.17), Screen.height - Screen.height * 0.12, 1.5 * guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
 
@@ -558,7 +558,7 @@ function OnGUI(){
           if (GUI.Button(Rect(guiInGame[1].offset.x - 2 * (Screen.width * 0.17) - Screen.width / 4, Screen.height - Screen.height * 0.2, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "LEAVE", "RedButton")) {
               gameSetupScript.leaveGame();
           }
-          voteStr = restartCount + "/" + allMembers + " players said yes";
+          voteStr = restartCount + "/" + allMembers + " players want to play again";
           GUI.Label(new Rect(Screen.width / 2 - (1.5 * guiInGame[1].textureWidth) / 2, Screen.height - Screen.height * 0.12, 1.5 * guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
 
       } else {
@@ -574,7 +574,7 @@ function OnGUI(){
               gameSetupScript.leaveGame();
           }
 
-          voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players said yes";
+          voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players want to play again";
           GUI.Label(new Rect(guiInGame[1].offset.x - 2.6 * (Screen.width * 0.17) - Screen.width / 5, Screen.height - Screen.height * 0.18, guiInGame[1].textureWidth * 1.5, guiInGame[1].textureHeight), (self.getRestartVote() ? "You voted!" : "Restart?"), "RestartHeader");
           GUI.Label(new Rect(guiInGame[1].offset.x - 2.5 * (Screen.width * 0.17) - Screen.width / 5, Screen.height - Screen.height * 0.12, 1.5 * guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
 
