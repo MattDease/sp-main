@@ -47,7 +47,7 @@ function Start() {
     }
 
     guiStatusBar = new GuiClasses();
-    backgroundTexutre = Resources.Load("Textures/gui/mainMenuBackground", Texture2D);
+    backgroundTexutre = Resources.Load("Textures/gui/background", Texture2D);
     createNewOverlayTexture = Resources.Load("Textures/gui/createNewOverlay", Texture2D);
 
 }

@@ -93,7 +93,7 @@ function Start() {
     backTexture = Resources.Load("Textures/gui/back", Texture2D);
     playerTexture = Resources.Load("Textures/gui/player", Texture2D);
     homeTexture = Resources.Load("Textures/gui/home", Texture2D);
-    backgroundTexutre = Resources.Load("Textures/gui/mainMenuBackground", Texture2D);
+    backgroundTexutre = Resources.Load("Textures/gui/background", Texture2D);
     createNewOverlayTexture = Resources.Load("Textures/gui/createNewOverlay", Texture2D);
     readyCheckMarkTexture = Resources.Load("Textures/gui/readyCheckMark", Texture2D);
     statusBarTexture = Resources.Load("Textures/gui/statusBar", Texture2D);
