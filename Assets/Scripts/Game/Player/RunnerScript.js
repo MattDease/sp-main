@@ -11,6 +11,7 @@ private var player : Runner;
 private var model : GameObject;
 private var animator : Animator;
 private var team : Team;
+private var game : Game;
 private var gameManager : GameObject;
 private var camContainer : GameObject;
 private var platform : GameObject = null;
@@ -38,6 +39,7 @@ function initRunner(playerId : String, teamId : int){
     model = gameObject.transform.Find("model").gameObject;
     animator = model.GetComponent(Animator);
     team = player.getTeam();
+    game = gameManager.GetComponent(GameSetupScript).game;
 
     player.gameObject = gameObject;
     player.script = this;
@@ -181,9 +183,21 @@ function LateUpdate(){
             }
             camContainer.transform.position = player.getPosition() + cameraOffset;
         }
-        else if(team.getRunners(true).Count > 0){
-            var targetPosition : Vector3 = team.getObserverCameraPosition();
-            camContainer.transform.position = Vector3.SmoothDamp(camContainer.transform.position, targetPosition, velocity, 0.2);
+        else{
+            var targetPosition : Vector3;
+            if(team.getRunners(true).Count > 0){
+                targetPosition = team.getObserverCameraPosition();
+            }
+            else{
+                var opposingTeam : Team = game.getTeam(team.getId() == 0 ? 1 : 0);
+                if(opposingTeam.getRunners(true).Count > 0){
+                    targetPosition = opposingTeam.getObserverCameraPosition();
+                    targetPosition.z += Config.TEAM_DEPTH_OFFSET;
+                }
+            }
+            if(targetPosition != Vector3.zero){
+                camContainer.transform.position = Vector3.SmoothDamp(camContainer.transform.position, targetPosition, velocity, 0.2);
+            }
         }
     }
 }
