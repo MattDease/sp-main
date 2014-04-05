@@ -97,6 +97,8 @@ function Start(){
     blueOverlayTexture = Resources.Load("Textures/gui/blueTeamOVerlay", Texture2D);
     inGameOverlay = Resources.Load("Textures/gui/inGameBar", Texture2D);
     purpleEgg = Resources.Load("Textures/gui/eggPurple", Texture2D);
+    blueEgg = Resources.Load("Textures/gui/eggBlue", Texture2D);
+
     sideArrow = Resources.Load("Textures/gui/side_arrow", Texture2D);
 
     menuSkin = Resources.Load("MenuSkin", GUISkin);
@@ -167,11 +169,35 @@ function OnGUI(){
         guiInGame[13].setLocation(Points.TopLeft);
 
         // TO DO: Change offset, playerOffset and arrowOffset accordingly
-         if (game.getMode() == GameMode.Versus) {
+        if (game.getMode() == GameMode.Versus) {
+
+            var leadingTeam : Team = game.getLeadingTeam();
+            var behindTeam : Team;
+            var maxOffset : float = Screen.width/4;
+
+            //Get the team that is behind
             for (var team: Team in game.getTeams()) {
-                var offset : int =  200 * team.getId() * getScale(); //get offset using fun math stuff!
-                GUI.DrawTexture(new Rect(guiInGame[11].offset.x + offset, guiInGame[11].offset.y, guiInGame[11].textureWidth, guiInGame[11].textureHeight), (team.getId() == 0 ? purpleEgg : blueEgg));
+                if(team.getId() != leadingTeam.getId()) {
+                    behindTeam = team;
+                }
             }
+
+            var offset : int =  25 * getScale();
+            GUI.DrawTexture(new Rect(guiInGame[11].offset.x + offset, guiInGame[11].offset.y, guiInGame[11].textureWidth, guiInGame[11].textureHeight), (behindTeam.getId() == 0 ? purpleEgg : blueEgg));
+
+            var distance = leadingTeam.getDistance() - behindTeam.getDistance();
+            var yOffset : float = 0;
+
+            offset = offset + distance;
+
+            if(offset > Screen.width/4) offset = Screen.width/4;
+
+            if(offset < (70 * getScale())){
+                yOffset = guiInGame[11].textureHeight/8;
+            }
+
+            GUI.DrawTexture(new Rect(guiInGame[11].offset.x + offset, guiInGame[11].offset.y + yOffset, guiInGame[11].textureWidth, guiInGame[11].textureHeight), (leadingTeam.getId() == 0 ? purpleEgg : blueEgg));
+
         }
 
         var offscreenCount : int = 0;
