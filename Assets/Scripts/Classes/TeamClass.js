@@ -149,9 +149,22 @@ public class Team{
     public function getClosestRunner(player : Player, forward : boolean) : Runner {
         var position : Vector3 = player.gameObject.transform.position;
         var closeRunner : Runner = null;
+        if(activeRunners.Count == 1){
+            return null;
+        }
+        closeRunner = findClosestRunner(player.getId(), position, forward);
+        // no runners in the direction of the throw
+        if(closeRunner == null){
+            closeRunner = findClosestRunner(player.getId(), position, !forward);
+        }
+        return closeRunner;
+    }
+
+    private function findClosestRunner(id : String, position : Vector3, forward : boolean) : Runner {
+        var closeRunner : Runner = null;
         var distanceX : float;
-        for(var runner : Runner in runners.Values){
-            if(runner.getId() != player.getId()){
+        for(var runner : Runner in activeRunners.Values){
+            if(runner.getId() != id){
                 var dist : float = runner.getPosition().x - position.x;
                 if(!distanceX || Mathf.Abs(dist) < distanceX){
                     if((dist >= 0 && forward) || (dist <= 0 && !forward)){

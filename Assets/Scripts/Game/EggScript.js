@@ -7,7 +7,11 @@ public var inTransit : boolean = false;
 public var holder : Runner;
 public var target : Runner;
 
-private var temp_speed : float = 4;
+private var cachedThrowOffset : Vector3;
+private var throwDelay : float = 0.37;
+private var throwDuration : float = 1;
+private var throwHeight : float = 2.2;
+private var throwTime : float;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     game = GameObject.Find("/GameManager").GetComponent(GameSetupScript).game;
@@ -21,34 +25,19 @@ function Update(){
     if(game.getState() != GameState.Playing){
         return;
     }
-    if(networkView.isMine){
-        if(inTransit){
-            if(target.isAlive()){
-                if(Vector3.Distance(transform.position, target.getPosition()) < 0.2){
-                    networkView.RPC("setHolder", RPCMode.All, target.getId());
-                }
-                // Temporarily throw directly between
-                transform.position = Vector3.MoveTowards(transform.position, target.getPosition(), temp_speed * Time.deltaTime);
-            }
-            else{
-                // Abort throw progress if target dies while egg is in transit
-                // TODO - Implement a more elegant solution
-                inTransit = false;
-                setHolder(holder.getId());
-            }
-        }
-        else{
-            transform.position = holder.getPosition();
-        }
+    if(!inTransit){
+        transform.position = holder.getPosition();
     }
-    else {
-         // set local z position
-        if(inTransit){
-            var progressPercent : float = Vector3.Distance(holder.getPosition(), transform.position) / Vector3.Distance(holder.getPosition(), target.getPosition());
-            transform.position.z = Mathf.Lerp(holder.getPosition().z, target.getPosition().z, progressPercent);
-        }
-        else{
-            transform.position.z = holder.getPosition().z;
+    else{
+        var transitPercent : float = (Time.time - throwTime) / throwDuration;
+        transitPercent = Mathf.Clamp(transitPercent, 0, 1);
+        var offsetY : float = Mathf.Sin((180 * transitPercent) * Mathf.Deg2Rad) * throwHeight;
+        offsetY = Mathf.Clamp(offsetY, 0, throwHeight);
+        var originPos : Vector3 = target.getPosition() - cachedThrowOffset;
+        transform.position = Vector3.Lerp(originPos, target.getPosition(), transitPercent);
+        transform.position.y += offsetY;
+        if(networkView.isMine && transitPercent > 0.99){
+            networkView.RPC("setHolder", RPCMode.All, target.getId());
         }
     }
 }
@@ -61,16 +50,19 @@ function setHolder(holderId : String){
     }
     this.holder = Util.GetPlayerById(holderId) as Runner;
     this.holder.controller.grab();
-    transform.position = this.holder.getPosition();
-    transform.position.z = this.holder.gameObject.GetComponent(RunnerScript).depth;
     inTransit = false;
-    GetComponent(EggSyncScript).enabled = true;
 }
 
 @RPC
 function startThrow(targetId : String){
-    this.target = Util.GetPlayerById(targetId) as Runner;
+    target = Util.GetPlayerById(targetId) as Runner;
+    Invoke("throwEgg", throwDelay);
+}
+
+function throwEgg(){
+    throwTime = Time.time;
     inTransit = true;
+    cachedThrowOffset = target.getPosition() - holder.getPosition();
 }
 
 function isHoldingEgg(id : String){
