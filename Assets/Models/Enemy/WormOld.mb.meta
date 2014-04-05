@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 557ad2874b4d44284afd65bdb3414494
+guid: e60c64b0897114a78bce6fda20952bcb
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -157,7 +157,7 @@ ModelImporter:
       name: Attack
       takeName: Take 001
       firstFrame: 1
-      lastFrame: 38
+      lastFrame: 55
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
