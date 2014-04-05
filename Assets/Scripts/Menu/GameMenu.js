@@ -176,9 +176,12 @@ function OnGUI() {
     setUpStyles();
 
     //Home Btn
-    guiObject[1].setLocation(Points.TopRight);
+      //Back Button
+    guiObject[1].textureWidth = Screen.width * 0.08;
+    guiObject[1].textureHeight = Screen.height * 0.15;
+    guiObject[1].setLocation(Points.TopLeft);
 
-    if (GUI.Button(Rect(Screen.width - Screen.width * 0.09, guiObject[1].offset.y - Screen.height * 0.01, Screen.width * 0.08, Screen.height * 0.2), homeTexture, "FullImage")) {
+    if (GUI.Button(Rect(Screen.width - Screen.width * 0.09, guiObject[1].offset.y + Screen.height * 0.02, guiObject[1].textureWidth,  guiObject[1].textureHeight), "", "HomeButton")) {
         selectCharacter = false;
 
         if (isHosting && Network.isServer){
@@ -596,7 +599,9 @@ function characterSelection() {
     //Get Selected Characters
     selectedCharacters = playerScript.getSelf().getTeam().getSelectedCharacters();
 
-    if (GUI.Button(Rect(guiObject[0].offset.x + Screen.width * 0.01, guiObject[0].offset.y - Screen.height * 0.01, Screen.width * 0.08, Screen.height * 0.2), backTexture, "FullImage")) {
+
+
+    if (GUI.Button(Rect(guiObject[0].offset.x + Screen.width * 0.01, guiObject[0].offset.y + Screen.height * 0.02, guiObject[1].textureWidth,  guiObject[1].textureHeight), "", "BackButton")) {
         selectCharacter = false;
     }
     //Characters gui
