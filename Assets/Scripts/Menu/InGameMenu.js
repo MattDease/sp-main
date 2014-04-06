@@ -203,7 +203,7 @@ function OnGUI(){
         var offsetTotal : float = 0;
         //Show cards for each player off screen
         for(var player : Player in self.getTeam().getTeammates().Values){
-            if(player.getId() == self.getId()){
+            if(player.getId() == self.getId() || player.GetType == Commander){
                 continue;
             }
             var pos : Vector3 = player.getPosition();
@@ -211,6 +211,7 @@ function OnGUI(){
             var screenPosition : Vector3 = Camera.main.WorldToScreenPoint(pos);
             if(screenPosition.x < 0){
                 var playerOffset : float = Screen.height - screenPosition.y;
+                GUI.DrawTexture(new Rect(guiInGame[12].offset.x + guiInGame[12].textureWidth/2, playerOffset, guiInGame[12].textureWidth, guiInGame[12].textureHeight), sideArrow);
                 GUI.Button(new Rect(guiInGame[13].offset.x + guiInGame[13].textureWidth , playerOffset, guiInGame[13].textureWidth, guiInGame[13].textureHeight), miniPlayerTextures[player.getCharacter()], "FullImage");
                 offsetTotal += screenPosition.y;
                 offscreenCount++;
