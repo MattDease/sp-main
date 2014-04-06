@@ -203,7 +203,7 @@ function OnGUI(){
         var offsetTotal : float = 0;
         //Show cards for each player off screen
         for(var player : Player in self.getTeam().getTeammates().Values){
-            if(player.getId() == self.getId() || player.GetType == Commander){
+            if(player.getId() == self.getId() || player.GetType == Commander || !player.isAlive()){
                 continue;
             }
             var pos : Vector3 = player.getPosition();
