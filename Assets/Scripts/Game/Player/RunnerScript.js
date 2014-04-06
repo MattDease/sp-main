@@ -314,7 +314,19 @@ function land(){
 
 @RPC
 function attack(){
-    animator.SetTrigger("Attack");
+    if(networkView.isMine){
+        if(Config.USE_EGG){
+            if(!eggScript.isHoldingEgg(player.getId())){
+                animator.SetTrigger("Attack");
+            }
+        }
+        else{
+            animator.SetTrigger("Attack");
+        }
+    }
+    else{
+        animator.SetTrigger("Attack");
+    }
 }
 
 @RPC
