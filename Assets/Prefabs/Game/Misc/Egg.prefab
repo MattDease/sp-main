@@ -28,7 +28,6 @@ GameObject:
   - 4: {fileID: 400002}
   - 148: {fileID: 14800000}
   - 114: {fileID: 11400002}
-  - 114: {fileID: 11400000}
   m_Layer: 0
   m_Name: Egg
   m_TagString: Untagged
@@ -42,8 +41,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: 0, z: -.911747813, w: .410750598}
-  m_LocalPosition: {x: .0500000007, y: .302507997, z: .0180014074}
+  m_LocalRotation: {x: .332571089, y: -.738211691, z: .535095811, w: -.241065428}
+  m_LocalPosition: {x: .0499999374, y: .302507997, z: .018001413}
   m_LocalScale: {x: -.0923373103, y: -.0923373103, z: -.0923373103}
   m_Children: []
   m_Father: {fileID: 400002}
@@ -101,17 +100,6 @@ Animator:
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 0
   m_HasTransformHierarchy: 1
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80763abd16bd77b4b9eb207bd8bbb98a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -127,12 +115,10 @@ MonoBehaviour:
   holder:
     gameObject: {fileID: 0}
     script: {fileID: 0}
-    selectedCharacter: 0
     controller: {fileID: 0}
   target:
     gameObject: {fileID: 0}
     script: {fileID: 0}
-    selectedCharacter: 0
     controller: {fileID: 0}
 --- !u!148 &14800000
 NetworkView:
