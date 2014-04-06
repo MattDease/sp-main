@@ -486,14 +486,17 @@ function OnDisable(){
 }
 
 function OnSwipe(sw:SwipeInfo){
-    // TODO - rewrite
-    //Figure out what direction we are swiping
-    if(sw.direction.x >= 0 && sw.angle < 180) {
+    if(sw.direction.y > 0 && sw.angle >= 45 && sw.angle <= 135) {
         networkView.RPC("jump", RPCMode.All);
     }
 
     if(Config.USE_EGG){
-        if(sw.direction.y >= 0  )  {
+        //left
+        if((sw.angle > 135 && sw.angle < 225)) {
+            toss(false);
+        }
+        //right
+        else if(sw.angle >= 0 && sw.angle < 45 || sw.angle > 315 && sw.angle <= 360){
             toss(true);
         }
     }
