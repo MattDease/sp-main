@@ -50,8 +50,6 @@ function Start() {
     guiStatusBar = new GuiClasses();
     backgroundTexutre = Resources.Load("Textures/gui/background", Texture2D);
     createNewOverlayTexture = Resources.Load("Textures/gui/createNewOverlay", Texture2D);
-
-//    netScript.setHostlistCallback(notSearchingForGame);
 }
 
 function OnGUI() {
@@ -82,7 +80,6 @@ function OnGUI() {
     if (GUI.Button(Rect(Screen.width - Screen.width * 0.09, guiObject[1].offset.y + Screen.height * 0.02, guiObject[1].textureWidth,  guiObject[1].textureHeight), "", "RefreshButton")) {
         Util.playTap();
         netScript.FetchHostList(true);
-        searchingForGames = true;
     }
 
     // if(connectionErrorMsg){
@@ -152,7 +149,7 @@ function OnGUI() {
         GUI.DrawTexture(new Rect(guiObject[4].offset.x, guiObject[4].offset.y, guiObject[4].textureWidth, guiObject[4].textureHeight), createNewOverlayTexture);
         GUI.DrawTexture(new Rect(guiObject[6].offset.x + guiObject[4].textureWidth/2.45, guiObject[6].offset.y + guiObject[4].textureHeight/2.6, guiObject[6].textureWidth, guiObject[6].textureHeight), eggTexture);
 
-        GUI.Label(Rect(0, 0, Screen.width, Screen.height), (searchingForGames ? "Searching for Games..." : "No Games Being Hosted"), "PlainText");
+        GUI.Label(Rect(0, 0, Screen.width, Screen.height), (netScript.isRefreshing ? "Searching for Games..." : "No Games Being Hosted"), "PlainText");
 
     }
 
