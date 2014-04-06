@@ -302,7 +302,7 @@ public class Game {
                 setGameStatus(getStatusPrefix(team) + " needs a commander.");
                 break;
                 case TeamStatus.NeedsRunner :
-                setGameStatus(getStatusPrefix(team) + " needs a two runners.");
+                setGameStatus(getStatusPrefix(team) + " needs two runners.");
                 break;
                 case TeamStatus.ManyCommanders :
                 setGameStatus(getStatusPrefix(team) + " can only have one commander.");
