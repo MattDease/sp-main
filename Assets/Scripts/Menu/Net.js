@@ -6,6 +6,8 @@
 // import System.Net.Sockets;
 import System.Collections.Generic;
 
+public var isRefreshing : boolean = false;
+
 private var hostList : List.<HostData> = new List.<HostData>();
 private var filteredHostList : List.<HostData> = new List.<HostData>();
 
@@ -14,8 +16,6 @@ private var lastHostListRequest : float = 0;
 private var connectCallback : Function;
 //server
 private var initializeCallback : Function;
-
-private var hostlistCallback : Function;
 
 private var natCapable : ConnectionTesterStatus = ConnectionTesterStatus.Undetermined;
 private var probingPublicIP : boolean = false;
@@ -82,10 +82,6 @@ function Update() {
         // If network test is undetermined, keep running
         testConnection();
     }
-}
-
-function setHostlistCallback(fn : Function){
-    hostlistCallback = fn;
 }
 
 function connect(host: HostData, callback : Function){
@@ -191,11 +187,12 @@ function FetchHostList(manual : boolean){
         return;
     }
 
-    var timeout : int = manual ? 3 : 30;
+    var timeout : int = manual ? 1 : 10;
 
     if(lastHostListRequest == 0 || Time.realtimeSinceStartup > lastHostListRequest + timeout){
         lastHostListRequest = Time.realtimeSinceStartup;
         MasterServer.RequestHostList(Config.GAME_ID);
+        isRefreshing = true;
     }
 }
 
@@ -289,11 +286,9 @@ function testConnection() {
 function OnMasterServerEvent(event: MasterServerEvent){
     switch(event){
         case MasterServerEvent.HostListReceived:
+            isRefreshing = false;
             sortAndFilterHostList(MasterServer.PollHostList());
             Debug.Log(">>> Received new host list. "+hostList.Count+" servers registered." + (hostList.Count - filteredHostList.Count) + " filtered out");
-            if(hostlistCallback){
-                hostlistCallback();
-            }
             break;
         case MasterServerEvent.RegistrationSucceeded:
             Debug.Log("Host successfully registered with master server.");
