@@ -61,4 +61,7 @@ function Update(){
         syncTime += Time.deltaTime;
         transform.position = Vector3.Lerp(syncStartPosition, syncEndPosition, syncTime / syncDelay);
     }
+    if(game.getState() == GameState.Ended && sound && sound.isPlaying){
+        sound.Stop();
+    }
 }
