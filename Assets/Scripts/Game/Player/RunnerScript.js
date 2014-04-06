@@ -32,6 +32,11 @@ private var lastSpeedChange : float = 0;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     gameManager = GameObject.Find("/GameManager");
+
+    if(!networkView.isMine){
+        // Change layer so collisions with local player is ignored
+        gameObject.layer = LayerMask.NameToLayer("Remote Players");
+    }
 }
 
 @RPC
@@ -70,9 +75,6 @@ function initRunner(playerId : String, teamId : int){
         var me : Player = gameManager.GetComponent(PlayerScript).getSelf();
 
         team.runnerCreationCount++;
-
-        // Change layer so collisions with local player is ignored
-        gameObject.layer = LayerMask.NameToLayer("Remote Players");
 
         GetComponentInChildren(Projector).enabled = false;
 

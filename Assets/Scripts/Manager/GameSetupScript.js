@@ -53,7 +53,7 @@ function createCharacter(info : NetworkMessageInfo){
     var go : Transform;
     var me : Player = playerScript.getSelf();
     if(me.GetType() == Runner){
-        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3.zero, Quaternion.identity, 0);
+        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3(0, 0.1, 0), Quaternion.identity, 0);
         go.networkView.RPC("initRunner", RPCMode.All, me.getId(), me.getTeamId());
     }
     else{
