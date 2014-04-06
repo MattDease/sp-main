@@ -44,20 +44,22 @@ public class Game {
     }
 
     public function end(){
-        GameObject.Find("/Music").transform.GetComponent(AudioSource).Stop();
-        GameObject.Find("/GameScripts").GetComponent(SoundScript).playGameEnd();
-        stateScript.setGameState(GameState.Ended);
-        playerScript.getSelf().gameObject.GetComponent(NetworkView).enabled = false;
-        for(var player : Player in players.Values){
-            player.script.enabled = false;
-            Util.Toggle(player.gameObject, false);
-            if(player.gameObject.rigidbody){
-                player.gameObject.rigidbody.useGravity = false;
+        if(getState() != GameState.Ended){
+            GameObject.Find("/Music").transform.GetComponent(AudioSource).Stop();
+            GameObject.Find("/GameScripts").GetComponent(SoundScript).playGameEnd();
+            stateScript.setGameState(GameState.Ended);
+            playerScript.getSelf().gameObject.GetComponent(NetworkView).enabled = false;
+            for(var player : Player in players.Values){
+                player.script.enabled = false;
+                Util.Toggle(player.gameObject, false);
+                if(player.gameObject.rigidbody){
+                    player.gameObject.rigidbody.useGravity = false;
+                }
             }
-        }
-        var enemies : GameObject[] = GameObject.FindGameObjectsWithTag("enemy");
-        for(var enemy : GameObject in enemies){
-            Util.Toggle(enemy, false);
+            var enemies : GameObject[] = GameObject.FindGameObjectsWithTag("enemy");
+            for(var enemy : GameObject in enemies){
+                Util.Toggle(enemy, false);
+            }
         }
     }
 

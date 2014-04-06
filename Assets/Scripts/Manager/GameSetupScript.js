@@ -22,7 +22,7 @@ private var gameMenu : GameMenu;
 
 private var readyPlayerCount : int = 0;
 private var restartReadyCount : int = 0;
-private var startTime : double;
+private var startTime : float;
 private var lastLevelPrefix : int = 0;
 private var isLeaving : boolean = false;
 private var prevSecondsLeft : int = -1;
@@ -89,15 +89,15 @@ function playerReady(){
 
 @RPC
 function startCountDown(info : NetworkMessageInfo){
-    var delay : double = Config.START_DELAY - (Network.time - info.timestamp);
-    startTime = Time.time + delay;
+    var delay : float = Config.START_DELAY - (Network.time - info.timestamp);
+    startTime = Time.realtimeSinceStartup + delay;
     Invoke("startGame", delay);
 }
 
 function getCountDown() : int {
     var secondsLeft = -1;
     if(startTime){
-        var delay : double = startTime - Time.time;
+        var delay : float = startTime - Time.realtimeSinceStartup;
         if(delay < 0){
             secondsLeft = 0;
         }
@@ -308,6 +308,7 @@ function addFullPlayer(name : String, teamId : int, role : String, netPlayer : N
     var player : Player = addPlayer(name, teamId, role, netPlayer);
     player.setCharacter(character);
     player.updateReadyStatus(ready);
+    player.getTeam().updateSelectedCharacters(character);
 }
 
 @RPC

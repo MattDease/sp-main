@@ -7,6 +7,7 @@ private var syncStartPosition : Vector3 = Vector3.zero;
 private var syncEndPosition : Vector3 = Vector3.zero;
 private var game : Game;
 private var sound : AudioSource;
+private var initialized : boolean = false;
 
 function Start(){
     syncStartPosition = transform.position;
@@ -15,8 +16,14 @@ function Start(){
     sound = GetComponent(AudioSource);
 }
 
+function initPlatformSync(){
+    syncStartPosition = transform.position;
+    syncEndPosition = transform.position;
+    initialized = true;
+}
+
 function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo) {
-    if(game && game.getState() == GameState.Ended){
+    if(!initialized || game && game.getState() == GameState.Ended){
         return;
     }
     var posX : float = 0;
@@ -50,7 +57,7 @@ function Update(){
     else if(sound){
         sound.Stop();
     }
-    if (!networkView.isMine){
+    if(!networkView.isMine && initialized){
         syncTime += Time.deltaTime;
         transform.position = Vector3.Lerp(syncStartPosition, syncEndPosition, syncTime / syncDelay);
     }

@@ -10,7 +10,12 @@ private var lastPositionTime : float = 0;
 private var gravitySpeed : float = 3;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
+
+}
+
+function initPlatform(){
     initialPosition = transform.position;
+    GetComponent(PlatformSyncScript).initPlatformSync();
 }
 
 function Update(){
