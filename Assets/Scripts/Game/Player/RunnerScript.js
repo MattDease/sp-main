@@ -319,8 +319,10 @@ function attack(){
 
 @RPC
 function grab(){
-    soundScript.playCatch();
-    animator.SetTrigger("Catch");
+    if(game.getState() == GameState.Playing){
+        soundScript.playCatch();
+        animator.SetTrigger("Catch");
+    }
 }
 
 function toss(forward : boolean){
@@ -456,6 +458,9 @@ function OnEnable(){
     }
 
     if(networkView.isMine){
+        if(eggScript.isHoldingEgg(player.getId())){
+            animator.SetTrigger("Catch");
+        }
 
         Gesture.onSwipeE += OnSwipe;
         Gesture.onLongTapE += OnLongTap;

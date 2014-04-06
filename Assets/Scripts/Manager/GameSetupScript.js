@@ -76,7 +76,6 @@ function playerReady(){
     var players : Dictionary.<String, Player> = game.getPlayers();
     if(readyPlayerCount == players.Count){
         if(Config.USE_EGG){
-            // TODO support multiple teams
             for(var team : Team in game.getTeams()){
                 var holder = team.getRandomRunner();
                 var egg : Transform = Network.Instantiate(eggPrefab, holder.getPosition(), Quaternion.identity, 0);
