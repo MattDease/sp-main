@@ -53,7 +53,7 @@ function Update(){
     else if(sound){
         sound.Stop();
     }
-    if (!networkView.isMine){
+    if (!networkView.isMine && syncStartPosition != Vector3.zero){
         syncTime += Time.deltaTime;
         transform.position = Vector3.Lerp(syncStartPosition, syncEndPosition, syncTime / syncDelay);
     }
