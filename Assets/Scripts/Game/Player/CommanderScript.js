@@ -11,6 +11,7 @@ private var player : Commander;
 private var model : GameObject;
 private var animator : Animator;
 private var team : Team;
+private var game : Game;
 private var camContainer : GameObject;
 
 private var touched : boolean = false;
@@ -20,6 +21,7 @@ private var plane : Plane = new Plane(Vector3(0, 1, Config.COMMANDER_DEPTH_OFFSE
 private var targetPosition : Vector3;
 private var targetRotation : Quaternion;
 private var velocity : Vector3 = Vector3.zero;
+private var camVelocity : Vector3 = Vector3.zero;
 private var offsetX : float = 0;
 private var platform : GameObject;
 private var platformOffset : Vector2 = Vector2.zero;
@@ -32,6 +34,7 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 function initCommander(playerId : String, teamId : int){
     player = Util.GetPlayerById(playerId) as Commander;
     team = player.getTeam();
+    game = GameObject.Find("/GameManager").GetComponent(GameSetupScript).game;
     model = gameObject.transform.Find("model").gameObject;
     animator = model.GetComponent(Animator);
 
@@ -74,7 +77,7 @@ function Update(){
         animator.SetBool("attack", false);
     }
     if(networkView.isMine){
-        if(touched){
+        if(team.isAlive() && touched){
             var currentPosition : Vector3 = player.getPosition();
             transform.position = Vector3.SmoothDamp(currentPosition, targetPosition, velocity, Config.COMMANDER_SMOOTH_TIME);
             var angleZ : float = Mathf.Atan2(targetPosition.y - currentPosition.y, targetPosition.x - currentPosition.x) * Mathf.Rad2Deg;
@@ -123,14 +126,28 @@ function Update(){
 }
 
 function LateUpdate(){
-    if(networkView.isMine && team.isAlive()){
-        var currentTeamPosition : Vector3 = team.getObserverCameraPosition();
-        if(!touched){
-            transform.position.x = currentTeamPosition.x + offsetX;
+    if(networkView.isMine){
+        var targetPosition : Vector3;
+        if(team.isAlive()){
+            targetPosition = team.getObserverCameraPosition();
         }
-        camContainer.transform.position.x = currentTeamPosition.x;
-        camContainer.transform.position.y = currentTeamPosition.y/2;
-        model.transform.rotation = Quaternion.Slerp(model.transform.rotation, targetRotation, Time.deltaTime * 10);
+        else if(game.getMode() == GameMode.Versus){
+            var opposingTeam : Team = game.getTeam(team.getId() == 0 ? 1 : 0);
+            if(opposingTeam.isAlive()){
+                targetPosition = opposingTeam.getObserverCameraPosition();
+                targetPosition.z += Config.TEAM_DEPTH_OFFSET;
+            }
+        }
+        if(targetPosition != Vector3.zero){
+            targetPosition.y /= 2;
+            camContainer.transform.position = Vector3.SmoothDamp(camContainer.transform.position, targetPosition, camVelocity, 0.2);
+        }
+        if(team.isAlive()){
+            if(!touched){
+                transform.position.x = targetPosition.x + offsetX;
+            }
+            model.transform.rotation = Quaternion.Slerp(model.transform.rotation, targetRotation, Time.deltaTime * 10);
+        }
     }
 }
 
