@@ -2,11 +2,14 @@
 
 private var game : Game;
 private var team : Team;
+private var model : GameObject;
 
 public var inTransit : boolean = false;
 public var holder : Runner;
 public var target : Runner;
 
+private var rotationSpeed : float = 360;
+private var eggRotation : Quaternion;
 private var cachedThrowOffset : Vector3;
 private var throwDelay : float = 0.37;
 private var throwDuration : float = 1;
@@ -15,6 +18,8 @@ private var throwTime : float;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     game = GameObject.Find("/GameManager").GetComponent(GameSetupScript).game;
+    model = transform.Find("model").gameObject;
+    eggRotation = model.transform.rotation;
 }
 
 function FixedUpdate(){
@@ -36,6 +41,7 @@ function Update(){
         var originPos : Vector3 = target.getPosition() - cachedThrowOffset;
         transform.position = Vector3.Lerp(originPos, target.getPosition(), transitPercent);
         transform.position.y += offsetY;
+        model.transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
         if(networkView.isMine && transitPercent > 0.99){
             networkView.RPC("setHolder", RPCMode.All, target.getId());
         }
@@ -51,6 +57,7 @@ function setHolder(holderId : String){
     this.holder = Util.GetPlayerById(holderId) as Runner;
     this.holder.controller.grab();
     inTransit = false;
+    model.transform.rotation = eggRotation;
 }
 
 @RPC
