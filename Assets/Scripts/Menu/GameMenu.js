@@ -192,7 +192,7 @@ function OnGUI() {
 
     /* ---------- CREATE NEW GAME SCREEN ---------- */
     if (isHosting && !Network.isServer) {
-        //GUI.Label(new Rect(0, Screen.height / 2 - Screen.height / 2.5, Screen.width, 0), "NEW GAME", "Header");
+        GUI.Label(new Rect(0, Screen.height / 2 - Screen.height / 2.5, Screen.width, 0), "NEW GAME", "Header");
 
         guiNewGame[0].textureWidth = Screen.width;
         guiNewGame[0].textureHeight = 100;
@@ -265,6 +265,8 @@ function OnGUI() {
             var cPlayer: Player;
 
             if (isVersus == GameMode.Team) {
+                GUI.Label(new Rect(0, Screen.height / 2 - Screen.height / 2.5, Screen.width, 0), "SELECT A CHARACTER", "Header");
+
                 for (var d = 0; d < Config.MAX_TEAM_COUNT; d++) {
 
                     currentTeamCount = d;

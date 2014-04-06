@@ -57,8 +57,9 @@ function OnGUI() {
         return;
     }
     GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), backgroundTexutre);
-
     GUI.skin = menuSkin;
+                    GUI.Label(new Rect(0, Screen.height / 2 - Screen.height / 2.5, Screen.width, 0), "JOIN GAME", "Header");
+
 
     //Back Button
     guiObject[1].textureWidth = Screen.width * 0.08;
