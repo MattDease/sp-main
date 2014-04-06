@@ -328,7 +328,7 @@ function OnGUI() {
                 guiVersus[3].setLocation(Points.Center);
 
                 guiVersus[4].textureWidth = Screen.width * 0.1;
-                guiVersus[4].textureHeight = Screen.height * 0.05;
+                guiVersus[4].textureHeight = Screen.height * 0.06;
                 guiVersus[4].setLocation(Points.Center);
 
                 var leftLayoutCount = 0;
@@ -403,7 +403,7 @@ function OnGUI() {
                             GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 - guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[cPlayer.getCharacter()], "FullImage");
                         }
 
-                        GUI.Label(Rect(guiVersus[3].offset.x + layoutOffset - 10, guiHost[3].offset.y + Screen.height * 0.2 - 5, Screen.width * 0.15, Screen.height * 0.20), cPlayer.getName(), "WhiteText");
+                        GUI.Label(Rect(guiVersus[3].offset.x + layoutOffset - 10, guiHost[3].offset.y + Screen.height * 0.2 , Screen.width * 0.15, Screen.height * 0.20), cPlayer.getName(), "WhiteText");
 
                         if (cPlayer.getReadyStatus()) {
                             GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset + guiHost[1].textureWidth / 2, guiVersus[3].offset.y - Screen.height * 0.05 - guiVersus[3].offset.y / 1.28, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
@@ -457,7 +457,7 @@ function OnGUI() {
                             GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 + guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[cPlayer.getCharacter()], "FullImage");
                         }
 
-                        GUI.Label(Rect(guiVersus[3].offset.x + layoutOffset - 10, guiHost[3].offset.y + (2 * guiVersus[3].offset.y / 1.4) + Screen.height * 0.2 - 5, Screen.width * 0.15, Screen.height * 0.20), cPlayer.getName(), "WhiteText");
+                        GUI.Label(Rect(guiVersus[3].offset.x + layoutOffset - 10, guiHost[3].offset.y + (2 * guiVersus[3].offset.y / 1.37) + Screen.height * 0.2 - 5, Screen.width * 0.15, Screen.height * 0.20), cPlayer.getName(), "WhiteText");
 
                         if (cPlayer.getReadyStatus()) {
                             GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset + guiHost[1].textureWidth / 2, guiVersus[3].offset.y + (2 * guiVersus[3].offset.y / 1.4) - Screen.height * 0.05 - guiVersus[3].offset.y / 1.28, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
@@ -804,6 +804,24 @@ function setUpStyles(){
     GUI.skin.textField.fontSize = menuScript.getScale() * bodyText;
 }
 function switchingTeams() {
+
+    guiOverlays[2].textureWidth = Screen.width;
+    guiOverlays[2].textureHeight = Screen.height / 3.6;
+    guiOverlays[2].setLocation(Points.Center);
+
+    //Allow player to select whole team when in middle
+     if (playerScript.getSelf().getTeamId() == 100) {
+        if(GUI.Button(new Rect(guiOverlays[2].offset.x, guiOverlays[2].offset.y - Screen.height * 0.073 - guiOverlays[2].offset.y / 1.32, guiOverlays[2].textureWidth, guiOverlays[2].textureHeight), "", "FullImage")){
+                Util.playTap();
+                gameSetupScript.game.setTeam(playerScript.getSelf(), 0, Network.player);
+                gameManager.networkView.RPC("setTeam", RPCMode.All, playerScript.getSelf().getId(), 0, Network.player);
+        }
+        if(GUI.Button(new Rect(guiOverlays[2].offset.x, guiOverlays[2].offset.y - Screen.height * 0.03 + guiOverlays[2].offset.y / 1.32, guiOverlays[2].textureWidth, guiOverlays[2].textureHeight), "", "FullImage")){
+                Util.playTap();
+                gameSetupScript.game.setTeam(playerScript.getSelf(), 1, Network.player);
+                gameManager.networkView.RPC("setTeam", RPCMode.All, playerScript.getSelf().getId(), 1, Network.player);
+        }
+    }
 
     //Check to see if on a team already, if on team 1, arrow needs to pount down...
     if (playerScript.getSelf().getTeamId() == 0) {
