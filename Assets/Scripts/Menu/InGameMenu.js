@@ -365,12 +365,11 @@ function OnGUI(){
          }
              //HOST
              if (Network.isServer) {
-                 if (!self.getRestartVote()) {
-                     if (game.isValid() && GUI.Button(Rect(guiInGame[1].offset.x, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "PLAY AGAIN?", "GreenButton")) {
-                         gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
-                     }
-                 } else if (Network.isServer && game.canRestart()) {
+                if (!self.getRestartVote()) gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
+
+                if (Network.isServer && game.canRestart()) {
                      if (GUI.Button(Rect(guiInGame[1].offset.x, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "RESTART", "GreenButton")) {
+                         Util.playTap();
                          gameSetupScript.restartGame();
                      }
                  }  else if (Network.isServer && !game.canRestart()) {
@@ -378,31 +377,37 @@ function OnGUI(){
                 }
 
                  if (GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17), Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "GAME SETUP", "GreenButton")) {
+                    Util.playTap();
                      gameSetupScript.returnToMenu();
                  }
 
-                 if (GUI.Button(Rect(guiInGame[1].offset.x - 2 * (Screen.width * 0.17), Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "LEAVE", "RedButton")) {
+                 if (GUI.Button(Rect(guiInGame[1].offset.x - 2 * (Screen.width * 0.17), Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "QUIT", "RedButton")) {
+                     Util.playTap();
                      gameSetupScript.leaveGame();
                  }
-                 voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players said yes";
-                 GUI.Label(new Rect(guiInGame[1].offset.x - 3.5 * (Screen.width * 0.17), Screen.height - Screen.height * 0.16, 1.5 * guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
+                 voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players voted to play again!";
+                 GUI.Label(new Rect(guiInGame[1].offset.x - 3.5 * (Screen.width * 0.22), Screen.height - Screen.height * 0.16, 2.5 * guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
 
              } else {
                  if (!self.getRestartVote()) {
-                     if (GUI.Button(Rect(guiInGame[1].offset.x, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "YES", "GreenButton")) {
-                         gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
-                     }
+                    if (GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17), Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "YES", "GreenButton")) {
+                     Util.playTap();
+                        gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
+                    }
                  } else {
-                     GUI.Button(Rect(guiInGame[1].offset.x, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "YES", "DisabledButton");
+                     GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17), Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "YES", "DisabledButton");
                  }
 
-                 if (GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17), Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "LEAVE", "RedButton")) {
+                if (GUI.Button(Rect(guiInGame[1].offset.x, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "QUIT", "RedButton")) {
+                     Util.playTap();
                      gameSetupScript.leaveGame();
+
                  }
 
-                 voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players said yes";
-                 GUI.Label(new Rect(guiInGame[1].offset.x - 2.6 * (Screen.width * 0.17), Screen.height - Screen.height * 0.18, guiInGame[1].textureWidth * 1.5, guiInGame[1].textureHeight), (self.getRestartVote() ? "You voted!" : "Restart?"), "RestartHeader");
-                 GUI.Label(new Rect(guiInGame[1].offset.x - 2.5 * (Screen.width * 0.17), Screen.height - Screen.height * 0.12, 1.5 * guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
+
+                 voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players voted to play again!";
+                 GUI.Label(new Rect(guiInGame[1].offset.x - 2.6 * (Screen.width * 0.17), Screen.height - Screen.height * 0.18, guiInGame[1].textureWidth * 1.5, guiInGame[1].textureHeight), (self.getRestartVote() ? "You voted!" : "Play Again?"), "RestartHeader");
+                 GUI.Label(new Rect(guiInGame[1].offset.x - 2.5 * (Screen.width * 0.23), Screen.height - Screen.height * 0.12, 2.5 * guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
 
              }
          }
@@ -510,22 +515,33 @@ function OnGUI(){
                 if (vsShowEmpty) {
                     GUI.Button(Rect(guiInGame[5].offset.x + (Screen.width * 0.035), guiInGame[8].offset.y + layoutOffset - (Screen.height * 0.02), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerTextures[12], "FullImage");
                  } else {
-                    GUI.Button(Rect(guiInGame[5].offset.x + (Screen.width * 0.035), guiInGame[8].offset.y + layoutOffset - (Screen.height * 0.02), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerTextures[vsPlayer.getCharacter()], "FullImage");
+
+                    if (self == vsPlayer) {
+                        GUI.Button(Rect(guiInGame[5].offset.x + (Screen.width * 0.035), guiInGame[8].offset.y + layoutOffset - (Screen.height * 0.02), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerSelfTextures[vsPlayer.getCharacter()], "FullImage");
+                    } else {
+                        GUI.Button(Rect(guiInGame[5].offset.x + (Screen.width * 0.035), guiInGame[8].offset.y + layoutOffset - (Screen.height * 0.02), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerTextures[vsPlayer.getCharacter()], "FullImage");
+                    }
+
+
                     GUI.Label(Rect(guiInGame[5].offset.x + (Screen.width * 0.035), guiInGame[8].offset.y + layoutOffset + (Screen.height * 0.065), guiInGame[8].textureWidth, guiInGame[8].textureHeight), vsPlayer.getName(), "WhiteText");
 
                      if (vsPlayer.getRestartVote()) {
-                         GUI.Button(Rect(guiInGame[3].offset.x / 1.5 + layoutOffset + guiInGame[3].textureWidth / 2 + (Screen.width * 0.01), guiInGame[3].offset.y - (Screen.height * 0.02), getScale() * 101.5, getScale() * 78.5), readyCheckMarkTexture, "FullImage");
+                         GUI.Button(Rect(guiInGame[5].offset.x + (Screen.width * 0.035) + guiInGame[8].textureWidth/1.6, guiInGame[8].offset.y + layoutOffset + (Screen.height * 0.065) -guiInGame[8].textureHeight/1.2, getScale() * 101.5, getScale() * 78.5), readyCheckMarkTexture, "FullImage");
                      }
                  }
               } else {
                  if (vsShowEmpty) {
                     GUI.Button(Rect(guiInGame[6].offset.x - (Screen.width * 0.029), guiInGame[8].offset.y + layoutOffset - (Screen.height * 0.02), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerTextures[12], "FullImage");
                  } else {
-                    GUI.Button(Rect(guiInGame[6].offset.x - (Screen.width * 0.029), guiInGame[8].offset.y + layoutOffset - (Screen.height * 0.02), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerTextures[vsPlayer.getCharacter()], "FullImage");
+                    if(self == vsPlayer){
+                        GUI.Button(Rect(guiInGame[6].offset.x - (Screen.width * 0.029), guiInGame[8].offset.y + layoutOffset - (Screen.height * 0.02), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerSelfTextures[vsPlayer.getCharacter()], "FullImage");
+                    } else {
+                        GUI.Button(Rect(guiInGame[6].offset.x - (Screen.width * 0.029), guiInGame[8].offset.y + layoutOffset - (Screen.height * 0.02), guiInGame[8].textureWidth, guiInGame[8].textureHeight), playerTextures[vsPlayer.getCharacter()], "FullImage");
+                    }
                     GUI.Label(Rect(guiInGame[6].offset.x - (Screen.width * 0.029), guiInGame[8].offset.y + layoutOffset + (Screen.height * 0.065), guiInGame[8].textureWidth, guiInGame[8].textureHeight), vsPlayer.getName(), "WhiteText");
 
                      if (vsPlayer.getRestartVote()) {
-                         GUI.Button(Rect(guiInGame[3].offset.x / 1.5 + layoutOffset + guiInGame[3].textureWidth / 2 + (Screen.width * 0.01), guiInGame[3].offset.y - (Screen.height * 0.02), getScale() * 101.5, getScale() * 78.5), readyCheckMarkTexture, "FullImage");
+                         GUI.Button(Rect(guiInGame[6].offset.x - (Screen.width * 0.029) + guiInGame[8].textureWidth/1.6, guiInGame[8].offset.y + layoutOffset + (Screen.height * 0.065) -guiInGame[8].textureHeight/1.2, getScale() * 101.5, getScale() * 78.5), readyCheckMarkTexture, "FullImage");
                      }
 
                  }
@@ -538,12 +554,12 @@ function OnGUI(){
       GUI.Label(new Rect(0, Screen.height / 2 - Screen.height / 2.5, Screen.width, 0), (winner.getId() == 0 ? "Purple" : "Blue") + " wins!", "Header");
 
       if (Network.isServer) {
-          if (!self.getRestartVote()) {
-              if (game.isValid() && GUI.Button(Rect(guiInGame[1].offset.x - Screen.width / 4, Screen.height - Screen.height * 0.2, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "PLAY AGAIN?", "GreenButton")) {
-                  gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
-              }
-          } else if (Network.isServer && game.canRestart()) {
+
+          if (!self.getRestartVote()) gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
+
+          if (Network.isServer && game.canRestart()) {
               if (GUI.Button(Rect(guiInGame[1].offset.x - Screen.width / 4, Screen.height - Screen.height * 0.2, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "RESTART", "GreenButton")) {
+                  Util.playTap();
                   gameSetupScript.restartGame();
               }
           }
@@ -551,32 +567,36 @@ function OnGUI(){
               GUI.Button(Rect(guiInGame[1].offset.x - Screen.width / 4, Screen.height - Screen.height * 0.2, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "RESTART", "DisabledButton");
           }
 
-          if (GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17) - Screen.width / 4, Screen.height - Screen.height * 0.2, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "GAME SETUP", "GreenButton")) {
+          if (GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17) - Screen.width / 4, Screen.height - Screen.height * 0.2, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "GAME SETUP", "YellowButton")) {
+               Util.playTap();
               gameSetupScript.returnToMenu();
           }
 
-          if (GUI.Button(Rect(guiInGame[1].offset.x - 2 * (Screen.width * 0.17) - Screen.width / 4, Screen.height - Screen.height * 0.2, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "LEAVE", "RedButton")) {
+          if (GUI.Button(Rect(guiInGame[1].offset.x - 2 * (Screen.width * 0.17) - Screen.width / 4, Screen.height - Screen.height * 0.2, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "QUIT", "RedButton")) {
+              Util.playTap();
               gameSetupScript.leaveGame();
           }
-          voteStr = restartCount + "/" + allMembers + " players said yes";
-          GUI.Label(new Rect(Screen.width / 2 - (1.5 * guiInGame[1].textureWidth) / 2, Screen.height - Screen.height * 0.12, 1.5 * guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
+          voteStr = restartCount + "/" + allMembers + " players voted to play again";
+          GUI.Label(new Rect(0, Screen.height - Screen.height * 0.12, Screen.width, guiInGame[1].textureHeight), voteStr, "OrangeText");
 
       } else {
           if (!self.getRestartVote()) {
               if (GUI.Button(Rect(guiInGame[1].offset.x - Screen.width / 5, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "YES", "GreenButton")) {
+                  Util.playTap();
                   gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
               }
           } else {
               GUI.Button(Rect(guiInGame[1].offset.x - Screen.width / 5, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "YES", "DisabledButton");
           }
 
-          if (GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17) - Screen.width / 5, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "LEAVE", "RedButton")) {
+          if (GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17) - Screen.width / 5, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "QUIT", "RedButton")) {
+              Util.playTap();
               gameSetupScript.leaveGame();
           }
 
-          voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players said yes";
-          GUI.Label(new Rect(guiInGame[1].offset.x - 2.6 * (Screen.width * 0.17) - Screen.width / 5, Screen.height - Screen.height * 0.18, guiInGame[1].textureWidth * 1.5, guiInGame[1].textureHeight), (self.getRestartVote() ? "You voted!" : "Restart?"), "RestartHeader");
-          GUI.Label(new Rect(guiInGame[1].offset.x - 2.5 * (Screen.width * 0.17) - Screen.width / 5, Screen.height - Screen.height * 0.12, 1.5 * guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
+          voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players voted to play again";
+          GUI.Label(new Rect(guiInGame[1].offset.x - 2.6 * (Screen.width * 0.16) - Screen.width / 5, Screen.height - Screen.height * 0.18, guiInGame[1].textureWidth * 1.5, guiInGame[1].textureHeight), (self.getRestartVote() ? "You voted!" : "Play Again?"), "RestartHeader");
+          GUI.Label(new Rect(guiInGame[1].offset.x - 2.5 * (Screen.width * 0.215) - Screen.width / 5, Screen.height - Screen.height * 0.12, 2.5 * guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
 
       }
 
@@ -638,20 +658,24 @@ function OnDebugGUI(){
             }
             if(!self.getRestartVote()){
                 if(game.isValid() && GUILayout.Button("Vote for Restart")){
+                    Util.playTap();
                     gameManager.networkView.RPC("voteForRestart", RPCMode.All, self.getId(), true);
                 }
             }
             else if(Network.isServer && game.canRestart()){
                 if(GUILayout.Button("Restart Game")){
+                    Util.playTap();
                     gameSetupScript.restartGame();
                 }
             }
             if(Network.isServer){
                 if(GUILayout.Button("Return to Game Menu")){
                     gameSetupScript.returnToMenu();
+                    Util.playTap();
                 }
             }
             if(GUILayout.Button("Leave")){
+                Util.playTap();
                 gameSetupScript.leaveGame();
             }
             break;
