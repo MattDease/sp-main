@@ -206,6 +206,10 @@ function OnGUI(){
             if(player.getId() == self.getId() || player.GetType == Commander){
                 continue;
             }
+            var runner : Runner = player as Runner;
+            if(!runner.isAlive()) {
+                continue;
+            }
             var pos : Vector3 = player.getPosition();
             pos.y += 0.5;
             var screenPosition : Vector3 = Camera.main.WorldToScreenPoint(pos);
