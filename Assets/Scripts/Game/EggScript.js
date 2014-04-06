@@ -27,6 +27,9 @@ function FixedUpdate(){
 }
 
 function Update(){
+    if(game.getState() == GameState.Loading && holder){
+        transform.position = holder.getPosition();
+    }
     if(game.getState() != GameState.Playing){
         return;
     }
