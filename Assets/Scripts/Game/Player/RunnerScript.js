@@ -277,6 +277,16 @@ function kill(id : String, info : NetworkMessageInfo){
 function jump(){
     var grounded : boolean = isGrounded();
     if(grounded || (!grounded && !isDoubleJump)) {
+        if(grounded && eggScript.isHoldingEgg(player.getId())){
+            var pos : Vector3 = transform.position;
+            pos.y += 0.5;
+            var hit : RaycastHit;
+            if(Physics.Raycast(pos, Vector3.back, hit, 3)) {
+                if(hit.collider.gameObject.CompareTag("commander")){
+                    rigidbody.velocity.y = Config.JUMP_SPEED;
+                }
+            }
+        }
         var animState : AnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
         if(animState.IsName("Base Layer.Locomotion")){
             animator.SetBool("Jump", true);
