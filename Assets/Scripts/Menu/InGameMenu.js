@@ -594,7 +594,7 @@ function OnGUI(){
               gameSetupScript.leaveGame();
           }
 
-          voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players voted to play again";
+          voteStr = restartCount + "/" + allMembers + " players voted to play again";
           GUI.Label(new Rect(guiInGame[1].offset.x - 2.6 * (Screen.width * 0.16) - Screen.width / 5, Screen.height - Screen.height * 0.18, guiInGame[1].textureWidth * 1.5, guiInGame[1].textureHeight), (self.getRestartVote() ? "You voted!" : "Play Again?"), "RestartHeader");
           GUI.Label(new Rect(guiInGame[1].offset.x - 2.5 * (Screen.width * 0.215) - Screen.width / 5, Screen.height - Screen.height * 0.12, 2.5 * guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
 
