@@ -314,19 +314,7 @@ function land(){
 
 @RPC
 function attack(){
-    if(networkView.isMine){
-        if(Config.USE_EGG){
-            if(!eggScript.isHoldingEgg(player.getId())){
-                animator.SetTrigger("Attack");
-            }
-        }
-        else{
-            animator.SetTrigger("Attack");
-        }
-    }
-    else{
-        animator.SetTrigger("Attack");
-    }
+    animator.SetTrigger("Attack");
 }
 
 @RPC
@@ -440,7 +428,14 @@ function checkKeyboardInput(){
             networkView.RPC("stopWalk", RPCMode.All);
         }
         if(Input.GetKeyUp(KeyCode.D)){
-            networkView.RPC("attack", RPCMode.All);
+            if(Config.USE_EGG){
+                if(!eggScript.isHoldingEgg(player.getId())){
+                    networkView.RPC("attack", RPCMode.All);
+                }
+            }
+            else{
+                networkView.RPC("attack", RPCMode.All);
+            }
         }
         if(Config.USE_EGG){
             if(Input.GetKeyUp(KeyCode.R)){
@@ -520,7 +515,14 @@ function OnLongTap(tap:Tap){
 }
 
 function OnTap(tap: Vector2){
-    networkView.RPC("attack", RPCMode.All);
+    if(Config.USE_EGG){
+        if(!eggScript.isHoldingEgg(player.getId())){
+            networkView.RPC("attack", RPCMode.All);
+        }
+    }
+    else{
+        networkView.RPC("attack", RPCMode.All);
+    }
 }
 
 function OnTouch(pos:Vector2){
