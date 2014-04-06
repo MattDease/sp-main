@@ -308,6 +308,7 @@ function addFullPlayer(name : String, teamId : int, role : String, netPlayer : N
     var player : Player = addPlayer(name, teamId, role, netPlayer);
     player.setCharacter(character);
     player.updateReadyStatus(ready);
+    player.getTeam().updateSelectedCharacters(character);
 }
 
 @RPC
