@@ -24,9 +24,12 @@ function Update() {
 
         if(Config.USE_EGG){
             egg = player.getTeam().getEgg();
-            eggScript = egg.GetComponent(EggScript);
-            if(eggScript.isHoldingEgg(player.getId())) hasEgg = true;
-            else hasEgg = false;
+            hasEgg = false;
+            if(egg){
+                eggScript = egg.GetComponent(EggScript);
+                if(eggScript.isHoldingEgg(player.getId())) hasEgg = true;
+                else hasEgg = false;
+            }
         }
 
         if(sign.name.Contains("2") || sign.name.Contains("4")) {

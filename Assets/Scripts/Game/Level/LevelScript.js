@@ -54,7 +54,7 @@ function initSegment(teamId : int){
 
             if(signType == SignType.Commander && (signIndex == 1 || signIndex == 5 || signIndex == 6)){
                 Instantiate(signs[signIndex], locator.position, Quaternion.identity);
-            } else if(player.GetType() == Runner && (signIndex == 0 || signIndex == 2 || signIndex == 3 )){
+            } else if(player.GetType() == Runner && (signIndex == 0 || signIndex == 2 || signIndex == 3 || signIndex == 4)){
                 Instantiate(signs[signIndex], locator.position, Quaternion.identity);
             }
         }
