@@ -199,8 +199,6 @@ function OnGUI(){
 
         }
 
-        var offscreenCount : int = 0;
-        var offsetTotal : float = 0;
         //Show cards for each player off screen
         for(var player : Player in self.getTeam().getTeammates().Values){
             if(player.getId() == self.getId() || player.GetType == Commander){
@@ -217,21 +215,15 @@ function OnGUI(){
                 var playerOffset : float = Screen.height - screenPosition.y;
                 GUI.DrawTexture(new Rect(guiInGame[12].offset.x + guiInGame[12].textureWidth/2, playerOffset, guiInGame[12].textureWidth, guiInGame[12].textureHeight), sideArrow);
                 GUI.Button(new Rect(guiInGame[13].offset.x + guiInGame[13].textureWidth , playerOffset, guiInGame[13].textureWidth, guiInGame[13].textureHeight), miniPlayerTextures[player.getCharacter()], "FullImage");
-                offsetTotal += screenPosition.y;
-                offscreenCount++;
             }
         }
-        //Only display arrow once if there are charactres off screen, its offset should be average of the players
-        if(offscreenCount > 0){
-            var arrowOffset : float = Screen.height - (offsetTotal/offscreenCount);
-            GUI.DrawTexture(new Rect(guiInGame[12].offset.x + guiInGame[12].textureWidth/2, arrowOffset, guiInGame[12].textureWidth, guiInGame[12].textureHeight), sideArrow);
-        }
+
     }
 
     if(gameState == GameState.Loading){
         switch(gameSetupScript.getCountDown()){
             case 1:
-                GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown1);
+                    GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown1);
             break;
             case 2:
                 GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown2);
