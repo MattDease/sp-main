@@ -179,7 +179,13 @@ function Update(){
             if(deadHit.collider.gameObject.layer == LayerMask.NameToLayer("Ground Segments")){
                 Util.Toggle(gameObject, false);
                 rigidbody.useGravity = false;
+                rigidbody.velocity = Vector3.zero;
             }
+        }
+        else if(transform.position.y < Config.RUNNER_DEATH_DEPTH){
+            Util.Toggle(gameObject, false);
+            rigidbody.useGravity = false;
+            rigidbody.velocity = Vector3.zero;
         }
     }
 }
@@ -257,6 +263,12 @@ function kill(id : String, info : NetworkMessageInfo){
     soundScript.playDeath();
     gameObject.layer = LayerMask.NameToLayer("Dead");
 
+    eggScript.notifyOfDeath(id);
+
+    if(networkView.isMine){
+        toss(true);
+    }
+
     var runner : Runner = Util.GetPlayerById(id) as Runner;
     runner.kill();
 }
@@ -306,7 +318,7 @@ function toss(forward : boolean){
         var target = team.getClosestRunner(player, forward);
         if(target){
             networkView.RPC("syncToss", RPCMode.All);
-            egg.networkView.RPC("startThrow", RPCMode.All, target.getId());
+            egg.networkView.RPC("startThrow", RPCMode.All, target.getId(), true);
         }
     }
 }
@@ -427,11 +439,13 @@ function checkKeyboardInput(){
 
 function OnEnable(){
     animator.SetBool("Idle", false);
+
+    if(Config.USE_EGG){
+        egg = team.getEgg();
+        eggScript = egg.GetComponent(EggScript);
+    }
+
     if(networkView.isMine){
-        if(Config.USE_EGG){
-            egg = team.getEgg();
-            eggScript = egg.GetComponent(EggScript);
-        }
 
         Gesture.onSwipeE += OnSwipe;
         Gesture.onLongTapE += OnLongTap;

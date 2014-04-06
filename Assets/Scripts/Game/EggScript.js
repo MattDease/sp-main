@@ -54,15 +54,26 @@ function setHolder(holderId : String){
 }
 
 @RPC
-function startThrow(targetId : String){
+function startThrow(targetId : String, delay : boolean){
     target = Util.GetPlayerById(targetId) as Runner;
-    Invoke("throwEgg", throwDelay);
+    Invoke("throwEgg", delay ? throwDelay : 0);
 }
 
 function throwEgg(){
-    throwTime = Time.time;
-    inTransit = true;
-    cachedThrowOffset = target.getPosition() - holder.getPosition();
+    if(target.isAlive()){
+        throwTime = Time.time;
+        inTransit = true;
+        cachedThrowOffset = target.getPosition() - transform.position;
+    }
+}
+
+function notifyOfDeath(id : String){
+    if(networkView.isMine && id == target.getId()){
+        var newTarget : Runner = target.getTeam().getClosestRunner(target, true);
+        if(newTarget != null){
+            networkView.RPC("startThrow", RPCMode.All, newTarget.getId(), false);
+        }
+    }
 }
 
 function isHoldingEgg(id : String){

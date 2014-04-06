@@ -164,7 +164,7 @@ public class Team{
         var closeRunner : Runner = null;
         var distanceX : float;
         for(var runner : Runner in activeRunners.Values){
-            if(runner.getId() != id){
+            if(runner.getId() != id && runner.isAlive()){
                 var dist : float = runner.getPosition().x - position.x;
                 if(!distanceX || Mathf.Abs(dist) < distanceX){
                     if((dist >= 0 && forward) || (dist <= 0 && !forward)){
