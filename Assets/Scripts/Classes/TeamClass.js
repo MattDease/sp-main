@@ -232,6 +232,7 @@ public class Team{
         if(teammates[id].GetType() == Commander){
             commander = null;
         }
+        removeSelectedCharacters(player.getCharacter());
         teammates.Remove(id);
     }
 
