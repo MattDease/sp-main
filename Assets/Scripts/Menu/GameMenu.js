@@ -459,7 +459,7 @@ function OnGUI() {
                             GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset, guiVersus[3].offset.y - Screen.height * 0.05 + guiVersus[3].offset.y / 1.4, guiVersus[3].textureWidth, guiVersus[3].textureHeight), playerTextures[cPlayer.getCharacter()], "FullImage");
                         }
 
-                        GUI.Label(Rect(guiVersus[3].offset.x + layoutOffset - 10, guiHost[3].offset.y + (2 * guiVersus[3].offset.y / 1.37) + Screen.height * 0.2 - 5, Screen.width * 0.15, Screen.height * 0.20), cPlayer.getName(), "WhiteText");
+                        GUI.Label(Rect(guiVersus[3].offset.x + layoutOffset - 10, guiHost[3].offset.y + (2 * guiVersus[3].offset.y / 1.4) + Screen.height * 0.2 - 5, Screen.width * 0.15, Screen.height * 0.20), cPlayer.getName(), "WhiteText");
 
                         if (cPlayer.getReadyStatus()) {
                             GUI.Button(Rect(guiVersus[3].offset.x + layoutOffset + guiHost[1].textureWidth / 2, guiVersus[3].offset.y + (2 * guiVersus[3].offset.y / 1.4) - Screen.height * 0.05 - guiVersus[3].offset.y / 1.28, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
