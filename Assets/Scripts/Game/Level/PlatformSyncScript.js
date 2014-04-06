@@ -9,14 +9,17 @@ private var game : Game;
 private var sound : AudioSource;
 
 function Start(){
-    syncStartPosition = transform.position;
-    syncEndPosition = transform.position;
     game = GameObject.Find("/GameManager").GetComponent(GameSetupScript).game;
     sound = GetComponent(AudioSource);
 }
 
+function initPlatformSync(){
+    syncStartPosition = transform.position;
+    syncEndPosition = transform.position;
+}
+
 function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo) {
-    if(game && game.getState() == GameState.Ended){
+    if(syncStartPosition == Vector3.zero || game && game.getState() == GameState.Ended){
         return;
     }
     var posX : float = 0;

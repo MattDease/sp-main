@@ -46,6 +46,13 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 function initSegment(teamId : int){
     transform.position.z = teamId == player.getTeamId() ? 0 : Config.TEAM_DEPTH_OFFSET;
 
+    var platformScripts : PlatformScript[] = transform.GetComponentsInChildren(PlatformScript) as PlatformScript[];
+    if(platformScripts != null){
+        for(var script : PlatformScript in platformScripts){
+            script.initPlatform();
+        }
+    }
+
     if(Config.USE_SIGNS && teamId == player.getTeamId()){
         var signs : List.<GameObject> = GameObject.Find("/GameScripts").GetComponent(LevelManager).signPrefabs;
         for(var k : int = 0; k < tutorialPoints.Count; k++){
