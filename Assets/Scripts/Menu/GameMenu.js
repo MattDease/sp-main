@@ -308,7 +308,7 @@ function OnGUI() {
                             GUI.Button(Rect(guiHost[1].offset.x + layoutOffset, guiHost[1].offset.y, Screen.width * 0.15, Screen.height * 0.20), playerTextures[cPlayer.getCharacter()], "FullImage");
                         }
 
-                        GUI.Label(Rect(guiHost[1].offset.x + layoutOffset, guiHost[1].offset.y + Screen.height * 0.2 - 15, Screen.width * 0.15, Screen.height * 0.20), cPlayer.getName(), "WhiteText");
+                        GUI.Label(Rect(guiHost[1].offset.x + layoutOffset, guiHost[1].offset.y + Screen.height * 0.2 - 15, Screen.width * 0.15, Screen.height * 0.20), cPlayer.getName(), "BlackText");
 
                         if (cPlayer.getReadyStatus()) {
                             GUI.Button(Rect(guiHost[1].offset.x + layoutOffset + guiHost[1].textureWidth / 2 + 10, guiHost[1].offset.y - guiHost[1].textureHeight / 6, menuScript.getScale() * 135, menuScript.getScale() * 105), readyCheckMarkTexture, "FullImage");
