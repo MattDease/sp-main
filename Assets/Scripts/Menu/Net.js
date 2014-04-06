@@ -15,6 +15,8 @@ private var connectCallback : Function;
 //server
 private var initializeCallback : Function;
 
+private var hostlistCallback : Function;
+
 private var natCapable : ConnectionTesterStatus = ConnectionTesterStatus.Undetermined;
 private var probingPublicIP : boolean = false;
 private var doneTestingNAT : boolean = false;
@@ -80,6 +82,10 @@ function Update() {
         // If network test is undetermined, keep running
         testConnection();
     }
+}
+
+function setHostlistCallback(fn : Function){
+    hostlistCallback = fn;
 }
 
 function connect(host: HostData, callback : Function){
@@ -285,6 +291,9 @@ function OnMasterServerEvent(event: MasterServerEvent){
         case MasterServerEvent.HostListReceived:
             sortAndFilterHostList(MasterServer.PollHostList());
             Debug.Log(">>> Received new host list. "+hostList.Count+" servers registered." + (hostList.Count - filteredHostList.Count) + " filtered out");
+            if(hostlistCallback){
+                hostlistCallback();
+            }
             break;
         case MasterServerEvent.RegistrationSucceeded:
             Debug.Log("Host successfully registered with master server.");
