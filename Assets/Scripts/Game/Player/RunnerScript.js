@@ -277,7 +277,7 @@ function kill(id : String, info : NetworkMessageInfo){
 function jump(){
     var grounded : boolean = isGrounded();
     if(grounded || (!grounded && !isDoubleJump)) {
-        if(grounded && eggScript.isHoldingEgg(player.getId())){
+        if(Config.USE_EGG && grounded && eggScript.isHoldingEgg(player.getId())){
             var pos : Vector3 = transform.position;
             pos.y += 0.5;
             var hit : RaycastHit;
@@ -458,7 +458,7 @@ function OnEnable(){
     }
 
     if(networkView.isMine){
-        if(eggScript.isHoldingEgg(player.getId())){
+        if(Config.USE_EGG && eggScript.isHoldingEgg(player.getId())){
             animator.SetTrigger("Catch");
         }
 
