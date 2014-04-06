@@ -51,7 +51,7 @@ function Start() {
     backgroundTexutre = Resources.Load("Textures/gui/background", Texture2D);
     createNewOverlayTexture = Resources.Load("Textures/gui/createNewOverlay", Texture2D);
 
-    netScript.setHostlistCallback(notSearchingForGame);
+//    netScript.setHostlistCallback(notSearchingForGame);
 }
 
 function OnGUI() {
