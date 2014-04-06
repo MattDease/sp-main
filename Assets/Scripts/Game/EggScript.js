@@ -67,7 +67,7 @@ function startThrow(targetId : String, delay : boolean){
 }
 
 function throwEgg(){
-    if(target.isAlive()){
+    if(target.isAlive() && !inTransit){
         throwTime = Time.time;
         inTransit = true;
         cachedThrowOffset = target.getPosition() - transform.position;

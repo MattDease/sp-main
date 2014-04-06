@@ -44,6 +44,7 @@ public class Team{
 
     public function kill() {
         alive = false;
+        Util.Toggle(egg, false);
     }
 
     public function collectCoin() {
