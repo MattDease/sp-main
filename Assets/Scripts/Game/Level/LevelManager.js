@@ -35,8 +35,8 @@ private var newSegmentThreshold : float = 25;
 private var lastSegmentEnd : List.<float> = new List.<float>();
 private var firstSegmentEnd : List.<float> = new List.<float>();
 
-private var currentLevel : int = 0;
-private var previousLevel : int = 0;
+private var currentLevel : List.<int> = new List.<int>();
+private var previousLevel : List.<int> = new List.<int>();
 
 
 public var BACKGROUND_OFFSET : List.<Vector3> = new List.<Vector3>();
@@ -58,6 +58,8 @@ function Start () {
     for(var i : int = 0; i < game.getTeams().Count; i++){
         lastSegmentEnd.Add(0);
         firstSegmentEnd.Add(0);
+        currentLevel.Add(0);
+        previousLevel.Add(0);
         levels.Add(new List.< List.<GameObject> >());
     }
 
@@ -109,11 +111,11 @@ function addSegment(teamId : int, isFirst : boolean){
         segment = startSegmentPrefab;
     }
     else {
-        difficultyManager.setSegmentCount(difficultyManager.getSegmentCount() + 1);
-        var segmentIndex : int = difficultyManager.getSegment();
+        difficultyManager.setSegmentCount(teamId, difficultyManager.getSegmentCount(teamId) + 1);
+        var segmentIndex : int = difficultyManager.getSegment(teamId);
 
-        previousLevel = currentLevel;
-        currentLevel = segmentIndex;
+        previousLevel[teamId] = currentLevel[teamId];
+        currentLevel[teamId] = segmentIndex;
 
         segment = segmentPrefabs[segmentIndex - 1];
     }
@@ -223,9 +225,9 @@ function onAddPlane(index : int, plane : GameObject){
     backgrounds[index].Add(plane);
 }
 
-function getCurrentLevel() {
-    return currentLevel;
+function getCurrentLevel(teamId : int) {
+    return currentLevel[teamId];
 }
-function getPreviousLevel() {
-    return previousLevel;
+function getPreviousLevel(teamId : int) {
+    return previousLevel[teamId];
 }
