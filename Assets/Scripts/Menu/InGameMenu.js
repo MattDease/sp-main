@@ -188,9 +188,7 @@ function OnGUI(){
                 }
             }
 
-            var offset : int =  25 * getScale();
-            GUI.DrawTexture(new Rect(guiInGame[11].offset.x + offset, guiInGame[11].offset.y, guiInGame[11].textureWidth, guiInGame[11].textureHeight), (behindTeam.getId() == 0 ? purpleEgg : blueEgg));
-
+            var offset : int = 25 * getScale()  ;
             var distance = leadingTeam.getDistance() - behindTeam.getDistance();
             var yOffset : float = 0;
 
@@ -199,10 +197,18 @@ function OnGUI(){
             if(offset > Screen.width/4) offset = Screen.width/4;
 
             if(offset < (70 * getScale())){
-                yOffset = guiInGame[11].textureHeight/8;
+                yOffset = guiInGame[11].textureHeight/6;
             }
 
-            GUI.DrawTexture(new Rect(guiInGame[11].offset.x + offset, guiInGame[11].offset.y + yOffset, guiInGame[11].textureWidth, guiInGame[11].textureHeight), (leadingTeam.getId() == 0 ? purpleEgg : blueEgg));
+            if(behindTeam == self.getTeam()){
+                GUI.DrawTexture(new Rect(guiInGame[11].offset.x + (25 * getScale()), guiInGame[11].offset.y, guiInGame[11].textureWidth, guiInGame[11].textureHeight), (behindTeam.getId() == 0 ? purpleEgg : blueEgg));
+                GUI.DrawTexture(new Rect(guiInGame[11].offset.x + offset, guiInGame[11].offset.y + yOffset, guiInGame[11].textureWidth, guiInGame[11].textureHeight), (leadingTeam.getId() == 0 ? purpleEgg : blueEgg));
+            }
+            else {
+                GUI.DrawTexture(new Rect(guiInGame[11].offset.x + offset, guiInGame[11].offset.y, guiInGame[11].textureWidth, guiInGame[11].textureHeight), (leadingTeam.getId() == 0 ? purpleEgg : blueEgg));
+                GUI.DrawTexture(new Rect(guiInGame[11].offset.x + (25 * getScale()), guiInGame[11].offset.y + yOffset, guiInGame[11].textureWidth, guiInGame[11].textureHeight), (behindTeam.getId() == 0 ? purpleEgg : blueEgg));
+            }
+
 
         }
 
