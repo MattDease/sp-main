@@ -182,12 +182,16 @@ function Update(){
                 Util.Toggle(gameObject, false);
                 rigidbody.useGravity = false;
                 rigidbody.velocity = Vector3.zero;
+                rigidbody.angularVelocity = Vector3(0, 0, 0);
+                transform.rotation = Quaternion.identity;
             }
         }
         else if(transform.position.y < Config.RUNNER_DEATH_DEPTH){
             Util.Toggle(gameObject, false);
             rigidbody.useGravity = false;
             rigidbody.velocity = Vector3.zero;
+            rigidbody.angularVelocity = Vector3(0, 0, 0);
+            transform.rotation = Quaternion.identity;
         }
     }
 }
@@ -264,6 +268,7 @@ function kill(id : String, info : NetworkMessageInfo){
     }
     soundScript.playDeath();
     gameObject.layer = LayerMask.NameToLayer("Dead");
+    GetComponentInChildren(Projector).enabled = false;
 
     if(Config.USE_EGG){
         eggScript.notifyOfDeath(id);
