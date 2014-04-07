@@ -34,6 +34,7 @@ private var ingameBoldStyle : GUIStyle;
 private var headerStyle :GUIStyle;
 private var headerRestartStyle : GUIStyle;
 private var greenStyle :GUIStyle;
+private var yellowStyle :GUIStyle;
 private var redStyle :GUIStyle;
 private var whiteText :GUIStyle;
 private var whiteTinyText :GUIStyle;
@@ -728,6 +729,9 @@ function setUpStyles(){
 
     greenStyle = GUI.skin.GetStyle("GreenButton");
     greenStyle.fontSize = getScale() * buttonText;
+
+    yellowStyle = GUI.skin.GetStyle("YellowButton");
+    yellowtyle.fontSize = getScale() * buttonText;
 
     redStyle = GUI.skin.GetStyle("RedButton");
     redStyle.fontSize = getScale() * buttonText;
