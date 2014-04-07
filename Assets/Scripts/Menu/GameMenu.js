@@ -586,6 +586,10 @@ function enter(isNew: boolean) {
 
 function leaveFor(newMenu: menus) {
     showMenu = false;
+    isHosting = false;
+    isStartingServer = false;
+    selectCharacter = false;
+    showStatusBar = false;
     menuScript.stateScript.setCurrentMenu(newMenu);
     Network.Disconnect();
     menuScript.open();
