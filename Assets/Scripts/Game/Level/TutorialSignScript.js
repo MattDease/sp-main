@@ -2,6 +2,7 @@
 
 private var anim: Animator;
 private var currentState : AnimatorStateInfo;
+private var game : Game;
 private var player : Player;
 private var sign : GameObject;
 private var isAnimating : boolean = false;
@@ -12,16 +13,21 @@ private var hasEgg : boolean = false;
 private var forEgg : boolean = false;
 
 function Start () {
+    game = GameObject.Find("/GameManager").GetComponent(GameSetupScript).game;
     player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
     sign = this.gameObject;
     anim = GetComponent(Animator);
 }
 
 function Update() {
+    if(game.getState() != GameState.Playing){
+        return;
+    }
+
     currentState = anim.GetCurrentAnimatorStateInfo(0);
 
     if(!player.getSignWith(sign.name)) {
-
+        forEgg = false;
         if(Config.USE_EGG){
             egg = player.getTeam().getEgg();
             hasEgg = false;
@@ -38,7 +44,7 @@ function Update() {
 
         distance = Vector3.Distance(sign.transform.position, player.gameObject.transform.position);
 
-        if(distance < Config.TUTORIAL_SIGN_DISTANCE && !isAnimating && !hasEgg || distance < Config.TUTORIAL_SIGN_DISTANCE && !isAnimating && hasEgg && forEgg ){
+        if(distance < Config.TUTORIAL_SIGN_DISTANCE && !isAnimating && !hasEgg && !sign.name.Contains("4") || distance < Config.TUTORIAL_SIGN_DISTANCE && !isAnimating && hasEgg && forEgg ){
             player.addTutorialSign(sign.name);
             anim.SetBool("Shown", true);
             GetComponent(AudioSource).Play();

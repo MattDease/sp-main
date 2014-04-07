@@ -44,7 +44,9 @@ public class Team{
 
     public function kill() {
         alive = false;
-        Util.Toggle(egg, false);
+        if(Config.USE_EGG){
+            Util.Toggle(egg, false);
+        }
     }
 
     public function collectCoin() {
@@ -232,6 +234,7 @@ public class Team{
         if(teammates[id].GetType() == Commander){
             commander = null;
         }
+        removeSelectedCharacters(player.getCharacter());
         teammates.Remove(id);
     }
 

@@ -182,9 +182,6 @@ function OnGUI() {
 
         if (isHosting && Network.isServer){
            netScript.killGame();
-        } else if(Network.isClient) {
-            //remove player
-           gameManager.networkView.RPC("removePlayer", RPCMode.All, Network.player);
         }
 
         leaveFor(menus.lobby);
@@ -588,6 +585,10 @@ function enter(isNew: boolean) {
 
 function leaveFor(newMenu: menus) {
     showMenu = false;
+    isHosting = false;
+    isStartingServer = false;
+    selectCharacter = false;
+    showStatusBar = false;
     menuScript.stateScript.setCurrentMenu(newMenu);
     Network.Disconnect();
     menuScript.open();
@@ -772,15 +773,17 @@ function characterSelection() {
 function checkVersus(teamCount : int) {
     isVersus = gameSetupScript.game.getIsVersus();
 
-    if (Config.VERSUS_ENABLED && teamCount > Config.MAX_TEAM_COUNT && !isVersus || !Config.VERSUS_ENABLED && Input.GetKey('v') && !isVersus) {
-        gameManager.networkView.RPC("setVersusMode", RPCMode.AllBuffered, GameMode.Versus.ToString());
-        isVersus = gameSetupScript.game.getIsVersus();
-        selectCharacter = false;
-    }
-    else if(Config.VERSUS_ENABLED && teamCount < Config.MAX_TEAM_COUNT && isVersus || !Config.VERSUS_ENABLED && Input.GetKey('t') && isVersus){
-        gameManager.networkView.RPC("setVersusMode", RPCMode.AllBuffered, GameMode.Team.ToString());
-        isVersus = gameSetupScript.game.getIsVersus();
-        selectCharacter = false;
+    if(Network.isServer){
+        if (Config.VERSUS_ENABLED && teamCount > Config.MAX_TEAM_COUNT && !isVersus || !Config.VERSUS_ENABLED && Input.GetKey('v') && !isVersus) {
+            gameManager.networkView.RPC("setVersusMode", RPCMode.AllBuffered, GameMode.Versus.ToString());
+            isVersus = gameSetupScript.game.getIsVersus();
+            selectCharacter = false;
+        }
+        else if(Config.VERSUS_ENABLED && teamCount <= Config.MAX_TEAM_COUNT && isVersus || !Config.VERSUS_ENABLED && Input.GetKey('t') && isVersus){
+            gameManager.networkView.RPC("setVersusMode", RPCMode.AllBuffered, GameMode.Team.ToString());
+            isVersus = gameSetupScript.game.getIsVersus();
+            selectCharacter = false;
+        }
     }
 }
 function setUpStyles(){

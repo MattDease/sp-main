@@ -32,6 +32,11 @@ private var lastSpeedChange : float = 0;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     gameManager = GameObject.Find("/GameManager");
+
+    if(!networkView.isMine){
+        // Change layer so collisions with local player is ignored
+        gameObject.layer = LayerMask.NameToLayer("Remote Players");
+    }
 }
 
 @RPC
@@ -70,9 +75,6 @@ function initRunner(playerId : String, teamId : int){
         var me : Player = gameManager.GetComponent(PlayerScript).getSelf();
 
         team.runnerCreationCount++;
-
-        // Change layer so collisions with local player is ignored
-        gameObject.layer = LayerMask.NameToLayer("Remote Players");
 
         GetComponentInChildren(Projector).enabled = false;
 
@@ -263,7 +265,9 @@ function kill(id : String, info : NetworkMessageInfo){
     soundScript.playDeath();
     gameObject.layer = LayerMask.NameToLayer("Dead");
 
-    eggScript.notifyOfDeath(id);
+    if(Config.USE_EGG){
+        eggScript.notifyOfDeath(id);
+    }
 
     if(networkView.isMine){
         toss(true);
@@ -326,7 +330,7 @@ function grab(){
 }
 
 function toss(forward : boolean){
-    if(eggScript.isHoldingEgg(player.getId())){
+    if(Config.USE_EGG && eggScript.isHoldingEgg(player.getId())){
         var target = team.getClosestRunner(player, forward);
         if(target){
             networkView.RPC("syncToss", RPCMode.All);
@@ -428,7 +432,14 @@ function checkKeyboardInput(){
             networkView.RPC("stopWalk", RPCMode.All);
         }
         if(Input.GetKeyUp(KeyCode.D)){
-            networkView.RPC("attack", RPCMode.All);
+            if(Config.USE_EGG){
+                if(!eggScript.isHoldingEgg(player.getId())){
+                    networkView.RPC("attack", RPCMode.All);
+                }
+            }
+            else{
+                networkView.RPC("attack", RPCMode.All);
+            }
         }
         if(Config.USE_EGG){
             if(Input.GetKeyUp(KeyCode.R)){
@@ -508,7 +519,14 @@ function OnLongTap(tap:Tap){
 }
 
 function OnTap(tap: Vector2){
-    networkView.RPC("attack", RPCMode.All);
+    if(Config.USE_EGG){
+        if(!eggScript.isHoldingEgg(player.getId())){
+            networkView.RPC("attack", RPCMode.All);
+        }
+    }
+    else{
+        networkView.RPC("attack", RPCMode.All);
+    }
 }
 
 function OnTouch(pos:Vector2){

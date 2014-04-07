@@ -111,14 +111,16 @@ public class Game {
             teams.Add(new Team(1));
         } else {
               this.mode = GameMode.Team;
-              playerScript.getSelf().setTeamId(0);
-              playerScript.getSelf().setCharacter(12);
 
             //Remove second team
             for(var player : Player in players.Values){
                 player.setTeam(0, getTeam(0));
                 player.setCharacter(12);
                 player.updateReadyStatus(false);
+
+                if(Util.IsNetworkedPlayerMe(player)){
+                    playerScript.setSelf(player);
+                }
             }
 
             teams.Remove(getTeam(1));
@@ -247,10 +249,16 @@ public class Game {
     public function removePlayer(id : String){
         var player = players[id];
         var teamId : int = player.getTeamId();
-        Network.RemoveRPCs(player.getNetworkPlayer());
-        Network.DestroyPlayerObjects(player.getNetworkPlayer());
+        if(Network.isServer){
+            Network.RemoveRPCs(player.getNetworkPlayer());
+        }
+        if(Util.IsNetworkedPlayerMe(player)){
+            Network.DestroyPlayerObjects(player.getNetworkPlayer());
+        }
         Debug.Log("Player '" + player.getName() + "' disconnected.");
-        teams[teamId].removeTeammate(player, "Remove");
+        if(teamId != 100){
+            teams[teamId].removeTeammate(player, "Remove");
+        }
         players.Remove(id);
         if(stateScript.getGameState() != GameState.Uninitialized){
             // Handle disconnecting players
@@ -258,7 +266,7 @@ public class Game {
             if(!this.isValid()){
                 this.end();
             }
-            else if(!teams[teamId].isAlive()){
+            else if(teamId != 100 && !teams[teamId].isAlive()){
                 this.end();
             }
         }
@@ -302,7 +310,7 @@ public class Game {
                 setGameStatus(getStatusPrefix(team) + " needs a commander.");
                 break;
                 case TeamStatus.NeedsRunner :
-                setGameStatus(getStatusPrefix(team) + " needs a two runners.");
+                setGameStatus(getStatusPrefix(team) + " needs two runners.");
                 break;
                 case TeamStatus.ManyCommanders :
                 setGameStatus(getStatusPrefix(team) + " can only have one commander.");

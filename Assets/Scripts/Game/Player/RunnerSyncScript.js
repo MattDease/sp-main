@@ -3,8 +3,8 @@
 private var lastSynchronizationTime : float = 0;
 private var syncDelay : float = 0;
 private var syncTime : float = 0;
-private var syncStartPosition : Vector3 = Vector3.zero;
-private var syncEndPosition : Vector3 = Vector3.zero;
+private var syncStartPosition : Vector3 = Vector3(0, 0.1, 0);
+private var syncEndPosition : Vector3 = Vector3(0, 0.1, 0);
 private var runnerScript : RunnerScript;
 private var game : Game;
 
