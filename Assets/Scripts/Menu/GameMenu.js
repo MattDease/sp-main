@@ -625,7 +625,9 @@ function characterSelection() {
 
 
 
-    if (GUI.Button(Rect(guiObject[0].offset.x + Screen.width * 0.01, guiObject[0].offset.y + Screen.height * 0.02, guiObject[1].textureWidth,  guiObject[1].textureHeight), "", "BackButton")) {
+     guiObject[1].textureWidth = Screen.width * 0.08;
+     guiObject[1].textureHeight = Screen.height * 0.15;
+    if (GUI.Button(Rect(guiObject[0].offset.x + Screen.width * 0.02, guiObject[0].offset.y + Screen.height * 0.02, guiObject[1].textureWidth,  guiObject[1].textureHeight), "", "BackButton")) {
         selectCharacter = false;
         Util.playTap();
     }

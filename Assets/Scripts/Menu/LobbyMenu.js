@@ -66,6 +66,11 @@ function OnGUI() {
     guiObject[1].textureHeight = Screen.height * 0.15;
     guiObject[1].setLocation(Points.TopLeft);
 
+    guiObject[1].textureWidth = Screen.width * 0.08;
+    guiObject[1].textureHeight = Screen.height * 0.15;
+    guiObject[1].setLocation(Points.TopLeft);
+
+
     var labelStyle: GUIStyle = GUI.skin.GetStyle("JoinGame");
     labelStyle.fontSize = menuScript.getScale() * buttonText;
 
@@ -80,6 +85,11 @@ function OnGUI() {
     if (GUI.Button(Rect(Screen.width - Screen.width * 0.09, guiObject[1].offset.y + Screen.height * 0.02, guiObject[1].textureWidth,  guiObject[1].textureHeight), "", "RefreshButton")) {
         Util.playTap();
         netScript.FetchHostList(true);
+    }
+
+     if (GUI.Button(Rect(Screen.width * 0.015, guiObject[1].offset.y + Screen.height * 0.02, guiObject[1].textureWidth, guiObject[1].textureHeight), "", "BackButton")) {
+        leaveFor(menus.start);
+        Util.playTap();
     }
 
     // if(connectionErrorMsg){
