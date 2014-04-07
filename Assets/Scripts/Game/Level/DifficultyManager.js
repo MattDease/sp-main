@@ -87,9 +87,9 @@ function getIndex(teamId : int, current : int , previous: int) : int{
     if(inArray(previous, easyLevels)){
         previousDiff = GameDifficulty.Easy;
     } else if(inArray(previous, mediumLevels)){
-         previousDiff = GameDifficulty.Easy;
+        previousDiff = GameDifficulty.Medium;
     } else if(inArray(previous, hardLevels)){
-        previousDiff = GameDifficulty.Easy;
+        previousDiff = GameDifficulty.Hard;
     }
 
     var tempDiffs : List.<GameDifficulty> = new List.<GameDifficulty>();
@@ -106,31 +106,39 @@ function getIndex(teamId : int, current : int , previous: int) : int{
                 if(previousDiff == diff.previous && currentDiff == diff.current){
                     tempDiffs.Add(diff.next);
                 }
-
+            }
+            if(tempDiffs.Count == 0){
+                tempDiffs.Add(GameDifficulty.Easy);
             }
         break;
         case GameDifficulty.Medium:
-             for(var diff : Difficulty in medium){
+            for(var diff : Difficulty in medium){
                 if(previousDiff == diff.previous && currentDiff == diff.current){
                     tempDiffs.Add(diff.next);
                 }
-
+            }
+            if(tempDiffs.Count == 0){
+                tempDiffs.Add(GameDifficulty.Medium);
             }
         break;
         case GameDifficulty.Hard:
-          for(var diff : Difficulty in hard){
+            for(var diff : Difficulty in hard){
                 if(previousDiff == diff.previous && currentDiff == diff.current){
                     tempDiffs.Add(diff.next);
                 }
-
+            }
+            if(tempDiffs.Count == 0){
+                tempDiffs.Add(GameDifficulty.Medium);
             }
         break;
         case GameDifficulty.Expert:
-         for(var diff : Difficulty in expert){
+            for(var diff : Difficulty in expert){
                 if(previousDiff == diff.previous && currentDiff == diff.current){
                     tempDiffs.Add(diff.next);
                 }
-
+            }
+            if(tempDiffs.Count == 0){
+                tempDiffs.Add(GameDifficulty.Hard);
             }
         break;
     }
