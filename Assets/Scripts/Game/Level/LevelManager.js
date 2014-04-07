@@ -7,6 +7,7 @@ import System.Collections.Generic;
 
 // Set in editor
 public var startSegmentPrefab : GameObject;
+public var deadSegmentPrefab : GameObject;
 public var segmentPrefabs : List.<GameObject>;
 public var backgroundPrefabs : List.<GameObject>;
 public var enemyPrefabs : List.<GameObject>;
@@ -77,10 +78,13 @@ function updateLevel(){
 
     for(var team : Team in game.getTeams()){
         if(!team.isAlive()){
+            if(lastSegmentEnd[team.getId()] - game.getTeam(team.getId() == 0 ? 1 : 0).getLeader().getDistance() < newSegmentThreshold){
+                addSegment(team.getId(), false, false);
+            }
             continue;
         }
         if(lastSegmentEnd[team.getId()] - team.getLeader().getDistance() < newSegmentThreshold){
-            addSegment(team.getId(), false);
+            addSegment(team.getId(), false, true);
         }
         if(team.getStraggler().getDistance() - firstSegmentEnd[team.getId()] > newSegmentThreshold){
             removeSegment(team.getId());
@@ -99,16 +103,19 @@ function updateLevel(){
 
 function addFirstSegment(teamId : int){
     lastSegmentEnd[teamId] = -segmentOffset;
-    addSegment(teamId, true);
-    addSegment(teamId, false);
+    addSegment(teamId, true, true);
+    addSegment(teamId, false, true);
 }
 
-function addSegment(teamId : int, isFirst : boolean){
+function addSegment(teamId : int, isFirst : boolean, isAlive : boolean){
     waitingForSegment = true;
     var segment : GameObject;
 
     if(isFirst){
         segment = startSegmentPrefab;
+    }
+    else if(!isAlive){
+        segment = deadSegmentPrefab;
     }
     else {
         difficultyManager.setSegmentCount(teamId, difficultyManager.getSegmentCount(teamId) + 1);
