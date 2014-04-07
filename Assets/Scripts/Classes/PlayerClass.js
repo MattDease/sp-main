@@ -152,9 +152,6 @@ public class Runner extends Player{
         UnityEngine.Object.Destroy(this.gameObject);
     }
 
-    public function getRoundDistance(distance : float) : float {
-       return Mathf.Round(getDistance() * 1) / 1;
-    }
 }
 
 public class Commander extends Player{
