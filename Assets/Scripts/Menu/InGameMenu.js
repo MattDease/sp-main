@@ -13,6 +13,7 @@ private var teamScoreTexture : Texture2D;
 private var countdown1 : Texture2D;
 private var countdown2 : Texture2D;
 private var countdown3 : Texture2D;
+private var countdownGo : Texture2D;
 private var redBarTexture : Texture2D;
 private var coinTexture : Texture2D;
 private var readyCheckMarkTexture : Texture2D;
@@ -65,7 +66,7 @@ private var miniPlayerTextures :Texture[] = new Texture[13];
 
 
 private var mvp: Runner;
-
+private var justStarting : int = 0;
 
 private var guiInGame: GuiClasses [];
 guiInGame = new GuiClasses[14];
@@ -87,6 +88,7 @@ function Start(){
     countdown1 = Resources.Load("Textures/gui/count_1", Texture2D);
     countdown2 = Resources.Load("Textures/gui/count_2", Texture2D);
     countdown3 = Resources.Load("Textures/gui/count_3", Texture2D);
+    countdownGo = Resources.Load("Textures/gui/count_go", Texture2D);
     redBarTexture = Resources.Load("Textures/gui/redBar", Texture2D);
     teamScoreTexture = Resources.Load("Textures/gui/team_score", Texture2D);
     coinTexture = Resources.Load("Textures/gui/coin", Texture2D);
@@ -138,6 +140,11 @@ function OnGUI(){
     var gameState = stateScript.getGameState();
 
     if(gameState == gameState.Playing){
+
+        if(justStarting < 10) {
+            GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdownGo);
+            justStarting++;
+        }
 
         guiInGame[9].textureWidth = 540 * getScale();
         guiInGame[9].textureHeight = 100 * getScale();
@@ -222,6 +229,9 @@ function OnGUI(){
 
     if(gameState == GameState.Loading){
         switch(gameSetupScript.getCountDown()){
+            case 0:
+                GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdownGo);
+            break;
             case 1:
                     GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown1);
             break;
