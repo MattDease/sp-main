@@ -171,7 +171,7 @@ function OnGUI(){
             myTeam = self.getTeam();
         }
 
-        if(myTeam.getRunners(true).Count == 1 && !playerScript.OBSERVER){
+        if(Config.USE_EGG && myTeam.getRunners(true).Count == 1 && !playerScript.OBSERVER){
           GUI.DrawTexture(new Rect(guiInGame[14].offset.x + guiInGame[14].textureHeight/2, guiInGame[14].offset.y + guiInGame[14].textureHeight/2, guiInGame[14].textureWidth, guiInGame[14].textureHeight), inGameOverlayWhite);
           GUI.Label(new Rect(guiInGame[14].offset.x + guiInGame[14].textureHeight/2, guiInGame[14].offset.y + guiInGame[14].textureHeight/2, guiInGame[14].textureWidth, guiInGame[14].textureHeight), (self.GetType() == Commander ? "Hover over runner to help them jump" : "Jump when the commander is near you"), "SpecialHeader");
 
