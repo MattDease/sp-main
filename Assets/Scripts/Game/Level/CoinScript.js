@@ -1,6 +1,7 @@
 ﻿#pragma strict
 
 private var game : Game;
+private var playerScript : PlayerScript;
 private var player : Player;
 private var alive : boolean;
 private var animator : Animator;
@@ -14,15 +15,21 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 function initCoin(teamId : int, hostTeam : boolean){
     var gameManager : GameObject = GameObject.Find("/GameManager");
     game = gameManager.GetComponent(GameSetupScript).game;
-    player = gameManager.GetComponent(PlayerScript).getSelf();
+    playerScript = gameManager.GetComponent(PlayerScript);
+    player = playerScript.getSelf();
     animator = transform.Find("skin").gameObject.GetComponent(Animator);
     alive = true;
+    this.teamId = teamId;
 
     if(!hostTeam){
         transform.position.z -= Config.TEAM_DEPTH_OFFSET;
     }
-    this.teamId = teamId;
-    transform.position.z += (teamId == player.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
+    if(playerScript.OBSERVER){
+        transform.position.z += (teamId == 0 ? 0 : Config.TEAM_DEPTH_OFFSET);
+    }
+    else{
+        transform.position.z += (teamId == player.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
+    }
 }
 
 

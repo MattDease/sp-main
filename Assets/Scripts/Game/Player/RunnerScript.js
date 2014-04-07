@@ -18,6 +18,7 @@ private var platform : GameObject = null;
 private var egg : GameObject;
 private var eggScript : EggScript;
 private var soundScript : RunnerSoundScript;
+private var playerScript : PlayerScript;
 
 private var targetSpeed : float = Config.RUN_SPEED;
 private var currentSpeed : float = Config.RUN_SPEED;
@@ -48,6 +49,7 @@ function initRunner(playerId : String, teamId : int){
     animator = model.GetComponent(Animator);
     team = player.getTeam();
     game = gameManager.GetComponent(GameSetupScript).game;
+    playerScript = gameManager.GetComponent(PlayerScript);
 
     player.gameObject = gameObject;
     player.script = this;
@@ -72,17 +74,22 @@ function initRunner(playerId : String, teamId : int){
         runningPlane = player.getPosition();
     }
     else{
-        var me : Player = gameManager.GetComponent(PlayerScript).getSelf();
+        var me : Player = playerScript.getSelf();
 
         team.runnerCreationCount++;
 
         GetComponentInChildren(Projector).enabled = false;
 
         transform.position.z += team.runnerCreationCount * Config.RUNNER_LANE_WIDTH;
-        if(teamId != me.getTeamId() || me.GetType() == Commander){
+        if(teamId != me.getTeamId() || me.GetType() == Commander || playerScript.OBSERVER){
             transform.position.z -= Config.RUNNER_LANE_WIDTH;
         }
-        transform.position.z += (teamId == me.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
+        if(playerScript.OBSERVER){
+            transform.position.z += (teamId == 0 ? 0 : Config.TEAM_DEPTH_OFFSET);
+        }
+        else{
+            transform.position.z += (teamId == me.getTeamId() ? 0 : Config.TEAM_DEPTH_OFFSET);
+        }
         depth = transform.position.z;
         Util.Toggle(gameObject, false);
         Invoke("show", 0.3);

@@ -524,7 +524,7 @@ function OnGUI() {
                 }
 
             } else {
-                if(playerScript.getSelf().getTeamId() != 100 && playerScript.getSelf().getCharacter() != 12) {
+                if(playerScript.getSelf().getTeamId() != 100 && playerScript.getSelf().getCharacter() != 12 && !playerScript.OBSERVER) {
                     if (GUI.Button(Rect(guiHost[2].offset.x, Screen.height - Screen.height * 0.13 - (100 * menuScript.getScale()), guiHost[2].textureWidth, guiHost[2].textureHeight), (playerScript.getSelf().getReadyStatus() ? "NOT READY" : "READY"), (playerScript.getSelf().getReadyStatus() ? "YellowButton" : "GreenButton"))) {
                         Util.playTap();
                         if (playerScript.getSelf().getReadyStatus()) playerScript.getSelf().updateReadyStatus(false);
@@ -562,7 +562,7 @@ function enter(isNew: boolean) {
         gameSetupScript.game = new Game();
     }
 
-    if (Network.isClient) {
+    if (Network.isClient && playerScript && !playerScript.OBSERVER) {
         gameSetupScript.registerPlayerProxy(playerScript.getName());
     }
 

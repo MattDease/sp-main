@@ -160,7 +160,7 @@ function OnGUI() {
     guiObject[5].textureHeight = Screen.height * 0.14;
     guiObject[5].setLocation(Points.BottomRight);
 
-    if(GUI.Button(Rect(guiObject[5].offset.x, Screen.height - Screen.height * 0.13, guiObject[5].textureWidth, guiObject[5].textureHeight), "NEW GAME", "GreenButton")){
+    if(!playerScript.OBSERVER && GUI.Button(Rect(guiObject[5].offset.x, Screen.height - Screen.height * 0.13, guiObject[5].textureWidth, guiObject[5].textureHeight), "NEW GAME", "GreenButton")){
         Util.playTap();
         leaveFor(menus.host);
     }

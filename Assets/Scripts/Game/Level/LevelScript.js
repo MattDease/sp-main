@@ -8,11 +8,13 @@ private var player : Player;
 private var signType : SignType = SignType.Runner;
 
 private var difficultyManager : DifficultyManager;
+private var playerScript : PlayerScript;
 
 public var diff : int = 0;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
-    player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
+    playerScript = GameObject.Find("/GameManager").GetComponent(PlayerScript);
+    player = playerScript.getSelf();
     difficultyManager = GameObject.Find("/GameScripts").GetComponent(DifficultyManager);
 
     if(player.GetType() == Commander) {
@@ -25,7 +27,12 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 
 @RPC
 function initSegment(teamId : int){
-    transform.position.z = teamId == player.getTeamId() ? 0 : Config.TEAM_DEPTH_OFFSET;
+    if(playerScript.OBSERVER){
+        transform.position.z = teamId == 0 ? 0 : Config.TEAM_DEPTH_OFFSET;
+    }
+    else{
+        transform.position.z = teamId == player.getTeamId() ? 0 : Config.TEAM_DEPTH_OFFSET;
+    }
     var platformScripts : Component[] = transform.GetComponentsInChildren(PlatformScript);
     if(platformScripts != null){
         for(var script : Component in platformScripts){

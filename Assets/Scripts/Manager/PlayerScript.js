@@ -1,5 +1,9 @@
 #pragma strict
 
+// Observer mode supported for project-fair ONLY, desktop only.
+public var OBSERVER : boolean = false;
+public var OBSERVED_TEAM : int = 0;
+
 private var playerName : String;
 private var timesPlayed : int = 0;
 public var self : Player;

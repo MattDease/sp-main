@@ -48,7 +48,9 @@ public class Game {
             GameObject.Find("/Music").transform.GetComponent(AudioSource).Stop();
             GameObject.Find("/GameScripts").GetComponent(SoundScript).playGameEnd();
             stateScript.setGameState(GameState.Ended);
-            playerScript.getSelf().gameObject.GetComponent(NetworkView).enabled = false;
+            if(!playerScript.OBSERVER){
+                playerScript.getSelf().gameObject.GetComponent(NetworkView).enabled = false;
+            }
             for(var player : Player in players.Values){
                 player.script.enabled = false;
                 Util.Toggle(player.gameObject, false);

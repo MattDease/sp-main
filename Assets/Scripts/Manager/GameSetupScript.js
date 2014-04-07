@@ -6,6 +6,7 @@ import System.Collections.Generic;
 //Set in editor
 public var characterPrefabs : List.<Transform>;
 public var eggPrefab : Transform;
+public var observerPrefab : Transform;
 
 public var game : Game;
 
@@ -52,7 +53,10 @@ function createCharacter(info : NetworkMessageInfo){
     var player : Player = playerScript.getSelf();
     var go : Transform;
     var me : Player = playerScript.getSelf();
-    if(me.GetType() == Runner){
+    if(playerScript.OBSERVER){
+        Instantiate(observerPrefab, Vector3.zero, Quaternion.identity);
+    }
+    else if(me.GetType() == Runner){
         go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3(0, 0.1, 0), Quaternion.identity, 0);
         go.networkView.RPC("initRunner", RPCMode.All, me.getId(), me.getTeamId());
     }
@@ -174,7 +178,7 @@ function resetGame(){
     if(Network.isServer){
         readyToRestart(playerScript.getSelf().getId());
     }
-    else{
+    else if(!playerScript.OBSERVER){
         networkView.RPC("readyToRestart", RPCMode.Server, playerScript.getSelf().getId());
     }
 }
