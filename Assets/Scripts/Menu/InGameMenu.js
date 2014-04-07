@@ -245,7 +245,7 @@ function OnGUI(){
         //Show cards for each player off screen
         if(!playerScript.OBSERVER){
             for(var player : Player in self.getTeam().getTeammates().Values){
-                if(player.getId() == self.getId() || player.GetType == Commander){
+                if(player.getId() == self.getId() || player.GetType() == Commander){
                     continue;
                 }
                 var runner : Runner = player as Runner;
