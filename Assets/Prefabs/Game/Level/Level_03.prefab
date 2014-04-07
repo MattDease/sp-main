@@ -867,7 +867,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400094}
   m_Layer: 9
-  m_Name: c_11
+  m_Name: t_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -945,6 +945,36 @@ GameObject:
   - 114: {fileID: 11400012}
   m_Layer: 9
   m_Name: Level_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &100122
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400122}
+  m_Layer: 9
+  m_Name: t_5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &100124
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400124}
+  m_Layer: 9
+  m_Name: c_11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1473,9 +1503,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100110}
-  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.5, y: 3, z: 0}
-  m_LocalScale: {x: .251257032, y: .251257032, z: .251257032}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 16.0070972, y: 3.22934246, z: 0}
+  m_LocalScale: {x: .251257002, y: .251257002, z: .251257002}
   m_Children: []
   m_Father: {fileID: 400118}
 --- !u!4 &400096
@@ -1620,7 +1650,8 @@ Transform:
   - {fileID: 400100}
   - {fileID: 400098}
   - {fileID: 400096}
-  - {fileID: 400094}
+  - {fileID: 400124}
+  - {fileID: 400122}
   - {fileID: 400092}
   - {fileID: 400090}
   - {fileID: 400088}
@@ -1668,6 +1699,7 @@ Transform:
   - {fileID: 400004}
   - {fileID: 400002}
   - {fileID: 400000}
+  - {fileID: 400094}
   m_Father: {fileID: 400120}
 --- !u!4 &400120
 Transform:
@@ -1681,6 +1713,28 @@ Transform:
   m_Children:
   - {fileID: 400118}
   m_Father: {fileID: 0}
+--- !u!4 &400122
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100122}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.28294086, y: 3, z: 0}
+  m_LocalScale: {x: .251257002, y: .251257002, z: .251257002}
+  m_Children: []
+  m_Father: {fileID: 400118}
+--- !u!4 &400124
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100124}
+  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
+  m_LocalPosition: {x: 16.5, y: 3, z: 0}
+  m_LocalScale: {x: .251257032, y: .251257032, z: .251257032}
+  m_Children: []
+  m_Father: {fileID: 400118}
 --- !u!23 &2300000
 Renderer:
   m_ObjectHideFlags: 1
@@ -2263,11 +2317,13 @@ MonoBehaviour:
   - {fileID: 400044}
   - {fileID: 400042}
   - {fileID: 400040}
-  tutorialPoints: []
+  tutorialPoints:
+  - {fileID: 400094}
+  - {fileID: 400122}
   coins:
   - {fileID: 400116}
   - {fileID: 400114}
-  - {fileID: 400094}
+  - {fileID: 400124}
   - {fileID: 400096}
   - {fileID: 400112}
   - {fileID: 400110}

@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   m_Layer: 9
-  m_Name: t_4
+  m_Name: t_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -815,15 +815,30 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100108
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400108}
+  m_Layer: 9
+  m_Name: t_4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.93985176, y: -.125692368, z: .5}
-  m_LocalScale: {x: .156355172, y: .156355172, z: .156355172}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 15.5029325, y: 1.39619195, z: .5}
+  m_LocalScale: {x: .156354994, y: .156354994, z: .156354994}
   m_Children: []
   m_Father: {fileID: 400104}
 --- !u!4 &400002
@@ -1448,6 +1463,7 @@ Transform:
   - {fileID: 400006}
   - {fileID: 400004}
   - {fileID: 400002}
+  - {fileID: 400108}
   - {fileID: 400000}
   m_Father: {fileID: 400106}
 --- !u!4 &400106
@@ -1462,6 +1478,17 @@ Transform:
   m_Children:
   - {fileID: 400104}
   m_Father: {fileID: 0}
+--- !u!4 &400108
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100108}
+  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.93985176, y: -.125692368, z: .5}
+  m_LocalScale: {x: .156355172, y: .156355172, z: .156355172}
+  m_Children: []
+  m_Father: {fileID: 400104}
 --- !u!23 &2300000
 Renderer:
   m_ObjectHideFlags: 1
@@ -1557,6 +1584,7 @@ MonoBehaviour:
   - {fileID: 400006}
   - {fileID: 400004}
   - {fileID: 400002}
+  - {fileID: 400108}
   - {fileID: 400000}
   coins:
   - {fileID: 400096}

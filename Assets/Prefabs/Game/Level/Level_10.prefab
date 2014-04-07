@@ -60,6 +60,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100008
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400008}
+  m_Layer: 9
+  m_Name: c_5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &100016
 GameObject:
   m_ObjectHideFlags: 1
@@ -277,7 +292,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400070}
   m_Layer: 9
-  m_Name: c_5
+  m_Name: t_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -434,6 +449,17 @@ Transform:
   m_LocalScale: {x: .173897877, y: .173897877, z: .173897877}
   m_Children: []
   m_Father: {fileID: 400082}
+--- !u!4 &400008
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100008}
+  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
+  m_LocalPosition: {x: 14, y: 2.5, z: 0}
+  m_LocalScale: {x: .173897877, y: .173897877, z: .173897877}
+  m_Children: []
+  m_Father: {fileID: 400082}
 --- !u!4 &400024
 Transform:
   m_ObjectHideFlags: 1
@@ -583,9 +609,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100070}
-  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: 14, y: 2.5, z: 0}
-  m_LocalScale: {x: .173897877, y: .173897877, z: .173897877}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .31479907, y: -.0473408699, z: 0}
+  m_LocalScale: {x: .173897997, y: .173897997, z: .173897997}
   m_Children: []
   m_Father: {fileID: 400082}
 --- !u!4 &400072
@@ -658,6 +684,7 @@ Transform:
   - {fileID: 400076}
   - {fileID: 400074}
   - {fileID: 400072}
+  - {fileID: 400008}
   - {fileID: 400070}
   - {fileID: 400068}
   - {fileID: 400066}
@@ -905,45 +932,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawns:
-  - {fileID: 0}
-  - {fileID: 400006}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 400044}
-  - {fileID: 400042}
-  - {fileID: 400040}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 400030}
-  - {fileID: 400028}
-  - {fileID: 400026}
-  - {fileID: 400024}
-  - {fileID: 400004}
-  - {fileID: 400002}
-  - {fileID: 400000}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 400046}
   - {fileID: 400062}
+  - {fileID: 400024}
   - {fileID: 400060}
-  - {fileID: 0}
-  tutorialPoints: []
+  - {fileID: 400028}
+  - {fileID: 400006}
+  - {fileID: 400030}
+  - {fileID: 400046}
+  - {fileID: 400002}
+  - {fileID: 400004}
+  - {fileID: 400042}
+  - {fileID: 400026}
+  - {fileID: 400044}
+  - {fileID: 400040}
+  - {fileID: 400000}
+  tutorialPoints:
+  - {fileID: 400070}
   coins:
   - {fileID: 400078}
   - {fileID: 400076}
   - {fileID: 400074}
   - {fileID: 400072}
-  - {fileID: 400070}
+  - {fileID: 400008}
   - {fileID: 400080}
   diff: 0
 --- !u!148 &14800000
