@@ -731,7 +731,7 @@ function setUpStyles(){
     greenStyle.fontSize = getScale() * buttonText;
 
     yellowStyle = GUI.skin.GetStyle("YellowButton");
-    yellowtyle.fontSize = getScale() * buttonText;
+    yellowStyle.fontSize = getScale() * buttonText;
 
     redStyle = GUI.skin.GetStyle("RedButton");
     redStyle.fontSize = getScale() * buttonText;
