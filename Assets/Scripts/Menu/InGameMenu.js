@@ -23,6 +23,7 @@ private var blueScoreTexture : Texture2D;
 private var purpleOverlayTexture : Texture2D;
 private var blueOverlayTexture : Texture2D;
 private var inGameOverlay : Texture2D;
+private var inGameOverlayWhite : Texture2D;
 
 private var purpleEgg : Texture2D;
 private var blueEgg : Texture2D;
@@ -32,6 +33,7 @@ private var menuSkin : GUISkin;
 private var localStyle :GUIStyle;
 private var ingameBoldStyle : GUIStyle;
 private var headerStyle :GUIStyle;
+private var specheaderStyle :GUIStyle;
 private var headerRestartStyle : GUIStyle;
 private var greenStyle :GUIStyle;
 private var yellowStyle :GUIStyle;
@@ -71,7 +73,7 @@ private var mvp: Runner;
 private var justStarting : int = 0;
 
 private var guiInGame: GuiClasses [];
-guiInGame = new GuiClasses[14];
+guiInGame = new GuiClasses[15];
 for (var z = 0; z < guiInGame.length; z++) {
     guiInGame[z] = new GuiClasses();
 }
@@ -100,6 +102,7 @@ function Start(){
     purpleOverlayTexture = Resources.Load("Textures/gui/purpleTeamOverlay", Texture2D);
     blueOverlayTexture = Resources.Load("Textures/gui/blueTeamOVerlay", Texture2D);
     inGameOverlay = Resources.Load("Textures/gui/inGameBar", Texture2D);
+    inGameOverlayWhite = Resources.Load("Textures/gui/inGameBarWhite", Texture2D);
     purpleEgg = Resources.Load("Textures/gui/eggPurple", Texture2D);
     blueEgg = Resources.Load("Textures/gui/eggBlue", Texture2D);
 
@@ -156,12 +159,22 @@ function OnGUI(){
         guiInGame[10].textureHeight = 70 * getScale();
         guiInGame[10].setLocation(Points.TopRight);
 
+        guiInGame[14].textureWidth = 1120 * getScale();
+        guiInGame[14].textureHeight = 100 * getScale();
+        guiInGame[14].setLocation(Points.TopLeft);
+
         var myTeam : Team;
         if(playerScript.OBSERVER){
             myTeam = game.getTeam(playerScript.OBSERVED_TEAM);
         }
         else{
             myTeam = self.getTeam();
+        }
+
+        if(myTeam.getRunners(true).Count == 1 && !playerScript.OBSERVER){
+          GUI.DrawTexture(new Rect(guiInGame[14].offset.x + guiInGame[14].textureHeight/2, guiInGame[14].offset.y + guiInGame[14].textureHeight/2, guiInGame[14].textureWidth, guiInGame[14].textureHeight), inGameOverlayWhite);
+          GUI.Label(new Rect(guiInGame[14].offset.x + guiInGame[14].textureHeight/2, guiInGame[14].offset.y + guiInGame[14].textureHeight/2, guiInGame[14].textureWidth, guiInGame[14].textureHeight), (self.GetType() == Commander ? "Hover over runner to help them jump" : "Jump when the commander is near you"), "SpecialHeader");
+
         }
 
         GUI.DrawTexture(new Rect(guiInGame[9].offset.x - guiInGame[9].textureHeight/2, guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), inGameOverlay);
@@ -178,7 +191,6 @@ function OnGUI(){
 
         newScore += myScore.ToString();
         GUI.Label(new Rect(guiInGame[10].offset.x - (4.7*guiInGame[9].textureHeight), guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), newScore + " m", "InGameBoldWhiteText");
-
        //PROGRESS BAR && OFF SCREEN PLAYER CARDS
 
         guiInGame[11].textureWidth = 70 * getScale();
@@ -785,6 +797,9 @@ function setUpStyles(){
 
     mvpTextStyle = GUI.skin.GetStyle("MVPHeader");
     mvpTextStyle.fontSize = getScale() * 55;
+
+    specheaderStyle =  GUI.skin.GetStyle("SpecialHeader");
+    specheaderStyle.fontSize = getScale() * 50;
 
     GUI.skin.textField.fontSize = getScale() * bodyText;
 }
