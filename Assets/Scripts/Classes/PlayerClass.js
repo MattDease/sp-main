@@ -56,7 +56,12 @@ public class Player{
     }
 
     public function getPosition() : Vector3 {
-        return this.gameObject.transform.position;
+        if(this.gameObject){
+            return this.gameObject.transform.position;
+        }
+        else{
+            return Vector3.zero;
+        }
     }
 
     public function setCharacter(characterId : int){
@@ -126,7 +131,12 @@ public class Runner extends Player{
     }
 
     public function getDistance() : float {
-        return roundDistance(this.gameObject.transform.position.x);
+        if(this.gameObject){
+            return this.gameObject.transform.position.x;
+        }
+        else{
+            return 0;
+        }
     }
 
     public function isAlive() : boolean {
@@ -142,9 +152,6 @@ public class Runner extends Player{
         UnityEngine.Object.Destroy(this.gameObject);
     }
 
-    public function roundDistance(distance : float) : float {
-       return Mathf.Round(distance * 1) / 1;
-    }
 }
 
 public class Commander extends Player{

@@ -52,7 +52,9 @@ function init(pt1 : Vector3, pt2 : Vector3, typeCount : int){
     // TODO adjust based on difficulty
     speed  = Random.Range(0.0, 0.2) + (type == EnemyType.Cardinal ? Config.CARDINAL_SPEED : Config.WASP_BEETLE_SPEED);
     start = pt1;
+    start.z = transform.position.z;
     end = pt2;
+    end.z = transform.position.z;
     this.typeCount = typeCount;
     distance = Vector3.Distance(pt1, pt2);
     if((type == EnemyType.Cardinal) || (type == EnemyType.Worm)){

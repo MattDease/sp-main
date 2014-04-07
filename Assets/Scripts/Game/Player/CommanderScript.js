@@ -13,6 +13,7 @@ private var animator : Animator;
 private var team : Team;
 private var game : Game;
 private var camContainer : GameObject;
+private var playerScript : PlayerScript;
 
 private var touched : boolean = false;
 private var plane : Plane = new Plane(Vector3(0, 1, Config.COMMANDER_DEPTH_OFFSET),
@@ -37,6 +38,7 @@ function initCommander(playerId : String, teamId : int){
     game = GameObject.Find("/GameManager").GetComponent(GameSetupScript).game;
     model = gameObject.transform.Find("model").gameObject;
     animator = model.GetComponent(Animator);
+    playerScript = GameObject.Find("/GameManager").GetComponent(PlayerScript);
 
     player.gameObject = gameObject;
     player.script = this;
@@ -58,8 +60,13 @@ function initCommander(playerId : String, teamId : int){
         rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
     }
     else{
-        var me : Player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
-        transform.position.z = Config.COMMANDER_DEPTH_OFFSET + (teamId == me.getTeamId() ? 0 : Config.TEAM_DEPTH_OFFSET);
+        var me : Player = playerScript.getSelf();
+        if(playerScript.OBSERVER){
+            transform.position.z = Config.COMMANDER_DEPTH_OFFSET + (teamId == 0 ? 0 : Config.TEAM_DEPTH_OFFSET);
+        }
+        else{
+            transform.position.z = Config.COMMANDER_DEPTH_OFFSET + (teamId == me.getTeamId() ? 0 : Config.TEAM_DEPTH_OFFSET);
+        }
         depth = transform.position.z;
     }
 }

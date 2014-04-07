@@ -309,6 +309,10 @@ public class Team{
         }
     }
 
+    public function getRoundDistance() : float {
+        return Mathf.Round(getDistance() * 1) / 1;
+    }
+
     public function getCoinCount() : int {
         return this.coinCount;
     }
