@@ -38,6 +38,17 @@ function Start(){
     open();
 }
 
+function Update(){
+    if( (Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftControl)) &&
+        (Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift)) &&
+         Input.GetKeyDown(KeyCode.O) &&
+         stateScript.getCurrentMenu() != menus.game &&
+         stateScript.getCurrentMenu() != menus.host ){
+        playerScript.OBSERVER = !playerScript.OBSERVER;
+        Debug.Log("Observer mode turned " + (playerScript.OBSERVER ? "on." : "off."));
+    }
+}
+
 function open(){
     var menuName : menus = stateScript.getCurrentMenu();
     switch (menuName){

@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c83495a810d13de43aa887c9249098a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OBSERVER: 0
   self:
     gameObject: {fileID: 0}
     script: {fileID: 0}
@@ -139,6 +140,7 @@ MonoBehaviour:
   - {fileID: 400104, guid: 9e243f64c2db7498ba10114eb87daa74, type: 2}
   - {fileID: 400038, guid: bc7ea9895636b41d4800e80382c9a018, type: 2}
   eggPrefab: {fileID: 400002, guid: debd9c21e3e974b07af00bbbb355176f, type: 2}
+  observerPrefab: {fileID: 400002, guid: f79264bdcfc3ff841be485a42cce709a, type: 2}
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1

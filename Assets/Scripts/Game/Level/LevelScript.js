@@ -8,31 +8,14 @@ private var player : Player;
 private var signType : SignType = SignType.Runner;
 
 private var difficultyManager : DifficultyManager;
+private var playerScript : PlayerScript;
 
 public var diff : int = 0;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
-    player = GameObject.Find("/GameManager").GetComponent(PlayerScript).getSelf();
+    playerScript = GameObject.Find("/GameManager").GetComponent(PlayerScript);
+    player = playerScript.getSelf();
     difficultyManager = GameObject.Find("/GameScripts").GetComponent(DifficultyManager);
-
-    switch(difficultyManager.getDifficulty()){
-        case GameDifficulty.Tutorial:
-            diff = 0;
-        break;
-        case GameDifficulty.Easy:
-            diff = 0;
-        break;
-        case GameDifficulty.Medium:
-            diff = 1;
-        break;
-        case GameDifficulty.Hard:
-             diff = 2;
-        break;
-        case GameDifficulty.Expert:
-            diff = 3;
-        break;
-    }
-
 
     if(player.GetType() == Commander) {
         signType = SignType.Commander;
@@ -44,7 +27,12 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 
 @RPC
 function initSegment(teamId : int){
-    transform.position.z = teamId == player.getTeamId() ? 0 : Config.TEAM_DEPTH_OFFSET;
+    if(playerScript.OBSERVER){
+        transform.position.z = teamId == 0 ? 0 : Config.TEAM_DEPTH_OFFSET;
+    }
+    else{
+        transform.position.z = teamId == player.getTeamId() ? 0 : Config.TEAM_DEPTH_OFFSET;
+    }
     var platformScripts : Component[] = transform.GetComponentsInChildren(PlatformScript);
     if(platformScripts != null){
         for(var script : Component in platformScripts){
@@ -67,6 +55,24 @@ function initSegment(teamId : int){
     }
 
     if(Network.isServer){
+        switch(difficultyManager.getDifficulty(teamId)){
+            case GameDifficulty.Tutorial:
+                diff = 0;
+            break;
+            case GameDifficulty.Easy:
+                diff = 0;
+            break;
+            case GameDifficulty.Medium:
+                diff = 1;
+            break;
+            case GameDifficulty.Hard:
+                 diff = 2;
+            break;
+            case GameDifficulty.Expert:
+                diff = 3;
+            break;
+        }
+
         var enemies : List.<Enemy> = new List.<Enemy>();
         var points : Dictionary.<int, Transform> = new Dictionary.<int, Transform>();
         var prefabs : Dictionary.<int, int> = new Dictionary.<int, int>();

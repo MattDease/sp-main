@@ -7,6 +7,7 @@ public var deathSound : AudioSource;
 private var game : Game;
 private var model : GameObject;
 private var animator : Animator;
+private var playerScript : PlayerScript;
 
 private var speed : float;
 private var distance : float;
@@ -24,7 +25,8 @@ private var lastWormAttack : float = 0;
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
     alive = true;
     var gameManager : GameObject =  GameObject.Find("/GameManager");
-    player = gameManager.GetComponent(PlayerScript).getSelf();
+    playerScript = gameManager.GetComponent(PlayerScript);
+    player = playerScript.getSelf();
     game = gameManager.GetComponent(GameSetupScript).game;
 
     model = transform.Find("model").gameObject;
@@ -33,11 +35,17 @@ function OnNetworkInstantiate (info : NetworkMessageInfo) {
 
 @RPC
 function initEnemy(teamId : int, hostTeam : boolean){
+    this.teamId = teamId;
+
     if(!hostTeam){
         transform.position.z -= Config.TEAM_DEPTH_OFFSET;
     }
-    this.teamId = teamId;
-    transform.position.z += (teamId == player.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
+    if(playerScript.OBSERVER){
+        transform.position.z += (teamId == 0 ? 0 : Config.TEAM_DEPTH_OFFSET);
+    }
+    else{
+        transform.position.z += (teamId == player.getTeamId()) ? 0 : Config.TEAM_DEPTH_OFFSET;
+    }
 }
 
 function init(pt1 : Vector3, pt2 : Vector3, typeCount : int){

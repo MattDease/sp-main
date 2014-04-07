@@ -156,7 +156,13 @@ function OnGUI(){
         guiInGame[10].textureHeight = 70 * getScale();
         guiInGame[10].setLocation(Points.TopRight);
 
-        var myTeam : Team = self.getTeam();
+        var myTeam : Team;
+        if(playerScript.OBSERVER){
+            myTeam = game.getTeam(playerScript.OBSERVED_TEAM);
+        }
+        else{
+            myTeam = self.getTeam();
+        }
 
         GUI.DrawTexture(new Rect(guiInGame[9].offset.x - guiInGame[9].textureHeight/2, guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), inGameOverlay);
         GUI.DrawTexture(new Rect(guiInGame[10].offset.x - guiInGame[9].textureHeight/2 - guiInGame[9].textureHeight/2 - (Screen.width * 0.05), guiInGame[10].offset.y + guiInGame[9].textureHeight/2 + guiInGame[10].textureHeight/4, guiInGame[10].textureWidth, guiInGame[10].textureHeight), coinTexture);
@@ -225,21 +231,23 @@ function OnGUI(){
         }
 
         //Show cards for each player off screen
-        for(var player : Player in self.getTeam().getTeammates().Values){
-            if(player.getId() == self.getId() || player.GetType == Commander){
-                continue;
-            }
-            var runner : Runner = player as Runner;
-            if(!runner.isAlive()) {
-                continue;
-            }
-            var pos : Vector3 = player.getPosition();
-            pos.y += 0.5;
-            var screenPosition : Vector3 = Camera.main.WorldToScreenPoint(pos);
-            if(screenPosition.x < 0){
-                var playerOffset : float = Screen.height - screenPosition.y;
-                GUI.DrawTexture(new Rect(guiInGame[12].offset.x + guiInGame[12].textureWidth/2, playerOffset, guiInGame[12].textureWidth, guiInGame[12].textureHeight), sideArrow);
-                GUI.Button(new Rect(guiInGame[13].offset.x + guiInGame[13].textureWidth , playerOffset, guiInGame[13].textureWidth, guiInGame[13].textureHeight), miniPlayerTextures[player.getCharacter()], "FullImage");
+        if(!playerScript.OBSERVER){
+            for(var player : Player in self.getTeam().getTeammates().Values){
+                if(player.getId() == self.getId() || player.GetType == Commander){
+                    continue;
+                }
+                var runner : Runner = player as Runner;
+                if(!runner.isAlive()) {
+                    continue;
+                }
+                var pos : Vector3 = player.getPosition();
+                pos.y += 0.5;
+                var screenPosition : Vector3 = Camera.main.WorldToScreenPoint(pos);
+                if(screenPosition.x < 0){
+                    var playerOffset : float = Screen.height - screenPosition.y;
+                    GUI.DrawTexture(new Rect(guiInGame[12].offset.x + guiInGame[12].textureWidth/2, playerOffset, guiInGame[12].textureWidth, guiInGame[12].textureHeight), sideArrow);
+                    GUI.Button(new Rect(guiInGame[13].offset.x + guiInGame[13].textureWidth , playerOffset, guiInGame[13].textureWidth, guiInGame[13].textureHeight), miniPlayerTextures[player.getCharacter()], "FullImage");
+                }
             }
         }
 
@@ -413,7 +421,7 @@ function OnGUI(){
                  voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players voted to play again!";
                  GUI.Label(new Rect(guiInGame[1].offset.x - 3.5 * (Screen.width * 0.22), Screen.height - Screen.height * 0.16, 2.5 * guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
 
-             } else {
+             } else if(!playerScript.OBSERVER) {
                  if (!self.getRestartVote()) {
                     if (GUI.Button(Rect(guiInGame[1].offset.x - (Screen.width * 0.17), Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "YES", "GreenButton")) {
                      Util.playTap();
@@ -429,10 +437,11 @@ function OnGUI(){
 
                  }
 
-
-                 voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players voted to play again!";
-                 GUI.Label(new Rect(guiInGame[1].offset.x - 2.6 * (Screen.width * 0.17), Screen.height - Screen.height * 0.18, guiInGame[1].textureWidth * 1.5, guiInGame[1].textureHeight), (self.getRestartVote() ? "You voted!" : "Play Again?"), "RestartHeader");
-                 GUI.Label(new Rect(guiInGame[1].offset.x - 2.5 * (Screen.width * 0.23), Screen.height - Screen.height * 0.12, 2.5 * guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
+                if(!playerScript.OBSERVER){
+                    voteStr = restartCount + "/" + self.getTeam().getTeammates().Count + " players voted to play again!";
+                    GUI.Label(new Rect(guiInGame[1].offset.x - 2.6 * (Screen.width * 0.17), Screen.height - Screen.height * 0.18, guiInGame[1].textureWidth * 1.5, guiInGame[1].textureHeight), (self.getRestartVote() ? "You voted!" : "Play Again?"), "RestartHeader");
+                    GUI.Label(new Rect(guiInGame[1].offset.x - 2.5 * (Screen.width * 0.23), Screen.height - Screen.height * 0.12, 2.5 * guiInGame[1].textureWidth, guiInGame[1].textureHeight), voteStr, "OrangeText");
+                }
 
              }
          }
@@ -604,7 +613,7 @@ function OnGUI(){
           voteStr = restartCount + "/" + allMembers + " players voted to play again";
           GUI.Label(new Rect(0, Screen.height - Screen.height * 0.12, Screen.width, guiInGame[1].textureHeight), voteStr, "OrangeText");
 
-      } else {
+      } else if(!playerScript.OBSERVER) {
           if (!self.getRestartVote()) {
               if (GUI.Button(Rect(guiInGame[1].offset.x - Screen.width / 5, Screen.height - Screen.height * 0.16, guiInGame[1].textureWidth, guiInGame[1].textureHeight), "YES", "GreenButton")) {
                   Util.playTap();
