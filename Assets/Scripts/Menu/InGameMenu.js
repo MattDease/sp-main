@@ -146,7 +146,7 @@ function OnGUI(){
 
     if(gameState == gameState.Playing){
 
-        if(justStarting < 10) {
+        if(justStarting < 30) {
             GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdownGo);
             justStarting++;
         }
