@@ -265,7 +265,9 @@ function kill(id : String, info : NetworkMessageInfo){
     soundScript.playDeath();
     gameObject.layer = LayerMask.NameToLayer("Dead");
 
-    eggScript.notifyOfDeath(id);
+    if(Config.USE_EGG){
+        eggScript.notifyOfDeath(id);
+    }
 
     if(networkView.isMine){
         toss(true);
@@ -328,7 +330,7 @@ function grab(){
 }
 
 function toss(forward : boolean){
-    if(eggScript.isHoldingEgg(player.getId())){
+    if(Config.USE_EGG && eggScript.isHoldingEgg(player.getId())){
         var target = team.getClosestRunner(player, forward);
         if(target){
             networkView.RPC("syncToss", RPCMode.All);
