@@ -65,6 +65,7 @@ private var playerTextures :Texture[] = new Texture[13];
 private var playerSelfTextures :Texture[] = new Texture[13];
 private var miniPlayerTextures :Texture[] = new Texture[13];
 
+private var scoreLength : int = 8;
 
 private var mvp: Runner;
 private var justStarting : int = 0;
@@ -160,7 +161,17 @@ function OnGUI(){
         GUI.DrawTexture(new Rect(guiInGame[9].offset.x - guiInGame[9].textureHeight/2, guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), inGameOverlay);
         GUI.DrawTexture(new Rect(guiInGame[10].offset.x - guiInGame[9].textureHeight/2 - guiInGame[9].textureHeight/2 - (Screen.width * 0.05), guiInGame[10].offset.y + guiInGame[9].textureHeight/2 + guiInGame[10].textureHeight/4, guiInGame[10].textureWidth, guiInGame[10].textureHeight), coinTexture);
         GUI.Label(new Rect(guiInGame[10].offset.x - guiInGame[9].textureHeight/2 - guiInGame[9].textureHeight/2, guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), "X " + myTeam.getCoinCount(), "InGameBoldWhiteText");
-        GUI.Label(new Rect(guiInGame[10].offset.x - guiInGame[9].textureHeight/2 - guiInGame[9].textureHeight/2 -(Screen.width * 0.38), guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), (myTeam.getDistance() * 10) + " m", "InGameBoldWhiteText_R");
+
+        var myScore : int  =  myTeam.getDistance() * 10;
+        var numZeros : int = scoreLength - myScore.ToString().length;
+        var newScore : String = "" ;
+
+        for(var i :int  = 0; i < numZeros; i++){
+             newScore += "0";
+        }
+
+        newScore += myScore.ToString();
+        GUI.Label(new Rect(guiInGame[10].offset.x - (4.7*guiInGame[9].textureHeight), guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), newScore + " m", "InGameBoldWhiteText");
 
        //PROGRESS BAR && OFF SCREEN PLAYER CARDS
 
