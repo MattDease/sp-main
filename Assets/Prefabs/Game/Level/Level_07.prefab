@@ -30,6 +30,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100004
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400004}
+  m_Layer: 9
+  m_Name: c_5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &100028
 GameObject:
   m_ObjectHideFlags: 1
@@ -257,7 +272,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400058}
   m_Layer: 9
-  m_Name: c_5
+  m_Name: t_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -389,6 +404,17 @@ Transform:
   m_GameObject: {fileID: 100038}
   m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
   m_LocalPosition: {x: 23.5, y: 3, z: 0}
+  m_LocalScale: {x: .202459455, y: .202459455, z: .202459455}
+  m_Children: []
+  m_Father: {fileID: 400070}
+--- !u!4 &400004
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100004}
+  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
+  m_LocalPosition: {x: 14.75, y: 3, z: 0}
   m_LocalScale: {x: .202459455, y: .202459455, z: .202459455}
   m_Children: []
   m_Father: {fileID: 400070}
@@ -541,9 +567,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100058}
-  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.75, y: 3, z: 0}
-  m_LocalScale: {x: .202459455, y: .202459455, z: .202459455}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .116298556, y: -.0782063007, z: 0}
+  m_LocalScale: {x: .202458993, y: .202458993, z: .202458993}
   m_Children: []
   m_Father: {fileID: 400070}
 --- !u!4 &400060
@@ -616,6 +642,7 @@ Transform:
   - {fileID: 400064}
   - {fileID: 400062}
   - {fileID: 400060}
+  - {fileID: 400004}
   - {fileID: 400058}
   - {fileID: 400056}
   - {fileID: 400054}
@@ -1024,37 +1051,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawns:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 400010}
-  - {fileID: 400008}
-  - {fileID: 400038}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 400002}
-  - {fileID: 400000}
   - {fileID: 400042}
-  - {fileID: 400040}
-  - {fileID: 0}
-  - {fileID: 400036}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 400046}
+  - {fileID: 400036}
+  - {fileID: 400010}
+  - {fileID: 400038}
+  - {fileID: 400040}
+  - {fileID: 400002}
   - {fileID: 400044}
-  tutorialPoints: []
+  - {fileID: 400008}
+  - {fileID: 400000}
+  tutorialPoints:
+  - {fileID: 400058}
   coins:
   - {fileID: 400066}
   - {fileID: 400064}
   - {fileID: 400060}
   - {fileID: 400062}
-  - {fileID: 400058}
+  - {fileID: 400004}
   - {fileID: 400068}
   diff: 0
 --- !u!148 &14800000

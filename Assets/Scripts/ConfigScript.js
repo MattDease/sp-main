@@ -91,7 +91,7 @@ public static class Config{
     //Distance between Player and Tutorial Sign required to show sign
     public var TUTORIAL_SIGN_DISTANCE : int = 10;
     //How many times you see a tutorial sign
-    public var MAX_SIGN_COUNT : int = 3;
+    public var MAX_SIGN_COUNT : int = 5;
 
     //Procedural Level - threshold to change difficulty
     public var EASY_DIFF_THRESHOLD : int = 5;

@@ -20,14 +20,15 @@ private var status;
 private var menuSkin : GUISkin;
 private var greenStyle :GUIStyle;
 private var backTexture : Texture2D;
-private var refreshTexture : Texture2D;
+private var eggTexture : Texture2D;
 private var createNewOverlayTexture : Texture2D;
 private var backgroundTexutre : Texture2D;
 private var whiteBarTexture : Texture2D;
 
 private var buttonText = 35;
 private var bodyText = 50;
-
+private var headerText = 60;
+private var searchingForGames : boolean = false;
 
 function Awake() {
     netScript = GetComponent(Net);
@@ -39,9 +40,9 @@ function Start() {
 
     menuSkin = Resources.Load("MenuSkin", GUISkin);
     backTexture = Resources.Load("Textures/gui/back", Texture2D);
-    refreshTexture = Resources.Load("Textures/gui/refresh", Texture2D);
+    eggTexture = Resources.Load("Textures/144", Texture2D);
 
-    guiObject = new GuiClasses[6];
+    guiObject = new GuiClasses[7];
     for (var y = 0; y < guiObject.length; y++) {
         guiObject[y] = new GuiClasses();
     }
@@ -49,7 +50,6 @@ function Start() {
     guiStatusBar = new GuiClasses();
     backgroundTexutre = Resources.Load("Textures/gui/background", Texture2D);
     createNewOverlayTexture = Resources.Load("Textures/gui/createNewOverlay", Texture2D);
-
 }
 
 function OnGUI() {
@@ -57,8 +57,9 @@ function OnGUI() {
         return;
     }
     GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), backgroundTexutre);
-
     GUI.skin = menuSkin;
+    GUI.Label(new Rect(0, Screen.height / 2 - Screen.height / 2.3, Screen.width, 0), "JOIN GAME", "Header");
+
 
     //Back Button
     guiObject[1].textureWidth = Screen.width * 0.08;
@@ -67,6 +68,9 @@ function OnGUI() {
 
     var labelStyle: GUIStyle = GUI.skin.GetStyle("JoinGame");
     labelStyle.fontSize = menuScript.getScale() * buttonText;
+
+    var headerStyle :GUIStyle = GUI.skin.GetStyle("Header");
+    headerStyle.fontSize = menuScript.getScale() * headerText;
 
     //Refresh Button
     guiObject[0].textureWidth = 170;
@@ -85,6 +89,12 @@ function OnGUI() {
     guiObject[3].textureWidth = (Screen.width * 1.3) * 0.2;
     guiObject[3].textureHeight = Screen.width * 0.2;
     guiObject[3].setLocation(Points.Center);
+
+    //Center for Refresh Icon
+    guiObject[6].textureWidth = 144 * menuScript.getScale();
+    guiObject[6].textureHeight = 144 * menuScript.getScale();
+    guiObject[6].setLocation(Points.Center);
+
 
     netScript.FetchHostList(false);
     hostList = netScript.GetHostList(filterHosts);
@@ -129,7 +139,6 @@ function OnGUI() {
             ++index;
         }
     } else {
-
         var localStyle: GUIStyle = GUI.skin.GetStyle("PlainText");
         localStyle.fontSize = menuScript.getScale() * bodyText;
 
@@ -137,8 +146,11 @@ function OnGUI() {
         guiObject[4].textureHeight = Screen.height / 1.5;
         guiObject[4].setLocation(Points.Center);
 
-        GUI.DrawTexture(new Rect(guiObject[4].offset.x, guiObject[4].offset.y, Screen.width / 1.5, Screen.height / 1.5), createNewOverlayTexture);
-        GUI.Label(Rect(0, 0, Screen.width, Screen.height), "No Games Being Hosted", "PlainText");
+        GUI.DrawTexture(new Rect(guiObject[4].offset.x, guiObject[4].offset.y, guiObject[4].textureWidth, guiObject[4].textureHeight), createNewOverlayTexture);
+        GUI.DrawTexture(new Rect(guiObject[6].offset.x + guiObject[4].textureWidth/2.45, guiObject[6].offset.y + guiObject[4].textureHeight/2.6, guiObject[6].textureWidth, guiObject[6].textureHeight), eggTexture);
+
+        GUI.Label(Rect(0, 0, Screen.width, Screen.height), (netScript.isRefreshing ? "Searching for Games..." : "No Games Being Hosted"), "PlainText");
+
     }
 
     greenStyle = GUI.skin.GetStyle("GreenButton");
@@ -196,4 +208,7 @@ function leaveFor(newMenu: menus) {
     showMenu = false;
     menuScript.stateScript.setCurrentMenu(newMenu);
     menuScript.open();
+}
+function notSearchingForGame() {
+    searchingForGames = false;
 }

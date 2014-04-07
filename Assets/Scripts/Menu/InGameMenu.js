@@ -13,6 +13,7 @@ private var teamScoreTexture : Texture2D;
 private var countdown1 : Texture2D;
 private var countdown2 : Texture2D;
 private var countdown3 : Texture2D;
+private var countdownGo : Texture2D;
 private var redBarTexture : Texture2D;
 private var coinTexture : Texture2D;
 private var readyCheckMarkTexture : Texture2D;
@@ -65,7 +66,7 @@ private var miniPlayerTextures :Texture[] = new Texture[13];
 
 
 private var mvp: Runner;
-
+private var justStarting : int = 0;
 
 private var guiInGame: GuiClasses [];
 guiInGame = new GuiClasses[14];
@@ -87,6 +88,7 @@ function Start(){
     countdown1 = Resources.Load("Textures/gui/count_1", Texture2D);
     countdown2 = Resources.Load("Textures/gui/count_2", Texture2D);
     countdown3 = Resources.Load("Textures/gui/count_3", Texture2D);
+    countdownGo = Resources.Load("Textures/gui/count_go", Texture2D);
     redBarTexture = Resources.Load("Textures/gui/redBar", Texture2D);
     teamScoreTexture = Resources.Load("Textures/gui/team_score", Texture2D);
     coinTexture = Resources.Load("Textures/gui/coin", Texture2D);
@@ -139,6 +141,11 @@ function OnGUI(){
 
     if(gameState == gameState.Playing){
 
+        if(justStarting < 10) {
+            GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdownGo);
+            justStarting++;
+        }
+
         guiInGame[9].textureWidth = 540 * getScale();
         guiInGame[9].textureHeight = 100 * getScale();
         guiInGame[9].setLocation(Points.TopRight);
@@ -152,7 +159,7 @@ function OnGUI(){
         GUI.DrawTexture(new Rect(guiInGame[9].offset.x - guiInGame[9].textureHeight/2, guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), inGameOverlay);
         GUI.DrawTexture(new Rect(guiInGame[10].offset.x - guiInGame[9].textureHeight/2 - guiInGame[9].textureHeight/2 - (Screen.width * 0.05), guiInGame[10].offset.y + guiInGame[9].textureHeight/2 + guiInGame[10].textureHeight/4, guiInGame[10].textureWidth, guiInGame[10].textureHeight), coinTexture);
         GUI.Label(new Rect(guiInGame[10].offset.x - guiInGame[9].textureHeight/2 - guiInGame[9].textureHeight/2, guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), "X " + myTeam.getCoinCount(), "InGameBoldWhiteText");
-        GUI.Label(new Rect(guiInGame[10].offset.x - guiInGame[9].textureHeight/2 - guiInGame[9].textureHeight/2 -(Screen.width * 0.38), guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), myTeam.getDistance() + " m", "InGameBoldWhiteText_R");
+        GUI.Label(new Rect(guiInGame[10].offset.x - guiInGame[9].textureHeight/2 - guiInGame[9].textureHeight/2 -(Screen.width * 0.38), guiInGame[9].offset.y + guiInGame[9].textureHeight/2, guiInGame[9].textureWidth, guiInGame[9].textureHeight), (myTeam.getDistance() * 10) + " m", "InGameBoldWhiteText_R");
 
        //PROGRESS BAR && OFF SCREEN PLAYER CARDS
 
@@ -199,11 +206,13 @@ function OnGUI(){
 
         }
 
-        var offscreenCount : int = 0;
-        var offsetTotal : float = 0;
         //Show cards for each player off screen
         for(var player : Player in self.getTeam().getTeammates().Values){
-            if(player.getId() == self.getId()){
+            if(player.getId() == self.getId() || player.GetType == Commander){
+                continue;
+            }
+            var runner : Runner = player as Runner;
+            if(!runner.isAlive()) {
                 continue;
             }
             var pos : Vector3 = player.getPosition();
@@ -211,22 +220,20 @@ function OnGUI(){
             var screenPosition : Vector3 = Camera.main.WorldToScreenPoint(pos);
             if(screenPosition.x < 0){
                 var playerOffset : float = Screen.height - screenPosition.y;
+                GUI.DrawTexture(new Rect(guiInGame[12].offset.x + guiInGame[12].textureWidth/2, playerOffset, guiInGame[12].textureWidth, guiInGame[12].textureHeight), sideArrow);
                 GUI.Button(new Rect(guiInGame[13].offset.x + guiInGame[13].textureWidth , playerOffset, guiInGame[13].textureWidth, guiInGame[13].textureHeight), miniPlayerTextures[player.getCharacter()], "FullImage");
-                offsetTotal += screenPosition.y;
-                offscreenCount++;
             }
         }
-        //Only display arrow once if there are charactres off screen, its offset should be average of the players
-        if(offscreenCount > 0){
-            var arrowOffset : float = Screen.height - (offsetTotal/offscreenCount);
-            GUI.DrawTexture(new Rect(guiInGame[12].offset.x + guiInGame[12].textureWidth/2, arrowOffset, guiInGame[12].textureWidth, guiInGame[12].textureHeight), sideArrow);
-        }
+
     }
 
     if(gameState == GameState.Loading){
         switch(gameSetupScript.getCountDown()){
+            case 0:
+                GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdownGo);
+            break;
             case 1:
-                GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown1);
+                    GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown1);
             break;
             case 2:
                 GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown2);
@@ -267,7 +274,7 @@ function OnGUI(){
          GUI.Label(new Rect(guiInGame[2].offset.x + guiInGame[2].offset.x / 1.3, guiInGame[2].offset.y - (80 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), "Coins", "InGameText");
          GUI.Label(new Rect(guiInGame[2].offset.x + guiInGame[2].offset.x / 1.3, guiInGame[2].offset.y + (10 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), "Total Score", "ScoreText");
 
-         GUI.Label(new Rect(guiInGame[2].offset.x + guiInGame[2].offset.x * 1.13, guiInGame[2].offset.y - (150 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), team.getDistance() + " m", "InGameBoldText");
+         GUI.Label(new Rect(guiInGame[2].offset.x + guiInGame[2].offset.x * 1.13, guiInGame[2].offset.y - (150 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), (team.getDistance() * 10) + " m", "InGameBoldText");
 
          cointText = "X " + team.getCoinCount();
 
@@ -455,7 +462,7 @@ function OnGUI(){
 
               cointText = "X " + team.getCoinCount();
 
-              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, guiInGame[7].offset.y - (205 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), team.getDistance()+" m", "InGameBoldWhiteText_R");
+              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, guiInGame[7].offset.y - (205 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), (team.getDistance() * 10) +" m", "InGameBoldWhiteText_R");
               GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, guiInGame[7].offset.y - (145 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), cointText, "InGameBoldWhiteText_R");
               GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, guiInGame[7].offset.y - (60 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), team.getPoints()+ "", "ScoreBoldWhiteText");
 
@@ -470,7 +477,7 @@ function OnGUI(){
 
               cointText = "X " + team.getCoinCount();
 
-              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, 1.83 * guiInGame[7].offset.y - (205 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), team.getDistance() + " m", "InGameBoldWhiteText_R");
+              GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, 1.83 * guiInGame[7].offset.y - (205 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), (team.getDistance() * 10) + " m", "InGameBoldWhiteText_R");
               GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, 1.83 * guiInGame[7].offset.y - (145 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), cointText, "InGameBoldWhiteText_R");
               GUI.Label(new Rect(guiInGame[7].offset.x + guiInGame[7].offset.x * 2.3, 1.83 * guiInGame[7].offset.y - (60 * getScale()), guiInGame[1].textureWidth, guiInGame[1].textureHeight), team.getPoints() + "", "ScoreBoldWhiteText");
 

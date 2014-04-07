@@ -126,7 +126,7 @@ public class Runner extends Player{
     }
 
     public function getDistance() : float {
-        return this.gameObject.transform.position.x;
+        return roundDistance(this.gameObject.transform.position.x);
     }
 
     public function isAlive() : boolean {
@@ -140,6 +140,10 @@ public class Runner extends Player{
 
     public function destroy() {
         UnityEngine.Object.Destroy(this.gameObject);
+    }
+
+    public function roundDistance(distance : float) : float {
+       return Mathf.Round(distance * 1) / 1;
     }
 }
 
