@@ -277,6 +277,12 @@ function registerPlayer(name : String, netPlayer : NetworkPlayer){
     networkView.RPC("addPlayer", RPCMode.All, name, newPlayerInfo[0], newPlayerInfo[1].ToString(), netPlayer);
 }
 
+// Server only
+@RPC
+function registerObserver(){
+    Network.maxConnections = Config.TEAM_SIZE - 1;
+}
+
 @RPC
 function setVersusMode(mode : String){
     var gameMode : GameMode = System.Enum.Parse(GameMode, mode);

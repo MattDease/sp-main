@@ -566,6 +566,10 @@ function enter(isNew: boolean) {
         gameSetupScript.registerPlayerProxy(playerScript.getName());
     }
 
+    if(playerScript && playerScript.OBSERVER){
+        gameManager.networkView.RPC("registerObserver", RPCMode.Server);
+    }
+
     // Redifine scripts when returning here from in-game
     if(!playerScript){
         gameManager = GameObject.Find("/GameManager");

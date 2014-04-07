@@ -163,6 +163,7 @@ function hideGame(name : String){
 }
 
 function OnServerInitialized(){
+    Network.maxConnections = Config.TEAM_SIZE - 2;
     MasterServer.RegisterHost(Config.GAME_ID, gameName, natCapable.ToString());
 }
 
