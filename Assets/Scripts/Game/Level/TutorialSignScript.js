@@ -44,7 +44,7 @@ function Update() {
 
         distance = Vector3.Distance(sign.transform.position, player.gameObject.transform.position);
 
-        if(distance < Config.TUTORIAL_SIGN_DISTANCE && !isAnimating && !hasEgg || distance < Config.TUTORIAL_SIGN_DISTANCE && !isAnimating && hasEgg && forEgg ){
+        if(distance < Config.TUTORIAL_SIGN_DISTANCE && !isAnimating && !hasEgg && !sign.name.Contains("4") || distance < Config.TUTORIAL_SIGN_DISTANCE && !isAnimating && hasEgg && forEgg ){
             player.addTutorialSign(sign.name);
             anim.SetBool("Shown", true);
             GetComponent(AudioSource).Play();
