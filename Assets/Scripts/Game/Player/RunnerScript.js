@@ -553,4 +553,5 @@ function OnTouch(pos:Vector2){
 function OnRelease(pos:Vector2){
     touched = false;
     networkView.RPC("stopWalk", RPCMode.All);
+    CancelInvoke("syncWalk");
 }
