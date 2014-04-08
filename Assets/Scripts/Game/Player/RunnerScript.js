@@ -493,8 +493,10 @@ function OnEnable(){
         Gesture.onLongTapE += OnLongTap;
         Gesture.onTouchDownE += OnTouch;
         Gesture.onTouchUpE += OnRelease;
-        Gesture.onMouse1DownE += OnTouch;
-        Gesture.onMouse1UpE += OnRelease;
+        if (Application.platform != RuntimePlatform.Android){
+            Gesture.onMouse1DownE += OnTouch;
+            Gesture.onMouse1UpE += OnRelease;
+        }
         Gesture.onShortTapE += OnTap;
     }
 }
@@ -505,8 +507,10 @@ function OnDisable(){
         Gesture.onLongTapE -= OnLongTap;
         Gesture.onTouchDownE -= OnTouch;
         Gesture.onTouchUpE -= OnRelease;
-        Gesture.onMouse1DownE -= OnTouch;
-        Gesture.onMouse1UpE -= OnRelease;
+        if (Application.platform != RuntimePlatform.Android){
+            Gesture.onMouse1DownE -= OnTouch;
+            Gesture.onMouse1UpE -= OnRelease;
+        }
         Gesture.onShortTapE -= OnTap;
 
     }

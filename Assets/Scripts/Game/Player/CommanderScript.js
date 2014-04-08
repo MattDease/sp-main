@@ -196,11 +196,14 @@ function OnEnable(){
         touched = false;
 
         Gesture.onTouchE += OnTouch;
-        Gesture.onMouse1E += OnTouch;
         Gesture.onTouchDownE += OnTouchStart;
-        Gesture.onMouse1DownE += OnTouchStart;
         Gesture.onTouchUpE += OnTouchEnd;
-        Gesture.onMouse1UpE += OnTouchEnd;
+
+        if (Application.platform != RuntimePlatform.Android){
+            Gesture.onMouse1E += OnTouch;
+            Gesture.onMouse1DownE += OnTouchStart;
+            Gesture.onMouse1UpE += OnTouchEnd;
+        }
     }
 }
 
@@ -209,11 +212,13 @@ function OnDisable(){
         touched = false;
 
         Gesture.onTouchE -= OnTouch;
-        Gesture.onMouse1E -= OnTouch;
         Gesture.onTouchDownE -= OnTouchStart;
-        Gesture.onMouse1DownE -= OnTouchStart;
         Gesture.onTouchUpE -= OnTouchEnd;
-        Gesture.onMouse1UpE -= OnTouchEnd;
+        if (Application.platform != RuntimePlatform.Android){
+            Gesture.onMouse1E -= OnTouch;
+            Gesture.onMouse1DownE -= OnTouchStart;
+            Gesture.onMouse1UpE -= OnTouchEnd;
+        }
     }
 }
 
