@@ -294,10 +294,20 @@ public class Team{
 
     public function getObserverCameraPosition() : Vector3 {
         var total : Vector2 = Vector2.zero;
+        var runnerCount : int = 0;
         for(var runner : Runner in activeRunners.Values){
-            total += runner.getPosition();
+            var pos : Vector2 = runner.getPosition();
+            if(pos.x > 0){
+                runnerCount++;
+                total += pos;
+            }
         }
-        return total / activeRunners.Count;
+        if(runnerCount == 0){
+            return Vector2.zero;
+        }
+        else{
+            return total / runnerCount;
+        }
     }
 
     public function getDistance() : float {
