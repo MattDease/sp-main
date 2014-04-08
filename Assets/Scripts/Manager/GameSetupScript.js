@@ -46,7 +46,7 @@ function enterGame(isRestart : boolean){
         // Prevent other players from joining;
         Network.maxConnections = 0;
     }
-    Network.RemoveRPCsInGroup(0);
+    Network.RemoveRPCsInGroup(1);
     networkView.RPC("loadLevel", RPCMode.All, "scene-game", lastLevelPrefix + 1);
 }
 
@@ -63,11 +63,11 @@ function createCharacter(info : NetworkMessageInfo){
         Instantiate(observerPrefab, Vector3.zero, Quaternion.identity);
     }
     else if(me.GetType() == Runner){
-        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3(0, 0.05, 0), Quaternion.identity, 0);
+        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3(0, 0.05, 0), Quaternion.identity, 1);
         go.networkView.RPC("initRunner", RPCMode.All, me.getId(), me.getTeamId());
     }
     else{
-        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3(0, 0, Config.COMMANDER_DEPTH_OFFSET), Quaternion.identity, 0);
+        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3(0, 0, Config.COMMANDER_DEPTH_OFFSET), Quaternion.identity, 1);
         go.networkView.RPC("initCommander", RPCMode.All, me.getId(), me.getTeamId());
     }
     if(Network.isServer){
@@ -88,7 +88,7 @@ function playerReady(){
         if(Config.USE_EGG){
             for(var team : Team in game.getTeams()){
                 var holder = team.getRandomRunner();
-                var egg : Transform = Network.Instantiate(eggPrefab, holder.getPosition(), Quaternion.identity, 0);
+                var egg : Transform = Network.Instantiate(eggPrefab, holder.getPosition(), Quaternion.identity, 1);
                 egg.networkView.RPC("setHolder", RPCMode.All, holder.getId());
             }
         }
@@ -100,12 +100,12 @@ function playerReady(){
 function startCountDown(info : NetworkMessageInfo){
     var delay : float = Config.START_DELAY - (Network.time - info.timestamp);
     startTime = Time.realtimeSinceStartup + delay;
-    Invoke("startGame", delay);
+    //Invoke("startGame", delay);
 }
 
 function getCountDown() : int {
     var secondsLeft = -1;
-    if(startTime){
+    if(startTime > 0){
         var delay : float = startTime - Time.realtimeSinceStartup;
         if(delay < 0){
             secondsLeft = 0;
@@ -114,8 +114,11 @@ function getCountDown() : int {
             secondsLeft = Mathf.Ceil(delay);
         }
     }
-    if(secondsLeft != prevSecondsLeft){
+    if(secondsLeft != prevSecondsLeft && prevSecondsLeft != -1){
         soundScript.playCountdown();
+        if(secondsLeft == 0){
+            startGame();
+        }
     }
     prevSecondsLeft = secondsLeft;
     return secondsLeft;
@@ -180,6 +183,7 @@ function loadLevel(level : String, levelPrefix : int){
 function resetGame(){
     readyPlayerCount = 0;
     prevSecondsLeft = -1;
+    startTime = -1;
     game.reset();
     if(Network.isServer){
         readyToRestart(playerScript.getSelf().getId());
@@ -205,7 +209,7 @@ function goToMenu(){
     readyPlayerCount = 0;
     game.reset();
     stateScript.setCurrentMenu(Network.isServer ? menus.host : menus.game);
-    Network.RemoveRPCsInGroup(0);
+    Network.RemoveRPCsInGroup(1);
     Application.LoadLevel("scene-menu");
 }
 
@@ -223,7 +227,7 @@ function leaveGame(){
     isLeaving = true;
     readyPlayerCount = 0;
     if(Network.isServer){
-        Network.RemoveRPCsInGroup(0);
+        Network.RemoveRPCsInGroup(1);
     }
     Network.Disconnect();
     playerScript.incrementTimesPlayed();
@@ -351,7 +355,7 @@ function updateCharacter(id : String, selectedChar : int, netPlayer : NetworkPla
 
         if(player.getCharacter() > 8 && selectedChar < 9 || player.getCharacter() == 12 && selectedChar < 9){
             if(player.getCharacter() > 8 && player.getCharacter() < 12 && selectedChar < 9){
-                player.getTeam().clearCommander();
+                player.getTeam().clearCommander(player.getId());
             }
             player.setCharacter(selectedChar);
             changeRole(id, player.getName(), PlayerRole.Runner.ToString(), player.getTeamId(), player.getCharacter(), netPlayer);

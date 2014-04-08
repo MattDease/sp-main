@@ -72,7 +72,7 @@ function Update () {
 }
 
 function updateLevel(){
-    if(Network.isClient || waitingForSegment || stateScript.getGameState() != GameState.Playing){
+    if(Network.isClient || waitingForSegment || stateScript.getGameState() == GameState.Uninitialized || stateScript.getGameState() == GameState.Ended){
         return;
     }
 
@@ -131,7 +131,7 @@ function addSegment(teamId : int, isFirst : boolean, isAlive : boolean){
         }
     }
 
-    var go : GameObject = Network.Instantiate(segment, new Vector3(lastSegmentEnd[teamId], 0, 0), Quaternion.identity, 0);
+    var go : GameObject = Network.Instantiate(segment, new Vector3(lastSegmentEnd[teamId], 0, 0), Quaternion.identity, 1);
     go.networkView.RPC('initSegment', RPCMode.All, teamId);
 }
 
@@ -156,7 +156,7 @@ function onAddSegment(teamId : int, segment : GameObject, enemies : List.<Enemy>
     var typeCount : int[] = [0, 0, 0, 0];
     for(var i : int = 0; i < enemies.Count; i++){
         var enemy : Enemy = enemies[i];
-        go = Network.Instantiate(enemyPrefabs[enemy.prefabIndex], enemy.start.position, Quaternion.identity, 0);
+        go = Network.Instantiate(enemyPrefabs[enemy.prefabIndex], enemy.start.position, Quaternion.identity, 1);
         go.GetComponent(EnemyScript).init(enemy.start.position, enemy.end.position, typeCount[enemy.prefabIndex]);
         go.networkView.RPC("initEnemy", RPCMode.All, teamId, teamId == playerScript.getSelf().getTeamId());
         typeCount[enemy.prefabIndex]++;
@@ -164,7 +164,7 @@ function onAddSegment(teamId : int, segment : GameObject, enemies : List.<Enemy>
     }
 
     for(var j : int = 0; j < coins.Count; j++){
-        go = Network.Instantiate(coinPrefab, coins[j].position, Quaternion.identity, 0);
+        go = Network.Instantiate(coinPrefab, coins[j].position, Quaternion.identity, 1);
         go.networkView.RPC("initCoin", RPCMode.All, teamId, teamId == playerScript.getSelf().getTeamId());
         objects.Add(go);
     }
@@ -224,7 +224,7 @@ function addPlane(index : int){
     if(game.getMode() == GameMode.Versus){
         pos.z += Config.TEAM_DEPTH_OFFSET;
     }
-    Network.Instantiate(backgroundPrefabs[index], pos, Quaternion.identity, 0);
+    Network.Instantiate(backgroundPrefabs[index], pos, Quaternion.identity, 1);
 }
 
 function removePlane(index : int){

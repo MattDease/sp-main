@@ -65,7 +65,13 @@ function Update() {
             }
         }
 
-        distance = Vector3.Distance(sign.transform.position, player.gameObject.transform.position);
+        if(sign && player && player.gameObject){
+            distance = Vector3.Distance(sign.transform.position, player.gameObject.transform.position);
+        }
+        else{
+            Debug.Log("Tutorial sign error " + sign + "_" + player);
+            return;
+        }
 
         if(distance < Config.TUTORIAL_SIGN_DISTANCE && !isAnimating && !hasEgg && !sign.name.Contains("4") || distance < Config.TUTORIAL_SIGN_DISTANCE && !isAnimating && hasEgg && forEgg ){
             player.addTutorialSign(sign.name);

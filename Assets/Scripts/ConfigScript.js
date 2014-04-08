@@ -17,7 +17,7 @@ public static class Config{
 
     //// GAMEPLAY
     // Once all players are ready, the delay in seconds before the game starts.
-    public var START_DELAY : float = 3;
+    public var START_DELAY : float = 4;
     // Percentage of players that must vote to restart the game before
     // the game can be restarted by the host.
     public var RESTART_PERCENT : float = 1.00;
@@ -94,8 +94,8 @@ public static class Config{
     public var MAX_SIGN_COUNT : int = 5;
 
     //Procedural Level - threshold to change difficulty
-    public var EASY_DIFF_THRESHOLD : int = 5;
-    public var MEDIUM_DIFF_THRESHOLD : int = 10;
+    public var EASY_DIFF_THRESHOLD : int = 3;
+    public var MEDIUM_DIFF_THRESHOLD : int = 9;
     public var HARD_DIFF_THRESHOLD : int = 15;
     public var EXPERT_DIFF_THRESHOLD : int = 20;
 }

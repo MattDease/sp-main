@@ -151,7 +151,7 @@ function OnGUI(){
             justStarting++;
         }
 
-        guiInGame[9].textureWidth = 540 * getScale();
+        guiInGame[9].textureWidth = Screen.width /3;
         guiInGame[9].textureHeight = 100 * getScale();
         guiInGame[9].setLocation(Points.TopRight);
 
@@ -159,7 +159,7 @@ function OnGUI(){
         guiInGame[10].textureHeight = 70 * getScale();
         guiInGame[10].setLocation(Points.TopRight);
 
-        guiInGame[14].textureWidth = 1120 * getScale();
+        guiInGame[14].textureWidth = Screen.width/ 1.7;
         guiInGame[14].textureHeight = 100 * getScale();
         guiInGame[14].setLocation(Points.TopLeft);
 
@@ -268,15 +268,16 @@ function OnGUI(){
     if(gameState == GameState.Loading){
         switch(gameSetupScript.getCountDown()){
             case 0:
-                GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdownGo);
+                  // GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdownGo);
             break;
             case 1:
-                    GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown1);
+                  GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown1);
             break;
             case 2:
                 GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown2);
             break;
             case 3:
+            case 4:
                 GUI.DrawTexture(new Rect(guiInGame[0].offset.x, guiInGame[0].offset.y, guiInGame[0].textureWidth, guiInGame[0].textureHeight), countdown3);
             break;
         }
