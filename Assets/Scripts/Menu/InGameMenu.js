@@ -165,6 +165,9 @@ function OnGUI(){
 
         var myTeam : Team;
         if(playerScript.OBSERVER){
+            if(playerScript.OBSERVED_TEAM == 1 && game.getMode() == GameMode.Team){
+                playerScript.OBSERVED_TEAM = 0;
+            }
             myTeam = game.getTeam(playerScript.OBSERVED_TEAM);
         }
         else{
