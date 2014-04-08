@@ -94,8 +94,8 @@ public static class Config{
     public var MAX_SIGN_COUNT : int = 5;
 
     //Procedural Level - threshold to change difficulty
-    public var EASY_DIFF_THRESHOLD : int = 5;
-    public var MEDIUM_DIFF_THRESHOLD : int = 10;
+    public var EASY_DIFF_THRESHOLD : int = 3;
+    public var MEDIUM_DIFF_THRESHOLD : int = 9;
     public var HARD_DIFF_THRESHOLD : int = 15;
     public var EXPERT_DIFF_THRESHOLD : int = 20;
 }
