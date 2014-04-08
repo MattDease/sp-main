@@ -318,7 +318,7 @@ public class Team{
     }
 
     public function getPoints() : float {
-        return (this.getDistance() *  10) * (this.getCoinCount() * 5);
+        return (this.getRoundDistance() *  10) * (this.getCoinCount() * 5);
     }
 
     public function ToString() : String {
