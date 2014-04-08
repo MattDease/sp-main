@@ -20,8 +20,8 @@ function Update () {
     }
     var targetPosition : Vector3;
     var team : Team = game.getTeam(playerScript.OBSERVED_TEAM);
-    if(player.OBSERVED_TEAM == 1 && game.getMode() == GameMode.Team){
-        player.OBSERVED_TEAM = 0;
+    if(playerScript.OBSERVED_TEAM == 1 && game.getMode() == GameMode.Team){
+        playerScript.OBSERVED_TEAM = 0;
     }
     if(!team.isAlive() && game.getMode() == GameMode.Versus){
         playerScript.OBSERVED_TEAM = (playerScript.OBSERVED_TEAM == 0 ? 1 : 0);
