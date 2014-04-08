@@ -5,11 +5,11 @@ public static class Config{
 
     //// GENERAL
     // General debug mode of the game.
-    public var DEBUG : boolean = true;
+    public var DEBUG : boolean = false;
     // General debug mode of the game.
     public var MENU_DEBUG : boolean = false;
     // Enable/Disable the egg in the game.
-    public var USE_EGG : boolean = false;
+    public var USE_EGG : boolean = true;
     //Enable/Disable the tutorial signs in the game
     public var USE_SIGNS : boolean = true;
     // Enable/Disable all sounds and music
@@ -85,16 +85,16 @@ public static class Config{
     //Sets team size limit
     public var TEAM_SIZE : int = 11;
     //Sets versus to automatically change when teamsize is greater than 5
-    public var VERSUS_ENABLED : boolean = false;
+    public var VERSUS_ENABLED : boolean = true;
     //Skips validation of team
-    public var VALIDATION_SKIP : boolean = true;
+    public var VALIDATION_SKIP : boolean = false;
     //Distance between Player and Tutorial Sign required to show sign
     public var TUTORIAL_SIGN_DISTANCE : int = 10;
     //How many times you see a tutorial sign
     public var MAX_SIGN_COUNT : int = 5;
 
     //Procedural Level - threshold to change difficulty
-    public var EASY_DIFF_THRESHOLD : int = 5;
+    public var EASY_DIFF_THRESHOLD : int = 4;
     public var MEDIUM_DIFF_THRESHOLD : int = 10;
     public var HARD_DIFF_THRESHOLD : int = 15;
     public var EXPERT_DIFF_THRESHOLD : int = 20;
