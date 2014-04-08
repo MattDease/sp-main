@@ -208,9 +208,16 @@ function OnEnable(){
 }
 
 function OnDisable(){
-    if(networkView.isMine){
-        touched = false;
+    touched = false;
+    unBindListeners();
+}
 
+function OnDestroy(){
+    unBindListeners();
+}
+
+function unBindListeners(){
+    if(networkView.isMine){
         Gesture.onTouchE -= OnTouch;
         Gesture.onTouchDownE -= OnTouchStart;
         Gesture.onTouchUpE -= OnTouchEnd;
