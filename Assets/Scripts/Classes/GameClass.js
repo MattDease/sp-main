@@ -124,8 +124,9 @@ public class Game {
                     playerScript.setSelf(player);
                 }
             }
-
-            teams.Remove(getTeam(1));
+            if(teams.Count > 1){
+                teams.Remove(getTeam(1));
+            }
         }
     }
 
