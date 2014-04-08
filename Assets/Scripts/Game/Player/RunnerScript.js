@@ -264,6 +264,9 @@ function killMe(){
 
 @RPC
 function kill(id : String, info : NetworkMessageInfo){
+    var runner : Runner = Util.GetPlayerById(id) as Runner;
+    runner.kill();
+
     if(transform.position.y < Config.RUNNER_DEATH_DEPTH || player.getTeam().getRunners(true).Count <= 1){
         Util.Toggle(gameObject, false);
         rigidbody.velocity = Vector3.zero;
@@ -277,16 +280,13 @@ function kill(id : String, info : NetworkMessageInfo){
     gameObject.layer = LayerMask.NameToLayer("Dead");
     GetComponentInChildren(Projector).enabled = false;
 
-    if(Config.USE_EGG){
+    if(Config.USE_EGG && eggScript){
         eggScript.notifyOfDeath(id);
     }
 
     if(networkView.isMine){
         toss(true);
     }
-
-    var runner : Runner = Util.GetPlayerById(id) as Runner;
-    runner.kill();
 }
 
 @RPC
