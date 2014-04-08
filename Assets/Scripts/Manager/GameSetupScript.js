@@ -57,7 +57,7 @@ function createCharacter(info : NetworkMessageInfo){
         Instantiate(observerPrefab, Vector3.zero, Quaternion.identity);
     }
     else if(me.GetType() == Runner){
-        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3(0, 0.1, 0), Quaternion.identity, 0);
+        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3(0, 0.05, 0), Quaternion.identity, 0);
         go.networkView.RPC("initRunner", RPCMode.All, me.getId(), me.getTeamId());
     }
     else{

@@ -475,6 +475,10 @@ function checkKeyboardInput(){
 function OnEnable(){
     animator.SetBool("Idle", false);
 
+    // Un-freeze position changes in X and Y
+    rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
+                            RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+
     if(Config.USE_EGG){
         egg = team.getEgg();
         eggScript = egg.GetComponent(EggScript);
