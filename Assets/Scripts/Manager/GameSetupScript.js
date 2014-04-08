@@ -27,6 +27,7 @@ private var startTime : float;
 private var lastLevelPrefix : int = 0;
 private var isLeaving : boolean = false;
 private var prevSecondsLeft : int = -1;
+private var prevMaxConnections : int;
 
 function Start(){
     playerScript = GetComponent(PlayerScript);
@@ -39,7 +40,12 @@ function Update(){
     }
 }
 
-function enterGame(){
+function enterGame(isRestart : boolean){
+    if(!isRestart && Network.isServer){
+        prevMaxConnections = Network.maxConnections;
+        // Prevent other players from joining;
+        Network.maxConnections = 0;
+    }
     Network.RemoveRPCsInGroup(0);
     networkView.RPC("loadLevel", RPCMode.All, "scene-game", lastLevelPrefix + 1);
 }
@@ -57,7 +63,7 @@ function createCharacter(info : NetworkMessageInfo){
         Instantiate(observerPrefab, Vector3.zero, Quaternion.identity);
     }
     else if(me.GetType() == Runner){
-        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3(0, 0.1, 0), Quaternion.identity, 0);
+        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3(0, 0.05, 0), Quaternion.identity, 0);
         go.networkView.RPC("initRunner", RPCMode.All, me.getId(), me.getTeamId());
     }
     else{
@@ -189,6 +195,7 @@ function restartGame(){
 
 // Server only
 function returnToMenu(){
+    Network.maxConnections = prevMaxConnections;
     MasterServer.RegisterHost(Config.GAME_ID, game.getName(), ConnectionTesterStatus.Undetermined.ToString());
     networkView.RPC("goToMenu", RPCMode.All);
 }
@@ -208,7 +215,7 @@ function readyToRestart(id : String){
     restartReadyCount++;
     if(restartReadyCount >= game.getPlayers().Count){
         restartReadyCount = 0;
-        enterGame();
+        enterGame(true);
     }
 }
 

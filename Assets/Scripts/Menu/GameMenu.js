@@ -517,7 +517,7 @@ function OnGUI() {
                     if (GUI.Button(Rect(guiHost[2].offset.x, Screen.height - Screen.height * 0.13 - (100 * menuScript.getScale()), guiHost[2].textureWidth, guiHost[2].textureHeight), "START", "GreenButton")) {
                         netScript.hideGame(gameName);
                         Util.playTap();
-                        gameSetupScript.enterGame();
+                        gameSetupScript.enterGame(false);
                     }
                 } else {
                     GUI.Button(Rect(guiHost[2].offset.x, Screen.height - Screen.height * 0.13 - (100 * menuScript.getScale()), guiHost[2].textureWidth, guiHost[2].textureHeight), "START", "DisabledButton");
