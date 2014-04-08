@@ -335,10 +335,8 @@ function attack(){
 
 @RPC
 function grab(){
-    if(game.getState() == GameState.Playing){
-        soundScript.playCatch();
-        animator.SetTrigger("Catch");
-    }
+    soundScript.playCatch();
+    animator.SetTrigger("Catch");
 }
 
 function toss(forward : boolean){

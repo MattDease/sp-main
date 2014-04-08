@@ -86,13 +86,17 @@ function playerReady(){
     var players : Dictionary.<String, Player> = game.getPlayers();
     if(readyPlayerCount == players.Count){
         if(Config.USE_EGG){
-            for(var team : Team in game.getTeams()){
-                var holder = team.getRandomRunner();
-                var egg : Transform = Network.Instantiate(eggPrefab, holder.getPosition(), Quaternion.identity, 1);
-                egg.networkView.RPC("setHolder", RPCMode.All, holder.getId());
-            }
+            Invoke("createEggs", 1.5);
         }
         networkView.RPC("startCountDown", RPCMode.All);
+    }
+}
+
+function createEggs(){
+    for(var team : Team in game.getTeams()){
+        var holder = team.getRandomRunner();
+        var egg : Transform = Network.Instantiate(eggPrefab, holder.getPosition(), Quaternion.identity, 1);
+        egg.networkView.RPC("setHolder", RPCMode.All, holder.getId());
     }
 }
 
