@@ -125,6 +125,10 @@ function addSegment(teamId : int, isFirst : boolean, isAlive : boolean){
         currentLevel[teamId] = segmentIndex;
 
         segment = segmentPrefabs[segmentIndex - 1];
+        if(!segment){
+            Debug.Log("Failed to select a level segment, segmentIndex=" + segmentIndex);
+            segment = segmentPrefabs[Random.Range(0, segmentPrefabs.Count)];
+        }
     }
 
     var go : GameObject = Network.Instantiate(segment, new Vector3(lastSegmentEnd[teamId], 0, 0), Quaternion.identity, 0);
