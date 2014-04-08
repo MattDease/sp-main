@@ -978,8 +978,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.39999998, y: 1.39999998, z: .100000001}
-  m_Center: {x: 0, y: 0, z: -.300000012}
+  m_Size: {x: 1.70000005, y: 2, z: .100000001}
+  m_Center: {x: 0, y: -.300000012, z: -.300000012}
 --- !u!82 &8200000
 AudioSource:
   m_ObjectHideFlags: 1
