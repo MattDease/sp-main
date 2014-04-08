@@ -7,7 +7,7 @@ public class Team{
     public var runnerCreationCount : int = 0;
 
     private var teammates : Dictionary.<String,Player> = new Dictionary.<String,Player>();
-    private var commander : Commander = null;
+    private var commanders : Dictionary.<String,Commander> = new Dictionary.<String,Commander>();
     private var runners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
     private var activeRunners : Dictionary.<String,Runner> = new Dictionary.<String,Runner>();
     private var selectedCharacters : List.<int> = new List.<int>();
@@ -37,7 +37,7 @@ public class Team{
             runner.reset();
             activeRunners[runner.getId()] = runner;
         }
-        if(commander){
+        for(var commander : Commander in commanders.Values){
             commander.reset();
         }
     }
@@ -62,27 +62,23 @@ public class Team{
             return TeamStatus.Valid;
         }
 
-        if(commander == null){
+        if(commanders.Count < 1){
             return TeamStatus.NoCommander;
+        }
+        if(commanders.Count > 1){
+            return TeamStatus.ManyCommanders;
         }
         if(runners.Count < 2){
             return TeamStatus.NeedsRunner;
         }
         var readyCount : int = 0;
-        var commanderCount : int = 0;
         for(var player : Player in teammates.Values){
             if(player.GetType() == Player){
                 return TeamStatus.NoCharacter;
             }
-            if(player.GetType() == Commander){
-                commanderCount++;
-            }
             if(player.getReadyStatus()){
                 readyCount++;
             }
-        }
-        if(commanderCount > 1){
-            return TeamStatus.ManyCommanders;
         }
         if(readyCount < teammates.Count){
             return TeamStatus.NotReady;
@@ -118,11 +114,16 @@ public class Team{
     }
 
     public function getCommander() : Commander {
-        return commander;
+        if(commanders.Count == 0){
+            return null;
+        }
+        else{
+            return commanders[commanders.Keys.ToArray()[0]];
+        }
     }
 
-   public function clearCommander()  {
-        commander = null;
+    public function clearCommander(id : String){
+        commanders.Remove(id);
     }
 
     public function getRunners(aliveOnly : boolean) : Dictionary.<String,Runner> {
@@ -187,7 +188,7 @@ public class Team{
         }
 
         if(player.GetType() == Commander){
-            commander = player as Commander;
+            commanders[player.getId()] = player as Commander;
         }
 
         if(teammates.ContainsKey(player.getId())){
@@ -211,7 +212,7 @@ public class Team{
     }
 
     public function addCommander (player: Player){
-        commander = player as Commander;
+        commanders[player.getId()] = player as Commander;
     }
     public function killTeammate(id : String){
         activeRunners.Remove(id);
@@ -232,7 +233,7 @@ public class Team{
             }
         }
         if(teammates[id].GetType() == Commander){
-            commander = null;
+            commanders.Remove(id);;
         }
         removeSelectedCharacters(player.getCharacter());
         teammates.Remove(id);
@@ -243,7 +244,7 @@ public class Team{
         teammates.Clear();
         runners.Clear();
         activeRunners.Clear();
-        clearCommander();
+        commanders.Clear();
     }
 
     public function getLeader() : Runner {

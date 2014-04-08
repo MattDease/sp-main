@@ -351,7 +351,7 @@ function updateCharacter(id : String, selectedChar : int, netPlayer : NetworkPla
 
         if(player.getCharacter() > 8 && selectedChar < 9 || player.getCharacter() == 12 && selectedChar < 9){
             if(player.getCharacter() > 8 && player.getCharacter() < 12 && selectedChar < 9){
-                player.getTeam().clearCommander();
+                player.getTeam().clearCommander(player.getId());
             }
             player.setCharacter(selectedChar);
             changeRole(id, player.getName(), PlayerRole.Runner.ToString(), player.getTeamId(), player.getCharacter(), netPlayer);
