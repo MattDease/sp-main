@@ -500,6 +500,14 @@ function OnEnable(){
 }
 
 function OnDisable(){
+    unBindListeners();
+}
+
+function OnDestroy(){
+    unBindListeners();
+}
+
+function unBindListeners(){
     if(networkView.isMine){
         Gesture.onSwipeE -= OnSwipe;
         Gesture.onLongTapE -= OnLongTap;
@@ -510,7 +518,6 @@ function OnDisable(){
             Gesture.onMouse1UpE -= OnRelease;
         }
         Gesture.onShortTapE -= OnTap;
-
     }
 }
 
