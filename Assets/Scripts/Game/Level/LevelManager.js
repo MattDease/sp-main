@@ -77,7 +77,7 @@ function updateLevel(){
     }
 
     for(var team : Team in game.getTeams()){
-        if(!team.isAlive()){
+        if(!team.isAlive() && game.getTeams().Count > 1){
             if(lastSegmentEnd[team.getId()] - game.getTeam(team.getId() == 0 ? 1 : 0).getLeader().getDistance() < newSegmentThreshold){
                 addSegment(team.getId(), false, false);
             }
