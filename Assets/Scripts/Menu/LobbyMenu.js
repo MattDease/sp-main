@@ -159,7 +159,7 @@ function OnGUI() {
         GUI.DrawTexture(new Rect(guiObject[4].offset.x, guiObject[4].offset.y, guiObject[4].textureWidth, guiObject[4].textureHeight), createNewOverlayTexture);
         GUI.DrawTexture(new Rect(guiObject[6].offset.x + guiObject[4].textureWidth/2.45, guiObject[6].offset.y + guiObject[4].textureHeight/2.6, guiObject[6].textureWidth, guiObject[6].textureHeight), eggTexture);
 
-        GUI.Label(Rect(0, 0, Screen.width, Screen.height), (netScript.isRefreshing ? "Searching for Games..." : "No Games Being Hosted"), "PlainText");
+        GUI.Label(Rect(0, 0, Screen.width, Screen.height), (netScript.isRefreshing ? "Searching for Games..." : "No games are available to join"), "PlainText");
 
     }
 
