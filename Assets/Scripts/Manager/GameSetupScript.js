@@ -100,12 +100,12 @@ function playerReady(){
 function startCountDown(info : NetworkMessageInfo){
     var delay : float = Config.START_DELAY - (Network.time - info.timestamp);
     startTime = Time.realtimeSinceStartup + delay;
-    Invoke("startGame", delay);
+    //Invoke("startGame", delay);
 }
 
 function getCountDown() : int {
     var secondsLeft = -1;
-    if(startTime){
+    if(startTime > 0){
         var delay : float = startTime - Time.realtimeSinceStartup;
         if(delay < 0){
             secondsLeft = 0;
@@ -114,8 +114,11 @@ function getCountDown() : int {
             secondsLeft = Mathf.Ceil(delay);
         }
     }
-    if(secondsLeft != prevSecondsLeft){
+    if(secondsLeft != prevSecondsLeft && prevSecondsLeft != -1){
         soundScript.playCountdown();
+        if(secondsLeft == 0){
+            startGame();
+        }
     }
     prevSecondsLeft = secondsLeft;
     return secondsLeft;
@@ -180,6 +183,7 @@ function loadLevel(level : String, levelPrefix : int){
 function resetGame(){
     readyPlayerCount = 0;
     prevSecondsLeft = -1;
+    startTime = -1;
     game.reset();
     if(Network.isServer){
         readyToRestart(playerScript.getSelf().getId());

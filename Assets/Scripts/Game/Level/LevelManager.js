@@ -72,7 +72,7 @@ function Update () {
 }
 
 function updateLevel(){
-    if(Network.isClient || waitingForSegment || stateScript.getGameState() != GameState.Playing){
+    if(Network.isClient || waitingForSegment || stateScript.getGameState() == GameState.Uninitialized || stateScript.getGameState() == GameState.Ended){
         return;
     }
 
