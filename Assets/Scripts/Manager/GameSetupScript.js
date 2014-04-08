@@ -46,7 +46,7 @@ function enterGame(isRestart : boolean){
         // Prevent other players from joining;
         Network.maxConnections = 0;
     }
-    Network.RemoveRPCsInGroup(0);
+    Network.RemoveRPCsInGroup(1);
     networkView.RPC("loadLevel", RPCMode.All, "scene-game", lastLevelPrefix + 1);
 }
 
@@ -63,11 +63,11 @@ function createCharacter(info : NetworkMessageInfo){
         Instantiate(observerPrefab, Vector3.zero, Quaternion.identity);
     }
     else if(me.GetType() == Runner){
-        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3(0, 0.05, 0), Quaternion.identity, 0);
+        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3(0, 0.05, 0), Quaternion.identity, 1);
         go.networkView.RPC("initRunner", RPCMode.All, me.getId(), me.getTeamId());
     }
     else{
-        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3(0, 0, Config.COMMANDER_DEPTH_OFFSET), Quaternion.identity, 0);
+        go = Network.Instantiate(characterPrefabs[me.getCharacter()], Vector3(0, 0, Config.COMMANDER_DEPTH_OFFSET), Quaternion.identity, 1);
         go.networkView.RPC("initCommander", RPCMode.All, me.getId(), me.getTeamId());
     }
     if(Network.isServer){
@@ -88,7 +88,7 @@ function playerReady(){
         if(Config.USE_EGG){
             for(var team : Team in game.getTeams()){
                 var holder = team.getRandomRunner();
-                var egg : Transform = Network.Instantiate(eggPrefab, holder.getPosition(), Quaternion.identity, 0);
+                var egg : Transform = Network.Instantiate(eggPrefab, holder.getPosition(), Quaternion.identity, 1);
                 egg.networkView.RPC("setHolder", RPCMode.All, holder.getId());
             }
         }
@@ -205,7 +205,7 @@ function goToMenu(){
     readyPlayerCount = 0;
     game.reset();
     stateScript.setCurrentMenu(Network.isServer ? menus.host : menus.game);
-    Network.RemoveRPCsInGroup(0);
+    Network.RemoveRPCsInGroup(1);
     Application.LoadLevel("scene-menu");
 }
 
@@ -223,7 +223,7 @@ function leaveGame(){
     isLeaving = true;
     readyPlayerCount = 0;
     if(Network.isServer){
-        Network.RemoveRPCsInGroup(0);
+        Network.RemoveRPCsInGroup(1);
     }
     Network.Disconnect();
     playerScript.incrementTimesPlayed();
