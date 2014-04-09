@@ -273,9 +273,6 @@ public class Game {
             if(!this.isValid()){
                 this.end();
             }
-            else if(teamId != 100 && !teams[teamId].isAlive()){
-                this.end();
-            }
         }
     }
 
