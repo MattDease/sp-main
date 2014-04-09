@@ -55,7 +55,6 @@ function enterGame(isRestart : boolean){
 
 function onLevelReady(){
     levelsReady++;
-    Debug.Log("levels ready: " + levelsReady);
     if(levelsReady == 1 && game.getMode() == GameMode.Team || levelsReady == 2 && game.getMode() == GameMode.Versus){
         networkView.RPC("createCharacter", RPCMode.All);
     }
