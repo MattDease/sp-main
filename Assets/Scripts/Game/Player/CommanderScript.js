@@ -208,24 +208,26 @@ function OnEnable(){
 }
 
 function OnDisable(){
-    touched = false;
-    unBindListeners();
+    if(networkView.isMine){
+        unBindListeners();
+    }
 }
 
 function OnDestroy(){
-    unBindListeners();
+    if(networkView.isMine){
+        unBindListeners();
+    }
 }
 
 function unBindListeners(){
-    if(networkView.isMine){
-        Gesture.onTouchE -= OnTouch;
-        Gesture.onTouchDownE -= OnTouchStart;
-        Gesture.onTouchUpE -= OnTouchEnd;
-        if (Application.platform != RuntimePlatform.Android){
-            Gesture.onMouse1E -= OnTouch;
-            Gesture.onMouse1DownE -= OnTouchStart;
-            Gesture.onMouse1UpE -= OnTouchEnd;
-        }
+    touched = false;
+    Gesture.onTouchE -= OnTouch;
+    Gesture.onTouchDownE -= OnTouchStart;
+    Gesture.onTouchUpE -= OnTouchEnd;
+    if (Application.platform != RuntimePlatform.Android){
+        Gesture.onMouse1E -= OnTouch;
+        Gesture.onMouse1DownE -= OnTouchStart;
+        Gesture.onMouse1UpE -= OnTouchEnd;
     }
 }
 
