@@ -6,6 +6,7 @@ public var gameManager : GameObject;
 public var playerScript : PlayerScript;
 public var stateScript : StateScript;
 public var style : GUIStyle;
+public var music : AudioSource;
 
 private var startMenuScript : StartMenu;
 private var mainMenuScript : MainMenu;
@@ -27,6 +28,10 @@ function Awake(){
 
 }
 
+function OnDestroy(){
+    music.Stop();
+}
+
 function Start(){
     playerScript = gameManager.GetComponent(PlayerScript);
     stateScript = gameManager.GetComponent(StateScript);
@@ -34,6 +39,8 @@ function Start(){
     if(Config.MUTE_SOUND){
         GetComponentInChildren(AudioListener).volume = 0;
     }
+
+    music.Play();
 
     open();
 }
