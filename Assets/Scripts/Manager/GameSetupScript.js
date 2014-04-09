@@ -86,7 +86,7 @@ function playerReady(){
     var players : Dictionary.<String, Player> = game.getPlayers();
     if(readyPlayerCount == players.Count){
         if(Config.USE_EGG){
-            Invoke("createEggs", 1.5);
+            Invoke("createEggs", 2.5);
         }
         networkView.RPC("startCountDown", RPCMode.All);
     }
@@ -168,7 +168,7 @@ function loadLevel(level : String, levelPrefix : int){
 
     stateScript.setGameState(GameState.Loading);
 
-    Network.SetSendingEnabled(0, false);
+    Network.SetSendingEnabled(1, false);
     Network.isMessageQueueRunning = false;
     Network.SetLevelPrefix(levelPrefix);
     Application.LoadLevel(level);
@@ -176,7 +176,7 @@ function loadLevel(level : String, levelPrefix : int){
     yield;
 
     Network.isMessageQueueRunning = true;
-    Network.SetSendingEnabled(0, true);
+    Network.SetSendingEnabled(1, true);
 
     for (var go : GameObject in FindObjectsOfType(GameObject)){
         go.SendMessage("OnNetworkLoadedLevel", SendMessageOptions.DontRequireReceiver);
