@@ -1,5 +1,6 @@
 ﻿#pragma strict
 
+private var gameManager : GameObject;
 private var game : Game;
 private var team : Team;
 private var model : GameObject;
@@ -17,9 +18,16 @@ private var throwHeight : float = 2.2;
 private var throwTime : float;
 
 function OnNetworkInstantiate (info : NetworkMessageInfo) {
-    game = GameObject.Find("/GameManager").GetComponent(GameSetupScript).game;
+    gameManager = GameObject.Find("/GameManager");
+    game = gameManager.GetComponent(GameSetupScript).game;
     model = transform.Find("model").gameObject;
     eggRotation = model.transform.rotation;
+    if(Network.isServer){
+        gameManager.GetComponent(GameSetupScript).eggReady();
+    }
+    else{
+        gameManager.networkView.RPC("eggReady", RPCMode.Server);
+    }
 }
 
 function FixedUpdate(){
