@@ -260,6 +260,9 @@ public class Team{
         if(leader){
             cachedDistance = leader.getDistance();
         }
+        else{
+            Debug.Log("Leader for team " + id + " is missing");
+        }
         return leader;
     }
 
