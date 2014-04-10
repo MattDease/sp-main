@@ -145,8 +145,8 @@ public class Team{
     }
 
     public function getRandomRunner() : Runner {
-        var index : int = Random.Range(0, runners.Keys.Count);
-        var key : String = runners.Keys.ToArray()[index];
+        // var index : int = Random.Range(0, runners.Keys.Count);
+        var key : String = runners.Keys.ToArray()[0];
         return runners[key];
     }
 
@@ -259,6 +259,9 @@ public class Team{
         }
         if(leader){
             cachedDistance = leader.getDistance();
+        }
+        else{
+            Debug.Log("Leader for team " + id + " is missing");
         }
         return leader;
     }

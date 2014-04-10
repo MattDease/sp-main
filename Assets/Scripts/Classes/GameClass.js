@@ -92,10 +92,6 @@ public class Game {
             //Add another team
             var changetoPlayer : Dictionary.<String,Player> = new Dictionary.<String,Player>();
 
-            playerScript.getSelf().setTeamId(100);
-            playerScript.getSelf().setCharacter(12);
-            playerScript.getSelf().updateReadyStatus(false);
-
             for(var player : Player in players.Values){
                 player.setTeam(100, null);
                 player.setCharacter(12);
@@ -103,6 +99,10 @@ public class Game {
 
                 if(player.GetType != Player) {
                     changetoPlayer.Add(player.getId(), player);
+                }
+
+                if(Util.IsNetworkedPlayerMe(player)){
+                    playerScript.setSelf(player);
                 }
             }
 
@@ -250,6 +250,10 @@ public class Game {
 
 
     public function removePlayer(id : String){
+        if(!players.ContainsKey(id)){
+            Debug.Log("Player is id " + id + " does not exist.");
+            return;
+        }
         var player = players[id];
         var teamId : int = player.getTeamId();
         if(Network.isServer){
@@ -267,9 +271,6 @@ public class Game {
             // Handle disconnecting players
             // TODO - handle disconnecting players more elegantly
             if(!this.isValid()){
-                this.end();
-            }
-            else if(teamId != 100 && !teams[teamId].isAlive()){
                 this.end();
             }
         }

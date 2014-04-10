@@ -5,11 +5,11 @@ public static class Config{
 
     //// GENERAL
     // General debug mode of the game.
-    public var DEBUG : boolean = true;
+    public var DEBUG : boolean = false;
     // General debug mode of the game.
     public var MENU_DEBUG : boolean = false;
     // Enable/Disable the egg in the game.
-    public var USE_EGG : boolean = false;
+    public var USE_EGG : boolean = true;
     //Enable/Disable the tutorial signs in the game
     public var USE_SIGNS : boolean = true;
     // Enable/Disable all sounds and music
@@ -75,7 +75,7 @@ public static class Config{
     // Note DNS lookup is disabled due to Unity Pro requirement on Android.
     public var MASTER_SERVER_IP : String = "192.168.11.11";
     // Backup master server IP
-    public var MASTER_SERVER_IP_SECONDARY : String = "172.19.12.112";
+    public var MASTER_SERVER_IP_SECONDARY : String = "192.168.11.13";
     // Master server hostname used for DNS lookup
     public var MASTER_SERVER_HOSTNAME : String = "scrambled.no-ip.biz";
     // Enable if connection test server is available.
@@ -85,9 +85,9 @@ public static class Config{
     //Sets team size limit
     public var TEAM_SIZE : int = 11;
     //Sets versus to automatically change when teamsize is greater than 5
-    public var VERSUS_ENABLED : boolean = false;
+    public var VERSUS_ENABLED : boolean = true;
     //Skips validation of team
-    public var VALIDATION_SKIP : boolean = true;
+    public var VALIDATION_SKIP : boolean = false;
     //Distance between Player and Tutorial Sign required to show sign
     public var TUTORIAL_SIGN_DISTANCE : int = 10;
     //How many times you see a tutorial sign

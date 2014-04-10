@@ -28,10 +28,10 @@ private var levels : List.< List.< List.<GameObject> > > = new List.< List.< Lis
 private var backgrounds : List.< List.<GameObject> > = new List.< List.<GameObject> >();
 
 private var waitingForSegment : boolean = false;
-private var levelsReady : int = 0;
+private var levelsReady : List.<int> = new List.<int>();
 
 private var segmentOffset : float = 18;
-private var newSegmentThreshold : float = 25;
+private var newSegmentThreshold : float = 40;
 
 private var lastSegmentEnd : List.<float> = new List.<float>();
 private var firstSegmentEnd : List.<float> = new List.<float>();
@@ -57,6 +57,7 @@ function Start () {
 
     // Initialize Level List
     for(var i : int = 0; i < game.getTeams().Count; i++){
+        levelsReady.Add(0);
         lastSegmentEnd.Add(0);
         firstSegmentEnd.Add(0);
         currentLevel.Add(0);
@@ -172,8 +173,8 @@ function onAddSegment(teamId : int, segment : GameObject, enemies : List.<Enemy>
     if(levels[teamId].Count == 0){
         firstSegmentEnd[teamId] = segmentWidth - segmentOffset;
         lastSegmentEnd[teamId] = segmentWidth - segmentOffset;
-        levelsReady++;
-        if(levelsReady == levels.Count){
+        levelsReady[teamId] = levelsReady[teamId] + 1;
+        if(levelsReady[teamId] == 1){
             gameSetupScript.onLevelReady();
         }
     }

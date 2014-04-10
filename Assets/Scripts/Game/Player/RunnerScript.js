@@ -471,11 +471,11 @@ function checkKeyboardInput(){
 }
 
 function OnEnable(){
-    animator.SetBool("Idle", false);
-
     // Un-freeze position changes in X and Y
     rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
                             RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+
+    animator.SetBool("Idle", false);
 
     if(Config.USE_EGG){
         egg = team.getEgg();
@@ -500,25 +500,29 @@ function OnEnable(){
 }
 
 function OnDisable(){
-    unBindListeners();
+    if(networkView.isMine){
+        unBindListeners();
+    }
 }
 
 function OnDestroy(){
-    unBindListeners();
+    if(networkView.isMine){
+        unBindListeners();
+    }
 }
 
 function unBindListeners(){
-    if(networkView.isMine){
-        Gesture.onSwipeE -= OnSwipe;
-        Gesture.onLongTapE -= OnLongTap;
-        Gesture.onTouchDownE -= OnTouch;
-        Gesture.onTouchUpE -= OnRelease;
-        if (Application.platform != RuntimePlatform.Android){
-            Gesture.onMouse1DownE -= OnTouch;
-            Gesture.onMouse1UpE -= OnRelease;
-        }
-        Gesture.onShortTapE -= OnTap;
+    CancelInvoke("syncWalk");
+
+    Gesture.onSwipeE -= OnSwipe;
+    Gesture.onLongTapE -= OnLongTap;
+    Gesture.onTouchDownE -= OnTouch;
+    Gesture.onTouchUpE -= OnRelease;
+    if (Application.platform != RuntimePlatform.Android){
+        Gesture.onMouse1DownE -= OnTouch;
+        Gesture.onMouse1UpE -= OnRelease;
     }
+    Gesture.onShortTapE -= OnTap;
 }
 
 function OnSwipe(sw:SwipeInfo){

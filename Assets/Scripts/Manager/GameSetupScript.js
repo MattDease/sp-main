@@ -22,12 +22,15 @@ private var soundScript : SoundScript;
 private var gameMenu : GameMenu;
 
 private var readyPlayerCount : int = 0;
+private var readyEggCount : int = 0;
 private var restartReadyCount : int = 0;
 private var startTime : float;
 private var lastLevelPrefix : int = 0;
 private var isLeaving : boolean = false;
 private var prevSecondsLeft : int = -1;
 private var prevMaxConnections : int;
+
+private var levelsReady : int = 0;
 
 function Start(){
     playerScript = GetComponent(PlayerScript);
@@ -51,7 +54,10 @@ function enterGame(isRestart : boolean){
 }
 
 function onLevelReady(){
-    networkView.RPC("createCharacter", RPCMode.All);
+    levelsReady++;
+    if(levelsReady == 1 && game.getMode() == GameMode.Team || levelsReady == 2 && game.getMode() == GameMode.Versus){
+        networkView.RPC("createCharacter", RPCMode.All);
+    }
 }
 
 @RPC
@@ -86,9 +92,11 @@ function playerReady(){
     var players : Dictionary.<String, Player> = game.getPlayers();
     if(readyPlayerCount == players.Count){
         if(Config.USE_EGG){
-            Invoke("createEggs", 1.5);
+            Invoke("createEggs", 0.5);
         }
-        networkView.RPC("startCountDown", RPCMode.All);
+        else{
+            networkView.RPC("startCountDown", RPCMode.All);
+        }
     }
 }
 
@@ -97,6 +105,19 @@ function createEggs(){
         var holder = team.getRandomRunner();
         var egg : Transform = Network.Instantiate(eggPrefab, holder.getPosition(), Quaternion.identity, 1);
         egg.networkView.RPC("setHolder", RPCMode.All, holder.getId());
+    }
+}
+
+// Server Only
+@RPC
+function eggReady(){
+    readyEggCount++;
+    var requiredCount : int = game.getPlayers().Count;
+    if(game.getMode() == GameMode.Versus){
+        requiredCount *= 2;
+    }
+    if(readyEggCount == requiredCount){
+        networkView.RPC("startCountDown", RPCMode.All);
     }
 }
 
@@ -129,8 +150,8 @@ function getCountDown() : int {
 }
 
 function startGame(){
-    soundScript.playGameStart();
     game.start();
+    soundScript.playGameStart();
 }
 
 function OnNetworkLoadedLevel(){
@@ -168,7 +189,7 @@ function loadLevel(level : String, levelPrefix : int){
 
     stateScript.setGameState(GameState.Loading);
 
-    Network.SetSendingEnabled(0, false);
+    Network.SetSendingEnabled(1, false);
     Network.isMessageQueueRunning = false;
     Network.SetLevelPrefix(levelPrefix);
     Application.LoadLevel(level);
@@ -176,7 +197,7 @@ function loadLevel(level : String, levelPrefix : int){
     yield;
 
     Network.isMessageQueueRunning = true;
-    Network.SetSendingEnabled(0, true);
+    Network.SetSendingEnabled(1, true);
 
     for (var go : GameObject in FindObjectsOfType(GameObject)){
         go.SendMessage("OnNetworkLoadedLevel", SendMessageOptions.DontRequireReceiver);
@@ -188,6 +209,8 @@ function resetGame(){
     readyPlayerCount = 0;
     prevSecondsLeft = -1;
     startTime = -1;
+    levelsReady = 0;
+    readyEggCount = 0;
     game.reset();
     if(Network.isServer){
         readyToRestart(playerScript.getSelf().getId());
@@ -211,6 +234,10 @@ function returnToMenu(){
 @RPC
 function goToMenu(){
     readyPlayerCount = 0;
+    prevSecondsLeft = -1;
+    startTime = -1;
+    levelsReady = 0;
+    readyEggCount = 0;
     game.reset();
     stateScript.setCurrentMenu(Network.isServer ? menus.host : menus.game);
     Network.RemoveRPCsInGroup(1);
