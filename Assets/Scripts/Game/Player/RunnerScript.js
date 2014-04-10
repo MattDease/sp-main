@@ -264,9 +264,6 @@ function killMe(){
 
 @RPC
 function kill(id : String, info : NetworkMessageInfo){
-    var runner : Runner = Util.GetPlayerById(id) as Runner;
-    runner.kill();
-
     if(transform.position.y < Config.RUNNER_DEATH_DEPTH || player.getTeam().getRunners(true).Count <= 1){
         Util.Toggle(gameObject, false);
         rigidbody.velocity = Vector3.zero;
@@ -287,6 +284,9 @@ function kill(id : String, info : NetworkMessageInfo){
     if(networkView.isMine){
         toss(true);
     }
+
+    var runner : Runner = Util.GetPlayerById(id) as Runner;
+    runner.kill();
 }
 
 @RPC
